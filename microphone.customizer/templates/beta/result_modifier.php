@@ -4,6 +4,20 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
 use Bitrix\Highloadblock\HighloadBlockTable;
 use Bitrix\Main\Loader;
 
+// Маппинг viewType → section code
+$arResult['VIEW_TYPE_TO_SECTION'] = [
+    1 => 'spheres',
+    2 => 'body', 
+    3 => 'logo',
+    4 => 'logobg',
+    5 => 'case',
+    6 => 'shockmount',
+    7 => 'shockmountPins'
+];
+
+// Обратный маппинг section → viewType
+$arResult['SECTION_TO_VIEW_TYPE'] = array_flip($arResult['VIEW_TYPE_TO_SECTION']);
+
 // Кэширование
 $cacheTime = 3600;
 $cacheId = 'customizer_hl_data_' . ($arParams['MODEL_CODE'] ?? 'default');
@@ -180,6 +194,36 @@ if ($cache->initCache($cacheTime, $cacheId, $cacheDir)) {
             );
         }
     }
+
+    // 7. Группировка опций по секциям для удобной генерации HTML
+    $arResult['OPTIONS_BY_SECTION'] = [];
+    foreach ($arResult['CURRENT_MODEL_OPTIONS'] as $viewType => $options) {
+        $sectionCode = $arResult['VIEW_TYPE_TO_SECTION'][$viewType] ?? $viewType;
+        $arResult['OPTIONS_BY_SECTION'][$sectionCode] = $options;
+    }
+
+    // 8. Подготовка данных для liquid-toggle блоков
+    $arResult['LIQUID_TOGGLES'] = [
+        'custom_logo' => [
+            'enabled' => true,
+            'title' => 'Собственная эмблема',
+            'description' => 'Загрузите собственный логотип для микрофона',
+            'price_rule' => 'custom-microphone-logo'
+        ],
+        'laser_engraving' => [
+            'enabled' => true,
+            'title' => 'Добавить персональную лазерную гравировку',
+            'description' => 'Нанесите гравировку на деревянный футляр',
+            'price_rule' => 'custom-woodcase-image'
+        ],
+        'shockmount' => [
+            'enabled' => $currentModel['SHOCKMOUNT_ENABLED'] ?? 0,
+            'included' => ($currentModel['SHOCKMOUNT_ENABLED'] ?? 0) === 1,
+            'price' => $currentModel['SHOCKMOUNT_PRICE'] ?? 10000,
+            'title' => 'Добавить подвес',
+            'description' => 'Профессиональный подвес для микрофона'
+        ]
+    ];
 
     $cache->endDataCache($arResult);
 }
