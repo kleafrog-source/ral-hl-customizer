@@ -1,7 +1,7 @@
 <!-- Бесплатные варианты отделки (spheres/body/logo/logobg/case/shockmount/pins) -->
 
 <!-- Highload-block: free visual variants for all microphone parts. Each item describes one selectable option (code, name, RAL link, SVG behavior flags). Used as the main source for CUSTOMIZER_DATA.options. -->
-<?xml version="1.0" encoding="UTF-8"?>
+
 <?xml version="1.0" encoding="UTF-8"?>
 <hiblock>
 	<items>
