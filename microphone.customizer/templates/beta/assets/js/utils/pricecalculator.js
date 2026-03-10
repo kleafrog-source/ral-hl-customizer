@@ -1,6 +1,6 @@
 // utils/PriceCalculator.js
 
-import { CONFIG } from '../config.js';
+import { CONFIG, getModelData } from '../config.js';
 
 /**
  * Calculates the total price based on the current state.
@@ -20,8 +20,11 @@ export function calculateTotal(state) {
     total += state.prices.case || 0;
     total += state.prices.shockmount || 0;
 
-    // Conditional shockmount price for Bomblet
-    if (state.variant === '023-the-bomblet' && state.shockmount.enabled) {
+    // Conditional shockmount price based on model data from Bitrix
+    const modelData = getModelData(state.variant);
+    const isBomblet = state.variant === '023-the-bomblet';
+    
+    if (isBomblet && state.shockmount.enabled) {
         total += CONFIG.shockmountPrice;
     } else {
         // For other variants, shockmount price is managed directly in the prices object
@@ -50,7 +53,10 @@ export function getBreakdown(state) {
         };
     }
 
-    const shockmountPrice = (state.variant === '023-the-bomblet' && state.shockmount.enabled)
+    const modelData = getModelData(state.variant);
+    const isBomblet = state.variant === '023-the-bomblet';
+    
+    const shockmountPrice = (isBomblet && state.shockmount.enabled)
         ? CONFIG.shockmountPrice
         : (state.prices.shockmount || 0);
 

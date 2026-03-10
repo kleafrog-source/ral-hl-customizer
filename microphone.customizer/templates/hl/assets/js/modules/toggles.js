@@ -171,9 +171,32 @@ export function initToggles() {
         
         // Set initial UI state
         const dataSection = document.getElementById('laser-engraving-data');
+        const posControls = document.getElementById('case-positioning-controls');
         if (dataSection) {
             dataSection.style.display = laserEnabled ? 'block' : 'none';
         }
+        if (posControls) {
+            posControls.style.display = (laserEnabled && stateManager.get('case.customLogo')) ? 'block' : 'none';
+        }
+    }
+
+    // Add case upload/clear handlers
+    const caseUploadBtn = document.getElementById('case-upload-btn');
+    if (caseUploadBtn) {
+        caseUploadBtn.addEventListener('click', () => {
+            if (window.WoodCase) {
+                document.getElementById('case-file-input').click();
+            }
+        });
+    }
+
+    const caseClearBtn = document.getElementById('case-clear-btn');
+    if (caseClearBtn) {
+        caseClearBtn.addEventListener('click', () => {
+            if (window.WoodCase) {
+                window.WoodCase.clearLogo();
+            }
+        });
     }
     
     // Initialize shockmount toggle - Инициализируем переключатель подвеса
@@ -186,8 +209,8 @@ export function initToggles() {
         shockmountCheckbox.checked = shockmountEnabled;
         
         // Set initial UI state - Устанавливаем начальное состояние UI
-        const shockmountSection = document.getElementById('shockmount-menu-item');
-        const shockmountPinsSection = document.getElementById('pins-menu-item');
+        const shockmountSection = document.getElementById('shockmount-section');
+        const shockmountPinsSection = document.getElementById('shockmountPins-section');
         const includedText = document.getElementById('shockmount-included-text');
         
         if (shockmountEnabled) {

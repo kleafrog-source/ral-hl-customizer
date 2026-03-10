@@ -1,13 +1,16 @@
 import { eventRegistry } from '../core/events.js';
 import { stateManager } from '../core/state.js';
-import { CONFIG } from '../config.js';
+import { CONFIG, getModelData } from '../config.js';
 import { updateFilter } from './appearance-new.js';
 
-// Utility functions for MALFA detection
+// Utility functions for MALFA detection using Bitrix data
 export function isMalfaMic(state = null) {
     const currentState = state || stateManager.get();
     const v = currentState.variant;
-    return v === '023-malfa' || v === '023-MALFA';
+    
+    // Используем данные из Bitrix для определения MALFA
+    const modelData = getModelData(v);
+    return modelData?.MODEL_SERIES === 'MALFA' || v === '023-malfa' || v === '023-MALFA';
 }
 
 export function isMalfaLogo(state = null) {

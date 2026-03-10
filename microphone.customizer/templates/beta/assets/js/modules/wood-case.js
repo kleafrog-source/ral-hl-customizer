@@ -1,6 +1,6 @@
 import { stateManager } from '../core/state.js';
 import { getDevice } from '../utils.js';
-import { CASE_IMAGES, CASE_GEOMETRY, CONFIG } from '../config.js';
+import { CASE_IMAGES, CASE_GEOMETRY, CONFIG, getModelData } from '../config.js';
 
 const WoodCase = {
     currentCase: '023-the-bomblet',
@@ -91,10 +91,9 @@ const WoodCase = {
     },
 
     setCase(id) {
-        const variantMap = {
-            'malfa': '023-malfa',
-        };
-        const caseId = variantMap[id] || id;
+        // Используем данные из Bitrix для определения правильного кода модели
+        const modelData = getModelData(id);
+        const caseId = modelData ? modelData.CODE : id;
 
         if (!caseId || !CASE_GEOMETRY.cases[caseId]) {
             console.warn(`WoodCase.setCase: Invalid case ID "${caseId}"`);

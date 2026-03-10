@@ -101,18 +101,18 @@ function initializeModelOptions(modelOptions, modelCode) {
     });
 
     // Устанавливаем состояние для spheres и body по умолчанию
-    if (!stateManager.get('spheres')) {
+    if (!stateManager.get('spheres.variant') || stateManager.get('spheres.variant') === 'standard') {
         const spheresOptions = modelOptions.spheres || [];
-        const defaultSpheres = spheresOptions.find(opt => opt.UF_VARIANT_CODE === 'spheres-brass');
+        const defaultSpheres = spheresOptions.find(opt => opt.UF_VARIANT_CODE === 'spheres-brass') || spheresOptions[0];
         if (defaultSpheres) {
             stateManager.set('spheres', {
-                variant: 'spheres-brass',
-                color: null,
-                colorValue: null,
-                colorName: null,
+                variant: defaultSpheres.UF_VARIANT_CODE,
+                color: defaultSpheres.UF_RAL_COLOR_ID || null,
+                colorValue: defaultSpheres.RAL_DATA?.UF_HEX || null,
+                colorName: defaultSpheres.RAL_DATA?.UF_NAME || null,
                 name: defaultSpheres.UF_VARIANT_NAME,
-                isRal: false,
-                isFree: true,
+                isRal: defaultSpheres.UF_IS_RAL === 1,
+                isFree: defaultSpheres.UF_IS_FREE === 1,
                 price: 0,
                 modelId: null,
                 svgTargetMode: defaultSpheres.svgTargetMode || 'original',
@@ -123,18 +123,18 @@ function initializeModelOptions(modelOptions, modelCode) {
         }
     }
 
-    if (!stateManager.get('body')) {
+    if (!stateManager.get('body.variant') || stateManager.get('body.variant') === 'standard') {
         const bodyOptions = modelOptions.body || [];
-        const defaultBody = bodyOptions.find(opt => opt.UF_VARIANT_CODE === 'body-satinsteel');
+        const defaultBody = bodyOptions.find(opt => opt.UF_VARIANT_CODE === 'body-satinsteel') || bodyOptions[0];
         if (defaultBody) {
             stateManager.set('body', {
-                variant: 'body-satinsteel',
-                color: null,
-                colorValue: null,
-                colorName: null,
+                variant: defaultBody.UF_VARIANT_CODE,
+                color: defaultBody.UF_RAL_COLOR_ID || null,
+                colorValue: defaultBody.RAL_DATA?.UF_HEX || null,
+                colorName: defaultBody.RAL_DATA?.UF_NAME || null,
                 name: defaultBody.UF_VARIANT_NAME,
-                isRal: false,
-                isFree: true,
+                isRal: defaultBody.UF_IS_RAL === 1,
+                isFree: defaultBody.UF_IS_FREE === 1,
                 price: 0,
                 modelId: null,
                 svgTargetMode: defaultBody.svgTargetMode || 'original',

@@ -64,12 +64,24 @@ if ($cache->initCache($cacheTime, $cacheId, $cacheDir)) {
     }
 
     // 2. Загрузка MicrophoneModels (ID 10)
-    $models = getHlData(10, [], ['ID', 'UF_CODE', 'UF_NAME', 'UF_BASE_PRICE', 'UF_DESCRIPTION', 'UF_SHOCKMOUNT_ENABLED', 'UF_SHOCKMOUNT_PRICE', 'UF_SORT'], ['UF_SORT' => 'ASC']);
+    $models = getHlData(10, [], ['ID', 'UF_CODE', 'UF_NAME', 'UF_BASE_PRICE', 'UF_DESCRIPTION', 'UF_SHOCKMOUNT_ENABLED', 'UF_SHOCKMOUNT_PRICE', 'UF_SORT', 'UF_MODEL_SERIES'], ['UF_SORT' => 'ASC']);
     $arResult['MODELS'] = [];
     $arResult['MODELS_BY_CODE'] = [];
     foreach ($models as $model) {
-        $arResult['MODELS'][$model['ID']] = $model;
-        $arResult['MODELS_BY_CODE'][$model['UF_CODE']] = $model;
+        // Упрощаем названия для JS
+        $modelData = [
+            'ID' => $model['ID'],
+            'CODE' => $model['UF_CODE'],
+            'NAME' => $model['UF_NAME'],
+            'BASE_PRICE' => (int)$model['UF_BASE_PRICE'],
+            'DESCRIPTION' => $model['UF_DESCRIPTION'],
+            'SHOCKMOUNT_ENABLED' => (int)$model['UF_SHOCKMOUNT_ENABLED'],
+            'SHOCKMOUNT_PRICE' => (int)$model['UF_SHOCKMOUNT_PRICE'],
+            'MODEL_SERIES' => $model['UF_MODEL_SERIES'],
+            'SORT' => (int)$model['UF_SORT']
+        ];
+        $arResult['MODELS'][$model['ID']] = $modelData;
+        $arResult['MODELS_BY_CODE'][$model['UF_CODE']] = $modelData;
     }
 
     // 3. Загрузка CustomizerOptions (ID 11)
@@ -123,8 +135,11 @@ if ($cache->initCache($cacheTime, $cacheId, $cacheDir)) {
         }
     }
 
-    // 5. Определение текущей модели
-    $currentModelCode = $arParams['MODEL_CODE'] ?? 'bomblet';
+    // 5. Сохранение маппинга типов представлений
+    $arResult['VIEW_TYPE_MAP'] = $viewTypeMap;
+
+    // 6. Определение текущей модели
+    $currentModelCode = $arParams['MODEL_CODE'] ?? '023-the-bomblet';
     $currentModel = $arResult['MODELS_BY_CODE'][$currentModelCode] ?? null;
     $arResult['CURRENT_MODEL_ID'] = $currentModel['ID'] ?? null;
     $arResult['CURRENT_MODEL_CODE'] = $currentModelCode;

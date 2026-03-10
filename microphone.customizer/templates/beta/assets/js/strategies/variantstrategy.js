@@ -6,6 +6,7 @@ import { updateMALFAVisibility, updateLogoSVG } from '../modules/logo.js';
 import { updateShockmountVisibility, updateShockmountLayers } from '../modules/shockmount-new.js';
 import * as cameraEffect from '../modules/camera-effect.js';
 import { selectVariant, selectRALVariant } from '../modules/microphone.js';
+import { getModelData } from '../config.js';
 
 /**
  * Saves the current microphone's customizable state.
@@ -67,8 +68,9 @@ function applyVisualUpdates() {
         el.setAttribute('aria-selected', 'false');
     });
 
-    // Manage Logo Variants Visibility
-    const isMalfa = newState.variant === '023-malfa';
+    // Manage Logo Variants Visibility using Bitrix data
+    const modelData = getModelData(newState.variant);
+    const isMalfa = modelData?.MODEL_SERIES === 'MALFA' || newState.variant === '023-malfa';
     const logoSubmenu = document.getElementById('submenu-logo');
     const allLogoVariants = logoSubmenu.querySelectorAll('.variants .variant-item');
     

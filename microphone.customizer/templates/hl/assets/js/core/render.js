@@ -1,7 +1,6 @@
 // core/render.js
 import { stateManager } from './state.js';
 import { CONFIG, variantNames } from '../config.js';
-import { FREE_LOGO_RALS, MALFA_SILVER_RAL } from '../config/ral.config.js';
 import { updateSVG } from '../engine.js';
 import { updateLogoSVG } from '../modules/logo.js';
 import { updateShockmountVisibility, updateShockmountLayers, updateShockmountPreview, updateShockmountPinsPreview } from '../modules/shockmount-new.js';
@@ -121,35 +120,42 @@ function renderSidebar(currentState) {
         // Subtitles с защитой от null элементов
         const spheresSubtitle = document.getElementById('spheres-subtitle');
         if (spheresSubtitle) {
-            spheresSubtitle.textContent = currentState.spheres.color || variantNames[currentState.spheres.variant];
+            spheresSubtitle.textContent = currentState.spheres.name || 'Стандартный';
         }
         
         const bodySubtitle = document.getElementById('body-subtitle');
         if (bodySubtitle) {
-            bodySubtitle.textContent = currentState.body.color || variantNames[currentState.body.variant];
+            bodySubtitle.textContent = currentState.body.name || 'Стандартный';
         }
 
-        let logoSubtitle = 'Кастомный';
-        if (!currentState.logo.customLogo) {
-            if (currentState.variant === '023-malfa') {
-                logoSubtitle = `MALFA (${currentState.logo.variant})`;
-            } else if (FREE_LOGO_RALS.includes(currentState.logobg.color)) {
-                logoSubtitle = `RAL ${currentState.logobg.color}`;
-            } else {
-                logoSubtitle = currentState.logo.variant === 'silver' ? 'Холодный хром' : 'Классическая латунь';
+        const logoSubtitleEl = document.getElementById('logo-subtitle');
+        if (logoSubtitleEl) {
+            let logoText = currentState.logo.name || 'Классическая латунь';
+            if (currentState.logo.customLogo) {
+                logoText = 'Кастомный';
             }
+            logoSubtitleEl.textContent = logoText;
         }
-        document.getElementById('logo-subtitle').textContent = logoSubtitle;
 
-        document.getElementById('case-subtitle').textContent = currentState.case.variant === 'custom' ? 'Собственное изображение' : 'Стандартный (Логотип Soyuz)';
-
-        const shockmountColorNames = { 'white': 'Чистый белый', 'cream': 'Жемчужно-белый', 'black': 'Матовый черный' };
-        let shockmountText = shockmountColorNames[currentState.shockmount.variant] || 'Чистый белый';
-        if (currentState.shockmount.variant === 'custom' && currentState.shockmount.color) {
-            const ralMatch = currentState.shockmount.color.match(/RAL\s*(\d+)/);
-            shockmountText = ralMatch ? `RAL ${ralMatch[1]}` : currentState.shockmount.color;
+        const logobgSubtitleEl = document.getElementById('logo-bg-subtitle');
+        if (logobgSubtitleEl) {
+            logobgSubtitleEl.textContent = currentState.logobg.name || 'Матовый черный';
         }
-        document.getElementById('shockmount-subtitle').textContent = shockmountText;
+
+        const caseSubtitleEl = document.getElementById('case-subtitle');
+        if (caseSubtitleEl) {
+            caseSubtitleEl.textContent = currentState.case.variant === 'custom' ? 'Собственное изображение' : 'Классический футляр СОЮЗ.';
+        }
+
+        const shockmountSubtitleEl = document.getElementById('shockmount-subtitle');
+        if (shockmountSubtitleEl) {
+            shockmountSubtitleEl.textContent = currentState.shockmount.name || 'Чистый белый';
+        }
+
+        const pinsSubtitleEl = document.getElementById('shockmount-pins-subtitle');
+        if (pinsSubtitleEl) {
+            pinsSubtitleEl.textContent = currentState.shockmountPins?.name || 'Латунь';
+        }
 
         // Prices
         const priceBreakdown = getBreakdown(currentState);

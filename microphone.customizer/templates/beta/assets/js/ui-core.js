@@ -8,6 +8,7 @@ import { validateField } from './services/validation.js';
 import { updateMalfaLogoOptionsVisibility } from './modules/logo.js';
 import { calculateTotal, getBreakdown, formatPrice } from './modules/price-calculator.js';
 import { initHLDataManager, updateModelOptions } from './modules/hl-data-manager.js';
+import { getModelData } from './config.js';
 
 // Removed old config imports:
 // import { variantNames, CONFIG, FREE_LOGO_RALS, MALFA_SILVER_RAL, MALFA_GOLD_RAL } from './config.js';
@@ -302,7 +303,8 @@ export function updateUI() {
 // Helper function to update MALFA logo visibility using HL data
 function updateMALFAVisibility() {
     const currentModelCode = stateManager.get('currentModelCode');
-    const isMALFA = currentModelCode === '023-malfa';
+    const modelData = getModelData(currentModelCode);
+    const isMALFA = modelData?.MODEL_SERIES === 'MALFA' || currentModelCode === '023-malfa';
 
     // Show/hide MALFA logo variants
     document.querySelectorAll('.malfa-logo').forEach(item => {

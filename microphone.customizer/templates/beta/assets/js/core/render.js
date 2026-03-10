@@ -1,6 +1,6 @@
 // core/render.js
 import { stateManager } from './state.js';
-import { CONFIG, variantNames } from '../config.js';
+import { CONFIG, variantNames, getModelData } from '../config.js';
 import { FREE_LOGO_RALS, MALFA_SILVER_RAL } from '../config/ral.config.js';
 import { updateSVG } from '../engine.js';
 import { updateLogoSVG } from '../modules/logo.js';
@@ -131,7 +131,10 @@ function renderSidebar(currentState) {
 
         let logoSubtitle = 'Кастомный';
         if (!currentState.logo.customLogo) {
-            if (currentState.variant === '023-malfa') {
+            const modelData = getModelData(currentState.variant);
+            const isMalfa = modelData?.MODEL_SERIES === 'MALFA' || currentState.variant === '023-malfa';
+            
+            if (isMalfa) {
                 logoSubtitle = `MALFA (${currentState.logo.variant})`;
             } else if (FREE_LOGO_RALS.includes(currentState.logobg.color)) {
                 logoSubtitle = `RAL ${currentState.logobg.color}`;

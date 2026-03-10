@@ -1,4 +1,5 @@
 import { stateManager } from '../core/state.js';
+import { getModelData, getAllModels } from '../config.js';
 
 // --- Configuration: Full animation configs for all 5 models ---
 const microphoneAnimations = {
@@ -131,6 +132,14 @@ let currentTimeline = null;
 
 function normalizeMicModel(variant) {
     if (!variant) return '017-TUBE';
+    
+    // Используем данные из Bitrix для определения правильного названия
+    const modelData = getModelData(variant);
+    if (modelData) {
+        return modelData.CODE.toUpperCase().replace('-', '-');
+    }
+    
+    // Fallback для обратной совместимости
     switch (variant) {
         case '023-the-bomblet': return '023-BOMBLET';
         case '023-malfa': return '023-MALFA';

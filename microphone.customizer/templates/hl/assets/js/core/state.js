@@ -65,7 +65,7 @@ class StateManager {
                 variant: 'standard', 
                 color: null, 
                 colorValue: null,
-                name: 'Стандартный' 
+                name: 'Латунь' 
             },
             
             // Metadata

@@ -492,11 +492,11 @@ const WoodCase = {
 
 export function toggleLaserEngraving() {
     const currentState = stateManager.get();
-    const isLaserEnabled = currentState.case?.laserEngraving || false;
+    const isLaserEnabled = currentState.case?.laserEngravingEnabled || false;
     
     // Toggle state
     const newState = !isLaserEnabled;
-    stateManager.set('case.laserEngraving', newState);
+    stateManager.set('case.laserEngravingEnabled', newState);
     
     // Price will be calculated by price calculator based on case.laserEngravingEnabled state
     

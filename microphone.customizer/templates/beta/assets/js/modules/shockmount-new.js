@@ -8,6 +8,7 @@ import { SECTION_LAYER_MAP } from '../config/layer-mapping.config.js';
 import { debugSVGState, debugSVGLayers } from '../debug.js';
 import { switchPreview } from './accessories.js';
 import { applyColorToSection, getColorDataFromOption, normalizeToRgbString } from './color-utils.js';
+import { getModelData } from '../config.js';
 import { getOptionsForSection, getRalColorById } from './hl-data-manager.js';
 
 // --- Private Helper Functions ---
@@ -67,6 +68,7 @@ export function updateShockmountVisibility() {
 
     // Get current model from HL data
     const currentModelCode = stateManager.get('currentModelCode') || '023-the-bomblet';
+    const modelData = getModelData(currentModelCode);
     const isBomblet = currentModelCode === '023-the-bomblet';
     
     // Get shockmount info from HL data
@@ -124,8 +126,10 @@ export function updateShockmountLayers(currentState = null) {
     const state = currentState || stateManager.get();
     const currentModelCode = state.currentModelCode;
     
-    // Get target layer ID based on model code
-    const targetLayerId = currentModelCode === '023-the-bomblet' ? 'layer10' : 'layer9';
+    // Get target layer ID based on model code from Bitrix data
+    const modelData = getModelData(currentModelCode);
+    const is023Series = currentModelCode.includes('023');
+    const targetLayerId = is023Series ? 'layer10' : 'layer9';
     if (!targetLayerId) return;
 
     // Hide all shockmount layers first
@@ -382,6 +386,7 @@ export function updateShockmountPinsPreview() {
 
     const currentState = stateManager.get();
     const currentModelCode = currentState.currentModelCode || '023-the-bomblet';
+    const modelData = getModelData(currentModelCode);
     const is023Series = currentModelCode.includes('023');
     const pinsState = currentState.shockmountPins;
 

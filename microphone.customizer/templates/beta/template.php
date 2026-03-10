@@ -248,11 +248,19 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
             <div class="sidebar-content">
                 <!-- VARIANT SWITCH -->
                 <div class="variant-switch" id="variant-switch">
-                    <button class="variant-button active" data-series="023" data-variant="023-the-bomblet">023 the BOMBLET</button>
-                    <button class="variant-button" data-series="023" data-variant="023-malfa">023 MALFA</button>
-                    <button class="variant-button" data-series="023" data-variant="023-deluxe">023 DELUXE</button>
-                    <button class="variant-button" data-series="017" data-variant="017-fet">017 FET</button>
-                    <button class="variant-button" data-series="017" data-variant="017-tube">017 TUBE</button>
+                    <?php foreach ($arResult['MODELS'] as $model): ?>
+                        <?php 
+                        $series = substr($model['CODE'], 0, 3);
+                        $isActive = $model['CODE'] === $arResult['CURRENT_MODEL_CODE'];
+                        $displayName = preg_replace('/\s+\d+/', '', $model['NAME']); // Remove numbers from name
+                        $displayName = preg_replace('/(\d+)/', ' $1', $displayName); // Add space before numbers
+                        ?>
+                        <button class="variant-button<?= $isActive ? ' active' : '' ?>" 
+                                data-series="<?= htmlspecialchars($series) ?>" 
+                                data-variant="<?= htmlspecialchars($model['CODE']) ?>">
+                            <?= htmlspecialchars($displayName) ?>
+                        </button>
+                    <?php endforeach; ?>
                 </div>
                 
                 <?php 
