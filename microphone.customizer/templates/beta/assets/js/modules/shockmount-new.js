@@ -128,7 +128,7 @@ export function updateShockmountLayers(currentState = null) {
     
     // Get target layer ID based on model code from Bitrix data
     const modelData = getModelData(currentModelCode);
-    const is023Series = currentModelCode.includes('023');
+    const is023Series = currentModelCode && currentModelCode.includes('023');
     const targetLayerId = is023Series ? 'layer10' : 'layer9';
     if (!targetLayerId) return;
 
@@ -387,23 +387,27 @@ export function updateShockmountPinsPreview() {
     const currentState = stateManager.get();
     const currentModelCode = currentState.currentModelCode || '023-the-bomblet';
     const modelData = getModelData(currentModelCode);
-    const is023Series = currentModelCode.includes('023');
+    const is023Series = currentModelCode && currentModelCode.includes('023');
     const pinsState = currentState.shockmountPins;
 
     // Debug logging
     debugSVGState('shockmountPins', pinsState, 'updateShockmountPinsPreview start');
 
     // Get layer mapping for this pin variant
-    let layerMapping = SECTION_LAYER_MAP.shockmountPins?.[pinsState?.variant];
+    let layerMapping = null;
+    if (pinsState && pinsState.variant) {
+        layerMapping = SECTION_LAYER_MAP.shockmountPins?.[pinsState.variant];
+    }
     
     // Fallback for unknown variants - use default mapping
     if (!layerMapping) {
-        console.warn(`[Shockmount] No layer mapping found for pins variant: ${pinsState?.variant}, using default mapping`);
+        const variantName = pinsState && pinsState.variant ? pinsState.variant : 'unknown';
+        console.warn(`[Shockmount] No layer mapping found for pins variant: ${variantName}, using default mapping`);
         layerMapping = {
             originals: [],
             colorizedGroup: 'g3',
             monoGroup: 'g4',
-            description: `Variant ${pinsState?.variant} (default)`,
+            description: `Variant ${variantName} (default)`,
             colorizedFilter: 'filter9',
             monoFilter: 'filter13',
             floodFilter: 'feFlood8'
@@ -455,9 +459,9 @@ export function updateShockmountPinsPreview() {
     }
 
     // Handle colorized layers (for RAL variants)
-    const isColorizedVariant = layerMapping.colorizedGroup && (
-        pinsState?.variant?.includes('RAL') || 
-        pinsState?.variant?.includes('ral')
+    const isColorizedVariant = layerMapping.colorizedGroup && pinsState && (
+        pinsState.variant.includes('RAL') || 
+        pinsState.variant.includes('ral')
     );
     
     if (isColorizedVariant) {
