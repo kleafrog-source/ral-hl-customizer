@@ -51,7 +51,7 @@ function getAssetsBasePath() {
         return window.CUSTOMIZER_ASSETS_PATH + '/image/';
     }
     console.warn('[CONFIG] CUSTOMIZER_ASSETS_PATH not available, using fallback');
-    return '/local/templates/microphone.customizer/assets/image/';
+    return '/local/components/custom/microphone.customizer/images/';
 }
 
 // Утилиты для работы с данными из Bitrix HighLoad блоков

@@ -173,7 +173,7 @@ function getAssetsBasePath() {
     // Fallback: определяем путь относительно текущего JS файла
     const currentPath = new URL(import.meta.url).pathname;
     const basePath = currentPath.replace(/\/assets\/js\/[^\/]+$/, '/assets/image/');
-    return basePath;
+    return '/local/components/custom/microphone.customizer/images/';
 }
 
 const assetsPath = getAssetsBasePath();

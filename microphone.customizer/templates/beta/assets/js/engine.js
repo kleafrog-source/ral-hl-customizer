@@ -12,7 +12,7 @@ export function updateResponsiveAssets(svg) {
     const images = svg.querySelectorAll('image');
     images.forEach(img => {
         let href = img.getAttribute('xlink:href') || img.getAttribute('href');
-        if (href && href.includes('/image/custom/')) {
+        if (href && href.includes('/image/')) {
             // Replace existing suffix or add new one before extension
             const newHref = href.replace(/(_4k|_tablet|_hdmob|_hd|_mobile|_desktop)?\.(png|jpg|webp|jpeg)$/i, `${suffix}.$2`);
             if (href !== newHref) {
