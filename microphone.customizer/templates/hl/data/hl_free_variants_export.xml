@@ -1,0 +1,569 @@
+<!-- Бесплатные варианты отделки (spheres/body/logo/logobg/case/shockmount/pins) -->
+
+<!-- Highload-block: free visual variants for all microphone parts. Each item describes one selectable option (code, name, RAL link, SVG behavior flags). Used as the main source for CUSTOMIZER_DATA.options. -->
+<?xml version="1.0" encoding="UTF-8"?>
+<hiblock>
+	<items>
+		<item>
+			<id>4</id>
+			<uf_is_ral>1</uf_is_ral>
+			<uf_view_type>7</uf_view_type>
+			<uf_ral_color_id>211</uf_ral_color_id>
+			<uf_variant_code>pins-9005</uf_variant_code>
+			<uf_variant_name>RAL 9005 Матовый черный</uf_variant_name>
+			<uf_is_free>1</uf_is_free>
+			<uf_price>0</uf_price>
+			<uf_sort>74</uf_sort>
+			<uf_additional_image>0</uf_additional_image>
+			<uf_svg_layer_group />
+			<uf_svg_special_key />
+			<uf_model_id />
+			<uf_svg_target_mode>filter</uf_svg_target_mode>
+			<uf_svg_filter_id>feFlood8</uf_svg_filter_id>
+		</item>
+		<item>
+			<id>5</id>
+			<uf_is_ral>0</uf_is_ral>
+			<uf_view_type>1</uf_view_type>
+			<uf_ral_color_id />
+			<uf_variant_code>spheres-brass</uf_variant_code>
+			<uf_variant_name>Классическая латунь</uf_variant_name>
+			<uf_is_free>1</uf_is_free>
+			<uf_price>0</uf_price>
+			<uf_sort>22</uf_sort>
+			<uf_additional_image>0</uf_additional_image>
+			<uf_svg_layer_group>spheres-original-2</uf_svg_layer_group>
+			<uf_svg_special_key />
+			<uf_model_id />
+			<uf_svg_target_mode>original</uf_svg_target_mode>
+			<uf_svg_filter_id />
+		</item>
+		<item>
+			<id>6</id>
+			<uf_is_ral>0</uf_is_ral>
+			<uf_view_type>2</uf_view_type>
+			<uf_ral_color_id />
+			<uf_variant_code>body-satinsteel</uf_variant_code>
+			<uf_variant_name>Сатинированная сталь</uf_variant_name>
+			<uf_is_free>1</uf_is_free>
+			<uf_price>0</uf_price>
+			<uf_sort>30</uf_sort>
+			<uf_additional_image>0</uf_additional_image>
+			<uf_svg_layer_group>body-original-3</uf_svg_layer_group>
+			<uf_svg_special_key />
+			<uf_model_id />
+			<uf_svg_target_mode>original</uf_svg_target_mode>
+			<uf_svg_filter_id />
+		</item>
+		<item>
+			<id>7</id>
+			<uf_is_ral>1</uf_is_ral>
+			<uf_view_type>7</uf_view_type>
+			<uf_ral_color_id>16</uf_ral_color_id>
+			<uf_variant_code>pins-1013</uf_variant_code>
+			<uf_variant_name>RAL 1013 Жемчужно-белый</uf_variant_name>
+			<uf_is_free>1</uf_is_free>
+			<uf_price>0</uf_price>
+			<uf_sort>73</uf_sort>
+			<uf_additional_image>0</uf_additional_image>
+			<uf_svg_layer_group />
+			<uf_svg_special_key />
+			<uf_model_id />
+			<uf_svg_target_mode>filter</uf_svg_target_mode>
+			<uf_svg_filter_id>feFlood8</uf_svg_filter_id>
+		</item>
+		<item>
+			<id>8</id>
+			<uf_is_ral>0</uf_is_ral>
+			<uf_view_type>3</uf_view_type>
+			<uf_ral_color_id />
+			<uf_variant_code>coldchrome</uf_variant_code>
+			<uf_variant_name>Холодный хром</uf_variant_name>
+			<uf_is_free>1</uf_is_free>
+			<uf_price>0</uf_price>
+			<uf_sort>40</uf_sort>
+			<uf_additional_image>0</uf_additional_image>
+			<uf_svg_layer_group>logo-letters-and-frame</uf_svg_layer_group>
+			<uf_svg_special_key>grayscale</uf_svg_special_key>
+			<uf_model_id />
+			<uf_svg_target_mode>original</uf_svg_target_mode>
+			<uf_svg_filter_id />
+		</item>
+		<item>
+			<id>9</id>
+			<uf_is_ral>0</uf_is_ral>
+			<uf_view_type>3</uf_view_type>
+			<uf_ral_color_id />
+			<uf_variant_code>brass-logo</uf_variant_code>
+			<uf_variant_name>Классическая латунь</uf_variant_name>
+			<uf_is_free>1</uf_is_free>
+			<uf_price>0</uf_price>
+			<uf_sort>41</uf_sort>
+			<uf_additional_image>0</uf_additional_image>
+			<uf_svg_layer_group>logo-letters-and-frame</uf_svg_layer_group>
+			<uf_svg_special_key />
+			<uf_model_id />
+			<uf_svg_target_mode>original</uf_svg_target_mode>
+			<uf_svg_filter_id />
+		</item>
+		<item>
+			<id>10</id>
+			<uf_is_ral>0</uf_is_ral>
+			<uf_view_type>3</uf_view_type>
+			<uf_ral_color_id />
+			<uf_variant_code>malfasilver</uf_variant_code>
+			<uf_variant_name>MALFA - Серебро</uf_variant_name>
+			<uf_is_free>1</uf_is_free>
+			<uf_price>0</uf_price>
+			<uf_sort>42</uf_sort>
+			<uf_additional_image>0</uf_additional_image>
+			<uf_svg_layer_group>malfa-logo-text-path</uf_svg_layer_group>
+			<uf_svg_special_key>malfa_silver</uf_svg_special_key>
+			<uf_model_id>2</uf_model_id>
+			<uf_svg_target_mode>gradient</uf_svg_target_mode>
+			<uf_svg_filter_id />
+		</item>
+		<item>
+			<id>11</id>
+			<uf_is_ral>0</uf_is_ral>
+			<uf_view_type>3</uf_view_type>
+			<uf_ral_color_id />
+			<uf_variant_code>malfagold</uf_variant_code>
+			<uf_variant_name>MALFA - Золото</uf_variant_name>
+			<uf_is_free>1</uf_is_free>
+			<uf_price>0</uf_price>
+			<uf_sort>43</uf_sort>
+			<uf_additional_image>0</uf_additional_image>
+			<uf_svg_layer_group>malfa-logo-text-path</uf_svg_layer_group>
+			<uf_svg_special_key>malfa_gold</uf_svg_special_key>
+			<uf_model_id>2</uf_model_id>
+			<uf_svg_target_mode>gradient</uf_svg_target_mode>
+			<uf_svg_filter_id />
+		</item>
+		<item>
+			<id>12</id>
+			<uf_is_ral>1</uf_is_ral>
+			<uf_view_type>4</uf_view_type>
+			<uf_ral_color_id>51</uf_ral_color_id>
+			<uf_variant_code>logobg-3001</uf_variant_code>
+			<uf_variant_name>RAL 3001 Сигнальный красный</uf_variant_name>
+			<uf_is_free>1</uf_is_free>
+			<uf_price>0</uf_price>
+			<uf_sort>50</uf_sort>
+			<uf_additional_image>0</uf_additional_image>
+			<uf_svg_layer_group />
+			<uf_svg_special_key>clip-logobg-malfa</uf_svg_special_key>
+			<uf_model_id />
+			<uf_svg_target_mode>filter</uf_svg_target_mode>
+			<uf_svg_filter_id>feFlood-logobg-color</uf_svg_filter_id>
+		</item>
+		<item>
+			<id>13</id>
+			<uf_is_ral>1</uf_is_ral>
+			<uf_view_type>4</uf_view_type>
+			<uf_ral_color_id>55</uf_ral_color_id>
+			<uf_variant_code>logobg-3005</uf_variant_code>
+			<uf_variant_name>RAL 3005 Винный красный</uf_variant_name>
+			<uf_is_free>1</uf_is_free>
+			<uf_price>0</uf_price>
+			<uf_sort>53</uf_sort>
+			<uf_additional_image>0</uf_additional_image>
+			<uf_svg_layer_group />
+			<uf_svg_special_key>clip-logobg-malfa</uf_svg_special_key>
+			<uf_model_id />
+			<uf_svg_target_mode>filter</uf_svg_target_mode>
+			<uf_svg_filter_id>feFlood-logobg-color</uf_svg_filter_id>
+		</item>
+		<item>
+			<id>14</id>
+			<uf_is_ral>1</uf_is_ral>
+			<uf_view_type>4</uf_view_type>
+			<uf_ral_color_id>102</uf_ral_color_id>
+			<uf_variant_code>logobg-5017</uf_variant_code>
+			<uf_variant_name>RAL 5017 Ультрамариновый синий</uf_variant_name>
+			<uf_is_free>1</uf_is_free>
+			<uf_price>0</uf_price>
+			<uf_sort>54</uf_sort>
+			<uf_additional_image>0</uf_additional_image>
+			<uf_svg_layer_group />
+			<uf_svg_special_key>clip-logobg-malfa</uf_svg_special_key>
+			<uf_model_id />
+			<uf_svg_target_mode>filter</uf_svg_target_mode>
+			<uf_svg_filter_id>feFlood-logobg-color</uf_svg_filter_id>
+		</item>
+		<item>
+			<id>15</id>
+			<uf_is_ral>1</uf_is_ral>
+			<uf_view_type>4</uf_view_type>
+			<uf_ral_color_id>113</uf_ral_color_id>
+			<uf_variant_code>logobg-6001</uf_variant_code>
+			<uf_variant_name>RAL 6001 Изумрудный зеленый</uf_variant_name>
+			<uf_is_free>1</uf_is_free>
+			<uf_price>0</uf_price>
+			<uf_sort>52</uf_sort>
+			<uf_additional_image>0</uf_additional_image>
+			<uf_svg_layer_group />
+			<uf_svg_special_key>clip-logobg-malfa</uf_svg_special_key>
+			<uf_model_id />
+			<uf_svg_target_mode>filter</uf_svg_target_mode>
+			<uf_svg_filter_id>feFlood-logobg-color</uf_svg_filter_id>
+		</item>
+		<item>
+			<id>16</id>
+			<uf_is_ral>1</uf_is_ral>
+			<uf_view_type>7</uf_view_type>
+			<uf_ral_color_id>214</uf_ral_color_id>
+			<uf_variant_code>pins-9010</uf_variant_code>
+			<uf_variant_name>RAL 9010 Чистый белый</uf_variant_name>
+			<uf_is_free>1</uf_is_free>
+			<uf_price>0</uf_price>
+			<uf_sort>75</uf_sort>
+			<uf_additional_image>0</uf_additional_image>
+			<uf_svg_layer_group />
+			<uf_svg_special_key />
+			<uf_model_id />
+			<uf_svg_target_mode>filter</uf_svg_target_mode>
+			<uf_svg_filter_id>feFlood8</uf_svg_filter_id>
+		</item>
+		<item>
+			<id>17</id>
+			<uf_is_ral>0</uf_is_ral>
+			<uf_view_type>7</uf_view_type>
+			<uf_ral_color_id />
+			<uf_variant_code>pins-brass-017-fet</uf_variant_code>
+			<uf_variant_name>Полированная латунь</uf_variant_name>
+			<uf_is_free>1</uf_is_free>
+			<uf_price>0</uf_price>
+			<uf_sort>71</uf_sort>
+			<uf_additional_image>0</uf_additional_image>
+			<uf_svg_layer_group>shockmount-017-pins-brass-group</uf_svg_layer_group>
+			<uf_svg_special_key />
+			<uf_model_id>4</uf_model_id>
+			<uf_svg_target_mode>original</uf_svg_target_mode>
+			<uf_svg_filter_id />
+		</item>
+		<item>
+			<id>18</id>
+			<uf_is_ral>1</uf_is_ral>
+			<uf_view_type>7</uf_view_type>
+			<uf_ral_color_id>212</uf_ral_color_id>
+			<uf_variant_code>pins-9006-023-the-bomblet</uf_variant_code>
+			<uf_variant_name>RAL 9006 Белый алюминий</uf_variant_name>
+			<uf_is_free>1</uf_is_free>
+			<uf_price>0</uf_price>
+			<uf_sort>72</uf_sort>
+			<uf_additional_image>0</uf_additional_image>
+			<uf_svg_layer_group>shockmount-023-pins-brass-group</uf_svg_layer_group>
+			<uf_svg_special_key>grayscale</uf_svg_special_key>
+			<uf_model_id>1</uf_model_id>
+			<uf_svg_target_mode>original</uf_svg_target_mode>
+			<uf_svg_filter_id />
+		</item>
+		<item>
+			<id>19</id>
+			<uf_is_ral>0</uf_is_ral>
+			<uf_view_type>5</uf_view_type>
+			<uf_ral_color_id />
+			<uf_variant_code>standard</uf_variant_code>
+			<uf_variant_name>Без дополнительной гравировки</uf_variant_name>
+			<uf_is_free>1</uf_is_free>
+			<uf_price>0</uf_price>
+			<uf_sort>90</uf_sort>
+			<uf_additional_image>0</uf_additional_image>
+			<uf_svg_layer_group />
+			<uf_svg_special_key />
+			<uf_model_id />
+			<uf_svg_target_mode />
+			<uf_svg_filter_id />
+		</item>
+		<item>
+			<id>20</id>
+			<uf_is_ral>1</uf_is_ral>
+			<uf_view_type>1</uf_view_type>
+			<uf_ral_color_id>211</uf_ral_color_id>
+			<uf_variant_code>spheres-9005</uf_variant_code>
+			<uf_variant_name>Матовый черный</uf_variant_name>
+			<uf_is_free>1</uf_is_free>
+			<uf_price>0</uf_price>
+			<uf_sort>21</uf_sort>
+			<uf_additional_image>0</uf_additional_image>
+			<uf_svg_layer_group>spheres-original-1</uf_svg_layer_group>
+			<uf_svg_special_key />
+			<uf_model_id />
+			<uf_svg_target_mode>original</uf_svg_target_mode>
+			<uf_svg_filter_id />
+		</item>
+		<item>
+			<id>21</id>
+			<uf_is_ral>0</uf_is_ral>
+			<uf_view_type>1</uf_view_type>
+			<uf_ral_color_id />
+			<uf_variant_code>spheres-satinsteel</uf_variant_code>
+			<uf_variant_name>Сатинированная сталь</uf_variant_name>
+			<uf_is_free>1</uf_is_free>
+			<uf_price>0</uf_price>
+			<uf_sort>20</uf_sort>
+			<uf_additional_image>0</uf_additional_image>
+			<uf_svg_layer_group>spheres-original-3</uf_svg_layer_group>
+			<uf_svg_special_key />
+			<uf_model_id />
+			<uf_svg_target_mode>original</uf_svg_target_mode>
+			<uf_svg_filter_id />
+		</item>
+		<item>
+			<id>22</id>
+			<uf_is_ral>1</uf_is_ral>
+			<uf_view_type>2</uf_view_type>
+			<uf_ral_color_id>211</uf_ral_color_id>
+			<uf_variant_code>body-black</uf_variant_code>
+			<uf_variant_name>Матовый черный</uf_variant_name>
+			<uf_is_free>1</uf_is_free>
+			<uf_price>0</uf_price>
+			<uf_sort>32</uf_sort>
+			<uf_additional_image>0</uf_additional_image>
+			<uf_svg_layer_group>body-original-1</uf_svg_layer_group>
+			<uf_svg_special_key />
+			<uf_model_id />
+			<uf_svg_target_mode>original</uf_svg_target_mode>
+			<uf_svg_filter_id />
+		</item>
+		<item>
+			<id>23</id>
+			<uf_is_ral>1</uf_is_ral>
+			<uf_view_type>2</uf_view_type>
+			<uf_ral_color_id>16</uf_ral_color_id>
+			<uf_variant_code>body-1013</uf_variant_code>
+			<uf_variant_name>Жемчужно-белый</uf_variant_name>
+			<uf_is_free>1</uf_is_free>
+			<uf_price>0</uf_price>
+			<uf_sort>33</uf_sort>
+			<uf_additional_image>0</uf_additional_image>
+			<uf_svg_layer_group>body-original-2</uf_svg_layer_group>
+			<uf_svg_special_key />
+			<uf_model_id />
+			<uf_svg_target_mode>original</uf_svg_target_mode>
+			<uf_svg_filter_id />
+		</item>
+		<item>
+			<id>24</id>
+			<uf_is_ral>1</uf_is_ral>
+			<uf_view_type>4</uf_view_type>
+			<uf_ral_color_id>211</uf_ral_color_id>
+			<uf_variant_code>logobg-9005</uf_variant_code>
+			<uf_variant_name>RAL 9005 Матовый черный</uf_variant_name>
+			<uf_is_free>1</uf_is_free>
+			<uf_price>0</uf_price>
+			<uf_sort>55</uf_sort>
+			<uf_additional_image>0</uf_additional_image>
+			<uf_svg_layer_group />
+			<uf_svg_special_key>clip-logobg-malfa</uf_svg_special_key>
+			<uf_model_id />
+			<uf_svg_target_mode>filter</uf_svg_target_mode>
+			<uf_svg_filter_id>feFlood-logobg-color</uf_svg_filter_id>
+		</item>
+		<item>
+			<id>25</id>
+			<uf_is_ral>1</uf_is_ral>
+			<uf_view_type>4</uf_view_type>
+			<uf_ral_color_id>214</uf_ral_color_id>
+			<uf_variant_code>logobg-9010</uf_variant_code>
+			<uf_variant_name>RAL 9010 Чистый белый</uf_variant_name>
+			<uf_is_free>1</uf_is_free>
+			<uf_price>0</uf_price>
+			<uf_sort>56</uf_sort>
+			<uf_additional_image>0</uf_additional_image>
+			<uf_svg_layer_group />
+			<uf_svg_special_key>clip-logobg-malfa</uf_svg_special_key>
+			<uf_model_id />
+			<uf_svg_target_mode>filter</uf_svg_target_mode>
+			<uf_svg_filter_id>feFlood-logobg-color</uf_svg_filter_id>
+		</item>
+		<item>
+			<id>26</id>
+			<uf_is_ral>1</uf_is_ral>
+			<uf_view_type>6</uf_view_type>
+			<uf_ral_color_id>214</uf_ral_color_id>
+			<uf_variant_code>shockmount-9010</uf_variant_code>
+			<uf_variant_name>RAL 9010 Чистый белый</uf_variant_name>
+			<uf_is_free>1</uf_is_free>
+			<uf_price>0</uf_price>
+			<uf_sort>63</uf_sort>
+			<uf_additional_image>0</uf_additional_image>
+			<uf_svg_layer_group />
+			<uf_svg_special_key />
+			<uf_model_id />
+			<uf_svg_target_mode>filter</uf_svg_target_mode>
+			<uf_svg_filter_id>feFlood6</uf_svg_filter_id>
+		</item>
+		<item>
+			<id>27</id>
+			<uf_is_ral>1</uf_is_ral>
+			<uf_view_type>6</uf_view_type>
+			<uf_ral_color_id>16</uf_ral_color_id>
+			<uf_variant_code>shockmount-1013</uf_variant_code>
+			<uf_variant_name>RAL 1013 Жемчужно-белый</uf_variant_name>
+			<uf_is_free>1</uf_is_free>
+			<uf_price>0</uf_price>
+			<uf_sort>62</uf_sort>
+			<uf_additional_image>0</uf_additional_image>
+			<uf_svg_layer_group />
+			<uf_svg_special_key />
+			<uf_model_id />
+			<uf_svg_target_mode>filter</uf_svg_target_mode>
+			<uf_svg_filter_id>feFlood6</uf_svg_filter_id>
+		</item>
+		<item>
+			<id>28</id>
+			<uf_is_ral>1</uf_is_ral>
+			<uf_view_type>6</uf_view_type>
+			<uf_ral_color_id>211</uf_ral_color_id>
+			<uf_variant_code>shockmount-9005</uf_variant_code>
+			<uf_variant_name>RAL 9005 Матовый черный</uf_variant_name>
+			<uf_is_free>1</uf_is_free>
+			<uf_price>0</uf_price>
+			<uf_sort>61</uf_sort>
+			<uf_additional_image>0</uf_additional_image>
+			<uf_svg_layer_group />
+			<uf_svg_special_key />
+			<uf_model_id />
+			<uf_svg_target_mode>filter</uf_svg_target_mode>
+			<uf_svg_filter_id>feFlood6</uf_svg_filter_id>
+		</item>
+		<item>
+			<id>29</id>
+			<uf_is_ral>0</uf_is_ral>
+			<uf_view_type>7</uf_view_type>
+			<uf_ral_color_id />
+			<uf_variant_code>pins-brass-017-tube</uf_variant_code>
+			<uf_variant_name>Полированная латунь</uf_variant_name>
+			<uf_is_free>1</uf_is_free>
+			<uf_price>0</uf_price>
+			<uf_sort>71</uf_sort>
+			<uf_additional_image>0</uf_additional_image>
+			<uf_svg_layer_group>shockmount-017-pins-brass-group</uf_svg_layer_group>
+			<uf_svg_special_key />
+			<uf_model_id>5</uf_model_id>
+			<uf_svg_target_mode>original</uf_svg_target_mode>
+			<uf_svg_filter_id />
+		</item>
+		<item>
+			<id>30</id>
+			<uf_is_ral>0</uf_is_ral>
+			<uf_view_type>7</uf_view_type>
+			<uf_ral_color_id />
+			<uf_variant_code>pins-brass-023-the-bomlet</uf_variant_code>
+			<uf_variant_name>Полированная латунь</uf_variant_name>
+			<uf_is_free>1</uf_is_free>
+			<uf_price>0</uf_price>
+			<uf_sort>71</uf_sort>
+			<uf_additional_image>0</uf_additional_image>
+			<uf_svg_layer_group>shockmount-023-pins-brass-group</uf_svg_layer_group>
+			<uf_svg_special_key />
+			<uf_model_id>1</uf_model_id>
+			<uf_svg_target_mode>original</uf_svg_target_mode>
+			<uf_svg_filter_id />
+		</item>
+		<item>
+			<id>31</id>
+			<uf_is_ral>0</uf_is_ral>
+			<uf_view_type>7</uf_view_type>
+			<uf_ral_color_id />
+			<uf_variant_code>pins-brass-023-malfa</uf_variant_code>
+			<uf_variant_name>Полированная латунь</uf_variant_name>
+			<uf_is_free>1</uf_is_free>
+			<uf_price>0</uf_price>
+			<uf_sort>71</uf_sort>
+			<uf_additional_image>0</uf_additional_image>
+			<uf_svg_layer_group>shockmount-023-pins-brass-group</uf_svg_layer_group>
+			<uf_svg_special_key />
+			<uf_model_id>2</uf_model_id>
+			<uf_svg_target_mode>original</uf_svg_target_mode>
+			<uf_svg_filter_id />
+		</item>
+		<item>
+			<id>32</id>
+			<uf_is_ral>1</uf_is_ral>
+			<uf_view_type>7</uf_view_type>
+			<uf_ral_color_id>212</uf_ral_color_id>
+			<uf_variant_code>pins-9006-023-malfa</uf_variant_code>
+			<uf_variant_name>RAL 9006 Белый алюминий</uf_variant_name>
+			<uf_is_free>1</uf_is_free>
+			<uf_price>0</uf_price>
+			<uf_sort>72</uf_sort>
+			<uf_additional_image>0</uf_additional_image>
+			<uf_svg_layer_group>shockmount-023-pins-brass-group</uf_svg_layer_group>
+			<uf_svg_special_key>grayscale</uf_svg_special_key>
+			<uf_model_id>2</uf_model_id>
+			<uf_svg_target_mode>original</uf_svg_target_mode>
+			<uf_svg_filter_id />
+		</item>
+		<item>
+			<id>33</id>
+			<uf_is_ral>1</uf_is_ral>
+			<uf_view_type>7</uf_view_type>
+			<uf_ral_color_id>212</uf_ral_color_id>
+			<uf_variant_code>pins-9006-023-deluxe</uf_variant_code>
+			<uf_variant_name>RAL 9006 Белый алюминий</uf_variant_name>
+			<uf_is_free>1</uf_is_free>
+			<uf_price>0</uf_price>
+			<uf_sort>72</uf_sort>
+			<uf_additional_image>0</uf_additional_image>
+			<uf_svg_layer_group>shockmount-023-pins-brass-group</uf_svg_layer_group>
+			<uf_svg_special_key>grayscale</uf_svg_special_key>
+			<uf_model_id>3</uf_model_id>
+			<uf_svg_target_mode>original</uf_svg_target_mode>
+			<uf_svg_filter_id />
+		</item>
+		<item>
+			<id>34</id>
+			<uf_is_ral>1</uf_is_ral>
+			<uf_view_type>7</uf_view_type>
+			<uf_ral_color_id>212</uf_ral_color_id>
+			<uf_variant_code>pins-9006-017-fet</uf_variant_code>
+			<uf_variant_name>RAL 9006 Белый алюминий</uf_variant_name>
+			<uf_is_free>1</uf_is_free>
+			<uf_price>0</uf_price>
+			<uf_sort>72</uf_sort>
+			<uf_additional_image>0</uf_additional_image>
+			<uf_svg_layer_group>shockmount-023-pins-brass-group</uf_svg_layer_group>
+			<uf_svg_special_key>grayscale</uf_svg_special_key>
+			<uf_model_id>4</uf_model_id>
+			<uf_svg_target_mode>original</uf_svg_target_mode>
+			<uf_svg_filter_id />
+		</item>
+		<item>
+			<id>35</id>
+			<uf_is_ral>1</uf_is_ral>
+			<uf_view_type>7</uf_view_type>
+			<uf_ral_color_id>212</uf_ral_color_id>
+			<uf_variant_code>pins-9006-017-tube</uf_variant_code>
+			<uf_variant_name>RAL 9006 Белый алюминий</uf_variant_name>
+			<uf_is_free>1</uf_is_free>
+			<uf_price>0</uf_price>
+			<uf_sort>72</uf_sort>
+			<uf_additional_image>0</uf_additional_image>
+			<uf_svg_layer_group>shockmount-023-pins-brass-group</uf_svg_layer_group>
+			<uf_svg_special_key>grayscale</uf_svg_special_key>
+			<uf_model_id>5</uf_model_id>
+			<uf_svg_target_mode>original</uf_svg_target_mode>
+			<uf_svg_filter_id />
+		</item>
+		<item>
+			<id>36</id>
+			<uf_is_ral>0</uf_is_ral>
+			<uf_view_type>7</uf_view_type>
+			<uf_ral_color_id />
+			<uf_variant_code>pins-brass-023-deluxe</uf_variant_code>
+			<uf_variant_name>Полированная латунь</uf_variant_name>
+			<uf_is_free>1</uf_is_free>
+			<uf_price>0</uf_price>
+			<uf_sort>71</uf_sort>
+			<uf_additional_image>0</uf_additional_image>
+			<uf_svg_layer_group>shockmount-023-pins-brass-group</uf_svg_layer_group>
+			<uf_svg_special_key />
+			<uf_model_id>3</uf_model_id>
+			<uf_svg_target_mode>original</uf_svg_target_mode>
+			<uf_svg_filter_id />
+		</item>
+	</items>
+</hiblock>

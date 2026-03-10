@@ -1,0 +1,167 @@
+  <? if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die(); 
+  ?>
+
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 575 2198" version="1.1" id="svg8">
+<defs id="defs1">
+ <clipPath id="clip-path"><path id="clip-top-bottom" d="M553.43,1894c-.22,1.65-.44,3.21-.67,4.66-2.87,18.27-4.3,27.4-7.35,38.66a263.89,263.89,0,0,1-22.3,55.61,269.16,269.16,0,0,1-91.06,98.75l6.88.93a2.78,2.78,0,0,1,.5.11l11.45,3.43a2.71,2.71,0,0,1,1.19.72l8,7.55a.6.6,0,0,1,.19.44v53a1,1,0,0,1-.20.61l-3.05,4.2a1.34,1.34,0,0,1-.31.32l-6.2,4.87a2.86,2.86,0,0,1-1,.47l-10.6,3-37.1,4.24h0c-39.51,1.71-80.83,2.53-123.83,2.19q-52.27-.42-101.07-2.91L151.17,2173,134,2169.59a1.36,1.36,0,0,1-.43-.14l-6-3.07-6.63-5.71a1.52,1.52,0,0,1-.45-.61l-1.13-1.84a1.34,1.34,0,0,1-.19-.68V2105s6.92-7.7,9.71-9.26c3.75-2.1,14.36-3.41,14.36-3.41l.69-2h.29a277.09,277.09,0,0,1-38.83-31.43,274.33,274.33,0,0,1-53.68-72.46A316.89,316.89,0,0,1,29,1922.62c-2.32-10-3.62-19.42-4.24-23.89-.24-1.69-.44-3.24-.61-4.7-.36-2.93-.60-5.44-.76-7.63V1874c.25-3.45.65-6.32,1-8.4-.14-.18-.31-.43-.49-.67l.18-.14.34.47c6.59.85,13.45,1.72,20.54,2.59,17.6,2.14,36.68,4.21,57.15,5.48h0l5.74.34c80.22,4.32,127.21,5.44,196.5,5.14,44.75-.19,88.67-.45,148.05-4,39.31-2.35,73.17-4.36,98.57-6.93l1-.10,1.59-.17.21.09a1.5,1.5,0,0,0,0,.24,42.47,42.47,0,0,1,.68,7.21A132.43,132.43,0,0,1,553.43,1894Zm2.51-864.23c-.28-3.52-.71-8.34-1.38-14,0-.15-.11-.91-.27-2.14-.72-5.59-2.85-21-6-34.37-7.54-32-22.94-61-23.87-62.76a258.48,258.48,0,0,0-49.67-64.88c-27.62-28.27-54.26-42.61-74.66-50.23l6-7a3.52,3.52,0,0,0,.83-2.26l.23-82.51a3,3,0,0,0-.18-1,3.33,3.33,0,0,0-.35-.68c-9.67-14.2-19.38-28.45-27.6-43.54-7.46-13.69-17.39-32.2-30.16-66.86a610.56,610.56,0,0,1-30.75-122h-.05c119.09-13.17,211.72-114.14,211.72-236.74C529.79,107.14,423.15.49,291.6.49S53.41,107.14,53.41,238.68c0,121.13,90.4,221.13,207.41,236.23C255,511.09,248.06,552,227.11,604.7a513,513,0,0,1-55.65,103.18v83a5.2,5.2,0,0,0,1.32,3.46c1.89,2.13,3.79,4.32,5.67,6.43a228.15,228.15,0,0,0-36.07,19.5,251,251,0,0,0-37.1,28.85A267.12,267.12,0,0,0,80.07,877,264.24,264.24,0,0,0,25.92,996c-3.71,18.88-4.06,29.7-3.93,37,.09,4.78.40,8.91.72,12.16a2.18,2.18,0,0,0,2.37,1.94l2.1-.20a3.35,3.35,0,0,1,.54-.12l.34,0c21.26-2,50.20-4.48,84.49-6.55,67-4.05,114.31-4.16,197.67-4.20,116-.07,159.85,3,186.54,5.33,23.55,2,43.13,4.25,56.83,5.93l.14.07a.82,0.82,0,0,0,.91-.66c.35-1.88.66-3.88.89-6a77.26,77.26,0,0,0,.45-8.30C556,1031.43,556,1030.61,555.94,1029.80Z" style="fill: none"/></clipPath>
+ <clipPath id="clip-path-2"><path id="clip-body-grayscale" d="M555.84,1859.06l-.12-807.68a1.62,1.62,0,0,0-.17-.72l-1-2s-.47-.80-1-1.52c-13.7-1.68-33.28-3.90-56.83-5.93-26.69-2.30-70.55-5.40-186.54-5.33-83.36,0-130.63.15-197.67,4.20-34.29,2.07-63.23,4.53-84.49,6.55l-.34,0h0A4.43,4.43,0,0,0,25.30,1048l-1.60,2.39a.71.71,0,0,0-.14.43l-.47,812.64s.90,1.25,1.36,1.87c6.59.85,13.45,1.72,20.54,2.59,17.6,2.14,36.68,4.21,57.15,5.48h0l5.74.34c80.22,4.32,127.21,5.44,196.5,5.14,44.75-.19,88.67-.45,148.05-4,39.31-2.35,73.17-4.36,98.57-6.93l1-.10,1.70-.18a2.62,2.62,0,0,1,.06-1.53c.31-.86,1-1,1.42-1.82a4.61,4.61,0,0,0,.61-2.33C555.91,1861,555.80,1860.06,555.84,1859.06Z" style="fill: none"/></clipPath>
+ <clipPath id="clip-path-6"><path id="clip-logobg" d="M357,1312.89c.68,36.26-9.61,56.89-17.75,57s-20.53-20.23-21.22-56.50,11.35-62.52,19.49-62.63S356.32,1276.62,357,1312.89Zm-104-61.82c-7.09.11-16.62,23.76-16,62s11.19,57.59,18.28,57.48,18.87-19.94,18.28-58.20S260.10,1251,253,1251.07Zm171.92,57.85-43.07,48.31-69.53,70.12-10.67,11.75a1.76,1.76,0,0,1-2.52.08q-37.29-34.48-75.23-71.44-27.66-27-54-53.64a3,3,0,0,1-.18-1.43,3,3,0,0,1,.52-1.45c17.71-18.70,34.81-35.90,53.23-54.78,24.17-24.77,48.26-49.27,72.15-72.82.57-.55,2.52.08,2.52.08L372,1253.62q10.84,10.80,21.79,22.13Q409.93,1292.48,424.93,1308.92Zm-204.77,17.79a12,12,0,0,0-4.50-.29c-2.57.32-3.38,1.32-5.31,1.18a7.80,7.80,0,0,1-4.63-2.46,14.27,14.27,0,0,1-4-7,20.61,20.61,0,0,1-.81-6.07,20.31,20.31,0,0,1,.64-6.07c.26-.93,1.63-5.60,5.43-8.41a9,9,0,0,1,3.67-1.69,5,5,0,0,1,2.34-.06c1.46.40,1.56,1.38,3,1.75a2.83,2.83,0,0,0,2.68-.46,3.89,3.89,0,0,0,.33-2.54h0q0-4,0-8a8.32,8.32,0,0,0-.93-.76c-3.23-2.30-7.13-1.81-8.62-1.62-6.25.79-10.37,5.27-11.85,6.88a26.60,26.60,0,0,0-5.73,10.36,32.70,32.70,0,0,0-.63,18,31.80,31.80,0,0,0,6.08,12.19,19.56,19.56,0,0,0,6.20,5.53,17.94,17.94,0,0,0,9.49,2c3.71-.16,5.47-1.37,5.94-1.72a7.55,7.55,0,0,0,1-.87ZM284,1308.64c-.40-25.75-4.69-38.38-6-42-1.65-4.58-5.12-14.12-13-20-3-2.25-6.63-4.94-11.42-4.83-8.39.19-14.65,8.51-17.48,14a70.50,70.50,0,0,0-7.84,22.94c-1.22,6.75-3.42,19.10-2.66,31.21.25,6.64.76,12.29,1.25,16.68a179.88,179.88,0,0,0,5.24,27.76c.32,1.13.58,2,.88,2.91,1.26,3.84,3.20,9.75,7.10,14.87,2.66,3.49,5.12,6.71,9.65,8.24,7.20,2.42,13.86-1.38,15.16-2.16a21,21,0,0,0,6.13-5.81c6.50-8.75,8.35-18.38,9-21.71A228.40,228.40,0,0,0,284,1308.64Zm81.05-25c-2.17-12.31-5.06-27.60-16.56-37.26-5.66-4.75-10-4.81-11.41-4.88-6.73-.32-10.92,4-12.43,5.34a29.66,29.66,0,0,0-8.63,13.79c-5,16.89-6.10,36.05-6.28,44.36l-7.73.64-1.55-103.73a1,1,0,0,0-1-1l-9-.17a1.15,1.15,0,0,0-1.17,1.17l4.31,217a1,1,0,0,0,1,.87h7.80a.72,.72,0,0,0,.73-.74q-.44-51.27-.88-102.56h7c1.36,12.50,3.19,23.56,5.07,33,.63,3.13,3.06,14.73,9.86,22.53a19.84,19.84,0,0,0,3.49,3.20c.59.42,7.68,5.33,15.38,3.55,1.56-.36,6.33-1.73,12-10,2.65-3.87,6.16-10.20,9.21-27.81a178.91,178.91,0,0,0,2.55-41.43A132.48,132.48,0,0,0,365,1283.62Zm33,46a17.15,17.15,0,0,0,3-10c-.08-2.44-.15-4.81-1.67-7.06-.77-1.15-1.80-2.10-1.61-3.40.14-1,.87-1.30,1.65-2.51a9.34,9.34,0,0,0,1.24-4.24,18.29,18.29,0,0,0-1.92-11.80,14.89,14.89,0,0,0-4.83-5.31,16.18,16.18,0,0,0-3.17-1.56,20.88,20.88,0,0,0-5.33-1.24,31.55,31.55,0,0,0-8.15,0c-3,.32-3.73.74-4.16,1.36s-.22.91-.29,3.56c-.08,3-.35,3.54-.10,5.34a15.37,15.37,0,0,0,.52,2.35c2.30-.15,5.74-.37,9.59-.56a12.06,12.06,0,0,1,2.38.10c1.63.24,4.10.61,5.28,2.56a4.64,4.64,0,0,1,.39,3.70,4.94,4.94,0,0,1-2.74,2.65,11.35,11.35,0,0,1-3.82.84c-2.55.09-4.39.19-6.79.26,0,1.90-.23,4.62-.15,6.70.06,1.54.16,3,.28,4.47,1.51,0,3.53,0,5.90.11,4.35.15,5.25.31,6.13,1,1.56,1.27,2.48,3.72,1.76,5.45-.61,1.46-2.16,1.90-4.88,2.66-1.76.49-4.81,1.34-7.43.22a11.64,11.64,0,0,0-2.25-.76c-1.48-.33-2.24-.50-2.80-.13-.76.50-.69,2.45-.53,6.35.06,1.49.11,1.42.13,2.60,0,1.54-.05,1.83.15,2.21.61,1.20,2.82,1.23,3.91,1.23,6.90,0,10.35,0,13.12-1.29A17.38,17.38,0,0,0,398.06,1329.65Z" style="fill: none"/></clipPath>
+ <clipPath id="clip-path-8"><path id="clip-logogold" d="M433.63,1306.19q-26.47-29.18-56.28-59.31c-26.56-26.76-52.77-51.50-78.30-74.32a3.39,3.39,0,0,0-4.62.07q-34.43,32.73-69.74,68.57-34.78,35.35-66.55,69.88a2.76,2.76,0,0,0,0,3.78q32,33,66.15,66.61,36.46,35.82,72.25,69.14a4.52,4.52,0,0,0,6.25-.06q30-29.05,60.71-60.88,37.07-38.48,70.13-75.90A5.69,5.69,0,0,0,433.63,1306.19Zm-51.77,51-69.53,70.12-10.67,11.75a1.76,1.76,0,0,1-2.52.08q-37.29-34.48-75.23-71.44-27.66-27-54-53.64a3,3,0,0,1-.18-1.43,3,3,0,0,1,.52-1.45c17.71-18.70,34.81-35.90,53.23-54.78,24.17-24.77,48.26-49.27,72.15-72.82.57-.55,2.52.08,2.52.08L372,1253.62q10.84,10.80,21.79,22.13q16.16,16.73,31.16,33.17Zm16.20-27.58a17.38,17.38,0,0,1-7.19,5.87c-2.77,1.31-6.22,1.30-13.12,1.29-1.09,0-3.30,0-3.91-1.23-.20-.38-.12-.67-.15-2.21,0-1.18-.07-1.11-.13-2.60-.16-3.90-.23-5.85.53-6.35.56-.37,1.32-.20,2.80.13a11.64,11.64,0,0,1,2.25.76c2.62,1.12,5.67.27,7.43-.22,2.72-.76,4.27-1.20,4.88-2.66.72-1.73-.20-4.18-1.76-5.45-.88-.71-1.78-.87-6.13-1-2.37-.07-4.39-.10-5.90-.11-.12-1.44-.22-2.93-.28-4.47-.08-2.08.11-4.80.15-6.70,2.40-.07,4.24-.17,6.79-.26a11.35,11.35,0,0,0,3.82-.84,4.94,4.94,0,0,0,2.74-2.65,4.64,4.64,0,0,0-.39-3.70c-1.18-2-3.65-2.32-5.28-2.56a12.06,12.06,0,0,0-2.38-.10c-3.85.19-7.29.41-9.59.56a15.37,15.37,0,0,1-.52-2.35c-.25-1.80,0-2.37.10-5.34.07-2.65-.12-3,.29-3.56s1.18-1,4.16-1.36a31.55,31.55,0,0,1,8.15,0,20.88,20.88,0,0,1,5.33,1.24,16.18,16.18,0,0,1,3.17,1.56,14.89,14.89,0,0,1,4.83,5.31,18.29,18.29,0,0,1,1.92,11.80,9.34,9.34,0,0,1-1.24,4.24c-.78,1.21-1.51,1.51-1.65,2.51-.19,1.30.84,2.25,1.61,3.40,1.52,2.25,1.59,4.62,1.67,7.06A17.15,17.15,0,0,1,398.06,1329.65Zm-177.90-2.94q-.10,5-.20,9.94a7.55,7.55,0,0,1-1,.87c-.47.35-2.23,1.56-5.94,1.72a17.94,17.94,0,0,1-9.49-2,19.56,19.56,0,0,1-6.20-5.53,31.80,31.80,0,0,1-6.08-12.19,32.70,32.70,0,0,1,.63-18,26.60,26.60,0,0,1,5.73-10.36c1.48-1.61,5.60-6.09,11.85-6.88,1.49-.19,5.39-.68,8.62,1.62a8.32,8.32,0,0,1,.93.76q0,4,0,8a3.89,3.89,0,0,1-.33,2.54,2.83,2.83,0,0,1-2.68.46c-1.43-.37-1.53-1.35-3-1.75a5,5,0,0,0-2.34.06,9,9,0,0,0-3.67,1.69c-3.80,2.81-5.17,7.48-5.43,8.41a20.31,20.31,0,0,0-.64,6.07,20.61,20.61,0,0,0,.81,6.07,14.27,14.27,0,0,0,4,7,7.80,7.80,0,0,0,4.63,2.46c1.93.14,2.74-.86,5.31-1.18A12,12,0,0,1,220.16,1326.71ZM284,1308.64c-.40-25.75-4.69-38.38-6-42-1.65-4.58-5.12-14.12-13-20-3-2.25-6.63-4.94-11.42-4.83-8.39.19-14.65,8.51-17.48,14a70.50,70.50,0,0,0-7.84,22.94c-1.22,6.75-3.42,19.10-2.66,31.21.25,6.64.76,12.29,1.25,16.68a179.88,179.88,0,0,0,5.24,27.76c.32,1.13.58,2,.88,2.91,1.26,3.84,3.20,9.75,7.10,14.87,2.66,3.49,5.12,6.71,9.65,8.24,7.20,2.42,13.86-1.38,15.16-2.16a21,21,0,0,0,6.13-5.81c6.50-8.75,8.35-18.38,9-21.71A228.40,228.40,0,0,0,284,1308.64Zm-28.72,61.93c-7.09.11-17.68-19.22-18.28-57.48s8.93-61.91,16-62,19.94,23,20.54,61.30S262.36,1370.46,255.27,1370.57Zm111.53-71.14a132.48,132.48,0,0,0-1.76-15.81c-2.17-12.31-5.06-27.60-16.56-37.26-5.66-4.75-10-4.81-11.41-4.88-6.73-.32-10.92,4-12.43,5.34a29.66,29.66,0,0,0-8.63,13.79c-5,16.89-6.10,36.05-6.28,44.36l-7.73.64-1.55-103.73a1,1,0,0,0-1-1l-9-.17a1.15,1.15,0,0,0-1.17,1.17l4.31,217a1,1,0,0,0,1,.87h7.80a.72,.72,0,0,0,.73-.74q-.44-51.27-.88-102.56h7c1.36,12.50,3.19,23.56,5.07,33,.63,3.13,3.06,14.73,9.86,22.53a19.84,19.84,0,0,0,3.49,3.20c.59.42,7.68,5.33,15.38,3.55,1.56-.36,6.33-1.73,12-10,2.65-3.87,6.16-10.20,9.21-27.81A178.91,178.91,0,0,0,366.80,1299.43Zm-27.54,70.46c-8.13.10-20.53-20.23-21.22-56.50s11.35-62.52,19.49-62.63,18.79,25.86,19.48,62.13S347.40,1369.78,339.26,1369.89Z" style="fill: none"/></clipPath>
+ <filter style="color-interpolation-filters:sRGB" id="filter-spheres-colorize"><feComposite id="feComposite-spheres-color" operator="arithmetic" k1="0.99999999999999989" in2="SourceGraphic" k2="0.59999999999999998" k3="0" k4="0"/><feColorMatrix id="feColorMatrix-spheres-saturate" type="saturate" k2="0.59999999999999998" result="result-spheres-5" values="0"/>
+ <!-- В данном фильтре #feFlood-spheres-color меняем flood-color для изменения цвета Силуэта при перекрашивании в платные RAL  -->
+ <feFlood id="feFlood-spheres-color" flood-color="rgb(51,110,159)" result="result-spheres-4" flood-opacity="1"/><feBlend mode="screen" id="feBlend-spheres-screen" result="result-spheres-1" in2="result-spheres-5"/><feBlend mode="multiply" id="feBlend-spheres-multiply" in2="result-spheres-1" result="result-spheres-2"/><feColorMatrix id="feColorMatrix-spheres-final-saturate" type="saturate" values="1" result="result-spheres-3"/><feComposite id="feComposite-spheres-final" in2="SourceGraphic" operator="in" k2="0.99999999999999989"/></filter>
+ <filter style="color-interpolation-filters:sRGB" id="filter-spheres-monochrome">
+  <feColorMatrix id="feColorMatrix-spheres-luminance" type="luminanceToAlpha" result="result-spheres-mono-2"/>
+  <feFlood id="feFlood-spheres-mono"/><feComposite id="feComposite-spheres-mono-out" operator="out" k1="-6.2100000000000017" in2="result-spheres-mono-2"/><feComposite id="feComposite-spheres-mono-arithmetic" in2="SourceGraphic" operator="arithmetic" k1="-6.1500000000000004" k2="8.0500000000000007" k3="0.93999999999999995" k4="-1.9099999999999999" result="result-spheres-mono-1"/></filter>
+ <filter style="color-interpolation-filters:sRGB" id="filter-body-colorize"><feComposite id="feComposite-body-color" operator="arithmetic" k1="0.99999999999999989" in2="SourceGraphic" k2="0.59999999999999998" k3="0" k4="0"/><feColorMatrix id="feColorMatrix-body-saturate" type="saturate" k2="0.59999999999999998" result="result-body-5" values="0"/>
+ <!-- В данном фильтре #feFlood-body-color меняем flood-color для изменения цвета Корпуса при перекрашивании в платные RAL  -->
+ <feFlood id="feFlood-body-color" flood-color="rgb(51,110,159)" result="result-body-4" flood-opacity="1"/><feBlend mode="screen" id="feBlend-body-screen" result="result-body-1" in2="result-body-5"/><feBlend mode="multiply" id="feBlend-body-multiply" in2="result-body-1" result="result-body-2"/><feColorMatrix id="feColorMatrix-body-final-saturate" type="saturate" values="1" result="result-body-3"/><feComposite id="feComposite-body-final" in2="SourceGraphic" operator="in" k2="0.99999999999999989"/></filter>
+ <filter style="color-interpolation-filters:sRGB" id="filter-body-monochrome"><feColorMatrix id="feColorMatrix-body-luminance" type="luminanceToAlpha" result="result-body-mono-2"/><feFlood id="feFlood-body-mono"/><feComposite id="feComposite-body-mono-out" operator="out" k1="-6.2100000000000017" in2="result-body-mono-2"/><feComposite id="feComposite-body-mono-arithmetic" in2="SourceGraphic" operator="arithmetic" k1="-6.1500000000000004" k2="8.0500000000000007" k3="0.93999999999999995" k4="-1.9099999999999999" result="result-body-mono-1"/></filter>
+ <filter style="color-interpolation-filters:sRGB" id="filter-logobg-colorize">
+  <feComposite id="feComposite-logobg-color" operator="arithmetic" k1="0.99999999999999989" in2="SourceGraphic" k2="0.59999999999999998" k3="0" k4="0"/><feColorMatrix id="feColorMatrix-logobg-saturate" type="saturate" k2="0.59999999999999998" result="result-logobg-5" values="0"/>
+  <!-- В данном фильтре #feFlood-logobg-color меняем flood-color для изменения цвета фона Эмблемы при перекрашивании в платные RAL  -->
+  <feFlood id="feFlood-logobg-color" flood-color="rgb(143,30,36)" result="result-logobg-4" flood-opacity="1"/><feBlend mode="screen" id="feBlend-logobg-screen" result="result-logobg-1" in2="result-logobg-5"/><feBlend mode="multiply" id="feBlend-logobg-multiply" in2="result-logobg-1" result="result-logobg-2"/><feColorMatrix id="feColorMatrix-logobg-final-saturate" type="saturate" values="1" result="result-logobg-3"/><feComposite id="feComposite-logobg-final" in2="SourceGraphic" operator="in" k2="0.99999999999999989"/></filter>
+ <filter style="color-interpolation-filters:sRGB" id="filter-logobg-monochrome"><feColorMatrix id="feColorMatrix-logobg-luminance" type="luminanceToAlpha" result="result-logobg-mono-2"/><feFlood id="feFlood-logobg-mono"/><feComposite id="feComposite-logobg-mono-out" operator="out" k1="-6.2100000000000017" in2="result-logobg-mono-2"/><feComposite id="feComposite-logobg-mono-arithmetic" in2="SourceGraphic" operator="arithmetic" k1="-6.1500000000000004" k2="8.0500000000000007" k3="0.93999999999999995" k4="-1.9099999999999999" result="result-logobg-mono-1"/></filter>
+ <!-- Malfa Clip Path -->
+ <clipPath id="clip-path-malfa">
+  <ellipse cx="400.79" cy="400.75" rx="398.01" ry="400.75" style="fill: none"/>
+ </clipPath>
+</defs>
+<defs id="defs2">
+  <!-- Градиент для Malfa (Серебро) -->
+ <linearGradient id="grad-malfa-silver" x1="2" y1="404.1" x2="800.83" y2="404.1" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fffdfc" id="stop9"></stop>
+      <stop offset="0.1" stop-color="#8a888f" id="stop10"></stop>
+      <stop offset="0.25" stop-color="#828087" id="stop11"></stop>
+      <stop offset="0.4" stop-color="#dfd4cc" id="stop12"></stop>
+      <stop offset="0.6" stop-color="#a59e98" id="stop13"></stop>
+      <stop offset="0.8" stop-color="#8f8a84" id="stop14"></stop>
+      <stop offset="1" stop-color="#fff7ef" id="stop15"></stop>
+    </linearGradient>
+    <!-- Градиент для Malfa (Золото) -->
+ <linearGradient id="grad-malfa-gold" x1="2" y1="404.1" x2="800.83" y2="404.1" gradientUnits="userSpaceOnUse">
+  <stop offset="0" stop-color="#F9F2E7"/>
+  <stop offset="0.1" stop-color="#C5A065"/>
+  <stop offset="0.25" stop-color="#B89456"/>
+  <stop offset="0.4" stop-color="#D4AF37"/>
+  <stop offset="0.6" stop-color="#AA8239"/>
+  <stop offset="0.8" stop-color="#8F6B29"/>
+  <stop offset="1" stop-color="#F9F2E7"/>
+ </linearGradient>
+</defs>
+<g id="silhouette-base" style="display:inline">
+ <path id="clip-silhouette-base" d="m 555.84,1859.06 -0.12,-807.68 a 1.62,1.62 0 0 0 -0.17,-0.72 l -1,-2 c 0,0 -0.47,-0.8 -1,-1.52 a 0.82,0.82 0 0 0 0.9,-0.67 c 0.36,-1.87 0.67,-3.87 0.9,-6 a 77.26,77.26 0 0 0 0.45,-8.3 c 0,-0.85 0,-1.68 0,-2.48 -0.28,-3.53 -0.71,-8.34 -1.38,-14 0,-0.15 -0.11,-0.92 -0.27,-2.14 -0.72,-5.59 -2.86,-21 -6,-34.36 -7.53,-32 -22.93,-61 -23.86,-62.74 A 258.74,258.74 0 0 0 474.64,851.59 C 447,823.34 420.39,809 400,801.39 l 6,-7 a 3.47,3.47 0 0 0 0.84,-2.26 q 0.11,-41.24 0.22,-82.48 a 3.21,3.21 0 0 0 -0.17,-1 3.33,3.33 0 0 0 -0.35,-0.68 c -9.67,-14.2 -19.37,-28.44 -27.60,-43.53 -7.45,-13.68 -17.38,-32.19 -30.14,-66.83 a 610.65,610.65 0 0 1 -30.74,-122 H 318 C 437.06,462.45 529.65,361.52 529.65,238.96 529.65,107.37 423.05,0.76 291.54,0.76 160.03,0.76 53.43,107.37 53.43,238.88 53.43,360 143.80,459.93 260.78,475 255,511.20 248,552.07 227.07,604.77 a 512,512 0 0 1 -55.63,103.15 v 83 a 5.20,5.20 0 0 0 1.32,3.46 c 1.89,2.13 3.79,4.32 5.67,6.42 A 230.10,230.10 0 0 0 142.37,820.30 250.55,250.55 0 0 0 105.29,849.14 267.76,267.76 0 0 0 80.08,876.92 264.32,264.32 0 0 0 26,995.90 c -3.71,18.87 -4.05,29.69 -3.92,37 0.08,4.78 0.39,8.91 0.71,12.15 a 2.18,2.18 0 0 0 2.37,2 l 2.61,-0.25 a 4.43,4.43 0 0 0 -2.47,1.20 l -1.60,2.39 a 0.71,0.71 0 0 0 -0.14,0.43 l -0.47,812.64 c 0,0 0.90,1.25 1.36,1.87 3.92,0.48 8.14,1 12.66,1.61 l -12.66,-1.61 c -0.34,2.08 -0.74,5 -1,8.40 v 12.36 c 0.16,2.19 0.40,4.69 0.76,7.63 0.17,1.45 0.37,3 0.61,4.69 0.62,4.47 1.92,13.84 4.24,23.89 a 317,317 0 0 0 22.63,63.84 274.59,274.59 0 0 0 53.66,72.43 278.26,278.26 0 0 0 38.83,31.43 h -0.29 l -0.68,2 c 0,0 -10.62,1.31 -14.37,3.41 -2.78,1.56 -9.70,9.25 -9.70,9.25 v 52.52 a 1.31,1.31 0 0 0 0.19,0.69 l 1.13,1.84 a 1.67,1.67 0 0 0 0.45,0.61 l 6.63,5.71 6,3.06 a 1.57,1.57 0 0 0 0.43,0.15 l 17.13,3.37 37.92,2.73 91.29,3.17 64.49,-0.90 56.92,-2.42 37.08,-4.24 10.61,-3 a 2.84,2.84 0 0 0 1,-0.48 l 6.21,-4.87 a 1.47,1.47 0 0 0 0.30,-0.31 L 460,2158 a 1,1 0 0 0 0.20,-0.61 v -53 a 0.63,0.63 0 0 0 -0.19,-0.44 l -8,-7.54 a 2.60,2.60 0 0 0 -1.19,-0.72 l -11.44,-3.43 a 3,3 0 0 0 -0.50,-0.11 l -6.88,-0.93 a 269.46,269.46 0 0 0 91,-98.72 263.82,263.82 0 0 0 22.29,-55.60 c 3.05,-11.25 4.48,-20.38 7.35,-38.64 0.22,-1.45 0.45,-3 0.66,-4.65 a 133.88,133.88 0 0 0 1.15,-18.85 a 42.47,42.47 0 0 0 -0.68,-7.21 2.62,2.62 0 0 1 0.06,-1.53 c 0.31,-0.86 1,-1 1.42,-1.82 a 4.61,4.61 0 0 0 0.61,-2.33 c 0.05,-0.87 -0.06,-1.81 -0.02,-2.81 z" style="fill:#232323"/>
+</g>
+
+
+
+<g id="spheres-original" style="display:inline">
+ <g clip-path="url(#clip-path)">
+  <!-- spheres-default-satin steel - слой для варианта Сатинированная сталь -->
+  <image id="spheres-original-3" width="1113" height="4537" transform="matrix(0.48,0,0,0.48,21.8,0.08)" xlink:href="https://soyuzmicrophones.ru/image/custom/mic017/silhouette_color_3_4k.png" style="display:inline"/>
+  <!-- spheres-default-brass - слой для варианта Классическая латунь -->
+  <image id="spheres-original-2" width="1113" height="4537" transform="matrix(0.48,0,0,0.48,21.8,0.08)" xlink:href="https://soyuzmicrophones.ru/image/custom/mic017/silhouette_color_2_4k.png" style="display:none"/>
+  <!-- spheres-default-black - слой для варианта Матовый черный -->
+  <image id="spheres-original-1" width="1113" height="4537" transform="matrix(0.48,0,0,0.48,21.8,0.08)" xlink:href="https://soyuzmicrophones.ru/image/custom/mic017/silhouette_color_1_4k.png" style="display:none"/>
+ </g>
+</g>
+
+<g id="spheres-colorized" clip-path="url(#clip-path)" style="display:none;filter:url(#filter-spheres-colorize)">
+ <!-- spheres-colorized-layer 4k -->
+ <image id="spheres-color-3" width="1113" height="4537" transform="matrix(0.48,0,0,0.48,21.8,0.08)" xlink:href="https://soyuzmicrophones.ru/image/custom/mic017/colorized-silhouette_4k.png" style="display:inline"/>
+ <!-- spheres-colorized-layer desktop and mobile-->
+ <image id="spheres-color-2" width="1113" height="4537" transform="matrix(0.48,0,0,0.48,21.8,0.08)" xlink:href="https://soyuzmicrophones.ru/image/custom/mic017/colorized-silhouette_hdmob.png" style="display:none"/>
+ <!-- spheres-colorized-layer tablet -->
+ <image id="spheres-color-1" width="1113" height="4537" transform="matrix(0.48,0,0,0.48,21.8,0.08)" xlink:href="https://soyuzmicrophones.ru/image/custom/mic017/colorized-silhouette_tablet.png" style="display:none"/>
+</g>
+
+<g id="spheres-monochrome" clip-path="url(#clip-path)" style="display:none;filter:url(#filter-spheres-monochrome)">
+ <!-- spheres-monochrome-layer 4k распологается поверх colorized layer для восстановления света/тени  -->
+ <image id="spheres-mono-3" width="1113" height="4537" transform="matrix(0.48,0,0,0.48,21.8,0.08)" xlink:href="https://soyuzmicrophones.ru/image/custom/mic017/colorized-silhouette_4k.png" style="display:inline"/>
+ <!-- spheres-monochrome-layer desktop and mobile распологается поверх colorized layer для восстановления света/тени  -->
+ <image id="spheres-mono-2" width="1113" height="4537" transform="matrix(0.48,0,0,0.48,21.8,0.08)" xlink:href="https://soyuzmicrophones.ru/image/custom/mic017/colorized-silhouette_hdmob.png" style="display:none"/>
+ <!-- spheres-monochrome-layer tabler распологается поверх colorized layer для восстановления света/тени  -->
+ <image id="spheres-mono-1" width="1113" height="4537" transform="matrix(0.48,0,0,0.48,21.8,0.08)" xlink:href="https://soyuzmicrophones.ru/image/custom/mic017/colorized-silhouette_tablet.png" style="display:none"/>
+</g>
+
+<g id="grills-variants" style="display:inline">
+ <!-- Изменен id и ссылка для bottom connector -->
+ <image id="bottom-connector" width="467" height="48" transform="matrix(0.48,0,0,0.48,175.88,2174)" xlink:href="https://soyuzmicrophones.ru/image/custom/mic017/bottom_connector_4k.png"/>
+
+ <!-- Изменены id и ссылки для грилей -->
+ <image id="img-grill-mic3" width="946" height="945" transform="matrix(0.48,0,0,0.48,67.88,24.44)" xlink:href="https://soyuzmicrophones.ru/image/custom/mic017/grill_4k.png" style="display:inline"/>
+ <image id="img-grill-mic2" width="946" height="945" transform="matrix(0.48,0,0,0.48,67.88,24.44)" xlink:href="https://soyuzmicrophones.ru/image/custom/mic017/grill_hd.png" style="display:none"/>
+ <image id="img-grill-mic1" width="946" height="945" transform="matrix(0.48,0,0,0.48,67.88,24.44)" xlink:href="https://soyuzmicrophones.ru/image/custom/mic017/grill_tablet.png" style="display:none"/>
+</g>
+
+<g id="body-original" style="display:inline">
+ <g clip-path="url(#clip-path-2)">
+  <!-- для Сатинированная сталь-->
+  <image id="body-original-3" width="1111" height="1757" transform="matrix(0.48,0,0,0.48,22.76,1035.92)" xlink:href="https://soyuzmicrophones.ru/image/custom/mic017/body_color_3_4k.png" style="display:inline"/>
+ <!-- для Жемчужно-белый -->
+    <image id="body-original-2" width="1111" height="1757" transform="matrix(0.48,0,0,0.48,22.76,1035.92)" xlink:href="https://soyuzmicrophones.ru/image/custom/mic017/body_color_2_4k.png" style="display:none"/>
+  <!-- Матовый черный -->
+      <image id="body-original-1" width="1111" height="1757" transform="matrix(0.48,0,0,0.48,22.76,1035.92)" xlink:href="https://soyuzmicrophones.ru/image/custom/mic017/body_color_1_4k.png" style="display:none"/>
+ </g>
+</g>
+<!-- Данный слой используется для перекрашивания корпуса в платные RAL -->
+<g id="body-colorized" clip-path="url(#clip-path-2)" style="display:none;filter:url(#filter-body-colorize)">
+ <!-- изображения с учетом разрешения экранов body-color-3 4K, body-color-2 HD/MOB, body-color-1 TABLET -->
+ <image id="body-color-3" width="1111" height="1757" transform="matrix(0.48,0,0,0.48,22.76,1035.92)" xlink:href="https://soyuzmicrophones.ru/image/custom/mic017/colorized-body_4k.png" style="display:inline"/>
+ <image id="body-color-2" width="1111" height="1757" transform="matrix(0.48,0,0,0.48,22.76,1035.92)" xlink:href="https://soyuzmicrophones.ru/image/custom/mic017/colorized-body_hdmob.png" style="display:none"/>
+ <image id="body-color-1" width="1111" height="1757" transform="matrix(0.48,0,0,0.48,22.76,1035.92)" xlink:href="https://soyuzmicrophones.ru/image/custom/mic017/colorized-body_tablet.png" style="display:none"/>
+</g>
+<!-- Данный слой отображается при использовании body-colorized для реалистичного отображения света/тени поверх перекрашенного слоя-->
+<g id="body-monochrome" clip-path="url(#clip-path-2)" style="display:none;filter:url(#filter-body-monochrome)">
+ <!-- Изображения с учетом разрешения экранов body-mono-3 4K, body-mono-2 HD/MOB, body-mono-1 TABLET -->
+ <image id="body-mono-3" width="1111" height="1757" transform="matrix(0.48,0,0,0.48,22.76,1035.92)" xlink:href="https://soyuzmicrophones.ru/image/custom/mic017/monochrome-body_4k.png" style="display:inline"/>
+ <image id="body-mono-2" width="1111" height="1757" transform="matrix(0.48,0,0,0.48,22.76,1035.92)" xlink:href="https://soyuzmicrophones.ru/image/custom/mic017/monochrome-body_hdmob.png" style="display:none"/>
+ <image id="body-mono-1" width="1111" height="1757" transform="matrix(0.48,0,0,0.48,22.76,1035.92)" xlink:href="https://soyuzmicrophones.ru/image/custom/mic017/monochrome-body_tablet.png" style="display:none"/>
+</g>
+
+<g id="logotype-gold" style="display:inline;isolation:isolate">
+ <g id="logobg-black" style="display:none">
+  <g clip-path="url(#clip-path-6)" id="g6" style="display:inline;opacity:0.8">
+   <!-- Изменен id и ссылка для badge background color -->
+   <image id="image-logobg-black" width="1158" height="1168" transform="matrix(0.24,0,0,0.24,157.4,1171.52)" xlink:href="https://soyuzmicrophones.ru/image/custom/mic017/badge_bg_color_4k.png"/>
+  </g>
+ </g>
+
+ <g id="logobg-colorized" style="display:inline">
+  <g clip-path="url(#clip-path-6)" id="g6-colored" style="display:inline;filter:url(#filter-logobg-colorize)">
+   <!-- слой для перекрашивания фона логотипа в платные RAL и бесплатные RAL . меняется цвет flood-color в фильтре #feFlood-logobg-color -->
+   <image id="image-logobg-colored" width="1158" height="1168" transform="matrix(0.24,0,0,0.24,157.4,1171.52)" xlink:href="https://soyuzmicrophones.ru/image/custom/mic017/badge_bg_color_4k.png"/>
+  </g>
+ </g>
+
+ <g id="logobg-monochrome" style="display:inline; opacity: 0.7;">
+  <g clip-path="url(#clip-path-6)" id="g6-mono" style="display:inline;filter:url(#filter-logobg-monochrome)">
+   <!-- данный слой отвечает за возврат света и тени для фона логотипа - всегда поверх  #logobg-colorized -->
+   <image id="image-logobg-monochrome" width="1158" height="1168" transform="matrix(0.24,0,0,0.24,157.4,1171.52)" xlink:href="https://soyuzmicrophones.ru/image/custom/mic017/badge_bg_color_4k.png"/>
+
+  </g>
+ </g>
+
+ <g id="logo-letters-and-frame" style="display:inline">
+  <g clip-path="url(#clip-path-8)" id="g8">
+   <!-- слой для Эмблемы микрофона - используется в разделе Тип Эмблемы - это вариант Классическая латунь . так же используется в варианте холодный хром (накладывается фильтр обесцвечивания) - Исполнение эмблемы -->
+   <image id="image-logo-letters" width="1158" height="1168" transform="matrix(0.24,0,0,0.24,157.4,1171.52)" xlink:href="https://soyuzmicrophones.ru/image/custom/mic017/logo_4k.png"/>
+  </g>
+ </g>
+</g>
+ <!-- MALFA (Золото) и MALFA (Серебро) - меняется градиент у слоя #logo-malfaa-img-nd_msk-->
+<g id="malfa-logo" style="display:none;" transform="matrix(0.35,0,0,0.35,157.4,1171.52)">
+ <g id="logo-malfaa-img-nd_msk">
+  <g style="clip-path: url(#clip-path-malfa)">
+  
+   <image width="178" height="173" transform="translate(-45.84 -40.08) scale(5.19 5.13)" xlink:href="https://soyuzmicrophones.ru/image/custom/mic017/malfa_edition_logo_4k.png"/>
+  </g>
+ </g>
+
+ <!-- Круг - фон для перекраски фона логотипа если выбран исполнение эмблемы MALFA   -->
+ <ellipse id="clip-logobg-malfa" cx="402.21" cy="404.1" rx="381.06" ry="377.71" style="opacity: 0.6; fill: #030303"/>
+
+ <!-- Text Path -->
+ <path id="malfa-logo-text-path" d="M401.43,803.5a422.21,422.21,0,0,1-89.61-9.77,393.29,393.29,0,0,1-301-304.59C-2,427.06-.84,365.4,14.21,305.88A398.09,398.09,0,0,1,91.63,152a397.84,397.84,0,0,1,264-144.73A405.09,405.09,0,0,1,401.44,4.7h.46A391.18,391.18,0,0,1,557.19,36.89,406.44,406.44,0,0,1,770.17,252a391.38,391.38,0,0,1,30.65,155.66A399.59,399.59,0,0,1,499.05,791.46v1.84h-7.58A401.27,401.27,0,0,1,401.43,803.5Zm10.27-23.74c6.8-.17,13.6-.53,20.28-1.07V485.59a10.45,10.45,0,0,1,4.39-8.51,30.82,30.82,0,0,1-24.67-23.46Zm-47-1.63c8.61.84,17.35,1.38,26.06,1.63V28.44c-8.67.25-17.42.79-26.06,1.62Zm84.42-300.59a10.77,10.77,0,0,1,3.81,8.27v290.6c8.49-1.17,16.94-2.62,25.18-4.33V476.81a8.41,8.41,0,0,1-3.45.73ZM322.84,771.69c6.84,1.45,13.86,2.74,20.92,3.83V32.69c-7,1.08-14,2.36-20.92,3.83V474.19a10.47,10.47,0,1,1-20.94,0V461.61h-.51a10.44,10.44,0,0,1-7.41-3.06,10.85,10.85,0,0,1-1.33-1.64l-14.57,22.73V759.21c7.75,2.7,15.75,5.18,23.82,7.39l0-266.13a10.47,10.47,0,1,1,20.94,0Zm176.21-4.59c8.24-2.2,16.42-4.7,24.38-7.43V488.36a10.49,10.49,0,0,1,10.47-10.47,11.66,11.66,0,0,1,1.89.16,10.6,10.6,0,0,1,8.58,10.53v263.2c7.2-3,14.34-6.17,21.3-9.56V162.13a10.48,10.48,0,0,1,10.48-10.46,11.66,11.66,0,0,1,1.89.16,10.59,10.59,0,0,1,8.57,10.52V447.67l17.32-42.41a7.68,7.68,0,0,1,14.22,0l24.41,59.8a7.74,7.74,0,0,1-7.06,10.68l-6,.08a7.71,7.71,0,0,1-7.18-4.83L616.3,456.1H605.78L599.7,471a7.72,7.72,0,0,1-7.18,4.82l-5.91-.08V731.2c7.22-4.09,14.31-8.43,21.13-12.91v-205a10.48,10.48,0,0,1,10.46-10.47,10,10,0,0,1,1.9.18,10.54,10.54,0,0,1,8.58,10.51v190c7.76-5.91,15.38-12.19,22.71-18.72V329.32a10.49,10.49,0,0,1,10.48-10.47,11.25,11.25,0,0,1,1.89.17,10.59,10.59,0,0,1,8.57,10.52V664.6C740,594.33,777.27,502,777.27,404.1c0-150.89-93.48-290.22-232.9-347.67V358.49A10.48,10.48,0,0,1,533.89,369a11.25,11.25,0,0,1-1.89-.17,10.58,10.58,0,0,1-8.57-10.52V48.53c-8-2.74-16.18-5.23-24.38-7.43V388.52a7.88,7.88,0,0,1,6.13-2.94h51a7.89,7.89,0,0,1,7.88,7.88v5.18a7.88,7.88,0,0,1-7.88,7.88h-38v4.39h25.2a7.89,7.89,0,0,1,7.88,7.88V424a7.9,7.9,0,0,1-7.88,7.88h-25.2v37.38a7.89,7.89,0,0,1-7.88,7.88h-5.18a7.88,7.88,0,0,1-6.13-2.94ZM235.12,741.21c7.23,3.57,14.62,6.93,22,10V57C116.38,115.41,25.6,251.34,25.6,404.1A373.34,373.34,0,0,0,129.34,663.34v-334a10.49,10.49,0,0,1,10.47-10.47,11.25,11.25,0,0,1,1.89.17,10.6,10.6,0,0,1,8.58,10.52v70.31l21.28,26.55V250.26a10.48,10.48,0,0,1,10.47-10.46,11.66,11.66,0,0,1,1.89.16,10.59,10.59,0,0,1,8.57,10.52V427.4l21.68-27V162.13a10.48,10.48,0,0,1,10.47-10.46,11.66,11.66,0,0,1,1.89.16,10.6,10.6,0,0,1,8.58,10.52ZM192.5,716.55c7.08,4.73,14.36,9.26,21.68,13.48V433.83l-21.68,27ZM150.28,683.7c6.83,6.13,14,12.09,21.28,17.74V459.87l-21.28-26.54ZM474.66,456.6a8.41,8.41,0,0,1,3.45.74V36.13c-8.25-1.71-16.71-3.17-25.18-4.34v424a8.12,8.12,0,0,1,0,.86Zm-51.19-72.11a8.42,8.42,0,0,1,8.41,8.41v53.88a9.1,9.1,0,0,0,.10,1.39V29.51c-6.69-.53-13.5-.89-20.28-1.07v361a8.43,8.43,0,0,1,7.66-4.92ZM278.08,440.85,301.9,403.7V41.6C294,43.78,286,46.26,278.08,49Zm335.51-.66-3.89-9.56-4.06,9.56ZM618.21,386a10.49,10.49,0,0,1-10.47-10.47V251.08a10.47,10.47,0,1,1,20.94,0V375.49A10.49,10.49,0,0,1,618.21,386Z" style="fill: url(#grad-malfa-silver)"/>
+ </g>
+</svg>
