@@ -264,6 +264,7 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                 </div>
                 
                 <?php 
+                //должно браться из языковых файлов.
                 $viewTypeNames = [
                     'spheres' => 'Силуэт',
                     'body' => 'Корпус',

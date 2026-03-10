@@ -1,7 +1,10 @@
 export const CONFIG = {
+    // Базовая цена должна браться из CUSTOMIZER_DATA.models[modelId].BASE_PRICE
     basePrice: 129990,
+    // Цена опции (для всех опций кроме шокмунта) должна браться из CUSTOMIZER_DATA.models[modelId].OPTION_PRICE
     optionPrice: 1500,
     scaleFactor: 0.8584,
+    // Цена шокмунта должна браться из CUSTOMIZER_DATA.models[modelId].SHOCKMOUNT_PRICE
     shockmountPrice: 10000,
     pxPerMm: 3.2909,
     caseScaleFactor: 1.0  // Коэффициент масштабирования для ручной корректировки CASE_GEOMETRY
@@ -88,7 +91,7 @@ export function getCaseImages() {
     const models = getAllModels();
     const caseImages = {};
     
-    // Маппинг кодов моделей на имена файлов изображений
+    // Маппинг кодов моделей на имена файлов изображений необходимо взять из новых данных HL.
     const imageFileMap = {
         '017-tube': 'case_017_tube',
         '017-fet': 'case_017_fet-023_dlx', 
@@ -124,7 +127,7 @@ export function getCaseGeometry() {
     const cases = {};
     const casesRescale = {};
     
-    // Геометрия футляров - можно будет перенести в базу данных в будущем
+    // Геометрия футляров - НЕ перенсим в HL . Оставляем здесь в таком же виде.
     const geometryData = {
         '017-tube': { 
             mm: 550, 
