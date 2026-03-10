@@ -20,3 +20,10 @@ Thumbs.db
 .vscode/
 node_modules/
 *.log
+
+# Исключить архивы
+*.rar
+*.zip
+*.7z
+*.tar
+*.gz
