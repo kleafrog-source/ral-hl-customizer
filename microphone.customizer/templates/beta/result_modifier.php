@@ -102,11 +102,12 @@ if ($cache->initCache($cacheTime, $cacheId, $cacheDir)) {
             }
         }
         
-        // Обработка UF_SERIES_VAR для вариантов футляров
-        if ($option['UF_SERIES_VAR']) {
-            $option['SERIES_VAR'] = unserialize($option['UF_SERIES_VAR']);
+        // Обработка UF_SERIES_VAR для вариантов футляров (новое поле)
+        if ($option['UF_SERIESVAR']) {
+            // Теперь это просто строка, а не сериализованный массив
+            $option['SERIES_VAR'] = $option['UF_SERIESVAR'];
         } else {
-            $option['SERIES_VAR'] = [];
+            $option['SERIES_VAR'] = '';
         }
         
         // Добавляем SVG_SPECIAL_KEY для футляров

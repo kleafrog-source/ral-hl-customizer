@@ -111,21 +111,21 @@ export function checkCaseCompatibility(caseVariant, modelCode) {
         return true;
     }
     
-    // Проверяем SERIES_VAR - содержит ли ID моделей
-    const seriesVar = selectedCaseOption.SERIES_VAR || [];
-    if (seriesVar.length > 0 && seriesVar.includes(modelId.toString())) {
-        console.log(`[CASE COMPATIBILITY] Case is compatible via SERIES_VAR`);
+    // Проверяем SERIES_VAR - теперь это строка с серией
+    const seriesVar = selectedCaseOption.SERIES_VAR || '';
+    if (seriesVar && modelSeries && seriesVar === modelSeries) {
+        console.log(`[CASE COMPATIBILITY] Case is compatible via SERIES_VAR: ${seriesVar}`);
         return true;
     }
     
     // Если футляр для всех моделей
-    if ((!selectedCaseOption.UF_MODEL_ID || selectedCaseOption.UF_MODEL_ID == 0) && 
-        seriesVar.length === 0) {
+    if ((!selectedCaseOption.UF_MODEL_ID || selectedCaseOption.UF_MODEL_ID == 0) && !seriesVar) {
         console.log(`[CASE COMPATIBILITY] Case is universal for all models`);
         return true;
     }
     
     console.log(`[CASE COMPATIBILITY] Case is NOT compatible with model ${modelCode}`);
+    console.log(`[CASE COMPATIBILITY] Expected series: ${modelSeries}, got: ${seriesVar}`);
     return false;
 }
 

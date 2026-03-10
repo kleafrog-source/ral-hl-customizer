@@ -159,9 +159,11 @@ function getCaseImageFromHL(modelCode) {
             }
         }
         
-        // Проверяем SERIES_VAR - содержит ли ID моделей (для обратной совместимости)
-        const seriesVar = caseOption.SERIES_VAR || [];
-        if (seriesVar.length > 0 && seriesVar.includes(modelData.ID.toString())) {
+        // Проверяем SERIES_VAR - теперь это строка с серией, а не массив
+        const seriesVar = caseOption.SERIES_VAR || '';
+        const modelSeries = modelData.MODEL_SERIES;
+        
+        if (seriesVar && modelSeries && seriesVar === modelSeries) {
             const svgSpecialKey = caseOption.SVG_SPECIAL_KEY;
             if (svgSpecialKey) {
                 console.log(`[CONFIG] Found HL case image for ${modelCode} (series-based): ${svgSpecialKey}`);
@@ -170,8 +172,7 @@ function getCaseImageFromHL(modelCode) {
         }
         
         // Если футляр для всех моделей (UF_MODEL_ID = 0 или пустой) и SERIES_VAR пустой
-        if ((!caseOption.UF_MODEL_ID || caseOption.UF_MODEL_ID == 0) && 
-            seriesVar.length === 0) {
+        if ((!caseOption.UF_MODEL_ID || caseOption.UF_MODEL_ID == 0) && !seriesVar) {
             const svgSpecialKey = caseOption.SVG_SPECIAL_KEY;
             if (svgSpecialKey) {
                 console.log(`[CONFIG] Found HL case image for ${modelCode} (universal): ${svgSpecialKey}`);

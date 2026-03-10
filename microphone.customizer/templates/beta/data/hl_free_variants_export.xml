@@ -18,9 +18,9 @@
 			<uf_additional_image>0</uf_additional_image>
 			<uf_svg_layer_group />
 			<uf_svg_special_key />
-			<uf_series_var>serialize#a:0:{}</uf_series_var>
 			<uf_model_id />
 			<uf_svg_target_mode>filter</uf_svg_target_mode>
+			<uf_seriesvar />
 			<uf_svg_filter_id>feFlood8</uf_svg_filter_id>
 		</item>
 		<item>
@@ -36,9 +36,9 @@
 			<uf_additional_image>0</uf_additional_image>
 			<uf_svg_layer_group>spheres-original-2</uf_svg_layer_group>
 			<uf_svg_special_key />
-			<uf_series_var>serialize#a:0:{}</uf_series_var>
 			<uf_model_id />
 			<uf_svg_target_mode>original</uf_svg_target_mode>
+			<uf_seriesvar />
 			<uf_svg_filter_id />
 		</item>
 		<item>
@@ -54,9 +54,9 @@
 			<uf_additional_image>0</uf_additional_image>
 			<uf_svg_layer_group>body-original-3</uf_svg_layer_group>
 			<uf_svg_special_key />
-			<uf_series_var>serialize#a:0:{}</uf_series_var>
 			<uf_model_id />
 			<uf_svg_target_mode>original</uf_svg_target_mode>
+			<uf_seriesvar />
 			<uf_svg_filter_id />
 		</item>
 		<item>
@@ -72,9 +72,9 @@
 			<uf_additional_image>0</uf_additional_image>
 			<uf_svg_layer_group />
 			<uf_svg_special_key />
-			<uf_series_var>serialize#a:0:{}</uf_series_var>
 			<uf_model_id />
 			<uf_svg_target_mode>filter</uf_svg_target_mode>
+			<uf_seriesvar />
 			<uf_svg_filter_id>feFlood8</uf_svg_filter_id>
 		</item>
 		<item>
@@ -90,9 +90,9 @@
 			<uf_additional_image>0</uf_additional_image>
 			<uf_svg_layer_group>logo-letters-and-frame</uf_svg_layer_group>
 			<uf_svg_special_key>grayscale</uf_svg_special_key>
-			<uf_series_var>serialize#a:0:{}</uf_series_var>
 			<uf_model_id />
 			<uf_svg_target_mode>original</uf_svg_target_mode>
+			<uf_seriesvar />
 			<uf_svg_filter_id />
 		</item>
 		<item>
@@ -108,9 +108,9 @@
 			<uf_additional_image>0</uf_additional_image>
 			<uf_svg_layer_group>logo-letters-and-frame</uf_svg_layer_group>
 			<uf_svg_special_key />
-			<uf_series_var>serialize#a:0:{}</uf_series_var>
 			<uf_model_id />
 			<uf_svg_target_mode>original</uf_svg_target_mode>
+			<uf_seriesvar />
 			<uf_svg_filter_id />
 		</item>
 		<item>
@@ -126,9 +126,9 @@
 			<uf_additional_image>0</uf_additional_image>
 			<uf_svg_layer_group>malfa-logo-text-path</uf_svg_layer_group>
 			<uf_svg_special_key>malfa_silver</uf_svg_special_key>
-			<uf_series_var>serialize#a:0:{}</uf_series_var>
 			<uf_model_id>2</uf_model_id>
 			<uf_svg_target_mode>gradient</uf_svg_target_mode>
+			<uf_seriesvar>023</uf_seriesvar>
 			<uf_svg_filter_id />
 		</item>
 		<item>
@@ -144,9 +144,9 @@
 			<uf_additional_image>0</uf_additional_image>
 			<uf_svg_layer_group>malfa-logo-text-path</uf_svg_layer_group>
 			<uf_svg_special_key>malfa_gold</uf_svg_special_key>
-			<uf_series_var>serialize#a:0:{}</uf_series_var>
 			<uf_model_id>2</uf_model_id>
 			<uf_svg_target_mode>gradient</uf_svg_target_mode>
+			<uf_seriesvar>023</uf_seriesvar>
 			<uf_svg_filter_id />
 		</item>
 		<item>
@@ -162,9 +162,9 @@
 			<uf_additional_image>0</uf_additional_image>
 			<uf_svg_layer_group />
 			<uf_svg_special_key>clip-logobg-malfa</uf_svg_special_key>
-			<uf_series_var>serialize#a:0:{}</uf_series_var>
 			<uf_model_id />
 			<uf_svg_target_mode>filter</uf_svg_target_mode>
+			<uf_seriesvar />
 			<uf_svg_filter_id>feFlood-logobg-color</uf_svg_filter_id>
 		</item>
 		<item>
@@ -180,9 +180,9 @@
 			<uf_additional_image>0</uf_additional_image>
 			<uf_svg_layer_group />
 			<uf_svg_special_key>clip-logobg-malfa</uf_svg_special_key>
-			<uf_series_var>serialize#a:0:{}</uf_series_var>
 			<uf_model_id />
 			<uf_svg_target_mode>filter</uf_svg_target_mode>
+			<uf_seriesvar />
 			<uf_svg_filter_id>feFlood-logobg-color</uf_svg_filter_id>
 		</item>
 		<item>
@@ -198,9 +198,9 @@
 			<uf_additional_image>0</uf_additional_image>
 			<uf_svg_layer_group />
 			<uf_svg_special_key>clip-logobg-malfa</uf_svg_special_key>
-			<uf_series_var>serialize#a:0:{}</uf_series_var>
 			<uf_model_id />
 			<uf_svg_target_mode>filter</uf_svg_target_mode>
+			<uf_seriesvar />
 			<uf_svg_filter_id>feFlood-logobg-color</uf_svg_filter_id>
 		</item>
 		<item>
@@ -216,9 +216,9 @@
 			<uf_additional_image>0</uf_additional_image>
 			<uf_svg_layer_group />
 			<uf_svg_special_key>clip-logobg-malfa</uf_svg_special_key>
-			<uf_series_var>serialize#a:0:{}</uf_series_var>
 			<uf_model_id />
 			<uf_svg_target_mode>filter</uf_svg_target_mode>
+			<uf_seriesvar />
 			<uf_svg_filter_id>feFlood-logobg-color</uf_svg_filter_id>
 		</item>
 		<item>
@@ -234,9 +234,9 @@
 			<uf_additional_image>0</uf_additional_image>
 			<uf_svg_layer_group />
 			<uf_svg_special_key />
-			<uf_series_var>serialize#a:0:{}</uf_series_var>
 			<uf_model_id />
 			<uf_svg_target_mode>filter</uf_svg_target_mode>
+			<uf_seriesvar />
 			<uf_svg_filter_id>feFlood8</uf_svg_filter_id>
 		</item>
 		<item>
@@ -252,14 +252,14 @@
 			<uf_additional_image>0</uf_additional_image>
 			<uf_svg_layer_group>shockmount-017-pins-brass-group</uf_svg_layer_group>
 			<uf_svg_special_key />
-			<uf_series_var>serialize#a:2:{i:1;s:1:&quot;4&quot;;i:2;s:1:&quot;5&quot;;}</uf_series_var>
 			<uf_model_id />
 			<uf_svg_target_mode>original</uf_svg_target_mode>
+			<uf_seriesvar>017</uf_seriesvar>
 			<uf_svg_filter_id />
 		</item>
 		<item>
 			<id>18</id>
-			<uf_is_ral>1</uf_is_ral>
+			<uf_is_ral>0</uf_is_ral>
 			<uf_view_type>7</uf_view_type>
 			<uf_ral_color_id>212</uf_ral_color_id>
 			<uf_variant_code>pins-9006-023</uf_variant_code>
@@ -270,14 +270,14 @@
 			<uf_additional_image>0</uf_additional_image>
 			<uf_svg_layer_group>shockmount-023-pins-brass-group</uf_svg_layer_group>
 			<uf_svg_special_key>grayscale</uf_svg_special_key>
-			<uf_series_var>serialize#a:3:{i:1;s:1:&quot;1&quot;;i:2;s:1:&quot;2&quot;;i:3;s:1:&quot;3&quot;;}</uf_series_var>
 			<uf_model_id />
 			<uf_svg_target_mode>original</uf_svg_target_mode>
+			<uf_seriesvar>023</uf_seriesvar>
 			<uf_svg_filter_id />
 		</item>
 		<item>
 			<id>20</id>
-			<uf_is_ral>1</uf_is_ral>
+			<uf_is_ral>0</uf_is_ral>
 			<uf_view_type>1</uf_view_type>
 			<uf_ral_color_id>211</uf_ral_color_id>
 			<uf_variant_code>spheres-9005</uf_variant_code>
@@ -288,9 +288,9 @@
 			<uf_additional_image>0</uf_additional_image>
 			<uf_svg_layer_group>spheres-original-1</uf_svg_layer_group>
 			<uf_svg_special_key />
-			<uf_series_var>serialize#a:0:{}</uf_series_var>
 			<uf_model_id />
 			<uf_svg_target_mode>original</uf_svg_target_mode>
+			<uf_seriesvar />
 			<uf_svg_filter_id />
 		</item>
 		<item>
@@ -306,14 +306,14 @@
 			<uf_additional_image>0</uf_additional_image>
 			<uf_svg_layer_group>spheres-original-3</uf_svg_layer_group>
 			<uf_svg_special_key />
-			<uf_series_var>serialize#a:0:{}</uf_series_var>
 			<uf_model_id />
 			<uf_svg_target_mode>original</uf_svg_target_mode>
+			<uf_seriesvar />
 			<uf_svg_filter_id />
 		</item>
 		<item>
 			<id>22</id>
-			<uf_is_ral>1</uf_is_ral>
+			<uf_is_ral>0</uf_is_ral>
 			<uf_view_type>2</uf_view_type>
 			<uf_ral_color_id>211</uf_ral_color_id>
 			<uf_variant_code>body-black</uf_variant_code>
@@ -324,14 +324,14 @@
 			<uf_additional_image>0</uf_additional_image>
 			<uf_svg_layer_group>body-original-1</uf_svg_layer_group>
 			<uf_svg_special_key />
-			<uf_series_var>serialize#a:0:{}</uf_series_var>
 			<uf_model_id />
 			<uf_svg_target_mode>original</uf_svg_target_mode>
+			<uf_seriesvar />
 			<uf_svg_filter_id />
 		</item>
 		<item>
 			<id>23</id>
-			<uf_is_ral>1</uf_is_ral>
+			<uf_is_ral>0</uf_is_ral>
 			<uf_view_type>2</uf_view_type>
 			<uf_ral_color_id>16</uf_ral_color_id>
 			<uf_variant_code>body-1013</uf_variant_code>
@@ -342,9 +342,9 @@
 			<uf_additional_image>0</uf_additional_image>
 			<uf_svg_layer_group>body-original-2</uf_svg_layer_group>
 			<uf_svg_special_key />
-			<uf_series_var>serialize#a:0:{}</uf_series_var>
 			<uf_model_id />
 			<uf_svg_target_mode>original</uf_svg_target_mode>
+			<uf_seriesvar />
 			<uf_svg_filter_id />
 		</item>
 		<item>
@@ -360,9 +360,9 @@
 			<uf_additional_image>0</uf_additional_image>
 			<uf_svg_layer_group />
 			<uf_svg_special_key>clip-logobg-malfa</uf_svg_special_key>
-			<uf_series_var>serialize#a:0:{}</uf_series_var>
 			<uf_model_id />
 			<uf_svg_target_mode>filter</uf_svg_target_mode>
+			<uf_seriesvar />
 			<uf_svg_filter_id>feFlood-logobg-color</uf_svg_filter_id>
 		</item>
 		<item>
@@ -378,9 +378,9 @@
 			<uf_additional_image>0</uf_additional_image>
 			<uf_svg_layer_group />
 			<uf_svg_special_key>clip-logobg-malfa</uf_svg_special_key>
-			<uf_series_var>serialize#a:0:{}</uf_series_var>
 			<uf_model_id />
 			<uf_svg_target_mode>filter</uf_svg_target_mode>
+			<uf_seriesvar />
 			<uf_svg_filter_id>feFlood-logobg-color</uf_svg_filter_id>
 		</item>
 		<item>
@@ -396,9 +396,9 @@
 			<uf_additional_image>0</uf_additional_image>
 			<uf_svg_layer_group />
 			<uf_svg_special_key />
-			<uf_series_var>serialize#a:0:{}</uf_series_var>
 			<uf_model_id />
 			<uf_svg_target_mode>filter</uf_svg_target_mode>
+			<uf_seriesvar />
 			<uf_svg_filter_id>feFlood6</uf_svg_filter_id>
 		</item>
 		<item>
@@ -414,9 +414,9 @@
 			<uf_additional_image>0</uf_additional_image>
 			<uf_svg_layer_group />
 			<uf_svg_special_key />
-			<uf_series_var>serialize#a:0:{}</uf_series_var>
 			<uf_model_id />
 			<uf_svg_target_mode>filter</uf_svg_target_mode>
+			<uf_seriesvar />
 			<uf_svg_filter_id>feFlood6</uf_svg_filter_id>
 		</item>
 		<item>
@@ -432,9 +432,9 @@
 			<uf_additional_image>0</uf_additional_image>
 			<uf_svg_layer_group />
 			<uf_svg_special_key />
-			<uf_series_var>serialize#a:0:{}</uf_series_var>
 			<uf_model_id />
 			<uf_svg_target_mode>filter</uf_svg_target_mode>
+			<uf_seriesvar />
 			<uf_svg_filter_id>feFlood6</uf_svg_filter_id>
 		</item>
 		<item>
@@ -450,14 +450,14 @@
 			<uf_additional_image>0</uf_additional_image>
 			<uf_svg_layer_group>shockmount-023-pins-brass-group</uf_svg_layer_group>
 			<uf_svg_special_key />
-			<uf_series_var>serialize#a:3:{i:1;s:1:&quot;1&quot;;i:2;s:1:&quot;2&quot;;i:3;s:1:&quot;3&quot;;}</uf_series_var>
 			<uf_model_id />
 			<uf_svg_target_mode>original</uf_svg_target_mode>
+			<uf_seriesvar>023</uf_seriesvar>
 			<uf_svg_filter_id />
 		</item>
 		<item>
 			<id>34</id>
-			<uf_is_ral>1</uf_is_ral>
+			<uf_is_ral>0</uf_is_ral>
 			<uf_view_type>7</uf_view_type>
 			<uf_ral_color_id>212</uf_ral_color_id>
 			<uf_variant_code>pins-9006-017</uf_variant_code>
@@ -468,9 +468,9 @@
 			<uf_additional_image>0</uf_additional_image>
 			<uf_svg_layer_group>shockmount-017-pins-brass-group</uf_svg_layer_group>
 			<uf_svg_special_key>grayscale</uf_svg_special_key>
-			<uf_series_var>serialize#a:2:{i:1;s:1:&quot;4&quot;;i:2;s:1:&quot;5&quot;;}</uf_series_var>
 			<uf_model_id />
 			<uf_svg_target_mode>original</uf_svg_target_mode>
+			<uf_seriesvar>017</uf_seriesvar>
 			<uf_svg_filter_id />
 		</item>
 		<item>
@@ -486,9 +486,9 @@
 			<uf_additional_image>0</uf_additional_image>
 			<uf_svg_layer_group />
 			<uf_svg_special_key>case_017_tube</uf_svg_special_key>
-			<uf_series_var>serialize#a:0:{}</uf_series_var>
 			<uf_model_id>5</uf_model_id>
 			<uf_svg_target_mode>woodcase_image</uf_svg_target_mode>
+			<uf_seriesvar>017</uf_seriesvar>
 			<uf_svg_filter_id />
 		</item>
 		<item>
@@ -504,9 +504,9 @@
 			<uf_additional_image>0</uf_additional_image>
 			<uf_svg_layer_group />
 			<uf_svg_special_key>case_017_fet-023_dlx</uf_svg_special_key>
-			<uf_series_var>serialize#a:0:{}</uf_series_var>
 			<uf_model_id>4</uf_model_id>
 			<uf_svg_target_mode>woodcase_image</uf_svg_target_mode>
+			<uf_seriesvar>017</uf_seriesvar>
 			<uf_svg_filter_id />
 		</item>
 		<item>
@@ -522,9 +522,9 @@
 			<uf_additional_image>0</uf_additional_image>
 			<uf_svg_layer_group />
 			<uf_svg_special_key>case_017_fet-023_dlx</uf_svg_special_key>
-			<uf_series_var>serialize#a:0:{}</uf_series_var>
 			<uf_model_id>3</uf_model_id>
 			<uf_svg_target_mode>woodcase_image</uf_svg_target_mode>
+			<uf_seriesvar>023</uf_seriesvar>
 			<uf_svg_filter_id />
 		</item>
 		<item>
@@ -540,9 +540,9 @@
 			<uf_additional_image>0</uf_additional_image>
 			<uf_svg_layer_group />
 			<uf_svg_special_key>case_023thebomblet-23_malfa</uf_svg_special_key>
-			<uf_series_var>serialize#a:0:{}</uf_series_var>
 			<uf_model_id>1</uf_model_id>
 			<uf_svg_target_mode>woodcase_image</uf_svg_target_mode>
+			<uf_seriesvar>023</uf_seriesvar>
 			<uf_svg_filter_id />
 		</item>
 		<item>
@@ -558,10 +558,11 @@
 			<uf_additional_image>0</uf_additional_image>
 			<uf_svg_layer_group />
 			<uf_svg_special_key>case_023thebomblet-23_malfa</uf_svg_special_key>
-			<uf_series_var>serialize#a:0:{}</uf_series_var>
 			<uf_model_id>2</uf_model_id>
 			<uf_svg_target_mode>woodcase_image</uf_svg_target_mode>
+			<uf_seriesvar>023</uf_seriesvar>
 			<uf_svg_filter_id />
 		</item>
 	</items>
 </hiblock>
+
