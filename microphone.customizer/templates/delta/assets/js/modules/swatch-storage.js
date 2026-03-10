@@ -13,7 +13,7 @@ import { FREE_VARIANTS } from '../config/free-variants.config.js';
 class SwatchStorageManager {
     constructor() {
         this.ralStorage = document.getElementById('ral-storage');
-       this.variantStorage = document.getElementById('variant-storage');
+        this.variantStorage = document.getElementById('variant-storage');
         
         if (!this.ralStorage || !this.variantStorage) {
             console.error('[SwatchStorage] Storage containers not found');
