@@ -1,5 +1,5 @@
 <!-- Модели микрофонов, базовые цены, флаг подвеса - файл получен экспортированием с продакшн версии сайта soyuzmicrophones.ru данные файлы в папке data только для ИИ справки -->
-<!-- Highload-block: microphone models catalog (code, name, base price, shockmount flags). Used to initialize models, modelsByCode and base pricing. -->
+<!-- Highload-block: microphone models catalog (code, name, base price, shockmount flags,model_series). Used to initialize models, modelsByCode and base pricing. -->
 <?xml version="1.0" encoding="UTF-8"?>
 <hiblock>
 	<items>
@@ -12,6 +12,7 @@
 			<uf_shockmount_enabled>0</uf_shockmount_enabled>
 			<uf_shockmount_price>10000</uf_shockmount_price>
 			<uf_sort>10</uf_sort>
+			<uf_model_series>023</uf_model_series>
 		</item>
 		<item>
 			<id>2</id>
@@ -22,6 +23,7 @@
 			<uf_shockmount_enabled>1</uf_shockmount_enabled>
 			<uf_shockmount_price>0</uf_shockmount_price>
 			<uf_sort>20</uf_sort>
+			<uf_model_series>023</uf_model_series>
 		</item>
 		<item>
 			<id>3</id>
@@ -32,6 +34,7 @@
 			<uf_shockmount_enabled>1</uf_shockmount_enabled>
 			<uf_shockmount_price>0</uf_shockmount_price>
 			<uf_sort>30</uf_sort>
+			<uf_model_series>023</uf_model_series>
 		</item>
 		<item>
 			<id>4</id>
@@ -42,6 +45,7 @@
 			<uf_shockmount_enabled>1</uf_shockmount_enabled>
 			<uf_shockmount_price>0</uf_shockmount_price>
 			<uf_sort>40</uf_sort>
+			<uf_model_series>017</uf_model_series>
 		</item>
 		<item>
 			<id>5</id>
@@ -52,6 +56,7 @@
 			<uf_shockmount_enabled>1</uf_shockmount_enabled>
 			<uf_shockmount_price>0</uf_shockmount_price>
 			<uf_sort>50</uf_sort>
+			<uf_model_series>017</uf_model_series>
 		</item>
 	</items>
 </hiblock>
