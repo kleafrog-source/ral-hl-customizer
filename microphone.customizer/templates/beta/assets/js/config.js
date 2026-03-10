@@ -50,11 +50,8 @@ function getAssetsBasePath() {
     if (window.CUSTOMIZER_ASSETS_PATH) {
         return window.CUSTOMIZER_ASSETS_PATH + '/image/';
     }
-    
-    // Fallback: определяем путь относительно текущего JS файла
-    const currentPath = new URL(import.meta.url).pathname;
-    const basePath = currentPath.replace(/\/assets\/js\/[^\/]+$/, '/assets/image/');
-    return basePath;
+    console.warn('[CONFIG] CUSTOMIZER_ASSETS_PATH not available, using fallback');
+    return '/local/templates/microphone.customizer/assets/image/';
 }
 
 // Утилиты для работы с данными из Bitrix HighLoad блоков
@@ -84,12 +81,13 @@ export function getModelSeries(modelCode) {
     return model?.MODEL_SERIES || null;
 }
 
-const assetsPath = getAssetsBasePath();
-
 // Динамическая генерация CASE_IMAGES на основе данных из Bitrix
 export function getCaseImages() {
     const models = getAllModels();
     const caseImages = {};
+    
+    // Получаем assetsPath динамически, а не при загрузке модуля
+    const assetsPath = getAssetsBasePath();
     
     // Старый маппинг как fallback
     const fallbackImageMap = {
@@ -186,8 +184,26 @@ function getCaseImageFromHL(modelCode) {
     return null;
 }
 
-// Для обратной совместимости оставим статичный экспорт
-export const CASE_IMAGES = getCaseImages();
+// Для обратной совместимости оставим статичный экспорт, но с безопасной инициализацией
+export let CASE_IMAGES = {};
+
+// Инициализируем CASE_IMAGES когда будут доступны данные
+function initializeCaseImages() {
+    if (window.CUSTOMIZER_DATA && window.CUSTOMIZER_DATA.models) {
+        CASE_IMAGES = getCaseImages();
+        console.log('[CONFIG] CASE_IMAGES initialized:', CASE_IMAGES);
+    } else {
+        console.warn('[CONFIG] CUSTOMIZER_DATA not available, CASE_IMAGES will be empty');
+    }
+}
+
+// Попробуем инициализировать сразу
+initializeCaseImages();
+
+// Также добавим возможность переинициализации
+export function reinitializeCaseImages() {
+    initializeCaseImages();
+}
 
 // Динамическая генерация CASE_GEOMETRY на основе данных из Bitrix
 export function getCaseGeometry() {

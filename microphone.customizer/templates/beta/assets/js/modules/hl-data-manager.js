@@ -5,6 +5,7 @@
 import { stateManager } from '../core/state.js';
 import { loadCustomPrices } from './price-calculator.js';
 import { logCustomizerState } from '../debugger-logs/state-debug.js';
+import { reinitializeCaseImages } from '../config.js';
 
 /**
  * Инициализация менеджера данных HL-блоков
@@ -37,6 +38,9 @@ export function initHLDataManager() {
     
     // Debug логирование после инициализации опций
     logCustomizerState('[HL DATA MANAGER] After initializeModelOptions');
+
+    // Переинициализируем CASE_IMAGES после загрузки HL данных
+    reinitializeCaseImages();
 
     // Устанавливаем базовые цены из HL-данных
     initializeModelPricing(data.modelsByCode, data.currentModelCode);
