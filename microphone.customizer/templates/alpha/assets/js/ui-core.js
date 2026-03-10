@@ -365,7 +365,7 @@ export function initEventListeners() {
     document.querySelectorAll('.submenu-back').forEach(item => {
         item.addEventListener('click', function() {
             const section = this.closest('.submenu').id.replace('submenu-', '');
-            toggleSubmenu(section);
+            closeSubmenu(section);
         });
     });
 
@@ -694,42 +694,68 @@ export function toggleSubmenu(section) {
 
     const isExpanded = menuItem.classList.contains('expanded');
 
+    if (isExpanded) {
+        closeSubmenu(section);
+    } else {
+        openSubmenu(section);
+    }
+}
+
+export function openSubmenu(section) {
+    const menuItem = document.querySelector(`[data-section="${section}"]`);
+    const submenu = document.getElementById(`submenu-${section}`);
+
+    if (!menuItem || !submenu) return;
+
+    // Close all other submenus first
     document.querySelectorAll('.submenu').forEach(m => m.classList.remove('active'));
     document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('expanded'));
 
-    if (!isExpanded) {
-        submenu.classList.add('active');
-        menuItem.classList.add('expanded');
+    // Open this submenu
+    submenu.classList.add('active');
+    menuItem.classList.add('expanded');
 
-        // Auto-preview switching logic
-        if (['spheres', 'body', 'logo', 'logo-bg'].includes(section)) {
+    // Auto-preview switching logic
+    if (['spheres', 'body', 'logo', 'logo-bg'].includes(section)) {
+        const currentPreview = document.querySelector('.preview-switch-btn.active')?.dataset.preview;
+        if (currentPreview === 'case' || currentPreview === 'shockmount') {
+            switchPreview('microphone');
+        }
+    } else if (section === 'case') {
+        const currentPreview = document.querySelector('.preview-switch-btn.active')?.dataset.preview;
+        if (currentPreview === 'microphone' || currentPreview === 'shockmount') {
+            switchPreview('case');
+        }
+    } else if ((section === 'shockmount' || section === 'shockmount-pins')) {
+        const currentState = stateManager.get();
+        if (currentState.shockmount.enabled) {
             const currentPreview = document.querySelector('.preview-switch-btn.active')?.dataset.preview;
-            if (currentPreview === 'case' || currentPreview === 'shockmount') {
-                switchPreview('microphone');
-            }
-        } else if (section === 'case') {
-            const currentPreview = document.querySelector('.preview-switch-btn.active')?.dataset.preview;
-            if (currentPreview === 'microphone' || currentPreview === 'shockmount') {
-                switchPreview('case');
-            }
-        } else if ((section === 'shockmount' || section === 'shockmount-pins')) {
-            const currentState = stateManager.get();
-            if (currentState.shockmount.enabled) {
-                const currentPreview = document.querySelector('.preview-switch-btn.active')?.dataset.preview;
-                if (currentPreview === 'microphone' || currentPreview === 'case') {
-                    switchPreview('shockmount');
-                }
-            }
-            else{
-                switchPreview('global-view');
+            if (currentPreview === 'microphone' || currentPreview === 'case') {
+                switchPreview('shockmount');
             }
         }
-
-        setTimeout(() => {
-            const backBtn = submenu.querySelector('.submenu-back');
-            if (backBtn) backBtn.focus();
-        }, 400);
+        else{
+            switchPreview('global-view');
+        }
     }
+
+    setTimeout(() => {
+        const backBtn = submenu.querySelector('.submenu-back');
+        if (backBtn) backBtn.focus();
+    }, 400);
+}
+
+export function closeSubmenu(section) {
+    const menuItem = document.querySelector(`[data-section="${section}"]`);
+    const submenu = document.getElementById(`submenu-${section}`);
+
+    if (!menuItem || !submenu) return;
+
+    submenu.classList.remove('active');
+    menuItem.classList.remove('expanded');
+
+    // Return focus to the menu item
+    menuItem.focus();
 }
 
 export function showNotification(msg, type) {
