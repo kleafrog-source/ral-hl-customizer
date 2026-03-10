@@ -8,6 +8,7 @@ import { SECTION_LAYER_MAP } from '../config/layer-mapping.config.js';
 import { debugSVGState, debugSVGLayers } from '../debug.js';
 import { switchPreview } from './accessories.js';
 import { applyColorToSection, getColorDataFromOption, normalizeToRgbString } from './color-utils.js';
+import { logShockmountPinsFlow } from '../debugger-logs/state-debug.js';
 import { getModelData } from '../config.js';
 import { getOptionsForSection, getRalColorById } from './hl-data-manager.js';
 
@@ -392,6 +393,9 @@ export function updateShockmountPinsPreview() {
 
     // Debug logging
     debugSVGState('shockmountPins', pinsState, 'updateShockmountPinsPreview start');
+    
+    // Добавляем трассировку для пинов
+    logShockmountPinsFlow('[PINS FLOW] After selection');
 
     // Get layer mapping for this pin variant
     let layerMapping = null;

@@ -352,6 +352,8 @@ function applyColorizedMode(svg, section, state) {
     const mapping = SECTION_LAYER_MAP[section]?.[state.variant];
     if (!mapping) {
         console.warn(`[Appearance] No mapping found for ${section} variant: ${state.variant}`);
+        console.log(`[Appearance] Available variants for ${section}:`, Object.keys(SECTION_LAYER_MAP[section] || {}));
+        console.log(`[Appearance] State details:`, { section, state, variant: state.variant });
         return;
     }
 

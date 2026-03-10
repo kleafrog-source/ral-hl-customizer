@@ -1,7 +1,7 @@
 import { stateManager } from '../core/state.js';
 import { getDevice } from '../utils.js';
 import { CASE_IMAGES, CASE_GEOMETRY, CONFIG, getModelData } from '../config.js';
-import { logCustomizerState, logCaseMapping, checkCaseCompatibility } from '../debugger-logs/state-debug.js';
+import { logCustomizerState, logCaseMapping, checkCaseCompatibility, logCaseFlow } from '../debugger-logs/state-debug.js';
 
 const WoodCase = {
     currentCase: '023-the-bomblet',
@@ -126,6 +126,7 @@ const WoodCase = {
         
         // Debug логирование после установки
         logCustomizerState('[WOOD-CASE] After setCase');
+        logCaseFlow('[CASE FLOW] After setCase');
         
         setTimeout(() => {
             if (woodCaseLoader) woodCaseLoader.style.display = 'none';

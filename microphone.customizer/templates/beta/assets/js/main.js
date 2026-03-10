@@ -17,7 +17,7 @@ import { startSessionRefresh } from './utils/bitrix.js';
 import { initializeWoodCase } from './modules/wood-case.js';
 import { initToggles as initToggleStates } from './modules/toggles.js';
 import { initHLDataManager } from './modules/hl-data-manager.js';
-import { logCustomizerState } from './debugger-logs/state-debug.js';
+import { logCustomizerState, logSectionFlow, logCaseFlow } from './debugger-logs/state-debug.js';
 import './debugger.js';
 
 // Removed old imports that are no longer needed:
@@ -61,6 +61,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     
     // Debug логирование после инициализации HL данных
     logCustomizerState('[STATE DEBUG] After initHLDataManager');
+    
+    // Добавляем трассировку для основных секций после инициализации
+    logSectionFlow('spheres', '[FLOW DEBUG] After init');
+    logSectionFlow('body', '[FLOW DEBUG] After init');
+    logCaseFlow('[CASE FLOW] After init');
 
     // Initialize camera effect for variant switching
     cameraEffect.initCameraEffect(stateManager.get('variant'));
