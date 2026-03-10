@@ -102,6 +102,18 @@ if ($cache->initCache($cacheTime, $cacheId, $cacheDir)) {
             }
         }
         
+        // Обработка UF_SERIES_VAR для вариантов футляров
+        if ($option['UF_SERIES_VAR']) {
+            $option['SERIES_VAR'] = unserialize($option['UF_SERIES_VAR']);
+        } else {
+            $option['SERIES_VAR'] = [];
+        }
+        
+        // Добавляем SVG_SPECIAL_KEY для футляров
+        if ($option['UF_SVG_SPECIAL_KEY']) {
+            $option['SVG_SPECIAL_KEY'] = $option['UF_SVG_SPECIAL_KEY'];
+        }
+        
         $arResult['OPTIONS'][$modelId][$viewTypeKey][] = $option;
     }
 

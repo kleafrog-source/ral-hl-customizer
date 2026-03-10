@@ -91,8 +91,8 @@ export function getCaseImages() {
     const models = getAllModels();
     const caseImages = {};
     
-    // Маппинг кодов моделей на имена файлов изображений необходимо взять из новых данных HL.
-    const imageFileMap = {
+    // Старый маппинг как fallback
+    const fallbackImageMap = {
         '017-tube': 'case_017_tube',
         '017-fet': 'case_017_fet-023_dlx', 
         '023-deluxe': 'case_017_fet-023_dlx',
@@ -103,7 +103,15 @@ export function getCaseImages() {
     Object.keys(models).forEach(modelId => {
         const model = models[modelId];
         const code = model.CODE;
-        const imageBase = imageFileMap[code];
+        
+        // Пытаемся получить изображение из HL данных
+        let imageBase = getCaseImageFromHL(code);
+        
+        // Fallback на старый маппинг
+        if (!imageBase) {
+            imageBase = fallbackImageMap[code];
+            console.warn(`[CONFIG] Using fallback image mapping for model: ${code}`);
+        }
         
         if (imageBase) {
             caseImages[code] = {
@@ -116,6 +124,66 @@ export function getCaseImages() {
     });
     
     return caseImages;
+}
+
+/**
+ * Получает изображение футляра из HL данных для конкретной модели
+ * @param {string} modelCode - код модели
+ * @returns {string|null} - базовое имя изображения или null
+ */
+function getCaseImageFromHL(modelCode) {
+    // Проверяем доступность CUSTOMIZER_DATA
+    if (!window.CUSTOMIZER_DATA || !window.CUSTOMIZER_DATA.options) {
+        console.warn('[CONFIG] CUSTOMIZER_DATA not available for case image mapping');
+        return null;
+    }
+    
+    const modelData = getModelData(modelCode);
+    if (!modelData) {
+        console.warn(`[CONFIG] Model data not found: ${modelCode}`);
+        return null;
+    }
+    
+    // Получаем опции футляров для всех моделей (model_id = 0) и для конкретной модели
+    const allCaseOptions = window.CUSTOMIZER_DATA.options[0]?.case || [];
+    const modelCaseOptions = window.CUSTOMIZER_DATA.options[modelData.ID]?.case || [];
+    const caseOptions = [...allCaseOptions, ...modelCaseOptions];
+    
+    // Ищем подходящий футляр для этой модели
+    for (const caseOption of caseOptions) {
+        // Проверяем UF_MODEL_ID - если футляр для конкретной модели
+        if (caseOption.UF_MODEL_ID == modelData.ID) {
+            // Этот футляр предназначен для нашей модели
+            const svgSpecialKey = caseOption.SVG_SPECIAL_KEY;
+            if (svgSpecialKey) {
+                console.log(`[CONFIG] Found HL case image for ${modelCode} (model-specific): ${svgSpecialKey}`);
+                return svgSpecialKey;
+            }
+        }
+        
+        // Проверяем SERIES_VAR - содержит ли ID моделей (для обратной совместимости)
+        const seriesVar = caseOption.SERIES_VAR || [];
+        if (seriesVar.length > 0 && seriesVar.includes(modelData.ID.toString())) {
+            const svgSpecialKey = caseOption.SVG_SPECIAL_KEY;
+            if (svgSpecialKey) {
+                console.log(`[CONFIG] Found HL case image for ${modelCode} (series-based): ${svgSpecialKey}`);
+                return svgSpecialKey;
+            }
+        }
+        
+        // Если футляр для всех моделей (UF_MODEL_ID = 0 или пустой) и SERIES_VAR пустой
+        if ((!caseOption.UF_MODEL_ID || caseOption.UF_MODEL_ID == 0) && 
+            seriesVar.length === 0) {
+            const svgSpecialKey = caseOption.SVG_SPECIAL_KEY;
+            if (svgSpecialKey) {
+                console.log(`[CONFIG] Found HL case image for ${modelCode} (universal): ${svgSpecialKey}`);
+                return svgSpecialKey;
+            }
+        }
+    }
+    
+    console.warn(`[CONFIG] No suitable case image found in HL data for: ${modelCode}`);
+    return null;
 }
 
 // Для обратной совместимости оставим статичный экспорт

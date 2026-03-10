@@ -1,6 +1,7 @@
 import { stateManager } from '../core/state.js';
 import { getDevice } from '../utils.js';
 import { CASE_IMAGES, CASE_GEOMETRY, CONFIG, getModelData } from '../config.js';
+import { logCustomizerState, logCaseMapping, checkCaseCompatibility } from '../debugger-logs/state-debug.js';
 
 const WoodCase = {
     currentCase: '023-the-bomblet',
@@ -91,6 +92,19 @@ const WoodCase = {
     },
 
     setCase(id) {
+        // Debug логирование
+        logCustomizerState('[WOOD-CASE] Before setCase');
+        logCaseMapping(id, stateManager.get('currentModelCode'));
+        
+        // Проверяем совместимость футляра с текущей моделью
+        const currentModelCode = stateManager.get('currentModelCode');
+        const isCompatible = checkCaseCompatibility(id, currentModelCode);
+        
+        if (!isCompatible) {
+            console.warn(`[WOOD-CASE] Case ${id} is not compatible with model ${currentModelCode}`);
+            // Все равно продолжаем, но с предупреждением
+        }
+        
         // Используем данные из Bitrix для определения правильного кода модели
         const modelData = getModelData(id);
         const caseId = modelData ? modelData.CODE : id;
@@ -109,6 +123,10 @@ const WoodCase = {
             this.applyStartConfig(caseId);
         }
         this.render();
+        
+        // Debug логирование после установки
+        logCustomizerState('[WOOD-CASE] After setCase');
+        
         setTimeout(() => {
             if (woodCaseLoader) woodCaseLoader.style.display = 'none';
         }, 300);

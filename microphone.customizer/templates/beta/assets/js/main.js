@@ -17,6 +17,7 @@ import { startSessionRefresh } from './utils/bitrix.js';
 import { initializeWoodCase } from './modules/wood-case.js';
 import { initToggles as initToggleStates } from './modules/toggles.js';
 import { initHLDataManager } from './modules/hl-data-manager.js';
+import { logCustomizerState } from './debugger-logs/state-debug.js';
 import './debugger.js';
 
 // Removed old imports that are no longer needed:
@@ -57,6 +58,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Initialize HL data manager first to load data from Bitrix HL blocks
     console.log('[Main] Initializing HL data manager...');
     initHLDataManager();
+    
+    // Debug логирование после инициализации HL данных
+    logCustomizerState('[STATE DEBUG] After initHLDataManager');
 
     // Initialize camera effect for variant switching
     cameraEffect.initCameraEffect(stateManager.get('variant'));
