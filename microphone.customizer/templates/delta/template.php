@@ -28,7 +28,7 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
 
 
     
-        <div class="toggle-color">
+        <div class="sidebar-edge-controls" id="sidebar-edge-controls">
             <button id="fullscreen-toggle" class="fullscreen-toggle" aria-label="Переключить полноэкранный режим">
                 <svg class="fullscreen-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3m-18 0v3a2 2 0 0 0 2 2h3"></path>
@@ -246,10 +246,34 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
         </div>
         
         <!-- Sidebar сгенерированный из HL данных -->
-        <div class="sidebar" id="customization-sidebar">
+        <div class="sidebar" id="customization-sidebar" data-sidebar-state="normal">
+            <div class="sidebar-header">
+                <div class="sidebar-title-block" data-sidebar-fade>
+                    <div class="sidebar-title">Customizer</div>
+                    <div class="sidebar-subtitle">Microphone</div>
+                </div>
+                <div class="sidebar-state-controls" role="group" aria-label="Sidebar size">
+                    <button class="sidebar-state-btn" type="button" data-sidebar-state-btn="compact" aria-label="Compact sidebar" title="Compact">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <rect x="4" y="5" width="6" height="14" rx="1"></rect>
+                            <rect x="14" y="5" width="6" height="14" rx="1" opacity="0.4"></rect>
+                        </svg>
+                    </button>
+                    <button class="sidebar-state-btn" type="button" data-sidebar-state-btn="normal" aria-label="Normal sidebar" title="Normal">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <rect x="4" y="5" width="16" height="14" rx="1"></rect>
+                        </svg>
+                    </button>
+                    <button class="sidebar-state-btn" type="button" data-sidebar-state-btn="expanded" aria-label="Expanded sidebar" title="Expanded">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <rect x="2" y="5" width="20" height="14" rx="1"></rect>
+                        </svg>
+                    </button>
+                </div>
+            </div>
             <div class="sidebar-content">
                 <!-- VARIANT SWITCH -->
-                <div class="variant-switch" id="variant-switch">
+                <div class="variant-switch" id="variant-switch" data-sidebar-fade data-sidebar-hide="compact">
                     <?php foreach ($arResult['MODELS'] as $model): ?>
                         <?php 
                         $series = substr($model['CODE'], 0, 3);
@@ -335,15 +359,15 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                     if (empty($sectionOptions)) continue;
                     ?>
                     
-                    <div class="menu-item" data-section="<?= htmlspecialchars($sectionKey) ?>" tabindex="0" id="<?= htmlspecialchars($sectionKey) ?>-section">
+                    <div class="menu-item" data-section="<?= htmlspecialchars($sectionKey) ?>" tabindex="0" id="<?= htmlspecialchars($sectionKey) ?>-section" data-tooltip="<?= htmlspecialchars($sectionTitle) ?>">
                         <div class="item-icon">
                             <div class="color-circle" id="<?= htmlspecialchars($sectionKey) ?>-color-display" style="background-color: #A1A1A0;"></div>
                         </div>
-                        <div class="item-content">
+                        <div class="item-content" data-sidebar-fade>
                             <p class="item-label"><?= htmlspecialchars($sectionTitle) ?></p>
                             <p class="item-subtitle" id="<?= htmlspecialchars($sectionKey) ?>-subtitle">Выберите вариант</p>
                         </div>
-                        <div class="item-arrow">
+                        <div class="item-arrow" data-sidebar-fade>
                             <svg width="8" height="12" viewBox="0 0 8 12" fill="none">
                                 <path d="M2 2L6 6L2 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                             </svg>
@@ -761,7 +785,7 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                     </div>
 
                     <?php if ($sectionKey === 'logo' && !empty($arResult['LIQUID_TOGGLES']['custom_logo']['enabled'])): ?>
-                        <div class="menu-item toggle-logo-section">
+                        <div class="menu-item toggle-logo-section" data-sidebar-fade data-sidebar-hide="compact">
                             <div class="toggle-flexbox-option-text">
                                 <h4 class="section-title" style="margin:0;">
                                     <?= htmlspecialchars($arResult['LIQUID_TOGGLES']['custom_logo']['title']) ?>
@@ -791,7 +815,7 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                 <?php endforeach; ?>
 
                 <!-- SHOCKMOUNT TOGGLE -->
-                <div class="menu-item" id="shockmount-toggle">
+                <div class="menu-item" id="shockmount-toggle" data-sidebar-fade data-sidebar-hide="compact">
                     <div class="toggle-flexbox-option-text" style="width: 100%;">
                         <h4 class="section-title" style="margin:0;"><?= htmlspecialchars($arResult['LIQUID_TOGGLES']['shockmount']['title'] ?? 'Добавить подвес') ?></h4>
                         <div class="switch-container" id="shockmount-switch-container" style="width: auto;">
@@ -809,13 +833,13 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                 </div>
 
                 <!-- SHOCKMOUNT SECTION -->
-                <div class="menu-item" data-section="shockmount" tabindex="0" id="shockmount-menu-item" style="display: none;">
+                <div class="menu-item" data-section="shockmount" tabindex="0" id="shockmount-menu-item" style="display: none;" data-tooltip="Shockmount">
                     <div class="item-icon"><div class="color-circle" id="shockmount-color-display" style="background-color: #f5f5f5;"></div></div>
-                    <div class="item-content">
+                    <div class="item-content" data-sidebar-fade>
                         <p class="item-label">Антивибрационный подвес</p>
                         <p class="item-subtitle" id="shockmount-subtitle">RAL 9010 Чистый белый</p>
                     </div>
-                    <svg class="chevron-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                    <svg class="chevron-icon" data-sidebar-fade viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
                     <div class="option-price" id="shockmount-price">+0 ₽</div>
                 </div>
                 <div class="submenu" id="submenu-shockmount">
@@ -941,15 +965,15 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                 </div>
 
                 <!-- SHOCKMOUNT PINS SECTION -->
-                <div class="menu-item" data-section="shockmountPins" tabindex="0" id="shockmountPins-section" style="display: none;">
+                <div class="menu-item" data-section="shockmountPins" tabindex="0" id="shockmountPins-section" style="display: none;" data-tooltip="Pins">
                     <div class="item-icon">
                         <div class="color-circle" id="shockmountPins-color-display" style="background-color: #A1A1A0;"></div>
                     </div>
-                    <div class="item-content">
+                    <div class="item-content" data-sidebar-fade>
                         <p class="item-label">Подвес (пины)</p>
                         <p class="item-subtitle" id="shockmountPins-subtitle">Выберите вариант</p>
                     </div>
-                    <div class="item-arrow">
+                    <div class="item-arrow" data-sidebar-fade>
                         <svg width="8" height="12" viewBox="0 0 8 12" fill="none">
                             <path d="M2 2L6 6L2 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
@@ -1085,7 +1109,7 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
             </div>
 
                 <!-- Price Section -->
-                <div class="sidebar-section price-section">
+                <div class="sidebar-section price-section" data-sidebar-fade data-sidebar-hide="compact">
                     <div class="price-display">
                         <div class="total-price">
                             <div class="price-row">

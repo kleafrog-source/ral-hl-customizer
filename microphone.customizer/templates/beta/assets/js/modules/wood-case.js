@@ -92,17 +92,14 @@ const WoodCase = {
     },
 
     setCase(id) {
-        // Debug логирование
         logCustomizerState('[WOOD-CASE] Before setCase');
         logCaseMapping(id, stateManager.get('currentModelCode'));
         
-        // Проверяем совместимость футляра с текущей моделью
         const currentModelCode = stateManager.get('currentModelCode');
         const isCompatible = checkCaseCompatibility(id, currentModelCode);
         
         if (!isCompatible) {
-            console.warn(`[WOOD-CASE] Case ${id} is not compatible with model ${currentModelCode}`);
-            // Все равно продолжаем, но с предупреждением
+            // console.warn(`[WOOD-CASE] Case ${id} is not compatible with model ${currentModelCode}`);
         }
         
         // Используем данные из Bitrix для определения правильного кода модели

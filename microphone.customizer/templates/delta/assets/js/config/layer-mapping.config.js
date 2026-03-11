@@ -37,18 +37,3 @@ export const SECTION_LAYER_MAP = {
     }
   }
 };
-
-// Device tier mapping for resolution-specific layers
-export const DEVICE_TIER_MAP = {
-  '4k': 3,
-  'hd': 2,
-  'tablet': 1
-};
-
-// Base layer IDs that have resolution variants
-// NOTE: Only include pure resolution/resource layers, NOT color/material-dependent layers
-export const RESOLUTION_BASE_LAYERS = [
-  'img-grill-mic'
-  // Add other pure resolution base layers here if they exist in SVG
-  // Examples: 'background', 'silhouette', 'frame' - but NOT *-original, *-color*, *-mono*
-];

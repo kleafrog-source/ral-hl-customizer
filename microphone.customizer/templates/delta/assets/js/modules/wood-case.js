@@ -1,7 +1,6 @@
 import { stateManager } from '../core/state.js';
 import { getDevice } from '../utils.js';
-import { CASE_IMAGES, CASE_GEOMETRY, CONFIG, getModelData } from '../config.js';
-import { logCustomizerState, logCaseMapping, checkCaseCompatibility, logCaseFlow } from '../debugger-logs/state-debug.js';
+import { CASE_IMAGES, CASE_GEOMETRY, getModelData } from '../config.js';
 
 const WoodCase = {
     currentCase: '023-the-bomblet',
@@ -28,7 +27,6 @@ const WoodCase = {
                 caseFileInput.click();
             });
         }
-        
         if (caseFileInput) {
             caseFileInput.addEventListener('change', (e) => this.handleUpload(e));
         }
@@ -92,20 +90,6 @@ const WoodCase = {
     },
 
     setCase(id) {
-        // Debug логирование
-        logCustomizerState('[WOOD-CASE] Before setCase');
-        logCaseMapping(id, stateManager.get('currentModelCode'));
-        
-        // Проверяем совместимость футляра с текущей моделью
-        const currentModelCode = stateManager.get('currentModelCode');
-        const isCompatible = checkCaseCompatibility(id, currentModelCode);
-        
-        if (!isCompatible) {
-            console.warn(`[WOOD-CASE] Case ${id} is not compatible with model ${currentModelCode}`);
-            // Все равно продолжаем, но с предупреждением
-        }
-        
-        // Используем данные из Bitrix для определения правильного кода модели
         const modelData = getModelData(id);
         const caseId = modelData ? modelData.CODE : id;
 
@@ -325,7 +309,7 @@ const WoodCase = {
                 this.showRulers();
             }
         });
-        //данная функция нужна для того, чтобы можно было зумить колесиком мыши и драгать логотип
+        
         document.getElementById('wood-case-logo-wrapper').addEventListener('wheel', (e) => {
             e.preventDefault();
             const state = this.history[this.currentCase];
