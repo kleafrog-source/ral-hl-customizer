@@ -94,7 +94,12 @@ if ($cache->initCache($cacheTime, $cacheId, $cacheDir)) {
     foreach ($optionRows as $option) {
         $modelId = (int)($option['UF_MODEL_ID'] ?: 0);
         $viewTypeId = (int)($option['UF_VIEW_TYPE'] ?: 0);
+        $variantCode = $option['UF_VARIANT_CODE'] ?? '';
         $sectionCode = $option['UF_SECTION_CODE'] ?: ($viewTypeMap[$viewTypeId] ?? 'unknown');
+        // HL export contains shockmountpinspaidral with view_type=6 (shockmount). Force it to pins.
+        if ($variantCode === 'shockmountpinspaidral') {
+            $sectionCode = 'shockmountPins';
+        }
 
         if (!isset($options[$modelId])) {
             $options[$modelId] = [];
@@ -168,6 +173,20 @@ if ($cache->initCache($cacheTime, $cacheId, $cacheDir)) {
                 $currentModelOptions[$sectionCode] = [];
             }
             $currentModelOptions[$sectionCode] = array_merge($currentModelOptions[$sectionCode], $sectionOptions);
+        }
+    }
+
+    // Filter options by model series (SERIES_VAR) when provided
+    $currentSeries = $currentModel['MODEL_SERIES'] ?? '';
+    if (!empty($currentSeries)) {
+        foreach ($currentModelOptions as $sectionCode => $sectionOptions) {
+            $currentModelOptions[$sectionCode] = array_values(array_filter($sectionOptions, function ($opt) use ($currentSeries) {
+                $seriesVar = $opt['SERIES_VAR'] ?? ($opt['UF_SERIESVAR'] ?? '');
+                if (empty($seriesVar)) {
+                    return true;
+                }
+                return (string)$seriesVar === (string)$currentSeries;
+            }));
         }
     }
     $arResult['CURRENT_MODEL_OPTIONS'] = $currentModelOptions;

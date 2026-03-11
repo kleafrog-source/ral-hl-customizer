@@ -67,9 +67,15 @@ export function initHLDataManager() {
     // Initialize toggles
     const toggleData = data.liquidToggles || {};
     if (toggleData.shockmount) {
-        const included = !!toggleData.shockmount.included;
+        // Hardcoded per spec: shockmount toggle is only available for 023-the-bomblet.
+        const isBomblet = data.currentModelCode === '023-the-bomblet';
+        const available = isBomblet;
+        const included = available ? false : false;
+        const enabled = available ? false : false;
+
+        stateManager.set('shockmount.available', available);
         stateManager.set('shockmount.included', included);
-        stateManager.set('shockmount.enabled', included ? true : false);
+        stateManager.set('shockmount.enabled', enabled);
         stateManager.set('shockmount.togglePrice', toggleData.shockmount.price || 0);
     }
 
@@ -94,4 +100,11 @@ export function getCurrentModel() {
 export function getViewTypeMap() {
     const hlData = stateManager.get('hlData');
     return hlData?.viewTypeMap || {};
+}
+
+export function findOptionByVariantCode(sectionCode, variantCode) {
+    if (!sectionCode || !variantCode) return null;
+    const hlData = stateManager.get('hlData');
+    const options = hlData?.currentModelOptions?.[sectionCode] || [];
+    return options.find(option => option.UF_VARIANT_CODE === variantCode) || null;
 }

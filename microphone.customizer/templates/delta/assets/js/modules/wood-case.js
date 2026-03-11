@@ -17,6 +17,9 @@ const WoodCase = {
         this.setupRulerEvents();
         window.addEventListener('resize', () => this.render());
 
+        const woodCaseLoader = document.getElementById('wood-case-loader');
+        if (woodCaseLoader) woodCaseLoader.remove();
+
         // Add null checks for elements that might not exist
         const caseUploadBtn = document.getElementById('case-upload-btn');
         const caseFileInput = document.getElementById('case-file-input');
@@ -109,9 +112,6 @@ const WoodCase = {
         this.render();
         
         // Debug логирование после установки
-        logCustomizerState('[WOOD-CASE] After setCase');
-        logCaseFlow('[CASE FLOW] After setCase');
-        
         setTimeout(() => {
             if (woodCaseLoader) woodCaseLoader.style.display = 'none';
         }, 300);
@@ -210,6 +210,15 @@ const WoodCase = {
         const caseData = CASE_GEOMETRY.cases[this.currentCase][dev];
         const svg = document.getElementById('wood-case-svg');
         if (svg) svg.setAttribute('viewBox', res.vb);
+
+        // Device-specific scaling for woodcase preview (hardcoded for stable framing).
+        const rescaleMap = CASE_GEOMETRY.cases_rescale || {};
+        const scaleFactor = rescaleMap[this.currentCase]?.[dev] ?? 1;
+        const workspace = document.getElementById('wood-case-workspace');
+        if (workspace) {
+            workspace.style.transform = `scale(${scaleFactor})`;
+            workspace.style.transformOrigin = 'center center';
+        }
 
         const bg = document.getElementById('wood-case-bg');
         if (bg) {

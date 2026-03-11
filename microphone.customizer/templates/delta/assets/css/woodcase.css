@@ -1,4 +1,8 @@
 /* New Case Preview Styles */
+#wood-case-loader {
+ display: none !important;
+}
+
 .workspace {
  flex: 1;
  position: relative;

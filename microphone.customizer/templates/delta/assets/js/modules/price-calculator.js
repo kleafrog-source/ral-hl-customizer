@@ -54,14 +54,15 @@ export function getBreakdown(state) {
         ? getSurcharge('case', 'custom-woodcase-image', modelCode, false)
         : 0;
 
+    const shockmountEnabled = !!state.shockmount?.enabled && !!state.shockmount?.available;
     let shockmountPrice = 0;
     if (state.shockmount?.included) {
         shockmountPrice = 0;
-    } else if (state.shockmount?.enabled) {
+    } else if (shockmountEnabled) {
         shockmountPrice = getSurcharge('shockmount', state.shockmount?.variantCode || '', modelCode, !!state.shockmount?.isRal);
     }
 
-    const pinsPrice = state.shockmountPins?.variantCode
+    const pinsPrice = shockmountEnabled && state.shockmountPins?.variantCode
         ? getSurcharge('shockmountPins', state.shockmountPins.variantCode || '', modelCode, !!state.shockmountPins?.isRal)
         : 0;
 

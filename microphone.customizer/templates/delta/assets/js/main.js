@@ -7,6 +7,7 @@ import { initToggles } from './modules/toggles.js';
 import { loadSVG, updateSVG } from './engine.js';
 import { initializeWoodCase } from './modules/wood-case.js';
 import { init as initLogo } from './modules/logo.js';
+import { initCameraEffect } from './modules/camera-effect.js';
 import { stateManager } from './core/state.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -19,6 +20,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     await loadSVG();
 
     initHLDataManager();
+    initCameraEffect(stateManager.get('currentModelCode') || window.CUSTOMIZER_DATA?.currentModelCode);
     initEventListeners();
     initLogo();
     initializeWoodCase();

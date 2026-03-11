@@ -597,7 +597,7 @@ body {
  padding: 15px;
 }
 
-.palette {
+.palette-group {
  display: grid;
  grid-template-columns: repeat(auto-fill, minmax(32px, 1fr));
  gap: 4px;
@@ -1384,6 +1384,21 @@ body {
     justify-content: center;
     padding: 12px 10px;
     gap: 0;
+}
+
+.sidebar[data-sidebar-state="compact"] .sidebar-header {
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.sidebar[data-sidebar-state="compact"] .sidebar-state-controls {
+    flex-direction: column;
+}
+
+.sidebar[data-sidebar-state="compact"] .sidebar-state-btn {
+    width: 28px;
+    height: 28px;
 }
 
 .sidebar[data-sidebar-state="compact"] .item-icon {

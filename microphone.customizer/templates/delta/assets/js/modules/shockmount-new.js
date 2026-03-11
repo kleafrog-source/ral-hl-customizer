@@ -2,6 +2,7 @@
 
 import { stateManager } from '../core/state.js';
 import { SECTION_LAYER_MAP } from '../config/layer-mapping.config.js';
+import { formatPrice } from './price-calculator.js';
 
 export function initShockmount() {
     updateShockmountVisibility();
@@ -12,13 +13,35 @@ export function initShockmount() {
 
 export function updateShockmountVisibility() {
     const state = stateManager.get();
-    const shockmountMenuItem = document.getElementById('shockmount-menu-item');
+    const shockmountToggle = document.getElementById('shockmount-toggle');
+    const shockmountMenuItem = document.getElementById('shockmount-section');
     const shockmountPinsMenuItem = document.getElementById('shockmountPins-section');
+    const shockmountSubmenu = document.getElementById('submenu-shockmount');
+    const shockmountPinsSubmenu = document.getElementById('submenu-shockmountPins');
     const switchContainer = document.getElementById('shockmount-switch-container');
     const includedText = document.getElementById('shockmount-included-text');
+    const togglePrice = document.getElementById('shockmount-toggle-price');
 
     const enabled = !!state.shockmount?.enabled;
     const included = !!state.shockmount?.included;
+    const available = !!state.shockmount?.available;
+
+    if (togglePrice) {
+        const priceValue = state.shockmount?.togglePrice || 0;
+        togglePrice.textContent = formatPrice(priceValue);
+    }
+
+    if (shockmountToggle) {
+        shockmountToggle.style.display = available ? 'flex' : 'none';
+    }
+
+    if (!available) {
+        if (shockmountMenuItem) shockmountMenuItem.style.display = 'none';
+        if (shockmountPinsMenuItem) shockmountPinsMenuItem.style.display = 'none';
+        if (shockmountSubmenu) shockmountSubmenu.style.display = 'none';
+        if (shockmountPinsSubmenu) shockmountPinsSubmenu.style.display = 'none';
+        return;
+    }
 
     if (switchContainer) {
         switchContainer.style.display = included ? 'none' : 'flex';
@@ -37,15 +60,16 @@ export function updateShockmountLayers(currentState = null) {
 
     const state = currentState || stateManager.get();
     const currentModelCode = state.currentModelCode || '';
-    const is023Series = currentModelCode.includes('023');
-    const targetLayerId = is023Series ? 'layer10' : 'layer9';
+    const modelSeries = (state.modelSeries || '').toString();
+    const is023Series = modelSeries === '023' || currentModelCode.includes('023');
+    const targetLayerId = is023Series ? 'layer9' : 'layer10';
 
     const allLayers = shockmountSVG.querySelectorAll('#layer10, #layer9');
     allLayers.forEach(layer => {
         layer.style.display = 'none';
     });
 
-    if (state.shockmount?.enabled) {
+    if (state.shockmount?.enabled && state.shockmount?.available) {
         const targetLayer = shockmountSVG.querySelector(`#${targetLayerId}`);
         if (targetLayer) targetLayer.style.display = 'inline';
     }
@@ -64,17 +88,21 @@ export function updateShockmountPreview() {
     const shockmountSvg = document.getElementById('shockmount-svg');
     if (!shockmountSvg) return;
 
-    const hasCustomColor = !!state.shockmount?.colorValue;
+    if (!state.shockmount?.enabled || !state.shockmount?.available) return;
+
+    const isFilterMode = state.shockmount?.svgTargetMode === 'filter';
+    const hasCustomColor = isFilterMode && !!state.shockmount?.colorValue;
     const main017 = shockmountSvg.querySelector('#shockmount-017-pins-brass-group');
     const main023 = shockmountSvg.querySelector('#shockmount-023-pins-brass-group');
-    const colorize = shockmountSvg.querySelector('#feFlood6');
+    const filterId = state.shockmount?.svgFilterId || 'feFlood6';
+    const colorize = shockmountSvg.querySelector(`#${filterId}`);
 
     if (main017) main017.style.display = hasCustomColor ? 'none' : 'inline';
     if (main023) main023.style.display = hasCustomColor ? 'none' : 'inline';
     if (colorize) colorize.style.display = hasCustomColor ? 'inline' : 'none';
 
     if (hasCustomColor) {
-        updateShockmountColor('feFlood6', state.shockmount.colorValue);
+        updateShockmountColor(filterId, state.shockmount.colorValue);
     }
 }
 
@@ -103,10 +131,19 @@ export function updateShockmountPinsPreview() {
     const mono017 = shockmountSvg.querySelector('#g4');
     const mono023 = shockmountSvg.querySelector('#g13-2');
 
-    const isColorizedVariant = pinsState.isRal || variant.toLowerCase().includes('ral');
+    const isFilterMode = pinsState.svgTargetMode === 'filter';
+    const isOriginalMode = pinsState.svgTargetMode === 'original';
+    const isColorizedVariant = isFilterMode || (pinsState.isRal && !isOriginalMode);
+    const applyGrayscale = pinsState.svgSpecialKey === 'grayscale';
 
-    if (brass017) brass017.style.display = isColorizedVariant ? 'none' : 'inline';
-    if (brass023) brass023.style.display = isColorizedVariant ? 'none' : 'inline';
+    if (brass017) {
+        brass017.style.display = isColorizedVariant ? 'none' : 'inline';
+        brass017.style.filter = applyGrayscale ? 'grayscale(1)' : 'none';
+    }
+    if (brass023) {
+        brass023.style.display = isColorizedVariant ? 'none' : 'inline';
+        brass023.style.filter = applyGrayscale ? 'grayscale(1)' : 'none';
+    }
 
     if (colorize017) colorize017.style.display = isColorizedVariant ? 'inline' : 'none';
     if (colorize023) colorize023.style.display = isColorizedVariant ? 'inline' : 'none';
@@ -114,6 +151,7 @@ export function updateShockmountPinsPreview() {
     if (mono023) mono023.style.display = isColorizedVariant ? 'inline' : 'none';
 
     if (isColorizedVariant && pinsState.colorValue) {
-        updateShockmountColor('feFlood8', pinsState.colorValue);
+        const filterId = pinsState.svgFilterId || 'feFlood8';
+        updateShockmountColor(filterId, pinsState.colorValue);
     }
 }

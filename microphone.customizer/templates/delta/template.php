@@ -248,23 +248,23 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
         <!-- Sidebar сгенерированный из HL данных -->
         <div class="sidebar" id="customization-sidebar" data-sidebar-state="normal">
             <div class="sidebar-header">
-                <div class="sidebar-title-block" data-sidebar-fade>
+                <div class="sidebar-title-block" data-sidebar-fade data-sidebar-hide="compact">
                     <div class="sidebar-title">Customizer</div>
                     <div class="sidebar-subtitle">Microphone</div>
                 </div>
                 <div class="sidebar-state-controls" role="group" aria-label="Sidebar size">
-                    <button class="sidebar-state-btn" type="button" data-sidebar-state-btn="compact" aria-label="Compact sidebar" title="Compact">
+                    <button class="sidebar-state-btn" type="button" data-sidebar-state-btn="compact" aria-label="Compact sidebar" title="Compact" data-tooltip="Compact">
                         <svg viewBox="0 0 24 24" aria-hidden="true">
                             <rect x="4" y="5" width="6" height="14" rx="1"></rect>
                             <rect x="14" y="5" width="6" height="14" rx="1" opacity="0.4"></rect>
                         </svg>
                     </button>
-                    <button class="sidebar-state-btn" type="button" data-sidebar-state-btn="normal" aria-label="Normal sidebar" title="Normal">
+                    <button class="sidebar-state-btn" type="button" data-sidebar-state-btn="normal" aria-label="Normal sidebar" title="Normal" data-tooltip="Normal">
                         <svg viewBox="0 0 24 24" aria-hidden="true">
                             <rect x="4" y="5" width="16" height="14" rx="1"></rect>
                         </svg>
                     </button>
-                    <button class="sidebar-state-btn" type="button" data-sidebar-state-btn="expanded" aria-label="Expanded sidebar" title="Expanded">
+                    <button class="sidebar-state-btn" type="button" data-sidebar-state-btn="expanded" aria-label="Expanded sidebar" title="Expanded" data-tooltip="Expanded">
                         <svg viewBox="0 0 24 24" aria-hidden="true">
                             <rect x="2" y="5" width="20" height="14" rx="1"></rect>
                         </svg>
@@ -332,7 +332,6 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                     $attrs = [];
                     $attrs[] = 'data-option-part="' . htmlspecialchars($sectionKey) . '"';
                     $attrs[] = 'data-variant-code="' . htmlspecialchars($option['UF_VARIANT_CODE'] ?? '') . '"';
-                    $attrs[] = 'data-variant-name="' . htmlspecialchars($option['UF_VARIANT_NAME'] ?? '') . '"';
                     $attrs[] = 'data-is-ral="' . (int)($option['UF_IS_RAL'] ?? 0) . '"';
                     $attrs[] = 'data-price="' . (int)$priceValue . '"';
                     $attrs[] = 'data-model-id="' . (int)($option['UF_MODEL_ID'] ?? 0) . '"';
@@ -351,11 +350,62 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                     }
                     return implode(' ', $attrs);
                 }
+
+                function buildRalPaletteData($sectionOptions, $ralColors, $pricesData, $sectionKey, $currentModelCode) {
+                    $freeRalOptions = [];
+                    $paidRalOptions = [];
+                    $freeRalIds = [];
+                    $paidTemplate = null;
+
+                    foreach ($sectionOptions as $option) {
+                        if (empty($option['UF_IS_RAL'])) {
+                            continue;
+                        }
+                        $ralId = (int)($option['UF_RAL_COLOR_ID'] ?? 0);
+                        $isFree = !empty($option['UF_IS_FREE']);
+
+                        if ($ralId && $isFree) {
+                            if (empty($option['RAL_DATA']) && isset($ralColors[$ralId])) {
+                                $option['RAL_DATA'] = $ralColors[$ralId];
+                            }
+                            $freeRalOptions[] = $option;
+                            $freeRalIds[$ralId] = true;
+                            continue;
+                        }
+
+                        if (!$ralId && !$isFree && !$paidTemplate) {
+                            $paidTemplate = $option;
+                        }
+                    }
+
+                    if ($paidTemplate) {
+                        $paidPrice = resolveOptionPrice(
+                            $pricesData,
+                            $sectionKey,
+                            $currentModelCode,
+                            $paidTemplate['UF_VARIANT_CODE'] ?? '',
+                            true,
+                            $paidTemplate['UF_PRICE'] ?? 0
+                        );
+
+                        foreach ($ralColors as $ralId => $ralData) {
+                            if (isset($freeRalIds[$ralId])) {
+                                continue;
+                            }
+                            $option = $paidTemplate;
+                            $option['RAL_DATA'] = $ralData;
+                            $paidRalOptions[] = ['option' => $option, 'price' => $paidPrice];
+                        }
+                    }
+
+                    return [$freeRalOptions, $paidRalOptions];
+                }
                 ?>
 
                 <?php foreach ($viewTypeNames as $sectionKey => $sectionTitle): ?>
                     <?php 
                     $sectionOptions = $currentOptions[$sectionKey] ?? [];
+                    if ($sectionKey === 'shockmount' || $sectionKey === 'shockmountPins') continue;
                     if (empty($sectionOptions)) continue;
                     ?>
                     
@@ -414,7 +464,6 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                                             class="option-button variant-item"
                                             data-option-part="<?= htmlspecialchars($sectionKey) ?>"
                                             data-variant-code="<?= htmlspecialchars($option['UF_VARIANT_CODE'] ?? '') ?>"
-                                            data-variant-name="<?= htmlspecialchars($option['UF_VARIANT_NAME'] ?? '') ?>"
                                             data-price="<?= (int)$optionPrice ?>"
                                             data-is-ral="<?= (int)($option['UF_IS_RAL'] ?? 0) ?>"
                                             data-option-id="<?= (int)($option['ID'] ?? 0) ?>"
@@ -456,7 +505,6 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                                             class="option-button custom-logo-btn variant-item"
                                             data-option-part="<?= htmlspecialchars($sectionKey) ?>"
                                             data-variant-code="<?= htmlspecialchars($option['UF_VARIANT_CODE'] ?? '') ?>"
-                                            data-variant-name="<?= htmlspecialchars($option['UF_VARIANT_NAME'] ?? '') ?>"
                                             data-price="<?= (int)$optionPrice ?>"
                                             data-is-ral="<?= (int)($option['UF_IS_RAL'] ?? 0) ?>"
                                             data-option-id="<?= (int)($option['ID'] ?? 0) ?>"
@@ -515,7 +563,6 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                                             class="option-button variant-item"
                                             data-option-part="<?= htmlspecialchars($sectionKey) ?>"
                                             data-variant-code="<?= htmlspecialchars($option['UF_VARIANT_CODE'] ?? '') ?>"
-                                            data-variant-name="<?= htmlspecialchars($option['UF_VARIANT_NAME'] ?? '') ?>"
                                             data-price="<?= (int)$optionPrice ?>"
                                             data-is-ral="<?= (int)($option['UF_IS_RAL'] ?? 0) ?>"
                                             data-option-id="<?= (int)($option['ID'] ?? 0) ?>"
@@ -557,7 +604,6 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                                             class="option-button variant-item"
                                             data-option-part="<?= htmlspecialchars($sectionKey) ?>"
                                             data-variant-code="<?= htmlspecialchars($option['UF_VARIANT_CODE'] ?? '') ?>"
-                                            data-variant-name="<?= htmlspecialchars($option['UF_VARIANT_NAME'] ?? '') ?>"
                                             data-price="<?= (int)$optionPrice ?>"
                                             data-is-ral="<?= (int)($option['UF_IS_RAL'] ?? 0) ?>"
                                             data-option-id="<?= (int)($option['ID'] ?? 0) ?>"
@@ -653,11 +699,15 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                                     </div>
                                 <?php endif; ?>
 
-                                <?php 
-                                $ralOptions = array_filter($sectionOptions, function($opt) {
-                                    return $opt['UF_IS_RAL'] ?? false;
-                                });
-                                if (!empty($ralOptions)):
+                                <?php
+                                list($freeRalOptions, $paidRalOptions) = buildRalPaletteData(
+                                    $sectionOptions,
+                                    $arResult['RAL_COLORS'] ?? [],
+                                    $pricesData,
+                                    $sectionKey,
+                                    $currentModelCode
+                                );
+                                if (!empty($freeRalOptions) || !empty($paidRalOptions)):
                                 ?>
                                     <div class="option-group">
                                         <h4>RAL цвета</h4>
@@ -671,33 +721,12 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                                         <div class="palette-container" id="<?= htmlspecialchars($sectionKey) ?>-palette" style="display: none;">
                                             <div class="palette-content">
                                                 <div class="swatches-container" id="<?= htmlspecialchars($sectionKey) ?>-swatches">
-                                                    <?php
-                                                    $freeRalOptions = [];
-                                                    $paidRalOptions = [];
-                                                    foreach ($ralOptions as $option) {
-                                                        $optionPrice = resolveOptionPrice(
-                                                            $pricesData,
-                                                            $sectionKey,
-                                                            $currentModelCode,
-                                                            $option['UF_VARIANT_CODE'] ?? '',
-                                                            true,
-                                                            $option['UF_PRICE'] ?? 0
-                                                        );
-                                                        $isPaid = $optionPrice > 0;
-                                                        if ($isPaid) {
-                                                            $paidRalOptions[] = ['option' => $option, 'price' => $optionPrice];
-                                                        } else {
-                                                            $freeRalOptions[] = ['option' => $option, 'price' => $optionPrice];
-                                                        }
-                                                    }
-                                                    ?>
                                                     <?php if (!empty($freeRalOptions)): ?>
                                                         <div class="palette-group">
                                                             <div class="palette-group-title">Бесплатные</div>
-                                                            <?php foreach ($freeRalOptions as $item): ?>
+                                                            <?php foreach ($freeRalOptions as $option): ?>
                                                                 <?php
-                                                                $option = $item['option'];
-                                                                $optionPrice = $item['price'];
+                                                                $optionPrice = 0;
                                                                 $hex = $option['RAL_DATA']['UF_HEX'] ?? '';
                                                                 $ralCode = $option['RAL_DATA']['UF_CODE'] ?? '';
                                                                 ?>
@@ -761,7 +790,6 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                                                 class="option-button variant-item"
                                                 data-option-part="<?= htmlspecialchars($sectionKey) ?>"
                                                 data-variant-code="<?= htmlspecialchars($option['UF_VARIANT_CODE'] ?? '') ?>"
-                                                data-variant-name="<?= htmlspecialchars($option['UF_VARIANT_NAME'] ?? '') ?>"
                                                 data-price="<?= (int)$optionPrice ?>"
                                                 data-is-ral="0"
                                                 data-option-id="<?= (int)($option['ID'] ?? 0) ?>"
@@ -833,7 +861,7 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                 </div>
 
                 <!-- SHOCKMOUNT SECTION -->
-                <div class="menu-item" data-section="shockmount" tabindex="0" id="shockmount-menu-item" style="display: none;" data-tooltip="Shockmount">
+                <div class="menu-item" data-section="shockmount" tabindex="0" id="shockmount-section" style="display: none;" data-tooltip="Shockmount">
                     <div class="item-icon"><div class="color-circle" id="shockmount-color-display" style="background-color: #f5f5f5;"></div></div>
                     <div class="item-content" data-sidebar-fade>
                         <p class="item-label">Антивибрационный подвес</p>
@@ -857,7 +885,7 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                             <?php 
                             if (isset($currentOptions['shockmount'])):
                                 $freeShockmountOptions = array_filter($currentOptions['shockmount'], function($opt) {
-                                    return $opt['UF_IS_FREE'] ?? true;
+                                    return ($opt['UF_IS_FREE'] ?? true) && !($opt['UF_IS_RAL'] ?? false);
                                 });
                                 foreach ($freeShockmountOptions as $option): ?>
                                     <?php
@@ -895,35 +923,20 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                                 <div class="palette-content">
                                     <div class="swatches-container" id="shockmount-swatches">
                                         <?php
-                                        $shockmountRalOptions = array_filter(($currentOptions['shockmount'] ?? []), function($opt) {
-                                            return !empty($opt['UF_IS_RAL']);
-                                        });
-                                        $freeRalOptions = [];
-                                        $paidRalOptions = [];
-                                        foreach ($shockmountRalOptions as $option) {
-                                            $optionPrice = resolveOptionPrice(
-                                                $pricesData,
-                                                'shockmount',
-                                                $currentModelCode,
-                                                $option['UF_VARIANT_CODE'] ?? '',
-                                                true,
-                                                $option['UF_PRICE'] ?? 0
-                                            );
-                                            $isPaid = $optionPrice > 0;
-                                            if ($isPaid) {
-                                                $paidRalOptions[] = ['option' => $option, 'price' => $optionPrice];
-                                            } else {
-                                                $freeRalOptions[] = ['option' => $option, 'price' => $optionPrice];
-                                            }
-                                        }
+                                        list($freeRalOptions, $paidRalOptions) = buildRalPaletteData(
+                                            $currentOptions['shockmount'] ?? [],
+                                            $arResult['RAL_COLORS'] ?? [],
+                                            $pricesData,
+                                            'shockmount',
+                                            $currentModelCode
+                                        );
                                         ?>
                                         <?php if (!empty($freeRalOptions)): ?>
                                             <div class="palette-group">
                                                 <div class="palette-group-title">Бесплатные</div>
-                                                <?php foreach ($freeRalOptions as $item): ?>
+                                                <?php foreach ($freeRalOptions as $option): ?>
                                                     <?php
-                                                    $option = $item['option'];
-                                                    $optionPrice = $item['price'];
+                                                    $optionPrice = 0;
                                                     $hex = $option['RAL_DATA']['UF_HEX'] ?? '';
                                                     $ralCode = $option['RAL_DATA']['UF_CODE'] ?? '';
                                                     ?>
@@ -999,7 +1012,7 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                             <?php 
                             if (isset($currentOptions['shockmountPins'])):
                                 $freePinsOptions = array_filter($currentOptions['shockmountPins'], function($opt) {
-                                    return $opt['UF_IS_FREE'] ?? true;
+                                    return ($opt['UF_IS_FREE'] ?? true) && !($opt['UF_IS_RAL'] ?? false);
                                 });
                                 foreach ($freePinsOptions as $option): ?>
                                     <?php
@@ -1037,35 +1050,20 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                                 <div class="palette-content">
                                     <div class="swatches-container" id="shockmountPins-swatches">
                                         <?php
-                                        $pinsRalOptions = array_filter(($currentOptions['shockmountPins'] ?? []), function($opt) {
-                                            return !empty($opt['UF_IS_RAL']);
-                                        });
-                                        $freeRalOptions = [];
-                                        $paidRalOptions = [];
-                                        foreach ($pinsRalOptions as $option) {
-                                            $optionPrice = resolveOptionPrice(
-                                                $pricesData,
-                                                'shockmountPins',
-                                                $currentModelCode,
-                                                $option['UF_VARIANT_CODE'] ?? '',
-                                                true,
-                                                $option['UF_PRICE'] ?? 0
-                                            );
-                                            $isPaid = $optionPrice > 0;
-                                            if ($isPaid) {
-                                                $paidRalOptions[] = ['option' => $option, 'price' => $optionPrice];
-                                            } else {
-                                                $freeRalOptions[] = ['option' => $option, 'price' => $optionPrice];
-                                            }
-                                        }
+                                        list($freeRalOptions, $paidRalOptions) = buildRalPaletteData(
+                                            $currentOptions['shockmountPins'] ?? [],
+                                            $arResult['RAL_COLORS'] ?? [],
+                                            $pricesData,
+                                            'shockmountPins',
+                                            $currentModelCode
+                                        );
                                         ?>
                                         <?php if (!empty($freeRalOptions)): ?>
                                             <div class="palette-group">
                                                 <div class="palette-group-title">Бесплатные</div>
-                                                <?php foreach ($freeRalOptions as $item): ?>
+                                                <?php foreach ($freeRalOptions as $option): ?>
                                                     <?php
-                                                    $option = $item['option'];
-                                                    $optionPrice = $item['price'];
+                                                    $optionPrice = 0;
                                                     $hex = $option['RAL_DATA']['UF_HEX'] ?? '';
                                                     $ralCode = $option['RAL_DATA']['UF_CODE'] ?? '';
                                                     ?>
@@ -1110,7 +1108,16 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
 
                 <!-- Price Section -->
                 <div class="sidebar-section price-section" data-sidebar-fade data-sidebar-hide="compact">
-                    <div class="price-display">
+                    <div class="price-section-header">
+                        <button class="price-section-toggle" id="price-section-toggle" type="button" aria-expanded="true">
+                            <span class="price-section-toggle-text">Скрыть детали</span>
+                            <svg class="chevron" width="12" height="8" viewBox="0 0 12 8" fill="none">
+                                <path d="M1 1L6 6L11 1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="price-section-body" id="price-section-body">
+                        <div class="price-display">
                         <div class="total-price">
                             <div class="price-row">
                                 <span>Базовая цена:</span>

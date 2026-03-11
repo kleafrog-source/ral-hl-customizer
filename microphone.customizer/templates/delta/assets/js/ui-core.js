@@ -4,6 +4,8 @@ import { updateLogoSVG } from './modules/logo.js';
 import { updateShockmountVisibility, updateShockmountLayers, updateShockmountPreview, updateShockmountPinsPreview } from './modules/shockmount-new.js';
 import { calculateTotal, getBreakdown, formatPrice } from './modules/price-calculator.js';
 import { initHLDataManager } from './modules/hl-data-manager.js';
+import { syncToggles } from './modules/toggles.js';
+import { switchLayer, updateMicVariant } from './modules/camera-effect.js';
 
 export function updateUI() {
     const state = stateManager.get();
@@ -32,7 +34,7 @@ export function updateUI() {
 
     const shockmountRow = document.getElementById('shockmount-price-row-container');
     if (shockmountRow) {
-        const showShockmount = !!state.shockmount?.enabled && !state.shockmount?.included;
+        const showShockmount = !!state.shockmount?.enabled && !state.shockmount?.included && !!state.shockmount?.available;
         shockmountRow.style.display = showShockmount ? 'flex' : 'none';
     }
 
@@ -80,7 +82,10 @@ function applyOptionFromElement(element) {
 
     const batch = stateManager.startBatch();
     const variantCode = element.dataset.variantCode || '';
-    const variantName = element.dataset.variantName || '';
+    const variantName = element.dataset.variantName
+        || element.dataset.ralName
+        || element.querySelector('.option-name')?.textContent?.trim()
+        || variantCode;
     const ralCode = element.dataset.ral || element.dataset.ralCode || (isRal ? variantCode : null);
 
     batch(`${section}.variantCode`, variantCode);
@@ -115,9 +120,14 @@ export function initEventListeners() {
     initThemeControl();
     initFullscreenControl();
     initControlAnimations();
+    initPriceSectionToggle();
+    initOrderModal();
 
     document.querySelectorAll('.menu-item[data-section]').forEach(item => {
-        item.addEventListener('click', () => toggleSubmenu(item.dataset.section));
+        item.addEventListener('click', () => {
+            toggleSubmenu(item.dataset.section);
+            focusSection(item.dataset.section);
+        });
     });
 
     document.querySelectorAll('.back-button, .submenu-back').forEach(btn => {
@@ -154,17 +164,96 @@ export function initEventListeners() {
             window.CUSTOMIZER_DATA.currentModelOptions = window.CUSTOMIZER_DATA.options[window.CUSTOMIZER_DATA.currentModelId] || window.CUSTOMIZER_DATA.options[0] || {};
 
             initHLDataManager();
+            syncToggles();
             updateShockmountVisibility();
             updateShockmountLayers(stateManager.get());
             updateShockmountPreview();
             updateShockmountPinsPreview();
             updateSVG();
             updateUI();
+            updateMicVariant(modelCode);
 
             if (window.WoodCase) {
                 window.WoodCase.setCase(modelCode);
             }
         });
+    });
+}
+
+function focusSection(section) {
+    if (!section) return;
+    if (section === 'case') {
+        switchLayer('case');
+        return;
+    }
+    if (section === 'shockmount' || section === 'shockmountPins') {
+        switchLayer('shockmount');
+        return;
+    }
+    switchLayer('microphone');
+}
+
+function initPriceSectionToggle() {
+    const section = document.querySelector('.price-section');
+    const toggle = document.getElementById('price-section-toggle');
+    const body = document.getElementById('price-section-body');
+    if (!section || !toggle || !body) return;
+
+    const toggleText = toggle.querySelector('.price-section-toggle-text');
+    const saved = localStorage.getItem('priceSectionCollapsed') === '1';
+
+    const applyState = (collapsed, animate = true) => {
+        const startHeight = body.offsetHeight;
+        section.classList.toggle('is-collapsed', collapsed);
+        toggle.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
+        if (toggleText) toggleText.textContent = collapsed ? 'Показать детали' : 'Скрыть детали';
+        localStorage.setItem('priceSectionCollapsed', collapsed ? '1' : '0');
+
+        const targetHeight = body.scrollHeight;
+        body.style.height = `${startHeight}px`;
+        if (window.anime && animate) {
+            window.anime.remove(body);
+            window.anime({
+                targets: body,
+                height: targetHeight,
+                duration: 260,
+                easing: 'easeOutQuad',
+                complete: () => {
+                    body.style.height = 'auto';
+                }
+            });
+        } else {
+            body.style.height = 'auto';
+        }
+    };
+
+    applyState(saved, false);
+
+    toggle.addEventListener('click', () => {
+        const next = !section.classList.contains('is-collapsed');
+        applyState(next, true);
+    });
+}
+
+function initOrderModal() {
+    const modal = document.getElementById('order-modal');
+    const openBtn = document.querySelector('.price-section .order-button');
+    if (!modal || !openBtn) return;
+
+    const closeBtn = modal.querySelector('[data-modal-close]') || modal.querySelector('button');
+    const open = () => {
+        modal.style.display = 'flex';
+        modal.setAttribute('aria-hidden', 'false');
+    };
+    const close = () => {
+        modal.style.display = 'none';
+        modal.setAttribute('aria-hidden', 'true');
+    };
+
+    openBtn.addEventListener('click', open);
+    if (closeBtn) closeBtn.addEventListener('click', close);
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) close();
     });
 }
 

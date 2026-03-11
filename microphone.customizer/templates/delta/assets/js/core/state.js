@@ -40,7 +40,7 @@ class StateManager {
             logo: { useCustom: false, customLogoData: null },
             logobg: {},
             case: { laserEngravingEnabled: false, logoTransform: { x: 0, y: 0, scale: 1 }, logoWidthMM: 0, logoOffsetMM: { top: 0, left: 0 } },
-            shockmount: { enabled: false, included: false },
+            shockmount: { enabled: false, included: false, available: false },
             shockmountPins: {},
             prices: { base: 0, spheres: 0, body: 0, logo: 0, logobg: 0, case: 0, shockmount: 0 },
             initialConfig: null,
