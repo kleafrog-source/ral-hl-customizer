@@ -3,8 +3,8 @@
 import { SECTION_LAYER_MAP } from '../config/layer-mapping.config.js';
 
 export function updateSectionLayers(section, state) {
-    const svg = document.querySelector('#microphone-svg-container svg');
-    if (!svg || section === 'logobg') return;
+    const svg = document.querySelector('.svg-wrapper svg');
+    if (!svg) return;
 
     const svgTargetMode = state.svgTargetMode;
     const svgLayerGroup = state.svgLayerGroup;
@@ -65,11 +65,11 @@ function applyFilterMode(svg, section, svgFilterId, colorValue) {
         });
     }
     if (!svgFilterId || !colorValue) return;
-    const filter = svg.querySelector(`#${svgFilterId}`);
-    if (filter) {
-        const flood = filter.querySelector('feFlood');
-        if (flood) flood.setAttribute('flood-color', colorValue);
-    }
+  const flood = svg.querySelector(`#${svgFilterId}`);
+  if (flood) {
+    flood.setAttribute('flood-color', colorValue);
+    flood.setAttribute('flood-opacity', '1');
+  }
 }
 
 function applyColorizedMode(svg, section, colorValue) {
@@ -119,11 +119,13 @@ function resetSectionGroups(svg, section) {
     });
 }
 
-export function updateFilter(filterId, section, hex) {
-    if (!hex) return;
-    const id = (section === 'logobg') ? 'feFlood-logobg-color' : `feFlood-${section}-color`;
-    const el = document.querySelector(`#${id}`);
-    if (el) {
-        el.setAttribute('flood-color', hex);
-    }
+export function updateFilter(filterId, section, colorValue) {
+  if (!colorValue || !filterId) return;
+  const svg = document.querySelector('.svg-wrapper svg');
+  if (!svg) return;
+ const flood = svg.querySelector(`#${filterId}`);
+  if (flood) {
+    flood.setAttribute('flood-color', colorValue);
+    flood.setAttribute('flood-opacity', '1');
+  }
 }
