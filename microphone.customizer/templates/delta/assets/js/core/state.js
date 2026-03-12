@@ -1,7 +1,7 @@
 // core/state.js
 
 // Debug flag
-const APP_DEBUG = false;
+const APP_DEBUG = true;
 
 export { APP_DEBUG };
 

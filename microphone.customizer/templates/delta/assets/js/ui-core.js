@@ -77,7 +77,7 @@ function applyOptionFromElement(element) {
     if ((section === 'logo' || section === 'logobg') && stateManager.get('logo.useCustom')) return;
 
     const isRal = element.dataset.isRal === '1';
-    const colorValue = element.dataset.ralHex || null;
+    const colorValue = element.dataset.ralRgb || null;
     const colorName = element.dataset.ralName || null;
 
     const batch = stateManager.startBatch();

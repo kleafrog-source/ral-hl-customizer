@@ -24,7 +24,7 @@ export function updateResponsiveAssets(svg) {
 
 export function updateSVG() {
     try {
-        const svg = document.querySelector('#microphone-svg-container svg');
+        const svg = document.querySelector('.svg-wrapper svg');
         if (!svg) {
             console.warn('[SVG] SVG element not found in #microphone-svg-container, skipping update');
             return;
@@ -150,7 +150,7 @@ export async function loadSVG(svgPath = null) {
         }
     }
 
-    const svg = document.querySelector('#microphone-svg-container svg');
+    const svg = document.querySelector('.svg-wrapper svg');
     if (svg) {
         svg.style.transformOrigin = 'center bottom';
         updateResponsiveAssets(svg);
