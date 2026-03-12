@@ -100,35 +100,6 @@ export function init() {
     updateLogoItemsLockState();
 }
 
-export function updateMalfaLogoOptionsVisibility() {
-    const classicBrassOption = document.querySelector('.variant-item[data-variant="classicbrass"]'); // Classic Brass
-    const coldChromeOption = document.querySelector('.variant-item[data-variant="coldchrome"]'); // Cold Chrome
-    const malfaSilverOption = document.querySelector('.variant-item[data-variant="malfasilver"]'); // MALFA Edition (Серебро)
-    const malfaGoldOption = document.querySelector('.variant-item[data-variant="malfagold"]'); // MALFA Edition (Золото)
-    
-    if (!classicBrassOption || !coldChromeOption || !malfaSilverOption || !malfaGoldOption) return;
-
-    if (isMalfaMic()) {
-        // For MALFA microphone: show MALFA options AND standard options
-        classicBrassOption.querySelector('.variant-label').textContent = 'MALFA Edition (Золото)';
-        coldChromeOption.querySelector('.variant-label').textContent = 'MALFA Edition (Серебро)';
-        
-        classicBrassOption.style.display = 'flex';
-        coldChromeOption.style.display = 'flex';
-        malfaSilverOption.style.display = 'flex';
-        malfaGoldOption.style.display = 'flex';
-    } else {
-        // For standard microphones: show only standard options, hide MALFA options
-        classicBrassOption.querySelector('.variant-label').textContent = 'Классическая латунь';
-        coldChromeOption.querySelector('.variant-label').textContent = 'Холодный хром';
-        
-        classicBrassOption.style.display = 'flex';
-        coldChromeOption.style.display = 'flex';
-        malfaSilverOption.style.display = 'none';
-        malfaGoldOption.style.display = 'none';
-    }
-}
-
 //Управляет видимостью и стилями элементов эмблемы(логотипа микрофона)
 export function updateLogoSVG() {
     const svg = document.querySelector('#microphone-svg-container svg');
@@ -346,4 +317,43 @@ export function clearCustomLogo() {
     updateLogoSVG();
     
     console.log('[Logo] Custom logo cleared');
+}
+
+// Управление видимостью MALFA вариантов логотипа
+export function updateMalfaLogoOptionsVisibility() {
+    const state = stateManager.get();
+    const isMalfaModel = isMalfaMic(state);
+    
+    console.log('[MALFA] updateMalfaLogoOptionsVisibility called:', {
+        isMalfaModel,
+        currentVariant: state.variant,
+        currentModelCode: state.currentModelCode
+    });
+    
+    // Находим все варианты логотипа
+    const logoVariants = document.querySelectorAll('#submenu-logo .variant-item[data-variant-code]');
+    console.log('[MALFA] Found logo variants:', logoVariants.length);
+    
+    logoVariants.forEach(variant => {
+        const variantCode = variant.dataset.variantCode;
+        const isMalfaVariant = variantCode === 'malfasilver' || variantCode === 'malfagold';
+        
+        console.log('[MALFA] Processing variant:', {
+            variantCode,
+            isMalfaVariant,
+            currentDisplay: variant.style.display
+        });
+        
+        if (isMalfaModel) {
+            // Для MALFA модели: показываем все варианты
+            variant.style.display = 'flex';
+        } else {
+            // Для обычной модели: скрываем MALFA варианты
+            if (isMalfaVariant) {
+                variant.style.display = 'none';
+            } else {
+                variant.style.display = 'flex';
+            }
+        }
+    });
 }

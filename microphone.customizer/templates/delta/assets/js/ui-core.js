@@ -1,6 +1,6 @@
 import { stateManager } from './core/state.js';
 import { updateSVG } from './engine.js';
-import { updateLogoSVG } from './modules/logo.js';
+import { updateLogoSVG, updateMalfaLogoOptionsVisibility } from './modules/logo.js';
 import { updateShockmountVisibility, updateShockmountLayers, updateShockmountPreview, updateShockmountPinsPreview } from './modules/shockmount-new.js';
 import { calculateTotal, getBreakdown, formatPrice } from './modules/price-calculator.js';
 import { initHLDataManager } from './modules/hl-data-manager.js';
@@ -9,6 +9,9 @@ import { syncToggles } from './modules/toggles.js';
 import { switchLayer, updateMicVariant } from './modules/camera-effect.js';
 
 export function updateUI() {
+    // Update MALFA logo options visibility based on current model
+    updateMalfaLogoOptionsVisibility();
+    
     const state = stateManager.get();
     const breakdown = getBreakdown(state);
     const total = calculateTotal(state);

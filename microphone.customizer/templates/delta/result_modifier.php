@@ -175,18 +175,30 @@ if ($cache->initCache($cacheTime, $cacheId, $cacheDir)) {
             $currentModelOptions[$sectionCode] = array_merge($currentModelOptions[$sectionCode], $sectionOptions);
         }
     }
+    
+    // Debug: Log logo options before filtering
+    if (isset($currentModelOptions['logo'])) {
+        error_log('DEBUG: Logo options before filtering: ' . print_r($currentModelOptions['logo'], true));
+    }
 
     // Filter options by model series (SERIES_VAR) when provided
     $currentSeries = $currentModel['MODEL_SERIES'] ?? '';
     if (!empty($currentSeries)) {
         foreach ($currentModelOptions as $sectionCode => $sectionOptions) {
-            $currentModelOptions[$sectionCode] = array_values(array_filter($sectionOptions, function ($opt) use ($currentSeries) {
-                $seriesVar = $opt['SERIES_VAR'] ?? ($opt['UF_SERIESVAR'] ?? '');
-                if (empty($seriesVar)) {
-                    return true;
-                }
-                return (string)$seriesVar === (string)$currentSeries;
-            }));
+            // Temporarily disable series filtering for logo section to show all variants
+            if ($sectionCode === 'logo') {
+                // For logo section, show all options (including MALFA)
+                $currentModelOptions[$sectionCode] = array_values($sectionOptions);
+            } else {
+                // For other sections, apply strict filtering
+                $currentModelOptions[$sectionCode] = array_values(array_filter($sectionOptions, function ($opt) use ($currentSeries) {
+                    $seriesVar = $opt['SERIES_VAR'] ?? ($opt['UF_SERIESVAR'] ?? '');
+                    if (empty($seriesVar)) {
+                        return true;
+                    }
+                    return (string)$seriesVar === (string)$currentSeries;
+                }));
+            }
         }
     }
     $arResult['CURRENT_MODEL_OPTIONS'] = $currentModelOptions;
