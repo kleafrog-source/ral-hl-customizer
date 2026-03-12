@@ -259,7 +259,7 @@ export function updateLogoItemsLockState() {
     const state = stateManager.get();
     const hasCustomLogo = state.logo.useCustom;
     const logoItems = document.querySelectorAll('#submenu-logo .variant-item[data-variant]:not([data-variant="custom"])');
-    const logoBgItems = document.querySelectorAll('#submenu-logobg .variant-item');
+    const logobgItems = document.querySelectorAll('#submenu-logobg .variant-item');
     
     // Lock/unlock logo items based on custom logo state
     logoItems.forEach(item => {
@@ -271,7 +271,7 @@ export function updateLogoItemsLockState() {
     });
     
     // Lock/unlock logo background items based on custom logo state
-    logoBgItems.forEach(item => {
+    logobgItems.forEach(item => {
         if (hasCustomLogo) {
             item.classList.add('locked');
         } else {
