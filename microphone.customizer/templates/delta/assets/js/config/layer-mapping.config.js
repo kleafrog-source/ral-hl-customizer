@@ -22,6 +22,14 @@ export const SECTION_LAYER_MAP = {
       monoGroup: 'logobg-monochrome'
     }
   },
+  logo: {
+    'standard': {
+      originals: ['logotype-gold'],
+      standardGroup: 'logo-letters-and-frame',
+      malfaGroup: 'malfa-logo-text-path',
+      customGroup: 'custom-logo-layer'
+    }
+  },
   shockmount: {
     'standard': {
       originals: ['layer9', 'layer10'],

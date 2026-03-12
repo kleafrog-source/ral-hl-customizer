@@ -6,6 +6,12 @@ export function updateSectionLayers(section, state) {
     const svg = document.querySelector('.svg-wrapper svg');
     if (!svg) return;
 
+    // Special handling for logo section
+    if (section === 'logo') {
+        updateLogoLayers(svg, state);
+        return;
+    }
+
     const svgTargetMode = state.svgTargetMode;
     const svgLayerGroup = state.svgLayerGroup;
     const svgFilterId = state.svgFilterId;
@@ -117,6 +123,82 @@ function resetSectionGroups(svg, section) {
             if (layer) layer.style.display = 'none';
         }
     });
+}
+
+function updateLogoLayers(svg, state) {
+    const sectionConfig = SECTION_LAYER_MAP.logo;
+    if (!sectionConfig) return;
+
+    const config = sectionConfig.standard;
+    const svgTargetMode = state.svgTargetMode;
+    const svgLayerGroup = state.svgLayerGroup;
+    const svgSpecialKey = state.svgSpecialKey;
+
+    // Hide all logo layers first
+    const allLayers = [
+        config.originals[0], // logotype-gold
+        config.standardGroup, // logo-letters-and-frame
+        config.malfaGroup, // malfa-logo-text-path
+        config.customGroup // custom-logo-layer
+    ];
+
+    allLayers.forEach(layerId => {
+        const layer = svg.querySelector(`#${layerId}`);
+        if (layer) layer.style.display = 'none';
+    });
+
+    // Handle custom logo mode
+    if (state.useCustom) {
+        const customLayer = svg.querySelector(`#${config.customGroup}`);
+        if (customLayer) {
+            customLayer.style.display = 'inline';
+        }
+        return;
+    }
+
+    // Handle standard logo modes
+    switch (svgTargetMode) {
+        case 'original':
+            // Show standard group (logo-letters-and-frame)
+            const standardLayer = svg.querySelector(`#${config.standardGroup}`);
+            if (standardLayer) {
+                standardLayer.style.display = 'inline';
+                
+                // Apply grayscale filter if specified
+                if (svgSpecialKey === 'grayscale') {
+                    standardLayer.style.filter = 'grayscale(100%)';
+                } else {
+                    standardLayer.style.filter = '';
+                }
+            }
+            break;
+            
+        case 'gradient':
+            // Show MALFA group (malfa-logo-text-path)
+            const malfaLayer = svg.querySelector(`#${config.malfaGroup}`);
+            if (malfaLayer) {
+                malfaLayer.style.display = 'inline';
+                
+                // Apply gradient based on special key
+                const malfaLogoTextPath = svg.querySelector('#malfa-logo-text-path');
+                if (malfaLogoTextPath) {
+                    if (svgSpecialKey === 'malfa_silver') {
+                        malfaLogoTextPath.style.fill = 'url(#grad-malfa-silver)';
+                    } else if (svgSpecialKey === 'malfa_gold') {
+                        malfaLogoTextPath.style.fill = 'url(#grad-malfa-gold)';
+                    }
+                }
+            }
+            break;
+            
+        default:
+            // Fallback to original
+            const fallbackLayer = svg.querySelector(`#${config.standardGroup}`);
+            if (fallbackLayer) {
+                fallbackLayer.style.display = 'inline';
+            }
+            break;
+    }
 }
 
 export function updateFilter(filterId, section, colorValue) {

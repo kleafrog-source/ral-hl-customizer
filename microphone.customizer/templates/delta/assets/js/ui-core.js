@@ -76,6 +76,22 @@ function applyOptionFromElement(element) {
     if (!section) return;
     if ((section === 'logo' || section === 'logobg') && stateManager.get('logo.useCustom')) return;
 
+    // Handle custom logo special case
+    const isCustomLogo = element.dataset.isCustomLogo === '1';
+    if (section === 'logo' && isCustomLogo) {
+        const batch = stateManager.startBatch();
+        batch('logo.useCustom', true);
+        batch('logo.variantCode', element.dataset.variantCode || '');
+        batch('logo.variantName', element.querySelector('.option-name')?.textContent?.trim() || '');
+        batch('logo.price', parseInt(element.dataset.price || '0', 10));
+        stateManager.endBatch();
+        
+        updateSVG();
+        updateLogoSVG();
+        updateUI();
+        return;
+    }
+
     const isRal = element.dataset.isRal === '1';
     const colorValue = element.dataset.ralRgb || null;
     const colorName = element.dataset.ralName || null;

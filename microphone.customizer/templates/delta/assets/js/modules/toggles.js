@@ -25,6 +25,7 @@ export function initToggles() {
             const customLogoUploadArea = document.getElementById('custom-logo-upload-area');
             if (customLogoUploadArea) customLogoUploadArea.style.display = enabled ? 'block' : 'none';
             updateSVG();
+            updateLogoSVG();
             updateUI();
         });
     }

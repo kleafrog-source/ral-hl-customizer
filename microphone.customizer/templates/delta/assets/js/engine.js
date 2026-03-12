@@ -54,6 +54,8 @@ export function updateSVG() {
         updateSectionLayers('body', state.body || {});
         //Переключает видимость слоев logobg в SVG
         updateSectionLayers('logobg', state.logobg || {});
+        //Переключает видимость слоев logo в SVG
+        updateSectionLayers('logo', state.logo || {});
         //Обновляет логотип в SVG
         updateLogoSVG();
     } catch (e) {
@@ -71,6 +73,7 @@ export function initSVGVisibility(svg, initialState) {
     const spheresVariant = initialState.spheres?.variant;
     const bodyVariant = initialState.body?.variant;
     const logobgVariant = initialState.logobg?.variant;
+    const logoVariant = initialState.logo?.variant;
     
     // Для spheres: если variant 'satinsteel', '3' или 'non-ral', показать spheres-original-3
     if (spheresVariant === 'satinsteel' || spheresVariant === '3' || spheresVariant === 'non-ral') {
@@ -96,6 +99,21 @@ export function initSVGVisibility(svg, initialState) {
         if (logobgBlack) {
             logobgBlack.style.setProperty('display', 'inline', 'important');
             console.log('[SVG] Set logobg-black to visible');
+        }
+    }
+    
+    // Для logo: показать начальный слой или скрыть при custom logo
+    if (initialState.logo?.useCustom) {
+        const logotypeGold = svg.querySelector('#logotype-gold');
+        if (logotypeGold) {
+            logotypeGold.style.setProperty('display', 'none', 'important');
+            console.log('[SVG] Hide logotype-gold for custom logo');
+        }
+    } else if (!logoVariant || logoVariant === 'brass-logo') {
+        const logotypeGold = svg.querySelector('#logotype-gold');
+        if (logotypeGold) {
+            logotypeGold.style.setProperty('display', 'inline', 'important');
+            console.log('[SVG] Set logotype-gold to visible');
         }
     }
     
