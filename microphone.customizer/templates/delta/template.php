@@ -614,8 +614,16 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                             <?php else: ?>
                                 <!-- Standard section with options -->
                                 <?php 
-                                $freeOptions = array_filter($sectionOptions, function($opt) {
-                                    return ($opt['UF_IS_FREE'] ?? true) && !($opt['UF_IS_RAL'] ?? false);
+                                // For logobg, include free RAL options in free variants
+                                $freeOptions = array_filter($sectionOptions, function($opt) use ($sectionKey) {
+                                    $isFree = $opt['UF_IS_FREE'] ?? true;
+                                    $isRal = $opt['UF_IS_RAL'] ?? false;
+                                    // For logobg, include free RAL options
+                                    if ($sectionKey === 'logobg') {
+                                        return $isFree;
+                                    }
+                                    // For other sections, exclude RAL from free variants
+                                    return $isFree && !$isRal;
                                 });
                                 if (!empty($freeOptions)):
                                 ?>

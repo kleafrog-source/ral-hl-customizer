@@ -134,21 +134,20 @@ function updateLogoLayers(svg, state) {
     const svgLayerGroup = state.svgLayerGroup;
     const svgSpecialKey = state.svgSpecialKey;
 
-    // Hide all logo layers first
-    const allLayers = [
-        config.originals[0], // logotype-gold
-        config.standardGroup, // logo-letters-and-frame
-        config.malfaGroup, // malfa-logo-text-path
-        config.customGroup // custom-logo-layer
-    ];
-
-    allLayers.forEach(layerId => {
-        const layer = svg.querySelector(`#${layerId}`);
-        if (layer) layer.style.display = 'none';
-    });
-
     // Handle custom logo mode
     if (state.useCustom) {
+        // Hide all logo layers
+        const allLayers = [
+            config.originals[0], // logotype-gold
+            config.standardGroup, // logo-letters-and-frame
+            config.malfaGroup // malfa-logo-text-path
+        ];
+        allLayers.forEach(layerId => {
+            const layer = svg.querySelector(`#${layerId}`);
+            if (layer) layer.style.display = 'none';
+        });
+        
+        // Show custom layer
         const customLayer = svg.querySelector(`#${config.customGroup}`);
         if (customLayer) {
             customLayer.style.display = 'inline';
@@ -156,10 +155,19 @@ function updateLogoLayers(svg, state) {
         return;
     }
 
+    // Hide custom layer for non-custom modes
+    const customLayer = svg.querySelector(`#${config.customGroup}`);
+    if (customLayer) {
+        customLayer.style.display = 'none';
+    }
+
     // Handle standard logo modes
     switch (svgTargetMode) {
         case 'original':
-            // Show standard group (logo-letters-and-frame)
+            // Hide MALFA group, show standard group
+            const malfaLayer = svg.querySelector(`#${config.malfaGroup}`);
+            if (malfaLayer) malfaLayer.style.display = 'none';
+            
             const standardLayer = svg.querySelector(`#${config.standardGroup}`);
             if (standardLayer) {
                 standardLayer.style.display = 'inline';
@@ -174,10 +182,13 @@ function updateLogoLayers(svg, state) {
             break;
             
         case 'gradient':
-            // Show MALFA group (malfa-logo-text-path)
-            const malfaLayer = svg.querySelector(`#${config.malfaGroup}`);
-            if (malfaLayer) {
-                malfaLayer.style.display = 'inline';
+            // Hide standard group, show MALFA group
+            const standardLayer2 = svg.querySelector(`#${config.standardGroup}`);
+            if (standardLayer2) standardLayer2.style.display = 'none';
+            
+            const malfaLayer2 = svg.querySelector(`#${config.malfaGroup}`);
+            if (malfaLayer2) {
+                malfaLayer2.style.display = 'inline';
                 
                 // Apply gradient based on special key
                 const malfaLogoTextPath = svg.querySelector('#malfa-logo-text-path');
@@ -192,7 +203,10 @@ function updateLogoLayers(svg, state) {
             break;
             
         default:
-            // Fallback to original
+            // Fallback: show standard group
+            const malfaLayer3 = svg.querySelector(`#${config.malfaGroup}`);
+            if (malfaLayer3) malfaLayer3.style.display = 'none';
+            
             const fallbackLayer = svg.querySelector(`#${config.standardGroup}`);
             if (fallbackLayer) {
                 fallbackLayer.style.display = 'inline';

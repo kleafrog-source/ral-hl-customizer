@@ -4,6 +4,7 @@ import { stateManager } from '../core/state.js';
 import { updateUI } from '../ui-core.js';
 import { updateShockmountVisibility, updateShockmountLayers, updateShockmountPreview, updateShockmountPinsPreview } from './shockmount-new.js';
 import { updateSVG } from '../engine.js';
+import { updateLogoSVG } from './logo.js';
 
 let listenersBound = false;
 
