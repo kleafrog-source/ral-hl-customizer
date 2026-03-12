@@ -153,7 +153,7 @@ if ($cache->initCache($cacheTime, $cacheId, $cacheDir)) {
     $arResult['PRICES'] = $prices;
 
     // Current model
-    $currentModelCode = $arParams['MODEL_CODE'] ?? '023-the-bomblet';
+    $currentModelCode = $arParams['MODEL_CODE'] ?? '023-malfa';
     $currentModel = $modelsByCode[$currentModelCode] ?? null;
     $currentModelId = $currentModel['ID'] ?? null;
 

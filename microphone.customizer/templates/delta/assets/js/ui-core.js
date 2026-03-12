@@ -4,6 +4,7 @@ import { updateLogoSVG } from './modules/logo.js';
 import { updateShockmountVisibility, updateShockmountLayers, updateShockmountPreview, updateShockmountPinsPreview } from './modules/shockmount-new.js';
 import { calculateTotal, getBreakdown, formatPrice } from './modules/price-calculator.js';
 import { initHLDataManager } from './modules/hl-data-manager.js';
+import { updateSectionLayers } from './modules/appearance-new.js';
 import { syncToggles } from './modules/toggles.js';
 import { switchLayer, updateMicVariant } from './modules/camera-effect.js';
 
@@ -125,6 +126,12 @@ function applyOptionFromElement(element) {
 
     updateSVG();
     updateLogoSVG();
+    
+    // Update section layers for logo to handle original/gradient modes
+    if (section === 'logo') {
+        updateSectionLayers('logo', stateManager.get().logo);
+    }
+    
     updateShockmountLayers(stateManager.get());
     updateShockmountPreview();
     updateShockmountPinsPreview();
