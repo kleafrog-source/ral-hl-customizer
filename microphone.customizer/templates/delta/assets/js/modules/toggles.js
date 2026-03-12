@@ -22,7 +22,8 @@ export function initToggles() {
             const logobgSection = document.querySelector('[data-section="logobg"]');
             if (logoSection) logoSection.classList.toggle('disabled', enabled);
             if (logobgSection) logobgSection.classList.toggle('disabled', enabled);
-            if (uploadArea) uploadArea.style.display = enabled ? 'block' : 'none';
+            const customLogoUploadArea = document.getElementById('custom-logo-upload-area');
+            if (customLogoUploadArea) customLogoUploadArea.style.display = enabled ? 'block' : 'none';
             updateSVG();
             updateUI();
         });
@@ -59,8 +60,8 @@ export function syncToggles() {
     const logoToggle = document.getElementById('logo-mode-toggle');
     if (logoToggle) {
         logoToggle.checked = !!stateManager.get('logo.useCustom');
-        const uploadArea = document.getElementById('custom-logo-upload-area');
-        if (uploadArea) uploadArea.style.display = logoToggle.checked ? 'block' : 'none';
+        const customLogoUploadArea = document.getElementById('custom-logo-upload-area');
+        if (customLogoUploadArea) customLogoUploadArea.style.display = logoToggle.checked ? 'block' : 'none';
         const logoSection = document.querySelector('[data-section="logo"]');
         const logobgSection = document.querySelector('[data-section="logobg"]');
         if (logoSection) logoSection.classList.toggle('disabled', logoToggle.checked);

@@ -345,6 +345,7 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
 
                     if (!empty($option['UF_IS_RAL']) && !empty($option['RAL_DATA'])) {
                         $attrs[] = 'data-ral-id="' . htmlspecialchars($option['RAL_DATA']['ID'] ?? '') . '"';
+                        $attrs[] = 'data-ral-rgb="' . htmlspecialchars($option['RAL_DATA']['UF_RGB_CODE'] ?? '') . '"';
                         $attrs[] = 'data-ral-hex="' . htmlspecialchars($option['RAL_DATA']['UF_HEX'] ?? '') . '"';
                         $attrs[] = 'data-ral-name="' . htmlspecialchars($option['RAL_DATA']['UF_NAME'] ?? '') . '"';
                     }
@@ -481,62 +482,6 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                                             <?php endif; ?>
                                         </button>
                                     <?php endforeach; ?>
-                                </div>
-                                
-                                <div class="option-group">
-                                    <h4>Кастомная эмблема</h4>
-                                    <?php 
-                                    $customOptions = array_filter($sectionOptions, function($opt) {
-                                        return $opt['UF_IS_CUSTOM_LOGO'] ?? false;
-                                    });
-                                    foreach ($customOptions as $option): ?>
-                                        <?php
-                                        $optionPrice = resolveOptionPrice(
-                                            $pricesData,
-                                            $sectionKey,
-                                            $currentModelCode,
-                                            $option['UF_VARIANT_CODE'] ?? '',
-                                            !empty($option['UF_IS_RAL']),
-                                            $option['UF_PRICE'] ?? 0
-                                        );
-                                        $isRalPaid = !empty($option['UF_IS_RAL']) && $optionPrice > 0;
-                                        ?>
-                                        <button
-                                            class="option-button custom-logo-btn variant-item"
-                                            data-option-part="<?= htmlspecialchars($sectionKey) ?>"
-                                            data-variant-code="<?= htmlspecialchars($option['UF_VARIANT_CODE'] ?? '') ?>"
-                                            data-price="<?= (int)$optionPrice ?>"
-                                            data-is-ral="<?= (int)($option['UF_IS_RAL'] ?? 0) ?>"
-                                            data-option-id="<?= (int)($option['ID'] ?? 0) ?>"
-                                            data-model-id="<?= (int)($option['UF_MODEL_ID'] ?? 0) ?>"
-                                            data-svg-target-mode="<?= htmlspecialchars($option['UF_SVG_TARGET_MODE'] ?? '') ?>"
-                                            data-svg-layer-group="<?= htmlspecialchars($option['UF_SVG_LAYER_GROUP'] ?? '') ?>"
-                                            data-svg-filter-id="<?= htmlspecialchars($option['UF_SVG_FILTER_ID'] ?? '') ?>"
-                                            data-svg-special-key="<?= htmlspecialchars($option['UF_SVG_SPECIAL_KEY'] ?? '') ?>"
-                                            data-is-ral-paid="<?= $isRalPaid ? 1 : 0 ?>"
-                                            data-variant="<?= htmlspecialchars($option['UF_VARIANT_CODE'] ?? '') ?>"
-                                            data-is-custom-logo="1"
-                                        >
-                                            <span class="option-name"><?= htmlspecialchars($option['UF_VARIANT_NAME'] ?? '') ?></span>
-                                            <span class="option-price">+<?= number_format($optionPrice, 0, '', ' ') ?>₽</span>
-                                        </button>
-                                    <?php endforeach; ?>
-                                    
-                                    <!-- Custom logo upload area -->
-                                    <div class="custom-logo-upload" id="custom-logo-upload" style="display: none;">
-                                        <div class="upload-area">
-                                            <input type="file" id="logo-file-input" accept="image/*" style="display: none;">
-                                            <button class="upload-button" onclick="document.getElementById('logo-file-input').click()">
-                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                                    <path d="M21 15V19C21 20.1 20.1 21 19 21H5C3.9 21 3 20.1 3 19V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                                    <path d="M17 8L12 3L7 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                                    <path d="M12 3V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                                </svg>
-                                                <span>Загрузить логотип</span>
-                                            </button>
-                                            <p class="upload-hint">PNG, JPG, SVG до 5MB</p>
-                                        </div>
-                                    </div>
                                 </div>
 
                             <?php elseif ($sectionKey === 'case'): ?>
@@ -696,6 +641,33 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                                                 <span class="option-name"><?= htmlspecialchars($option['UF_VARIANT_NAME'] ?? '') ?></span>
                                             </button>
                                         <?php endforeach; ?>
+                                        
+                                        <?php
+                                        // Добавляем бесплатные RAL цвета из палитры
+                                        list($freeRalOptions, $paidRalOptions) = buildRalPaletteData(
+                                            $sectionOptions,
+                                            $arResult['RAL_COLORS'] ?? [],
+                                            $pricesData,
+                                            $sectionKey,
+                                            $currentModelCode
+                                        );
+                                        if (!empty($freeRalOptions)):
+                                            foreach ($freeRalOptions as $option): ?>
+                                                <?php
+                                                $optionPrice = 0;
+                                                $hex = $option['RAL_DATA']['UF_HEX'] ?? '';
+                                                $ralCode = $option['RAL_DATA']['UF_CODE'] ?? '';
+                                                $ralName = $option['RAL_DATA']['UF_NAME'] ?? 'RAL ' . $ralCode;
+                                                ?>
+                                                <button
+                                                    class="option-button variant-item"
+                                                    data-ral="<?= htmlspecialchars($ralCode) ?>"
+                                                    <?= buildOptionDataAttrs($sectionKey, $option, $optionPrice, false) ?>
+                                                >
+                                                    <span class="option-name"><?= htmlspecialchars($ralName) ?></span>
+                                                </button>
+                                            <?php endforeach;
+                                        endif; ?>
                                     </div>
                                 <?php endif; ?>
 
@@ -721,25 +693,6 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                                         <div class="palette-container" id="<?= htmlspecialchars($sectionKey) ?>-palette" style="display: none;">
                                             <div class="palette-content">
                                                 <div class="swatches-container" id="<?= htmlspecialchars($sectionKey) ?>-swatches">
-                                                    <?php if (!empty($freeRalOptions)): ?>
-                                                        <div class="palette-group">
-                                                            <div class="palette-group-title">Бесплатные</div>
-                                                            <?php foreach ($freeRalOptions as $option): ?>
-                                                                <?php
-                                                                $optionPrice = 0;
-                                                                $hex = $option['RAL_DATA']['UF_HEX'] ?? '';
-                                                                $ralCode = $option['RAL_DATA']['UF_CODE'] ?? '';
-                                                                ?>
-                                                                <button
-                                                                    type="button"
-                                                                    class="swatch variant-item"
-                                                                    data-ral="<?= htmlspecialchars($ralCode) ?>"
-                                                                    style="background-color: <?= htmlspecialchars($hex) ?>;"
-                                                                    <?= buildOptionDataAttrs($sectionKey, $option, $optionPrice, false) ?>
-                                                                ></button>
-                                                            <?php endforeach; ?>
-                                                        </div>
-                                                    <?php endif; ?>
                                                     <?php if (!empty($paidRalOptions)): ?>
                                                         <div class="palette-group">
                                                             <div class="palette-group-title">Платные</div>
@@ -748,6 +701,7 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                                                                 $option = $item['option'];
                                                                 $optionPrice = $item['price'];
                                                                 $hex = $option['RAL_DATA']['UF_HEX'] ?? '';
+                                                                $rgb = $option['RAL_DATA']['UF_RGB_CODE'] ?? '';
                                                                 $ralCode = $option['RAL_DATA']['UF_CODE'] ?? '';
                                                                 ?>
                                                                 <button
@@ -801,6 +755,7 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                                                 data-is-ral-paid="<?= $isRalPaid ? 1 : 0 ?>"
                                                 data-variant="<?= htmlspecialchars($option['UF_VARIANT_CODE'] ?? '') ?>"
                                                 data-hex="<?= htmlspecialchars($option['UF_HEX'] ?? '') ?>"
+                                                data-rgb="<?= htmlspecialchars($option['UF_RGB'] ?? '') ?>"
                                             >
                                                 <span class="option-name"><?= htmlspecialchars($option['UF_VARIANT_NAME'] ?? '') ?></span>
                                                 <span class="option-price">+<?= number_format($optionPrice, 0, '', ' ') ?>₽</span>
@@ -822,21 +777,65 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                             </div>
                             <p><?= htmlspecialchars($arResult['LIQUID_TOGGLES']['custom_logo']['description']) ?></p>
                             <div id="custom-logo-upload-area" style="display: none;">
-                                <div class="upload-container">
-                                    <input type="file" id="custom-logo-input" accept="image/*" style="display: none;">
-                                    <label for="custom-logo-input" class="upload-button">
-                                        <span>Выберите файл логотипа</span>
-                                    </label>
-                                    <div class="upload-preview" id="logo-preview"></div>
-                                    <div class="upload-controls">
-                                        <label>Ширина логотипа (мм):</label>
-                                        <input type="number" id="logo-width-mm" min="5" max="50" value="15" step="1">
-                                        <label>Смещение сверху (мм):</label>
-                                        <input type="number" id="logo-offset-mm-top" min="-20" max="20" value="0" step="1">
-                                        <label>Смещение слева (мм):</label>
-                                        <input type="number" id="logo-offset-mm-left" min="-20" max="20" value="0" step="1">
+                                <div class="option-group">
+                                    <h4>Кастомная эмблема</h4>
+                                    <?php 
+                                    if (isset($currentOptions['logo'])):
+                                        $customOptions = array_filter($currentOptions['logo'], function($opt) {
+                                            return $opt['UF_IS_CUSTOM_LOGO'] ?? false;
+                                        });
+                                        foreach ($customOptions as $option): ?>
+                                            <?php
+                                            $optionPrice = resolveOptionPrice(
+                                                $pricesData,
+                                                'logo',
+                                                $currentModelCode,
+                                                $option['UF_VARIANT_CODE'] ?? '',
+                                                !empty($option['UF_IS_RAL']),
+                                                $option['UF_PRICE'] ?? 0
+                                            );
+                                            $isRalPaid = !empty($option['UF_IS_RAL']) && $optionPrice > 0;
+                                            ?>
+                                            <button
+                                                class="option-button custom-logo-btn variant-item"
+                                                data-option-part="logo"
+                                                data-variant-code="<?= htmlspecialchars($option['UF_VARIANT_CODE'] ?? '') ?>"
+                                                data-price="<?= (int)$optionPrice ?>"
+                                                data-is-ral="<?= (int)($option['UF_IS_RAL'] ?? 0) ?>"
+                                                data-option-id="<?= (int)($option['ID'] ?? 0) ?>"
+                                                data-model-id="<?= (int)($option['UF_MODEL_ID'] ?? 0) ?>"
+                                                data-svg-target-mode="<?= htmlspecialchars($option['UF_SVG_TARGET_MODE'] ?? '') ?>"
+                                                data-svg-layer-group="<?= htmlspecialchars($option['UF_SVG_LAYER_GROUP'] ?? '') ?>"
+                                                data-svg-filter-id="<?= htmlspecialchars($option['UF_SVG_FILTER_ID'] ?? '') ?>"
+                                                data-svg-special-key="<?= htmlspecialchars($option['UF_SVG_SPECIAL_KEY'] ?? '') ?>"
+                                                data-is-ral-paid="<?= $isRalPaid ? 1 : 0 ?>"
+                                                data-variant="<?= htmlspecialchars($option['UF_VARIANT_CODE'] ?? '') ?>"
+                                                data-is-custom-logo="1"
+                                            >
+                                                <span class="option-name"><?= htmlspecialchars($option['UF_VARIANT_NAME'] ?? '') ?></span>
+                                                <span class="option-price">+<?= number_format($optionPrice, 0, '', ' ') ?>₽</span>
+                                            </button>
+                                        <?php endforeach;
+                                    endif; ?>
+                                    
+                                    <!-- Custom logo upload area -->
+                                    <div class="custom-logo-upload" id="custom-logo-upload" style="display: block;">
+                                        <div class="upload-area">
+                                            <input type="file" id="logo-file-input" accept="image/*" style="display: none;">
+                                            <button class="upload-button" onclick="document.getElementById('logo-file-input').click()">
+                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                    <path d="M21 15V19C21 20.1 20.1 21 19 21H5C3.9 21 3 20.1 3 19V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                    <path d="M17 8L12 3L7 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                    <path d="M12 3V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                </svg>
+                                                <span>Загрузить логотип</span>
+                                            </button>
+                                            <p class="upload-hint">PNG, JPG, SVG до 5MB</p>
+                                        </div>
                                     </div>
                                 </div>
+                                
+                          
                             </div>
                         </div>
                     <?php endif; ?>
@@ -908,6 +907,34 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                                     </button>
                                 <?php endforeach;
                             endif; ?>
+                            
+                            <?php
+                            // Добавляем бесплатные RAL цвета из палитры
+                            list($freeRalOptions, $paidRalOptions) = buildRalPaletteData(
+                                $currentOptions['shockmount'] ?? [],
+                                $arResult['RAL_COLORS'] ?? [],
+                                $pricesData,
+                                'shockmount',
+                                $currentModelCode
+                            );
+                            if (!empty($freeRalOptions)):
+                                foreach ($freeRalOptions as $option): ?>
+                                    <?php
+                                    $optionPrice = 0;
+                                    $hex = $option['RAL_DATA']['UF_HEX'] ?? '';
+                                    $rgb = $option['RAL_DATA']['UF_RGB_CODE'] ?? '';
+                                    $ralCode = $option['RAL_DATA']['UF_CODE'] ?? '';
+                                    $ralName = $option['RAL_DATA']['UF_NAME'] ?? 'RAL ' . $ralCode;
+                                    ?>
+                                    <button
+                                        class="option-button variant-item"
+                                        data-ral="<?= htmlspecialchars($ralCode) ?>"
+                                        <?= buildOptionDataAttrs('shockmount', $option, $optionPrice, false) ?>
+                                    >
+                                        <span class="option-name"><?= htmlspecialchars($ralName) ?></span>
+                                    </button>
+                                <?php endforeach;
+                            endif; ?>
                         </div>
                         
                         <div class="option-group">
@@ -931,25 +958,6 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                                             $currentModelCode
                                         );
                                         ?>
-                                        <?php if (!empty($freeRalOptions)): ?>
-                                            <div class="palette-group">
-                                                <div class="palette-group-title">Бесплатные</div>
-                                                <?php foreach ($freeRalOptions as $option): ?>
-                                                    <?php
-                                                    $optionPrice = 0;
-                                                    $hex = $option['RAL_DATA']['UF_HEX'] ?? '';
-                                                    $ralCode = $option['RAL_DATA']['UF_CODE'] ?? '';
-                                                    ?>
-                                                    <button
-                                                        type="button"
-                                                        class="swatch variant-item"
-                                                        data-ral="<?= htmlspecialchars($ralCode) ?>"
-                                                        style="background-color: <?= htmlspecialchars($hex) ?>;"
-                                                        <?= buildOptionDataAttrs('shockmount', $option, $optionPrice, false) ?>
-                                                    ></button>
-                                                <?php endforeach; ?>
-                                            </div>
-                                        <?php endif; ?>
                                         <?php if (!empty($paidRalOptions)): ?>
                                             <div class="palette-group">
                                                 <div class="palette-group-title">Платные</div>
@@ -958,6 +966,7 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                                                     $option = $item['option'];
                                                     $optionPrice = $item['price'];
                                                     $hex = $option['RAL_DATA']['UF_HEX'] ?? '';
+                                                    $rgb = $option['RAL_DATA']['UF_RGB_CODE'] ?? '';
                                                     $ralCode = $option['RAL_DATA']['UF_CODE'] ?? '';
                                                     ?>
                                                     <button
@@ -1035,6 +1044,34 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                                     </button>
                                 <?php endforeach;
                             endif; ?>
+                            
+                            <?php
+                            // Добавляем бесплатные RAL цвета из палитры
+                            list($freeRalOptions, $paidRalOptions) = buildRalPaletteData(
+                                $currentOptions['shockmountPins'] ?? [],
+                                $arResult['RAL_COLORS'] ?? [],
+                                $pricesData,
+                                'shockmountPins',
+                                $currentModelCode
+                            );
+                            if (!empty($freeRalOptions)):
+                                foreach ($freeRalOptions as $option): ?>
+                                    <?php
+                                    $optionPrice = 0;
+                                    $hex = $option['RAL_DATA']['UF_HEX'] ?? '';
+                                    $rgb = $option['RAL_DATA']['UF_RGB_CODE'] ?? '';
+                                    $ralCode = $option['RAL_DATA']['UF_CODE'] ?? '';
+                                    $ralName = $option['RAL_DATA']['UF_NAME'] ?? 'RAL ' . $ralCode;
+                                    ?>
+                                    <button
+                                        class="option-button variant-item"
+                                        data-ral="<?= htmlspecialchars($ralCode) ?>"
+                                        <?= buildOptionDataAttrs('shockmountPins', $option, $optionPrice, false) ?>
+                                    >
+                                        <span class="option-name"><?= htmlspecialchars($ralName) ?></span>
+                                    </button>
+                                <?php endforeach;
+                            endif; ?>
                         </div>
 
                         <div class="option-group">
@@ -1058,25 +1095,6 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                                             $currentModelCode
                                         );
                                         ?>
-                                        <?php if (!empty($freeRalOptions)): ?>
-                                            <div class="palette-group">
-                                                <div class="palette-group-title">Бесплатные</div>
-                                                <?php foreach ($freeRalOptions as $option): ?>
-                                                    <?php
-                                                    $optionPrice = 0;
-                                                    $hex = $option['RAL_DATA']['UF_HEX'] ?? '';
-                                                    $ralCode = $option['RAL_DATA']['UF_CODE'] ?? '';
-                                                    ?>
-                                                    <button
-                                                        type="button"
-                                                        class="swatch variant-item"
-                                                        data-ral="<?= htmlspecialchars($ralCode) ?>"
-                                                        style="background-color: <?= htmlspecialchars($hex) ?>;"
-                                                        <?= buildOptionDataAttrs('shockmountPins', $option, $optionPrice, false) ?>
-                                                    ></button>
-                                                <?php endforeach; ?>
-                                            </div>
-                                        <?php endif; ?>
                                         <?php if (!empty($paidRalOptions)): ?>
                                             <div class="palette-group">
                                                 <div class="palette-group-title">Платные</div>
@@ -1085,6 +1103,7 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                                                     $option = $item['option'];
                                                     $optionPrice = $item['price'];
                                                     $hex = $option['RAL_DATA']['UF_HEX'] ?? '';
+                                                     $rgb = $option['RAL_DATA']['UFRGB_CODE'] ?? '';
                                                     $ralCode = $option['RAL_DATA']['UF_CODE'] ?? '';
                                                     ?>
                                                     <button
