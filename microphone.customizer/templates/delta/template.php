@@ -483,6 +483,49 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                                         </button>
                                     <?php endforeach; ?>
                                 </div>
+                                
+                                <!-- MALFA variants (hardcoded like in old template) -->
+                                <div class="option-group" id="malfa-logo-group" style="display: none;">
+                                    <h4>MALFA Edition</h4>
+                                    
+                                    <!-- MALFA - Серебро -->
+                                    <button
+                                        class="option-button variant-item"
+                                        data-option-part="logo"
+                                        data-variant-code="malfasilver"
+                                        data-price="0"
+                                        data-is-ral="0"
+                                        data-option-id="10"
+                                        data-model-id="2"
+                                        data-svg-target-mode="gradient"
+                                        data-svg-layer-group="malfa-logo-text-path"
+                                        data-svg-filter-id=""
+                                        data-svg-special-key="malfa_silver"
+                                        data-is-ral-paid="0"
+                                        data-variant="malfasilver"
+                                    >
+                                        <span class="option-name">MALFA - Серебро</span>
+                                    </button>
+                                    
+                                    <!-- MALFA - Золото -->
+                                    <button
+                                        class="option-button variant-item"
+                                        data-option-part="logo"
+                                        data-variant-code="malfagold"
+                                        data-price="0"
+                                        data-is-ral="0"
+                                        data-option-id="11"
+                                        data-model-id="2"
+                                        data-svg-target-mode="gradient"
+                                        data-svg-layer-group="malfa-logo-text-path"
+                                        data-svg-filter-id=""
+                                        data-svg-special-key="malfa_gold"
+                                        data-is-ral-paid="0"
+                                        data-variant="malfagold"
+                                    >
+                                        <span class="option-name">MALFA - Золото</span>
+                                    </button>
+                                </div>
 
                             <?php elseif ($sectionKey === 'case'): ?>
                                 <!-- Special case section -->

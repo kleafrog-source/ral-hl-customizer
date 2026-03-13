@@ -330,7 +330,13 @@ export function updateMalfaLogoOptionsVisibility() {
         currentModelCode: state.currentModelCode
     });
     
-    // Находим все варианты логотипа
+    // Управляем видимостью MALFA группы
+    const malfaGroup = document.getElementById('malfa-logo-group');
+    if (malfaGroup) {
+        malfaGroup.style.display = isMalfaModel ? 'block' : 'none';
+    }
+    
+    // Находим все варианты логотипа (для стандартных вариантов)
     const logoVariants = document.querySelectorAll('#submenu-logo .variant-item[data-variant-code]');
     console.log('[MALFA] Found logo variants:', logoVariants.length);
     
@@ -344,16 +350,9 @@ export function updateMalfaLogoOptionsVisibility() {
             currentDisplay: variant.style.display
         });
         
-        if (isMalfaModel) {
-            // Для MALFA модели: показываем все варианты
+        // Стандартные варианты всегда видимы
+        if (!isMalfaVariant) {
             variant.style.display = 'flex';
-        } else {
-            // Для обычной модели: скрываем MALFA варианты
-            if (isMalfaVariant) {
-                variant.style.display = 'none';
-            } else {
-                variant.style.display = 'flex';
-            }
         }
     });
 }

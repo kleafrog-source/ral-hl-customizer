@@ -153,7 +153,7 @@ if ($cache->initCache($cacheTime, $cacheId, $cacheDir)) {
     $arResult['PRICES'] = $prices;
 
     // Current model
-    $currentModelCode = $arParams['MODEL_CODE'] ?? '023-malfa';
+    $currentModelCode = $arParams['MODEL_CODE'] ?? '023-the-bomblet';
     $currentModel = $modelsByCode[$currentModelCode] ?? null;
     $currentModelId = $currentModel['ID'] ?? null;
 
@@ -176,11 +176,6 @@ if ($cache->initCache($cacheTime, $cacheId, $cacheDir)) {
         }
     }
     
-    // Debug: Log logo options before filtering
-    if (isset($currentModelOptions['logo'])) {
-        error_log('DEBUG: Logo options before filtering: ' . print_r($currentModelOptions['logo'], true));
-    }
-
     // Filter options by model series (SERIES_VAR) when provided
     $currentSeries = $currentModel['MODEL_SERIES'] ?? '';
     if (!empty($currentSeries)) {
