@@ -6,11 +6,13 @@ import { updateFilter } from './appearance-new.js';
 // Utility functions for MALFA detection using Bitrix data
 export function isMalfaMic(state = null) {
     const currentState = state || stateManager.get();
-    const v = currentState.variant;
+    
+    // Проверяем разные способы хранения модели в state
+    const modelCode = currentState.currentModelCode || currentState.variant || currentState.model?.code || currentState.model?.slug;
     
     // Используем данные из Bitrix для определения MALFA
-    const modelData = getModelData(v);
-    return modelData?.MODEL_SERIES === 'MALFA' || v === '023-malfa' || v === '023-MALFA';
+    const modelData = getModelData(modelCode);
+    return modelData?.MODEL_SERIES === 'MALFA' || modelCode === '023-malfa' || modelCode === '023-MALFA';
 }
 
 export function isMalfaLogo(state = null) {
@@ -324,35 +326,9 @@ export function updateMalfaLogoOptionsVisibility() {
     const state = stateManager.get();
     const isMalfaModel = isMalfaMic(state);
     
-    console.log('[MALFA] updateMalfaLogoOptionsVisibility called:', {
-        isMalfaModel,
-        currentVariant: state.variant,
-        currentModelCode: state.currentModelCode
-    });
-    
     // Управляем видимостью MALFA группы
     const malfaGroup = document.getElementById('malfa-logo-group');
     if (malfaGroup) {
         malfaGroup.style.display = isMalfaModel ? 'block' : 'none';
     }
-    
-    // Находим все варианты логотипа (для стандартных вариантов)
-    const logoVariants = document.querySelectorAll('#submenu-logo .variant-item[data-variant-code]');
-    console.log('[MALFA] Found logo variants:', logoVariants.length);
-    
-    logoVariants.forEach(variant => {
-        const variantCode = variant.dataset.variantCode;
-        const isMalfaVariant = variantCode === 'malfasilver' || variantCode === 'malfagold';
-        
-        console.log('[MALFA] Processing variant:', {
-            variantCode,
-            isMalfaVariant,
-            currentDisplay: variant.style.display
-        });
-        
-        // Стандартные варианты всегда видимы
-        if (!isMalfaVariant) {
-            variant.style.display = 'flex';
-        }
-    });
 }
