@@ -36,21 +36,21 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                 </svg>
             </button>        
             <button id="theme-toggle" class="theme-toggle" aria-label="Переключить тему">
-<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
             </svg>
             </button>
         </div>
 
         <div class="app-container">
-        <div class="preview-area" id="preview-area">
+             <div class="preview-area" id="preview-area">
             <div class="svg-container">
-                <div class="svg-wrapper" id="microphone-svg-container">
+                     <div class="svg-wrapper" id="microphone-svg-container">
                     <!-- SVG контент будет загружен через JavaScript -->
-                </div>
+                     </div>
 
                 <!-- Shockmount Preview Container -->
-                <div class="shockmount-preview-container" id="shockmount-svg-container">
+                     <div class="shockmount-preview-container" id="shockmount-svg-container">
                        <div class="shockmount-svg-container">
                          <svg xmlns="http://www.w3.org/2000/svg" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:xlink="http://www.w3.org/1999/xlink" inkscape:version="1.4.2 (f4327f4, 2025-05-13)" sodipodi:docname="finished-shockmount-023-017.svg" xml:space="preserve" id="shockmount-svg" x="0" y="0" style="enable-background:new 0 0 2048.2 2048.2;" version="1.1" viewBox="0 0 2048.2 2048.2">
                       <defs>
@@ -199,14 +199,16 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                         </g>
                       </g>
                         </svg>
-                    </div>
-                </div>
+                         </div>
+                     </div>
 
                 <!-- Case Preview Container -->
-                <div class="case-preview-container" id="case-preview-container" style=" width:100%; height:100%;">
+                        <div class="case-preview-container" id="case-preview-container" style=" width:100%; height:100%;">
                      
-                <div id="wood-case-workspace">
-                        <div class="loader" id="wood-case-loader">Загрузка...</div>
+                            <div id="wood-case-workspace">
+                            <div class="loader" id="wood-case-loader">
+                            Загрузка...  
+                            </div>
                         <svg id="wood-case-svg" preserveAspectRatio="xMidYMid meet">
                             <defs>
                                 <filter id="shadow"><feDropShadow dx="0" dy="1" stdDeviation="2" flood-color="black" /></filter>
@@ -241,10 +243,10 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                             </foreignObject>
                             <g id="wood-case-rulers-group"></g>
                         </svg>
+                        </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
         
         <!-- Sidebar сгенерированный из HL данных -->
         <div class="sidebar" id="customization-sidebar" data-sidebar-state="normal">
@@ -618,7 +620,7 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                                         </div>
                                         <p><?= htmlspecialchars($arResult['LIQUID_TOGGLES']['laser_engraving']['description'] ?? '') ?></p>
                                     </div>
-                                    <!-- Laser engraving upload area -->
+                                    <!-- Laser engraving upload area загрузка и удаление изображения с футляра -->
                                     <div class="laser-engraving-upload toggle-laser-engraving-data" id="laser-engraving-data" style="display: none;">
                                         <div class="upload-area">
                                             <input type="file" id="case-file-input" accept="image/*" style="display: none;">
@@ -707,10 +709,37 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                                     $sectionKey,
                                     $currentModelCode
                                 );
-                                if (!empty($freeRalOptions) || !empty($paidRalOptions)):
                                 ?>
+
+                                <!-- 2. Бесплатные RAL цвета -->
+                                <?php if (!empty($freeRalOptions)): ?>
                                     <div class="option-group">
-                                        <h4>RAL цвета</h4>
+                                        <!-- <h4>Бесплатные RAL цвета</h4> -->
+                                        <?php foreach ($freeRalOptions as $option): ?>
+                                            <?php
+                                            $optionPrice = 0;
+                                            $hex = $option['RAL_DATA']['UF_HEX'] ?? '';
+                                            $rgb = $option['RAL_DATA']['UF_RGB_CODE'] ?? '';
+                                            $ralCode = $option['RAL_DATA']['UF_CODE'] ?? '';
+                                            $ralName = $option['RAL_DATA']['UF_NAME'] ?? '';
+                                            // Формируем читаемый label из HL
+                                            $label = trim(($ralName ? $ralName : 'RAL ' . $ralCode));
+                                            ?>
+                                            <button
+                                                class="option-button variant-item"
+                                                data-ral="<?= htmlspecialchars($ralCode) ?>"
+                                                <?= buildOptionDataAttrs($sectionKey, $option, $optionPrice, false) ?>
+                                            >
+                                                <span class="option-name"><?= htmlspecialchars($label) ?></span>
+                                            </button>
+                                        <?php endforeach; ?>
+                                    </div>
+                                <?php endif; ?>
+
+                                <!-- 3. RAL цвета (палитра) -->
+                                <?php if (!empty($freeRalOptions) || !empty($paidRalOptions)): ?>
+                                    <div class="option-group">
+                                        <h4>Премиум цвета</h4>
                                         <div class="palette-toggle-btn" data-section="<?= htmlspecialchars($sectionKey) ?>">
                                             <span>Палитра RAL K7</span>
                                             <svg class="chevron" width="12" height="8" viewBox="0 0 12 8" fill="none">
@@ -745,28 +774,6 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                <?php endif; ?>
-
-                                <?php if (!empty($freeRalOptions)): ?>
-                                    <div class="option-group">
-                                        <h4>Бесплатные RAL цвета</h4>
-                                        <?php foreach ($freeRalOptions as $option): ?>
-                                            <?php
-                                            $optionPrice = 0;
-                                            $hex = $option['RAL_DATA']['UF_HEX'] ?? '';
-                                            $rgb = $option['RAL_DATA']['UF_RGB_CODE'] ?? '';
-                                            $ralCode = $option['RAL_DATA']['UF_CODE'] ?? '';
-                                            $ralName = $option['RAL_DATA']['UF_NAME'] ?? 'RAL ' . $ralCode;
-                                            ?>
-                                            <button
-                                                class="option-button variant-item"
-                                                data-ral="<?= htmlspecialchars($ralCode) ?>"
-                                                <?= buildOptionDataAttrs($sectionKey, $option, $optionPrice, false) ?>
-                                            >
-                                                <span class="option-name"><?= htmlspecialchars($ralName) ?></span>
-                                            </button>
-                                        <?php endforeach; ?>
                                     </div>
                                 <?php endif; ?>
 
@@ -868,7 +875,7 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                                         <?php endforeach;
                                     endif; ?>
                                     
-                                    <!-- Custom logo upload area -->
+                                    <!-- Custom logo microphone upload area -->
                                     <div class="custom-logo-upload" id="custom-logo-upload" style="display: block;">
                                         <div class="upload-area">
                                             <input type="file" id="logo-file-input" accept="image/*" style="display: none;">
@@ -881,6 +888,7 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                                                 <span>Загрузить логотип</span>
                                             </button>
                                             <p class="upload-hint">PNG, JPG, SVG до 5MB</p>
+                                             <button id="custom-logo-remove" class="remove-custom-logo-btn" style="display:none; width:100%; margin-top:10px; padding:10px; border:1px solid #ef4444; color:#ef4444; background:none; border-radius:8px; cursor:pointer;">Удалить загруженный файл</button>
                                         </div>
                                     </div>
                                 </div>
@@ -988,7 +996,7 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                         </div>
                         
                         <div class="option-group">
-                            <h4>RAL цвета</h4>
+                            <h4>Премиум цвета</h4>
                             <div class="palette-toggle-btn" data-section="shockmount">
                                 <span>Палитра RAL K7</span>
                                 <svg class="chevron" width="12" height="8" viewBox="0 0 12 8" fill="none">
@@ -1125,7 +1133,7 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                         </div>
 
                         <div class="option-group">
-                            <h4>RAL цвета</h4>
+                            <h4>Премиум цвета</h4>
                             <div class="palette-toggle-btn" data-section="shockmountPins">
                                 <span>Палитра RAL K7</span>
                                 <svg class="chevron" width="12" height="8" viewBox="0 0 12 8" fill="none">

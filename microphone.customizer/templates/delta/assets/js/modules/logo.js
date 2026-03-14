@@ -72,12 +72,12 @@ export function toggleCustomLogo() {
 }
 
 export function init() {
-    const uploadButton = document.querySelector('#submenu-logo .variant-item[style*="border-style: dashed"]');
+    const uploadButton = document.querySelector('#custom-logo-upload');
     if (uploadButton) {
         eventRegistry.add(uploadButton, 'click', uploadCustomLogo);
     }
 
-    const input = document.getElementById('custom-logo-input');
+    const input = document.getElementById('logo-file-input');
     if (input) {
         input.addEventListener('change', e => {
             const file = e.target.files?.[0];
@@ -104,7 +104,7 @@ export function init() {
 
 //Управляет видимостью и стилями элементов эмблемы(логотипа микрофона)
 export function updateLogoSVG() {
-    const svg = document.querySelector('#microphone-svg-container svg');
+    const svg = document.querySelector('.svg-wrapper svg');
     if (!svg) return;
     
     const customLayer = svg.querySelector('#custom-logo-layer');

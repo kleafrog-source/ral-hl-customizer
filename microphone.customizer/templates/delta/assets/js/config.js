@@ -276,7 +276,7 @@ export function getCaseGeometry() {
     return {
         res: { mobile: { max: 767, vb: "0 0 750 1334" }, tablet: { max: 1024, vb: "0 0 1024 768" }, desktop: { max: 2560, vb: "0 0 1920 1080" }, _4k: { max: 9999, vb: "0 0 3840 2160" } },
         cases,
-        cases_rescale
+        casesRescale
     };
 }
 
