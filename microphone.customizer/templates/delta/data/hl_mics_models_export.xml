@@ -1,7 +1,1276 @@
-<!-- Модели микрофонов, базовые цены, флаг подвеса - файл получен экспортированием с продакшн версии сайта soyuzmicrophones.ru данные файлы в папке data только для ИИ справки -->
-<!-- Highload-block: microphone models catalog (code, name, base price, shockmount flags,model_series). Used to initialize models, modelsByCode and base pricing. -->
+<!--
+  Highload-block: microphone models catalog (code, name, base price, комплект).
+  Источник: экспорт с продакшн-версии soyuzmicrophones.ru.
+  Эти данные используются ИИ и шаблоном delta для:
+  - инициализации списка моделей и базовых цен;
+  - чтения флагов подвеса (UF_SHOCKMOUNT_ENABLED, UF_SHOCKMOUNT_PRICE);
+  - управления видимостью и логикой переключателя подвеса (UF_SHOCKMOUNT_TOGGLE, UF_SHOCKMOUNT_VISIBLE);
+  - выбора стартовой модели при загрузке (UF_IS_DEFAULT_MODEL);
+  - задания initial state по умолчанию для каждой модели
+    (UF_DEFAULT_SPHERES, UF_DEFAULT_BODY, UF_DEFAULT_LOGO, UF_DEFAULT_LOGOBG,
+     UF_DEFAULT_SHOCKMOUNT, UF_DEFAULT_SHOCKMOUNT_PINS).
+  Файлы в папке /data служат только справочными: их не нужно импортировать обратно в PROD.
+-->
 <?xml version="1.0" encoding="UTF-8"?>
 <hiblock>
+	<hiblock>
+		<id>10</id>
+		<name>MicrophoneModels</name>
+		<table_name>b_hlbd_microphonemodels</table_name>
+	</hiblock>
+	<langs>
+		<lang>
+			<id>10</id>
+			<lid>ru</lid>
+			<name>Модель микрофона</name>
+		</lang>
+		<lang>
+			<id>10</id>
+			<lid>en</lid>
+			<name>Mic model</name>
+		</lang>
+	</langs>
+	<fields>
+		<field>
+			<id>81</id>
+			<entity_id>HLBLOCK_10</entity_id>
+			<field_name>UF_CODE</field_name>
+			<user_type_id>string</user_type_id>
+			<xml_id />
+			<sort>10</sort>
+			<multiple>N</multiple>
+			<mandatory>Y</mandatory>
+			<show_filter>N</show_filter>
+			<show_in_list>Y</show_in_list>
+			<edit_in_list>Y</edit_in_list>
+			<is_searchable>N</is_searchable>
+			<settings>
+				<size>20</size>
+				<rows>1</rows>
+				<regexp />
+				<min_length>0</min_length>
+				<max_length>0</max_length>
+				<default_value />
+			</settings>
+			<edit_form_label>
+				<br />
+				<en>CodeModel</en>
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Код модели</ru>
+				<ua />
+			</edit_form_label>
+			<list_column_label>
+				<br />
+				<en>CodeModel</en>
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Код модели</ru>
+				<ua />
+			</list_column_label>
+			<list_filter_label>
+				<br />
+				<en>CodeModel</en>
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Код модели</ru>
+				<ua />
+			</list_filter_label>
+			<error_message>
+				<br />
+				<en>CodeModel</en>
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Код модели</ru>
+				<ua />
+			</error_message>
+			<help_message>
+				<br />
+				<en>CodeModel</en>
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Код модели</ru>
+				<ua />
+			</help_message>
+			<base_type>string</base_type>
+		</field>
+		<field>
+			<id>82</id>
+			<entity_id>HLBLOCK_10</entity_id>
+			<field_name>UF_NAME</field_name>
+			<user_type_id>string</user_type_id>
+			<xml_id />
+			<sort>20</sort>
+			<multiple>N</multiple>
+			<mandatory>Y</mandatory>
+			<show_filter>N</show_filter>
+			<show_in_list>Y</show_in_list>
+			<edit_in_list>Y</edit_in_list>
+			<is_searchable>N</is_searchable>
+			<settings>
+				<size>20</size>
+				<rows>1</rows>
+				<regexp />
+				<min_length>0</min_length>
+				<max_length>0</max_length>
+				<default_value />
+			</settings>
+			<edit_form_label>
+				<br />
+				<en>Model Name</en>
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Название модели</ru>
+				<ua />
+			</edit_form_label>
+			<list_column_label>
+				<br />
+				<en>Model Name</en>
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Название модели</ru>
+				<ua />
+			</list_column_label>
+			<list_filter_label>
+				<br />
+				<en>Model Name</en>
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Название модели</ru>
+				<ua />
+			</list_filter_label>
+			<error_message>
+				<br />
+				<en>Model Name</en>
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Название модели</ru>
+				<ua />
+			</error_message>
+			<help_message>
+				<br />
+				<en>Model Name</en>
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Название модели</ru>
+				<ua />
+			</help_message>
+			<base_type>string</base_type>
+		</field>
+		<field>
+			<id>83</id>
+			<entity_id>HLBLOCK_10</entity_id>
+			<field_name>UF_BASE_PRICE</field_name>
+			<user_type_id>integer</user_type_id>
+			<xml_id />
+			<sort>30</sort>
+			<multiple>N</multiple>
+			<mandatory>Y</mandatory>
+			<show_filter>N</show_filter>
+			<show_in_list>Y</show_in_list>
+			<edit_in_list>Y</edit_in_list>
+			<is_searchable>N</is_searchable>
+			<settings>
+				<size>20</size>
+				<min_value>0</min_value>
+				<max_value>0</max_value>
+				<default_value />
+			</settings>
+			<edit_form_label>
+				<br />
+				<en>Basic Price</en>
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Базовая цена</ru>
+				<ua />
+			</edit_form_label>
+			<list_column_label>
+				<br />
+				<en>Basic Price</en>
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Базовая цена</ru>
+				<ua />
+			</list_column_label>
+			<list_filter_label>
+				<br />
+				<en>Basic Price</en>
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Базовая цена</ru>
+				<ua />
+			</list_filter_label>
+			<error_message>
+				<br />
+				<en>Basic Price</en>
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Базовая цена</ru>
+				<ua />
+			</error_message>
+			<help_message>
+				<br />
+				<en>Basic Price</en>
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Базовая цена</ru>
+				<ua />
+			</help_message>
+			<base_type>int</base_type>
+		</field>
+		<field>
+			<id>84</id>
+			<entity_id>HLBLOCK_10</entity_id>
+			<field_name>UF_DESCRIPTION</field_name>
+			<user_type_id>string</user_type_id>
+			<xml_id />
+			<sort>40</sort>
+			<multiple>N</multiple>
+			<mandatory>N</mandatory>
+			<show_filter>N</show_filter>
+			<show_in_list>Y</show_in_list>
+			<edit_in_list>Y</edit_in_list>
+			<is_searchable>N</is_searchable>
+			<settings>
+				<size>20</size>
+				<rows>13</rows>
+				<regexp />
+				<min_length>0</min_length>
+				<max_length>0</max_length>
+				<default_value />
+			</settings>
+			<edit_form_label>
+				<br />
+				<en>DESCRIPTION</en>
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Комплектация</ru>
+				<ua />
+			</edit_form_label>
+			<list_column_label>
+				<br />
+				<en>DESCRIPTION</en>
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Комплектация</ru>
+				<ua />
+			</list_column_label>
+			<list_filter_label>
+				<br />
+				<en>DESCRIPTION</en>
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Комплектация</ru>
+				<ua />
+			</list_filter_label>
+			<error_message>
+				<br />
+				<en>DESCRIPTION</en>
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Комплектация</ru>
+				<ua />
+			</error_message>
+			<help_message>
+				<br />
+				<en>DESCRIPTION</en>
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Комплектация</ru>
+				<ua />
+			</help_message>
+			<base_type>string</base_type>
+		</field>
+		<field>
+			<id>85</id>
+			<entity_id>HLBLOCK_10</entity_id>
+			<field_name>UF_SHOCKMOUNT_ENABLED</field_name>
+			<user_type_id>boolean</user_type_id>
+			<xml_id />
+			<sort>50</sort>
+			<multiple>N</multiple>
+			<mandatory>N</mandatory>
+			<show_filter>N</show_filter>
+			<show_in_list>Y</show_in_list>
+			<edit_in_list>Y</edit_in_list>
+			<is_searchable>N</is_searchable>
+			<settings>
+				<default_value>1</default_value>
+				<display>RADIO</display>
+				<label>
+					<0 />
+					<1 />
+				</label>
+				<label_checkbox />
+			</settings>
+			<edit_form_label>
+				<br />
+				<en>SHOCKMOUNT_ENABLED</en>
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Подвес включен по умолчанию?	</ru>
+				<ua />
+			</edit_form_label>
+			<list_column_label>
+				<br />
+				<en>SHOCKMOUNT_ENABLED</en>
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Подвес включен по умолчанию?	</ru>
+				<ua />
+			</list_column_label>
+			<list_filter_label>
+				<br />
+				<en>SHOCKMOUNT_ENABLED</en>
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Подвес включен по умолчанию?	</ru>
+				<ua />
+			</list_filter_label>
+			<error_message>
+				<br />
+				<en>SHOCKMOUNT_ENABLED</en>
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Подвес включен по умолчанию?	</ru>
+				<ua />
+			</error_message>
+			<help_message>
+				<br />
+				<en>SHOCKMOUNT_ENABLED</en>
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Подвес включен по умолчанию?	</ru>
+				<ua />
+			</help_message>
+			<base_type>int</base_type>
+		</field>
+		<field>
+			<id>86</id>
+			<entity_id>HLBLOCK_10</entity_id>
+			<field_name>UF_SHOCKMOUNT_PRICE</field_name>
+			<user_type_id>integer</user_type_id>
+			<xml_id />
+			<sort>60</sort>
+			<multiple>N</multiple>
+			<mandatory>N</mandatory>
+			<show_filter>N</show_filter>
+			<show_in_list>Y</show_in_list>
+			<edit_in_list>Y</edit_in_list>
+			<is_searchable>N</is_searchable>
+			<settings>
+				<size>20</size>
+				<min_value>0</min_value>
+				<max_value>0</max_value>
+				<default_value>0</default_value>
+			</settings>
+			<edit_form_label>
+				<br />
+				<en>SHOCKMOUNT_PRICE</en>
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Цена подвеса</ru>
+				<ua />
+			</edit_form_label>
+			<list_column_label>
+				<br />
+				<en>SHOCKMOUNT_PRICE</en>
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Цена подвеса</ru>
+				<ua />
+			</list_column_label>
+			<list_filter_label>
+				<br />
+				<en>SHOCKMOUNT_PRICE</en>
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Цена подвеса</ru>
+				<ua />
+			</list_filter_label>
+			<error_message>
+				<br />
+				<en>SHOCKMOUNT_PRICE</en>
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Цена подвеса</ru>
+				<ua />
+			</error_message>
+			<help_message>
+				<br />
+				<en>SHOCKMOUNT_PRICE</en>
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Цена подвеса</ru>
+				<ua />
+			</help_message>
+			<base_type>int</base_type>
+		</field>
+		<field>
+			<id>87</id>
+			<entity_id>HLBLOCK_10</entity_id>
+			<field_name>UF_SORT</field_name>
+			<user_type_id>integer</user_type_id>
+			<xml_id />
+			<sort>70</sort>
+			<multiple>N</multiple>
+			<mandatory>Y</mandatory>
+			<show_filter>N</show_filter>
+			<show_in_list>Y</show_in_list>
+			<edit_in_list>Y</edit_in_list>
+			<is_searchable>N</is_searchable>
+			<settings>
+				<size>20</size>
+				<min_value>0</min_value>
+				<max_value>0</max_value>
+				<default_value>500</default_value>
+			</settings>
+			<edit_form_label>
+				<br />
+				<en>SORT</en>
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Сортировка</ru>
+				<ua />
+			</edit_form_label>
+			<list_column_label>
+				<br />
+				<en>SORT</en>
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Сортировка</ru>
+				<ua />
+			</list_column_label>
+			<list_filter_label>
+				<br />
+				<en>SORT</en>
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Сортировка</ru>
+				<ua />
+			</list_filter_label>
+			<error_message>
+				<br />
+				<en>SORT</en>
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Сортировка</ru>
+				<ua />
+			</error_message>
+			<help_message>
+				<br />
+				<en>SORT</en>
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Сортировка</ru>
+				<ua />
+			</help_message>
+			<base_type>int</base_type>
+		</field>
+		<field>
+			<id>112</id>
+			<entity_id>HLBLOCK_10</entity_id>
+			<field_name>UF_MODEL_SERIES</field_name>
+			<user_type_id>string</user_type_id>
+			<xml_id />
+			<sort>80</sort>
+			<multiple>N</multiple>
+			<mandatory>N</mandatory>
+			<show_filter>N</show_filter>
+			<show_in_list>Y</show_in_list>
+			<edit_in_list>Y</edit_in_list>
+			<is_searchable>N</is_searchable>
+			<settings>
+				<size>20</size>
+				<rows>1</rows>
+				<regexp />
+				<min_length>0</min_length>
+				<max_length>0</max_length>
+				<default_value />
+			</settings>
+			<edit_form_label>
+				<br />
+				<en>series of mic</en>
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Модель-серия цифра</ru>
+				<ua />
+			</edit_form_label>
+			<list_column_label>
+				<br />
+				<en>series of mic</en>
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Модель-серия цифра</ru>
+				<ua />
+			</list_column_label>
+			<list_filter_label>
+				<br />
+				<en>series of mic</en>
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Модель-серия цифра</ru>
+				<ua />
+			</list_filter_label>
+			<error_message>
+				<br />
+				<en />
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru />
+				<ua />
+			</error_message>
+			<help_message>
+				<br />
+				<en>series of mic</en>
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>023,017</ru>
+				<ua />
+			</help_message>
+			<base_type>string</base_type>
+		</field>
+		<field>
+			<id>115</id>
+			<entity_id>HLBLOCK_10</entity_id>
+			<field_name>UF_DEFAULT_SPHERES</field_name>
+			<user_type_id>string</user_type_id>
+			<xml_id />
+			<sort>90</sort>
+			<multiple>N</multiple>
+			<mandatory>N</mandatory>
+			<show_filter>N</show_filter>
+			<show_in_list>Y</show_in_list>
+			<edit_in_list>Y</edit_in_list>
+			<is_searchable>N</is_searchable>
+			<settings>
+				<size>20</size>
+				<rows>1</rows>
+				<regexp />
+				<min_length>0</min_length>
+				<max_length>0</max_length>
+				<default_value />
+			</settings>
+			<edit_form_label>
+				<br />
+				<en>UF_DEFAULT_SPHERES</en>
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Силуэт по умолчанию</ru>
+				<ua />
+			</edit_form_label>
+			<list_column_label>
+				<br />
+				<en>UF_DEFAULT_SPHERES</en>
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Силуэт по умолчанию</ru>
+				<ua />
+			</list_column_label>
+			<list_filter_label>
+				<br />
+				<en>UF_DEFAULT_SPHERES</en>
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Силуэт по умолчанию</ru>
+				<ua />
+			</list_filter_label>
+			<error_message>
+				<br />
+				<en />
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru />
+				<ua />
+			</error_message>
+			<help_message>
+				<br />
+				<en />
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru />
+				<ua />
+			</help_message>
+			<base_type>string</base_type>
+		</field>
+		<field>
+			<id>121</id>
+			<entity_id>HLBLOCK_10</entity_id>
+			<field_name>UF_IS_DEFAULT_MODEL</field_name>
+			<user_type_id>boolean</user_type_id>
+			<xml_id />
+			<sort>100</sort>
+			<multiple>N</multiple>
+			<mandatory>N</mandatory>
+			<show_filter>N</show_filter>
+			<show_in_list>Y</show_in_list>
+			<edit_in_list>Y</edit_in_list>
+			<is_searchable>N</is_searchable>
+			<settings>
+				<default_value>0</default_value>
+				<display>RADIO</display>
+				<label>
+					<0 />
+					<1 />
+				</label>
+				<label_checkbox />
+			</settings>
+			<edit_form_label>
+				<br />
+				<en>UF_IS_DEFAULT_MODEL</en>
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Первый при загрузке?</ru>
+				<ua />
+			</edit_form_label>
+			<list_column_label>
+				<br />
+				<en>UF_IS_DEFAULT_MODEL</en>
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Первый при загрузке?</ru>
+				<ua />
+			</list_column_label>
+			<list_filter_label>
+				<br />
+				<en>UF_IS_DEFAULT_MODEL</en>
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Первый при загрузке?</ru>
+				<ua />
+			</list_filter_label>
+			<error_message>
+				<br />
+				<en />
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru />
+				<ua />
+			</error_message>
+			<help_message>
+				<br />
+				<en />
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru />
+				<ua />
+			</help_message>
+			<base_type>int</base_type>
+		</field>
+		<field>
+			<id>122</id>
+			<entity_id>HLBLOCK_10</entity_id>
+			<field_name>UF_SHOCKMOUNT_TOGGLE</field_name>
+			<user_type_id>boolean</user_type_id>
+			<xml_id />
+			<sort>100</sort>
+			<multiple>N</multiple>
+			<mandatory>N</mandatory>
+			<show_filter>N</show_filter>
+			<show_in_list>Y</show_in_list>
+			<edit_in_list>Y</edit_in_list>
+			<is_searchable>N</is_searchable>
+			<settings>
+				<default_value>0</default_value>
+				<display>RADIO</display>
+				<label>
+					<0 />
+					<1 />
+				</label>
+				<label_checkbox />
+			</settings>
+			<edit_form_label>
+				<br />
+				<en>UF_SHOCKMOUNT_TOGGLE</en>
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Показывать ли переключатель подвеса.</ru>
+				<ua />
+			</edit_form_label>
+			<list_column_label>
+				<br />
+				<en>UF_SHOCKMOUNT_TOGGLE</en>
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Показывать ли пользователю переключатель подвеса.</ru>
+				<ua />
+			</list_column_label>
+			<list_filter_label>
+				<br />
+				<en>UF_SHOCKMOUNT_TOGGLE</en>
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Показывать ли пользователю переключатель подвеса.</ru>
+				<ua />
+			</list_filter_label>
+			<error_message>
+				<br />
+				<en />
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru />
+				<ua />
+			</error_message>
+			<help_message>
+				<br />
+				<en />
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>0 — никакого тоггла, подвес всегда включён (если он есть).  1 — показать переключатель (пользователь может включить/выключить подвес).</ru>
+				<ua />
+			</help_message>
+			<base_type>int</base_type>
+		</field>
+		<field>
+			<id>123</id>
+			<entity_id>HLBLOCK_10</entity_id>
+			<field_name>UF_SHOCKMOUNT_VISIBLE</field_name>
+			<user_type_id>boolean</user_type_id>
+			<xml_id />
+			<sort>100</sort>
+			<multiple>N</multiple>
+			<mandatory>N</mandatory>
+			<show_filter>N</show_filter>
+			<show_in_list>Y</show_in_list>
+			<edit_in_list>Y</edit_in_list>
+			<is_searchable>N</is_searchable>
+			<settings>
+				<default_value>1</default_value>
+				<display>RADIO</display>
+				<label>
+					<0 />
+					<1 />
+				</label>
+				<label_checkbox />
+			</settings>
+			<edit_form_label>
+				<br />
+				<en>UF_SHOCKMOUNT_VISIBLE</en>
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Подвес видим на рендере (если включён)?</ru>
+				<ua />
+			</edit_form_label>
+			<list_column_label>
+				<br />
+				<en>UF_SHOCKMOUNT_VISIBLE</en>
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Подвес видим на рендере (если включён)?</ru>
+				<ua />
+			</list_column_label>
+			<list_filter_label>
+				<br />
+				<en>UF_SHOCKMOUNT_VISIBLE</en>
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Подвес видим на рендере (если включён)?</ru>
+				<ua />
+			</list_filter_label>
+			<error_message>
+				<br />
+				<en />
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru />
+				<ua />
+			</error_message>
+			<help_message>
+				<br />
+				<en />
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Подвес должен быть видим на рендере (если включён).</ru>
+				<ua />
+			</help_message>
+			<base_type>int</base_type>
+		</field>
+		<field>
+			<id>116</id>
+			<entity_id>HLBLOCK_10</entity_id>
+			<field_name>UF_DEFAULT_BODY</field_name>
+			<user_type_id>string</user_type_id>
+			<xml_id />
+			<sort>110</sort>
+			<multiple>N</multiple>
+			<mandatory>N</mandatory>
+			<show_filter>N</show_filter>
+			<show_in_list>Y</show_in_list>
+			<edit_in_list>Y</edit_in_list>
+			<is_searchable>N</is_searchable>
+			<settings>
+				<size>20</size>
+				<rows>1</rows>
+				<regexp />
+				<min_length>0</min_length>
+				<max_length>0</max_length>
+				<default_value />
+			</settings>
+			<edit_form_label>
+				<br />
+				<en>UF_DEFAULT_BODY</en>
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Корпус по умолчанию</ru>
+				<ua />
+			</edit_form_label>
+			<list_column_label>
+				<br />
+				<en>UF_DEFAULT_BODY</en>
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Корпус по умолчанию</ru>
+				<ua />
+			</list_column_label>
+			<list_filter_label>
+				<br />
+				<en>UF_DEFAULT_BODY</en>
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Корпус по умолчанию</ru>
+				<ua />
+			</list_filter_label>
+			<error_message>
+				<br />
+				<en />
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru />
+				<ua />
+			</error_message>
+			<help_message>
+				<br />
+				<en />
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru />
+				<ua />
+			</help_message>
+			<base_type>string</base_type>
+		</field>
+		<field>
+			<id>117</id>
+			<entity_id>HLBLOCK_10</entity_id>
+			<field_name>UF_DEFAULT_LOGO</field_name>
+			<user_type_id>string</user_type_id>
+			<xml_id />
+			<sort>120</sort>
+			<multiple>N</multiple>
+			<mandatory>N</mandatory>
+			<show_filter>N</show_filter>
+			<show_in_list>Y</show_in_list>
+			<edit_in_list>Y</edit_in_list>
+			<is_searchable>N</is_searchable>
+			<settings>
+				<size>20</size>
+				<rows>1</rows>
+				<regexp />
+				<min_length>0</min_length>
+				<max_length>0</max_length>
+				<default_value />
+			</settings>
+			<edit_form_label>
+				<br />
+				<en>UF_DEFAULT_LOGO</en>
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Тип логотипа по умолчанию</ru>
+				<ua />
+			</edit_form_label>
+			<list_column_label>
+				<br />
+				<en>UF_DEFAULT_LOGO</en>
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Тип логотипа по умолчанию</ru>
+				<ua />
+			</list_column_label>
+			<list_filter_label>
+				<br />
+				<en>UF_DEFAULT_LOGO</en>
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Тип логотипа по умолчанию</ru>
+				<ua />
+			</list_filter_label>
+			<error_message>
+				<br />
+				<en />
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru />
+				<ua />
+			</error_message>
+			<help_message>
+				<br />
+				<en />
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru />
+				<ua />
+			</help_message>
+			<base_type>string</base_type>
+		</field>
+		<field>
+			<id>118</id>
+			<entity_id>HLBLOCK_10</entity_id>
+			<field_name>UF_DEFAULT_LOGOBG</field_name>
+			<user_type_id>string</user_type_id>
+			<xml_id />
+			<sort>130</sort>
+			<multiple>N</multiple>
+			<mandatory>N</mandatory>
+			<show_filter>N</show_filter>
+			<show_in_list>Y</show_in_list>
+			<edit_in_list>Y</edit_in_list>
+			<is_searchable>N</is_searchable>
+			<settings>
+				<size>20</size>
+				<rows>1</rows>
+				<regexp />
+				<min_length>0</min_length>
+				<max_length>0</max_length>
+				<default_value />
+			</settings>
+			<edit_form_label>
+				<br />
+				<en> UF_DEFAULT_LOGOBG</en>
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Фон лого по умолчанию</ru>
+				<ua />
+			</edit_form_label>
+			<list_column_label>
+				<br />
+				<en> UF_DEFAULT_LOGOBG</en>
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Фон лого по умолчанию</ru>
+				<ua />
+			</list_column_label>
+			<list_filter_label>
+				<br />
+				<en> UF_DEFAULT_LOGOBG</en>
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Фон лого по умолчанию</ru>
+				<ua />
+			</list_filter_label>
+			<error_message>
+				<br />
+				<en />
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru />
+				<ua />
+			</error_message>
+			<help_message>
+				<br />
+				<en />
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru />
+				<ua />
+			</help_message>
+			<base_type>string</base_type>
+		</field>
+		<field>
+			<id>119</id>
+			<entity_id>HLBLOCK_10</entity_id>
+			<field_name>UF_DEFAULT_SHOCKMOUNT</field_name>
+			<user_type_id>string</user_type_id>
+			<xml_id />
+			<sort>150</sort>
+			<multiple>N</multiple>
+			<mandatory>N</mandatory>
+			<show_filter>N</show_filter>
+			<show_in_list>Y</show_in_list>
+			<edit_in_list>Y</edit_in_list>
+			<is_searchable>N</is_searchable>
+			<settings>
+				<size>20</size>
+				<rows>1</rows>
+				<regexp />
+				<min_length>0</min_length>
+				<max_length>0</max_length>
+				<default_value />
+			</settings>
+			<edit_form_label>
+				<br />
+				<en>UF_DEFAULT_SHOCKMOUNT</en>
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Каркас подвеса по умолчанию</ru>
+				<ua />
+			</edit_form_label>
+			<list_column_label>
+				<br />
+				<en>UF_DEFAULT_SHOCKMOUNT</en>
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Каркас подвеса по умолчанию</ru>
+				<ua />
+			</list_column_label>
+			<list_filter_label>
+				<br />
+				<en>UF_DEFAULT_SHOCKMOUNT</en>
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Каркас подвеса по умолчанию</ru>
+				<ua />
+			</list_filter_label>
+			<error_message>
+				<br />
+				<en />
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru />
+				<ua />
+			</error_message>
+			<help_message>
+				<br />
+				<en />
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru />
+				<ua />
+			</help_message>
+			<base_type>string</base_type>
+		</field>
+		<field>
+			<id>120</id>
+			<entity_id>HLBLOCK_10</entity_id>
+			<field_name>UF_DEFAULT_SHOCKMOUNT_PINS</field_name>
+			<user_type_id>string</user_type_id>
+			<xml_id />
+			<sort>170</sort>
+			<multiple>N</multiple>
+			<mandatory>N</mandatory>
+			<show_filter>N</show_filter>
+			<show_in_list>Y</show_in_list>
+			<edit_in_list>Y</edit_in_list>
+			<is_searchable>N</is_searchable>
+			<settings>
+				<size>20</size>
+				<rows>1</rows>
+				<regexp />
+				<min_length>0</min_length>
+				<max_length>0</max_length>
+				<default_value />
+			</settings>
+			<edit_form_label>
+				<br />
+				<en>UF_DEFAULT_SHOCKMOUNT_PINS</en>
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Пины подвеса по умолчанию</ru>
+				<ua />
+			</edit_form_label>
+			<list_column_label>
+				<br />
+				<en>UF_DEFAULT_SHOCKMOUNT_PINS</en>
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Пины подвеса по умолчанию</ru>
+				<ua />
+			</list_column_label>
+			<list_filter_label>
+				<br />
+				<en>UF_DEFAULT_SHOCKMOUNT_PINS</en>
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Пины подвеса по умолчанию</ru>
+				<ua />
+			</list_filter_label>
+			<error_message>
+				<br />
+				<en />
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru />
+				<ua />
+			</error_message>
+			<help_message>
+				<br />
+				<en />
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru />
+				<ua />
+			</help_message>
+			<base_type>string</base_type>
+		</field>
+	</fields>
 	<items>
 		<item>
 			<id>1</id>
@@ -14,6 +1283,9 @@
 			<uf_sort>10</uf_sort>
 			<uf_model_series>023</uf_model_series>
 			<uf_default_spheres>spheres-satinsteel</uf_default_spheres>
+			<uf_is_default_model>1</uf_is_default_model>
+			<uf_shockmount_toggle>1</uf_shockmount_toggle>
+			<uf_shockmount_visible>1</uf_shockmount_visible>
 			<uf_default_body>body-satinsteel</uf_default_body>
 			<uf_default_logo>coldchrome</uf_default_logo>
 			<uf_default_logobg>logobg-3001</uf_default_logobg>
@@ -32,6 +1304,9 @@
 			<uf_sort>20</uf_sort>
 			<uf_model_series>023</uf_model_series>
 			<uf_default_spheres>spheres-satinsteel</uf_default_spheres>
+			<uf_is_default_model>0</uf_is_default_model>
+			<uf_shockmount_toggle>0</uf_shockmount_toggle>
+			<uf_shockmount_visible>1</uf_shockmount_visible>
 			<uf_default_body>body-black</uf_default_body>
 			<uf_default_logo>malfasilver</uf_default_logo>
 			<uf_default_logobg>logobg-9005</uf_default_logobg>
@@ -51,6 +1326,9 @@
 			<uf_sort>30</uf_sort>
 			<uf_model_series>023</uf_model_series>
 			<uf_default_spheres>spheres-satinsteel</uf_default_spheres>
+			<uf_is_default_model>0</uf_is_default_model>
+			<uf_shockmount_toggle>0</uf_shockmount_toggle>
+			<uf_shockmount_visible>1</uf_shockmount_visible>
 			<uf_default_body>body-satinsteel</uf_default_body>
 			<uf_default_logo>coldchrome</uf_default_logo>
 			<uf_default_logobg>logobg-3001</uf_default_logobg>
@@ -68,6 +1346,9 @@
 			<uf_sort>40</uf_sort>
 			<uf_model_series>017</uf_model_series>
 			<uf_default_spheres>spheres-brass</uf_default_spheres>
+			<uf_is_default_model>0</uf_is_default_model>
+			<uf_shockmount_toggle>0</uf_shockmount_toggle>
+			<uf_shockmount_visible>1</uf_shockmount_visible>
 			<uf_default_body>body-1013</uf_default_body>
 			<uf_default_logo>brass-logo</uf_default_logo>
 			<uf_default_logobg>logobg-6001</uf_default_logobg>
@@ -85,6 +1366,9 @@
 			<uf_sort>50</uf_sort>
 			<uf_model_series>017</uf_model_series>
 			<uf_default_spheres>spheres-brass</uf_default_spheres>
+			<uf_is_default_model>0</uf_is_default_model>
+			<uf_shockmount_toggle>0</uf_shockmount_toggle>
+			<uf_shockmount_visible>1</uf_shockmount_visible>
 			<uf_default_body>body-1013</uf_default_body>
 			<uf_default_logo>brass-logo</uf_default_logo>
 			<uf_default_logobg>logobg-5017</uf_default_logobg>
