@@ -632,7 +632,7 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                                                 </svg>
                                                 <span>Загрузить изображение</span>
                                             </button>
-                                            <p class="upload-hint">PNG, JPG до 5MB</p>
+                                            <p class="upload-hint">Допустимые форматы: PNG, SVG, JPG, BMP, WEBP, ICO, до 3 МБ</p>
                                             <button id="case-clear-btn" class="remove-logo-btn" style="display:none; width:100%; margin-top:10px; padding:10px; border:1px solid #ef4444; color:#ef4444; background:none; border-radius:8px; cursor:pointer;">Удалить загруженный файл</button>
                                         </div>
                                         
@@ -887,7 +887,7 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                                                 </svg>
                                                 <span>Загрузить логотип</span>
                                             </button>
-                                            <p class="upload-hint">PNG, JPG, SVG до 5MB</p>
+                                            <p class="upload-hint">Допустимые форматы: PNG, SVG, JPG, BMP, WEBP, ICO, до 3 МБ</p>
                                              <button id="custom-logo-remove" class="remove-custom-logo-btn" style="display:none; width:100%; margin-top:10px; padding:10px; border:1px solid #ef4444; color:#ef4444; background:none; border-radius:8px; cursor:pointer;">Удалить загруженный файл</button>
                                         </div>
                                     </div>

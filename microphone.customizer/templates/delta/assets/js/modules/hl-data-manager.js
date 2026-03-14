@@ -67,11 +67,13 @@ export function initHLDataManager() {
     // Initialize toggles
     const toggleData = data.liquidToggles || {};
     if (toggleData.shockmount) {
-        // Hardcoded per spec: shockmount toggle is only available for 023-the-bomblet.
+        // Shockmount behavior per model:
+        // - 023-the-bomblet: toggle available, user can enable/disable
+        // - other models: toggle hidden, always enabled
         const isBomblet = data.currentModelCode === '023-the-bomblet';
         const available = isBomblet;
-        const included = available ? false : false;
-        const enabled = available ? false : false;
+        const included = false;
+        const enabled = isBomblet ? false : true; // Non-bomblet models always have shockmount enabled
 
         stateManager.set('shockmount.available', available);
         stateManager.set('shockmount.included', included);

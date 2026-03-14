@@ -26,6 +26,10 @@ export function toggleCustomLogo() {
     const currentState = stateManager.get();
     const isCustomLogoEnabled = currentState.logo?.customLogo || false;
     
+    const uploadArea = document.getElementById('custom-logo-upload');
+    const enabled = uploadArea.style.display === 'block';
+    uploadArea.style.display = enabled ? 'none' : 'block';
+
     // Toggle the state
     const newState = !isCustomLogoEnabled;
     stateManager.set('logo.customLogo', newState);
@@ -82,24 +86,92 @@ export function init() {
         input.addEventListener('change', e => {
             const file = e.target.files?.[0];
             if (!file) return;
-            const reader = new FileReader();
-            reader.onload = event => {
-                stateManager.set('logo.customLogoData', event.target.result);
-                updateLogoItemsLockState();
-                updateLogoSVG();
-            };
-            reader.readAsDataURL(file);
+            handleLogoFileUpload(file);
+        });
+    }
+    
+    // Добавляем drag&drop для логотипа
+    const uploadArea = document.querySelector('#custom-logo-upload .upload-area');
+    if (uploadArea) {
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('drag-over');
+        });
+        
+        uploadArea.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('drag-over');
+        });
+        
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('drag-over');
+            const file = e.dataTransfer.files?.[0];
+            if (file) {
+                handleLogoFileUpload(file);
+            }
         });
     }
     
     // Добавляем обработчик для кнопки удаления кастомного логотипа
-    const removeButton = document.querySelector('.remove-logo-btn');
+    const removeButton = document.getElementById('custom-logo-remove');
     if (removeButton) {
         eventRegistry.add(removeButton, 'click', clearCustomLogo);
     }
     
     // Initialize lock state
     updateLogoItemsLockState();
+}
+
+// Handle logo file upload with validation
+function handleLogoFileUpload(file) {
+    // Check file size (3MB limit)
+    const maxSize = 3 * 1024 * 1024;
+    if (file.size > maxSize) {
+        showNotification('Файл слишком большой. Максимальный размер: 3 МБ', 'error');
+        return;
+    }
+    
+    // Check file type
+    const allowedTypes = ['image/png', 'image/svg+xml', 'image/jpeg', 'image/jpg', 'image/bmp', 'image/webp', 'image/x-icon'];
+    const allowedExtensions = ['.png', '.svg', '.jpg', '.jpeg', '.bmp', '.webp', '.ico'];
+    
+    const fileName = file.name.toLowerCase();
+    const hasValidExtension = allowedExtensions.some(ext => fileName.endsWith(ext));
+    const hasValidType = allowedTypes.includes(file.type);
+    
+    if (!hasValidExtension && !hasValidType) {
+        showNotification('Неподдерживаемый формат файла. Допустимые: PNG, SVG, JPG, BMP, WEBP, ICO', 'error');
+        return;
+    }
+    
+    // Process file
+    const reader = new FileReader();
+    reader.onload = event => {
+        stateManager.set('logo.customLogoData', event.target.result);
+        updateLogoItemsLockState();
+        updateLogoSVG();
+        showNotification('Логотип успешно загружен', 'success');
+    };
+    reader.readAsDataURL(file);
+}
+
+// Show notification helper
+function showNotification(message, type = 'info') {
+    // Create notification element if it doesn't exist
+    let notification = document.querySelector('.notification');
+    if (!notification) {
+        notification = document.createElement('div');
+        notification.className = 'notification';
+        document.body.appendChild(notification);
+    }
+    
+    notification.textContent = message;
+    notification.className = `notification ${type} show`;
+    
+    setTimeout(() => {
+        notification.classList.remove('show');
+    }, 3000);
 }
 
 //Управляет видимостью и стилями элементов эмблемы(логотипа микрофона)

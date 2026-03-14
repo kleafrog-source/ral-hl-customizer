@@ -38,6 +38,29 @@ const WoodCase = {
             caseClearBtn.addEventListener('click', () => this.clearLogo());
         }
 
+        // Add drag&drop for case upload
+        const caseUploadArea = document.querySelector('.laser-engraving-upload .upload-area');
+        if (caseUploadArea) {
+            caseUploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                caseUploadArea.classList.add('drag-over');
+            });
+            
+            caseUploadArea.addEventListener('dragleave', (e) => {
+                e.preventDefault();
+                caseUploadArea.classList.remove('drag-over');
+            });
+            
+            caseUploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                caseUploadArea.classList.remove('drag-over');
+                const file = e.dataTransfer.files?.[0];
+                if (file) {
+                    this.handleUpload({ files: [file] });
+                }
+            });
+        }
+
         this.setupManualInputs();
         this.render();
     },
@@ -120,6 +143,26 @@ const WoodCase = {
     handleUpload(e) {
         const file = (e.target && e.target.files) ? e.target.files[0] : (e.files ? e.files[0] : null);
         if (!file) return;
+        
+        // Check file size (3MB limit)
+        const maxSize = 3 * 1024 * 1024;
+        if (file.size > maxSize) {
+            this.showNotification('Файл слишком большой. Максимальный размер: 3 МБ', 'error');
+            return;
+        }
+        
+        // Check file type
+        const allowedTypes = ['image/png', 'image/svg+xml', 'image/jpeg', 'image/jpg', 'image/bmp', 'image/webp', 'image/x-icon'];
+        const allowedExtensions = ['.png', '.svg', '.jpg', '.jpeg', '.bmp', '.webp', '.ico'];
+        
+        const fileName = file.name.toLowerCase();
+        const hasValidExtension = allowedExtensions.some(ext => fileName.endsWith(ext));
+        const hasValidType = allowedTypes.includes(file.type);
+        
+        if (!hasValidExtension && !hasValidType) {
+            this.showNotification('Неподдерживаемый формат файла. Допустимые: PNG, SVG, JPG, BMP, WEBP, ICO', 'error');
+            return;
+        }
         
         const woodCaseLoader = document.getElementById('wood-case-loader');
         const caseClearBtn = document.getElementById('case-clear-btn');
@@ -460,6 +503,23 @@ const WoodCase = {
                 el.addEventListener('mouseenter', () => this.showRulers());
             }
         });
+    },
+
+    showNotification(message, type = 'info') {
+        // Create notification element if it doesn't exist
+        let notification = document.querySelector('.notification');
+        if (!notification) {
+            notification = document.createElement('div');
+            notification.className = 'notification';
+            document.body.appendChild(notification);
+        }
+        
+        notification.textContent = message;
+        notification.className = `notification ${type} show`;
+        
+        setTimeout(() => {
+            notification.classList.remove('show');
+        }, 3000);
     },
 
     clearLogo() {
