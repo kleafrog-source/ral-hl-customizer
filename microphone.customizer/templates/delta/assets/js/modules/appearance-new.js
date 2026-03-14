@@ -76,6 +76,14 @@ function applyFilterMode(svg, section, svgFilterId, colorValue) {
     flood.setAttribute('flood-color', colorValue);
     flood.setAttribute('flood-opacity', '1');
   }
+
+  // ДОП. ЛОГИКА ДЛЯ MALFA: синхронизировать эллипс-клиппер
+  if (section === 'logobg') {
+    const malfaClip = svg.querySelector('#clip-logo-bg-malfa');
+    if (malfaClip) {
+      malfaClip.setAttribute('fill', colorValue);
+    }
+  }
 }
 
 function applyColorizedMode(svg, section, colorValue) {
@@ -223,5 +231,13 @@ export function updateFilter(filterId, section, colorValue) {
   if (flood) {
     flood.setAttribute('flood-color', colorValue);
     flood.setAttribute('flood-opacity', '1');
+  }
+
+  // ДОП. ЛОГИКА ДЛЯ MALFA: синхронизировать эллипс-клиппер
+  if (section === 'logobg') {
+    const malfaClip = svg.querySelector('#clip-logo-bg-malfa');
+    if (malfaClip) {
+      malfaClip.setAttribute('fill', colorValue);
+    }
   }
 }

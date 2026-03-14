@@ -746,7 +746,7 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                                                 <div class="swatches-container" id="<?= htmlspecialchars($sectionKey) ?>-swatches">
                                                     <?php if (!empty($paidRalOptions)): ?>
                                                         <div class="palette-group">
-                                                            <div class="palette-group-title">Платные</div>
+                                                            
                                                             <?php foreach ($paidRalOptions as $item): ?>
                                                                 <?php
                                                                 $option = $item['option'];
@@ -778,7 +778,7 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                                 if (!empty($paidOptions)):
                                 ?>
                                     <div class="option-group">
-                                        <h4>Платные варианты</h4>
+                                      
                                         <?php foreach ($paidOptions as $option): ?>
                                             <?php
                                             $optionPrice = resolveOptionPrice(
@@ -1011,7 +1011,7 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                                         ?>
                                         <?php if (!empty($paidRalOptions)): ?>
                                             <div class="palette-group">
-                                                <div class="palette-group-title">Платные</div>
+                                                
                                                 <?php foreach ($paidRalOptions as $item): ?>
                                                     <?php
                                                     $option = $item['option'];
@@ -1148,7 +1148,7 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                                         ?>
                                         <?php if (!empty($paidRalOptions)): ?>
                                             <div class="palette-group">
-                                                <div class="palette-group-title">Платные</div>
+                                              
                                                 <?php foreach ($paidRalOptions as $item): ?>
                                                     <?php
                                                     $option = $item['option'];
