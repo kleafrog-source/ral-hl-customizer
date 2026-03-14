@@ -232,28 +232,36 @@ if ($cache->initCache($cacheTime, $cacheId, $cacheDir)) {
     $arResult['CURRENT_MODEL_OPTIONS'] = $currentModelOptions;
     $arResult['OPTIONS_BY_SECTION'] = $currentModelOptions;
 
-    // Глобальный список опций по секциям (без фильтрации по модели)
+    // SECTION_OPTIONS — список опций по секциям для текущей модели,
+    // в формате, который использует model-defaults.js и UI.
     $sectionOptions = [];
-    foreach ($options as $option) {
-        $sectionKey = $option['UF_VIEW_TYPE'];
-        if (!isset($sectionOptions[$sectionKey])) {
-            $sectionOptions[$sectionKey] = [];
+
+    foreach ($currentModelOptions as $sectionKey => $sectionOptionsList) {
+        if (!is_array($sectionOptionsList)) {
+            continue;
         }
-        $sectionOptions[$sectionKey][] = [
-            'variantCode' => $option['UF_VARIANT_CODE'],
-            'variantName' => $option['UF_VARIANT_NAME'],
-            'isRal' => (int)$option['UF_IS_RAL'],
-            'color' => $option['UF_RAL_COLOR_CODE'],
-            'colorValue' => $option['UF_RAL_RGB'],
-            'colorName' => $option['RAL_DATA']['UF_NAME'] ?? null,
-            'modelId' => (int)$option['UF_MODEL_ID'],
-            'svgTargetMode' => $option['UF_SVG_TARGET_MODE'],
-            'svgLayerGroup' => $option['UF_SVG_LAYER_GROUP'],
-            'svgFilterId' => $option['UF_SVG_FILTER_ID'],
-            'svgSpecialKey' => $option['UF_SVG_SPECIAL_KEY'],
-            'ID' => (int)$option['ID']
-        ];
+
+        $sectionOptions[$sectionKey] = [];
+
+        foreach ($sectionOptionsList as $opt) {
+            $ralData = $opt['RAL_DATA'] ?? [];
+
+            $sectionOptions[$sectionKey][] = [
+                'variantCode'   => (string)($opt['UF_VARIANT_CODE'] ?? ''),
+                'variantName'   => (string)($opt['UF_VARIANT_NAME'] ?? ''),
+                'isRal'         => (bool)($opt['UF_IS_RAL'] ?? false),
+                'color'         => (string)($opt['UF_RAL_COLOR_CODE'] ?? ''),
+                'colorValue'    => (string)($ralData['UF_HEX'] ?? ''),
+                'colorName'     => (string)($ralData['UF_NAME'] ?? ''),
+                'modelId'       => (int)($opt['UF_MODEL_ID'] ?? 0),
+                'svgTargetMode' => (string)($opt['UF_SVG_TARGET_MODE'] ?? ''),
+                'svgLayerGroup' => (string)($opt['UF_SVG_LAYER_GROUP'] ?? ''),
+                'svgFilterId'   => (string)($opt['UF_SVG_FILTER_ID'] ?? ''),
+                'svgSpecialKey' => (string)($opt['UF_SVG_SPECIAL_KEY'] ?? ''),
+            ];
+        }
     }
+
     $arResult['SECTION_OPTIONS'] = $sectionOptions;
 
     $arResult['LIQUID_TOGGLES'] = [
