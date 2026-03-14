@@ -396,6 +396,154 @@
 			<base_type>int</base_type>
 		</field>
 		<field>
+			<id>122</id>
+			<entity_id>HLBLOCK_10</entity_id>
+			<field_name>UF_SHOCKMOUNT_TOGGLE</field_name>
+			<user_type_id>boolean</user_type_id>
+			<xml_id />
+			<sort>52</sort>
+			<multiple>N</multiple>
+			<mandatory>N</mandatory>
+			<show_filter>N</show_filter>
+			<show_in_list>Y</show_in_list>
+			<edit_in_list>Y</edit_in_list>
+			<is_searchable>N</is_searchable>
+			<settings>
+				<default_value>0</default_value>
+				<display>RADIO</display>
+				<label>
+					<0 />
+					<1 />
+				</label>
+				<label_checkbox />
+			</settings>
+			<edit_form_label>
+				<br />
+				<en>UF_SHOCKMOUNT_TOGGLE</en>
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Показывать ли переключатель подвеса.</ru>
+				<ua />
+			</edit_form_label>
+			<list_column_label>
+				<br />
+				<en>UF_SHOCKMOUNT_TOGGLE</en>
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Показывать ли пользователю переключатель подвеса.</ru>
+				<ua />
+			</list_column_label>
+			<list_filter_label>
+				<br />
+				<en>UF_SHOCKMOUNT_TOGGLE</en>
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Показывать ли пользователю переключатель подвеса.</ru>
+				<ua />
+			</list_filter_label>
+			<error_message>
+				<br />
+				<en />
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru />
+				<ua />
+			</error_message>
+			<help_message>
+				<br />
+				<en />
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>0 — никакого тоггла, подвес всегда включён (если он есть).  1 — показать переключатель (пользователь может включить/выключить подвес).</ru>
+				<ua />
+			</help_message>
+			<base_type>int</base_type>
+		</field>
+		<field>
+			<id>123</id>
+			<entity_id>HLBLOCK_10</entity_id>
+			<field_name>UF_SHOCKMOUNT_VISIBLE</field_name>
+			<user_type_id>boolean</user_type_id>
+			<xml_id />
+			<sort>53</sort>
+			<multiple>N</multiple>
+			<mandatory>N</mandatory>
+			<show_filter>N</show_filter>
+			<show_in_list>Y</show_in_list>
+			<edit_in_list>Y</edit_in_list>
+			<is_searchable>N</is_searchable>
+			<settings>
+				<default_value>1</default_value>
+				<display>RADIO</display>
+				<label>
+					<0 />
+					<1 />
+				</label>
+				<label_checkbox />
+			</settings>
+			<edit_form_label>
+				<br />
+				<en>UF_SHOCKMOUNT_VISIBLE</en>
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Подвес видим на рендере (если включён)?</ru>
+				<ua />
+			</edit_form_label>
+			<list_column_label>
+				<br />
+				<en>UF_SHOCKMOUNT_VISIBLE</en>
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Подвес видим на рендере (если включён)?</ru>
+				<ua />
+			</list_column_label>
+			<list_filter_label>
+				<br />
+				<en>UF_SHOCKMOUNT_VISIBLE</en>
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Подвес видим на рендере (если включён)?</ru>
+				<ua />
+			</list_filter_label>
+			<error_message>
+				<br />
+				<en />
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru />
+				<ua />
+			</error_message>
+			<help_message>
+				<br />
+				<en />
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Подвес должен быть видим на рендере (если включён).</ru>
+				<ua />
+			</help_message>
+			<base_type>int</base_type>
+		</field>
+		<field>
 			<id>86</id>
 			<entity_id>HLBLOCK_10</entity_id>
 			<field_name>UF_SHOCKMOUNT_PRICE</field_name>
@@ -533,6 +681,80 @@
 				<la />
 				<pl />
 				<ru>Сортировка</ru>
+				<ua />
+			</help_message>
+			<base_type>int</base_type>
+		</field>
+		<field>
+			<id>121</id>
+			<entity_id>HLBLOCK_10</entity_id>
+			<field_name>UF_IS_DEFAULT_MODEL</field_name>
+			<user_type_id>boolean</user_type_id>
+			<xml_id />
+			<sort>75</sort>
+			<multiple>N</multiple>
+			<mandatory>N</mandatory>
+			<show_filter>N</show_filter>
+			<show_in_list>Y</show_in_list>
+			<edit_in_list>Y</edit_in_list>
+			<is_searchable>N</is_searchable>
+			<settings>
+				<default_value>0</default_value>
+				<display>RADIO</display>
+				<label>
+					<0 />
+					<1 />
+				</label>
+				<label_checkbox />
+			</settings>
+			<edit_form_label>
+				<br />
+				<en>UF_IS_DEFAULT_MODEL</en>
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Первый при загрузке?</ru>
+				<ua />
+			</edit_form_label>
+			<list_column_label>
+				<br />
+				<en>UF_IS_DEFAULT_MODEL</en>
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Первый при загрузке?</ru>
+				<ua />
+			</list_column_label>
+			<list_filter_label>
+				<br />
+				<en>UF_IS_DEFAULT_MODEL</en>
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru>Первый при загрузке?</ru>
+				<ua />
+			</list_filter_label>
+			<error_message>
+				<br />
+				<en />
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru />
+				<ua />
+			</error_message>
+			<help_message>
+				<br />
+				<en />
+				<fr />
+				<it />
+				<la />
+				<pl />
+				<ru />
 				<ua />
 			</help_message>
 			<base_type>int</base_type>
@@ -682,228 +904,6 @@
 				<ua />
 			</help_message>
 			<base_type>string</base_type>
-		</field>
-		<field>
-			<id>121</id>
-			<entity_id>HLBLOCK_10</entity_id>
-			<field_name>UF_IS_DEFAULT_MODEL</field_name>
-			<user_type_id>boolean</user_type_id>
-			<xml_id />
-			<sort>100</sort>
-			<multiple>N</multiple>
-			<mandatory>N</mandatory>
-			<show_filter>N</show_filter>
-			<show_in_list>Y</show_in_list>
-			<edit_in_list>Y</edit_in_list>
-			<is_searchable>N</is_searchable>
-			<settings>
-				<default_value>0</default_value>
-				<display>RADIO</display>
-				<label>
-					<0 />
-					<1 />
-				</label>
-				<label_checkbox />
-			</settings>
-			<edit_form_label>
-				<br />
-				<en>UF_IS_DEFAULT_MODEL</en>
-				<fr />
-				<it />
-				<la />
-				<pl />
-				<ru>Первый при загрузке?</ru>
-				<ua />
-			</edit_form_label>
-			<list_column_label>
-				<br />
-				<en>UF_IS_DEFAULT_MODEL</en>
-				<fr />
-				<it />
-				<la />
-				<pl />
-				<ru>Первый при загрузке?</ru>
-				<ua />
-			</list_column_label>
-			<list_filter_label>
-				<br />
-				<en>UF_IS_DEFAULT_MODEL</en>
-				<fr />
-				<it />
-				<la />
-				<pl />
-				<ru>Первый при загрузке?</ru>
-				<ua />
-			</list_filter_label>
-			<error_message>
-				<br />
-				<en />
-				<fr />
-				<it />
-				<la />
-				<pl />
-				<ru />
-				<ua />
-			</error_message>
-			<help_message>
-				<br />
-				<en />
-				<fr />
-				<it />
-				<la />
-				<pl />
-				<ru />
-				<ua />
-			</help_message>
-			<base_type>int</base_type>
-		</field>
-		<field>
-			<id>122</id>
-			<entity_id>HLBLOCK_10</entity_id>
-			<field_name>UF_SHOCKMOUNT_TOGGLE</field_name>
-			<user_type_id>boolean</user_type_id>
-			<xml_id />
-			<sort>100</sort>
-			<multiple>N</multiple>
-			<mandatory>N</mandatory>
-			<show_filter>N</show_filter>
-			<show_in_list>Y</show_in_list>
-			<edit_in_list>Y</edit_in_list>
-			<is_searchable>N</is_searchable>
-			<settings>
-				<default_value>0</default_value>
-				<display>RADIO</display>
-				<label>
-					<0 />
-					<1 />
-				</label>
-				<label_checkbox />
-			</settings>
-			<edit_form_label>
-				<br />
-				<en>UF_SHOCKMOUNT_TOGGLE</en>
-				<fr />
-				<it />
-				<la />
-				<pl />
-				<ru>Показывать ли переключатель подвеса.</ru>
-				<ua />
-			</edit_form_label>
-			<list_column_label>
-				<br />
-				<en>UF_SHOCKMOUNT_TOGGLE</en>
-				<fr />
-				<it />
-				<la />
-				<pl />
-				<ru>Показывать ли пользователю переключатель подвеса.</ru>
-				<ua />
-			</list_column_label>
-			<list_filter_label>
-				<br />
-				<en>UF_SHOCKMOUNT_TOGGLE</en>
-				<fr />
-				<it />
-				<la />
-				<pl />
-				<ru>Показывать ли пользователю переключатель подвеса.</ru>
-				<ua />
-			</list_filter_label>
-			<error_message>
-				<br />
-				<en />
-				<fr />
-				<it />
-				<la />
-				<pl />
-				<ru />
-				<ua />
-			</error_message>
-			<help_message>
-				<br />
-				<en />
-				<fr />
-				<it />
-				<la />
-				<pl />
-				<ru>0 — никакого тоггла, подвес всегда включён (если он есть).  1 — показать переключатель (пользователь может включить/выключить подвес).</ru>
-				<ua />
-			</help_message>
-			<base_type>int</base_type>
-		</field>
-		<field>
-			<id>123</id>
-			<entity_id>HLBLOCK_10</entity_id>
-			<field_name>UF_SHOCKMOUNT_VISIBLE</field_name>
-			<user_type_id>boolean</user_type_id>
-			<xml_id />
-			<sort>100</sort>
-			<multiple>N</multiple>
-			<mandatory>N</mandatory>
-			<show_filter>N</show_filter>
-			<show_in_list>Y</show_in_list>
-			<edit_in_list>Y</edit_in_list>
-			<is_searchable>N</is_searchable>
-			<settings>
-				<default_value>1</default_value>
-				<display>RADIO</display>
-				<label>
-					<0 />
-					<1 />
-				</label>
-				<label_checkbox />
-			</settings>
-			<edit_form_label>
-				<br />
-				<en>UF_SHOCKMOUNT_VISIBLE</en>
-				<fr />
-				<it />
-				<la />
-				<pl />
-				<ru>Подвес видим на рендере (если включён)?</ru>
-				<ua />
-			</edit_form_label>
-			<list_column_label>
-				<br />
-				<en>UF_SHOCKMOUNT_VISIBLE</en>
-				<fr />
-				<it />
-				<la />
-				<pl />
-				<ru>Подвес видим на рендере (если включён)?</ru>
-				<ua />
-			</list_column_label>
-			<list_filter_label>
-				<br />
-				<en>UF_SHOCKMOUNT_VISIBLE</en>
-				<fr />
-				<it />
-				<la />
-				<pl />
-				<ru>Подвес видим на рендере (если включён)?</ru>
-				<ua />
-			</list_filter_label>
-			<error_message>
-				<br />
-				<en />
-				<fr />
-				<it />
-				<la />
-				<pl />
-				<ru />
-				<ua />
-			</error_message>
-			<help_message>
-				<br />
-				<en />
-				<fr />
-				<it />
-				<la />
-				<pl />
-				<ru>Подвес должен быть видим на рендере (если включён).</ru>
-				<ua />
-			</help_message>
-			<base_type>int</base_type>
 		</field>
 		<field>
 			<id>116</id>
@@ -1279,13 +1279,13 @@
 			<uf_base_price>139990</uf_base_price>
 			<uf_description>деревянный футляр, аттенюатор -20 дБ, шарнирное крепление</uf_description>
 			<uf_shockmount_enabled>0</uf_shockmount_enabled>
-			<uf_shockmount_price>10000</uf_shockmount_price>
-			<uf_sort>10</uf_sort>
-			<uf_model_series>023</uf_model_series>
-			<uf_default_spheres>spheres-satinsteel</uf_default_spheres>
-			<uf_is_default_model>1</uf_is_default_model>
 			<uf_shockmount_toggle>1</uf_shockmount_toggle>
 			<uf_shockmount_visible>1</uf_shockmount_visible>
+			<uf_shockmount_price>10000</uf_shockmount_price>
+			<uf_sort>10</uf_sort>
+			<uf_is_default_model>1</uf_is_default_model>
+			<uf_model_series>023</uf_model_series>
+			<uf_default_spheres>spheres-satinsteel</uf_default_spheres>
 			<uf_default_body>body-satinsteel</uf_default_body>
 			<uf_default_logo>coldchrome</uf_default_logo>
 			<uf_default_logobg>logobg-3001</uf_default_logobg>
@@ -1297,16 +1297,15 @@
 			<uf_code>023-malfa</uf_code>
 			<uf_name>023 MALFA</uf_name>
 			<uf_base_price>149990</uf_base_price>
-			<uf_description>деревянный футляр, антивибрационный подвес, 
-аттенюатор -20 дБ, шарнирное крепление</uf_description>
+			<uf_description>деревянный футляр, антивибрационный подвес, аттенюатор -20 дБ, шарнирное крепление</uf_description>
 			<uf_shockmount_enabled>1</uf_shockmount_enabled>
-			<uf_shockmount_price>0</uf_shockmount_price>
-			<uf_sort>20</uf_sort>
-			<uf_model_series>023</uf_model_series>
-			<uf_default_spheres>spheres-satinsteel</uf_default_spheres>
-			<uf_is_default_model>0</uf_is_default_model>
 			<uf_shockmount_toggle>0</uf_shockmount_toggle>
 			<uf_shockmount_visible>1</uf_shockmount_visible>
+			<uf_shockmount_price>0</uf_shockmount_price>
+			<uf_sort>20</uf_sort>
+			<uf_is_default_model>0</uf_is_default_model>
+			<uf_model_series>023</uf_model_series>
+			<uf_default_spheres>spheres-satinsteel</uf_default_spheres>
 			<uf_default_body>body-black</uf_default_body>
 			<uf_default_logo>malfasilver</uf_default_logo>
 			<uf_default_logobg>logobg-9005</uf_default_logobg>
@@ -1318,17 +1317,15 @@
 			<uf_code>023-deluxe</uf_code>
 			<uf_name>023 Deluxe</uf_name>
 			<uf_base_price>159990</uf_base_price>
-			<uf_description>деревянный футляр, аттенюатор, антивибрационный
-подвес,
-клипса, микрофонный кабель</uf_description>
+			<uf_description>деревянный футляр, аттенюатор, антивибрационный подвес, клипса, микрофонный кабель</uf_description>
 			<uf_shockmount_enabled>1</uf_shockmount_enabled>
-			<uf_shockmount_price>0</uf_shockmount_price>
-			<uf_sort>30</uf_sort>
-			<uf_model_series>023</uf_model_series>
-			<uf_default_spheres>spheres-satinsteel</uf_default_spheres>
-			<uf_is_default_model>0</uf_is_default_model>
 			<uf_shockmount_toggle>0</uf_shockmount_toggle>
 			<uf_shockmount_visible>1</uf_shockmount_visible>
+			<uf_shockmount_price>0</uf_shockmount_price>
+			<uf_sort>30</uf_sort>
+			<uf_is_default_model>0</uf_is_default_model>
+			<uf_model_series>023</uf_model_series>
+			<uf_default_spheres>spheres-satinsteel</uf_default_spheres>
 			<uf_default_body>body-satinsteel</uf_default_body>
 			<uf_default_logo>coldchrome</uf_default_logo>
 			<uf_default_logobg>logobg-3001</uf_default_logobg>
@@ -1342,13 +1339,13 @@
 			<uf_base_price>229990</uf_base_price>
 			<uf_description>деревянный футляр, антивибрационный подвес, аттенюатор -20дБ, шарнирное крепление</uf_description>
 			<uf_shockmount_enabled>1</uf_shockmount_enabled>
-			<uf_shockmount_price>0</uf_shockmount_price>
-			<uf_sort>40</uf_sort>
-			<uf_model_series>017</uf_model_series>
-			<uf_default_spheres>spheres-brass</uf_default_spheres>
-			<uf_is_default_model>0</uf_is_default_model>
 			<uf_shockmount_toggle>0</uf_shockmount_toggle>
 			<uf_shockmount_visible>1</uf_shockmount_visible>
+			<uf_shockmount_price>0</uf_shockmount_price>
+			<uf_sort>40</uf_sort>
+			<uf_is_default_model>0</uf_is_default_model>
+			<uf_model_series>017</uf_model_series>
+			<uf_default_spheres>spheres-brass</uf_default_spheres>
 			<uf_default_body>body-1013</uf_default_body>
 			<uf_default_logo>brass-logo</uf_default_logo>
 			<uf_default_logobg>logobg-6001</uf_default_logobg>
@@ -1362,13 +1359,13 @@
 			<uf_base_price>419990</uf_base_price>
 			<uf_description>деревянный футляр, антивибрационный подвес, блок питания БП-017, кабель XLR-6, шарнирное крепление, запасная лампа 6Ж1П</uf_description>
 			<uf_shockmount_enabled>1</uf_shockmount_enabled>
-			<uf_shockmount_price>0</uf_shockmount_price>
-			<uf_sort>50</uf_sort>
-			<uf_model_series>017</uf_model_series>
-			<uf_default_spheres>spheres-brass</uf_default_spheres>
-			<uf_is_default_model>0</uf_is_default_model>
 			<uf_shockmount_toggle>0</uf_shockmount_toggle>
 			<uf_shockmount_visible>1</uf_shockmount_visible>
+			<uf_shockmount_price>0</uf_shockmount_price>
+			<uf_sort>50</uf_sort>
+			<uf_is_default_model>0</uf_is_default_model>
+			<uf_model_series>017</uf_model_series>
+			<uf_default_spheres>spheres-brass</uf_default_spheres>
 			<uf_default_body>body-1013</uf_default_body>
 			<uf_default_logo>brass-logo</uf_default_logo>
 			<uf_default_logobg>logobg-5017</uf_default_logobg>
