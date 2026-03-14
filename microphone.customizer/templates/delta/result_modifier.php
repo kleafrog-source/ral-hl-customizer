@@ -123,6 +123,13 @@ if ($cache->initCache($cacheTime, $cacheId, $cacheDir)) {
             $option['SVG_SPECIAL_KEY'] = $option['UF_SVG_SPECIAL_KEY'];
         }
 
+        // Special handling for free logobg RAL variants
+        if ($sectionCode === 'logobg' && !empty($option['UF_IS_RAL']) && !empty($option['UF_RAL_COLOR_ID']) && !empty($option['UF_IS_FREE'])) {
+            // This is a free logobg RAL variant - ensure it's marked as free
+            $option['IS_RAL_PAID'] = 0;
+            $option['UF_PRICE'] = 0;
+        }
+
         $options[$modelId][$sectionCode][] = $option;
     }
     $arResult['OPTIONS'] = $options;

@@ -661,9 +661,9 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                                 $freeOptions = array_filter($sectionOptions, function($opt) use ($sectionKey) {
                                     $isFree = $opt['UF_IS_FREE'] ?? true;
                                     $isRal = $opt['UF_IS_RAL'] ?? false;
-                                    // For logobg, include free RAL options
+                                    // For logobg, exclude RAL options from free variants (they'll be rendered via palette)
                                     if ($sectionKey === 'logobg') {
-                                        return $isFree;
+                                        return $isFree && !$isRal;
                                     }
                                     // For other sections, exclude RAL from free variants
                                     return $isFree && !$isRal;
@@ -683,7 +683,10 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                                                 $isRal,
                                                 0
                                             );
-                                            $isRalPaid = $isRal && $resolvedPrice > 0;
+                                            // For logobg RAL variants, use IS_RAL_PAID from HL data to avoid duplication
+                                            $isRalPaid = ($sectionKey === 'logobg' && $isRal) ? 
+                                                ($option['IS_RAL_PAID'] ?? 0) : 
+                                                ($isRal && $resolvedPrice > 0);
                                             ?>
                                             <button
                                                 class="option-button variant-item"
