@@ -232,6 +232,30 @@ if ($cache->initCache($cacheTime, $cacheId, $cacheDir)) {
     $arResult['CURRENT_MODEL_OPTIONS'] = $currentModelOptions;
     $arResult['OPTIONS_BY_SECTION'] = $currentModelOptions;
 
+    // Глобальный список опций по секциям (без фильтрации по модели)
+    $sectionOptions = [];
+    foreach ($options as $option) {
+        $sectionKey = $option['UF_VIEW_TYPE'];
+        if (!isset($sectionOptions[$sectionKey])) {
+            $sectionOptions[$sectionKey] = [];
+        }
+        $sectionOptions[$sectionKey][] = [
+            'variantCode' => $option['UF_VARIANT_CODE'],
+            'variantName' => $option['UF_VARIANT_NAME'],
+            'isRal' => (int)$option['UF_IS_RAL'],
+            'color' => $option['UF_RAL_COLOR_CODE'],
+            'colorValue' => $option['UF_RAL_RGB'],
+            'colorName' => $option['RAL_DATA']['UF_NAME'] ?? null,
+            'modelId' => (int)$option['UF_MODEL_ID'],
+            'svgTargetMode' => $option['UF_SVG_TARGET_MODE'],
+            'svgLayerGroup' => $option['UF_SVG_LAYER_GROUP'],
+            'svgFilterId' => $option['UF_SVG_FILTER_ID'],
+            'svgSpecialKey' => $option['UF_SVG_SPECIAL_KEY'],
+            'ID' => (int)$option['ID']
+        ];
+    }
+    $arResult['SECTION_OPTIONS'] = $sectionOptions;
+
     $arResult['LIQUID_TOGGLES'] = [
         'custom_logo' => [
             'enabled' => true,

@@ -3,14 +3,12 @@
 import { stateManager } from './core/state.js';
 import { updateSVG } from './engine.js';
 import { updateSectionLayers } from './modules/appearance-new.js';
-import { updateLogoSVG } from './modules/logo.js';
+import { updateLogoSVG, updateMalfaLogoOptionsVisibility } from './modules/logo.js';
 import { updateShockmountLayers, updateShockmountVisibility, updateShockmountPreview, updateShockmountPinsPreview } from './modules/shockmount-new.js';
 import { syncToggles } from './modules/toggles.js';
 import { applyModelDefaults } from './modules/model-defaults.js';
 import { calculateTotal, getBreakdown, formatPrice } from './modules/price-calculator.js';
 import { initHLDataManager } from './modules/hl-data-manager.js';
-import { updateSectionLayers } from './modules/appearance-new.js';
-import { syncToggles } from './modules/toggles.js';
 import { switchLayer, updateMicVariant } from './modules/camera-effect.js';
 
 export function updateUI() {

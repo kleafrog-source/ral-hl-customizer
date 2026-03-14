@@ -251,10 +251,10 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
         <!-- Sidebar сгенерированный из HL данных -->
         <div class="sidebar" id="customization-sidebar" data-sidebar-state="normal">
             <div class="sidebar-header">
-                <div class="sidebar-title-block" data-sidebar-fade data-sidebar-hide="compact">
+                <!-- <div class="sidebar-title-block" data-sidebar-fade data-sidebar-hide="compact">
                     <div class="sidebar-title">Customizer</div>
                     <div class="sidebar-subtitle">Microphone</div>
-                </div>
+                </div> -->
                 <div class="sidebar-state-controls" role="group" aria-label="Sidebar size">
                     <button class="sidebar-state-btn" type="button" data-sidebar-state-btn="compact" aria-label="Compact sidebar" title="Compact" data-tooltip="Compact">
                         <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -1375,6 +1375,8 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
         'models' => $arResult['MODELS'] ?? [],
         'modelsByCode' => $arResult['MODELS_BY_CODE'] ?? [],
         'options' => $arResult['OPTIONS'] ?? [],
+        'sectionOptions' => $arResult['SECTION_OPTIONS'] ?? [],
+        'optionsBySection' => $arResult['SECTION_OPTIONS'] ?? [],
         'prices' => $arResult['PRICES'] ?? [],
         'currentModelId' => $arResult['CURRENT_MODEL_ID'],
         'currentModelCode' => $arResult['CURRENT_MODEL_CODE'],

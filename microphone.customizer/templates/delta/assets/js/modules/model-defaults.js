@@ -9,16 +9,27 @@ import { updateSectionLayers } from './appearance-new.js';
  * @param {string} modelCode - код модели
  */
 export function applyModelDefaults(modelCode) {
-    if (!modelCode || !window.CUSTOMIZER_DATA?.models?.[modelCode]) {
-        console.warn('[ModelDefaults] Model not found:', modelCode);
+    if (!modelCode) {
+        console.warn('[ModelDefaults] No modelCode provided');
         return;
     }
 
-    const model = window.CUSTOMIZER_DATA.models[modelCode];
+    // Используем modelsByCode для поиска модели по коду
+    const modelMap = window.CUSTOMIZER_DATA?.modelsByCode || {};
+    const model = modelMap[modelCode];
+    
+    if (!model) {
+        console.warn('[ModelDefaults] Model not found:', modelCode, 'Available models:', Object.keys(modelMap));
+        return;
+    }
+
     const defaults = model.DEFAULTS || {};
     
     console.log('[ModelDefaults] Applying defaults for model:', modelCode, defaults);
 
+    // Используем глобальный список опций по секциям, как в остальном коде
+    const sectionOptionsMap = window.CUSTOMIZER_DATA.sectionOptions || window.CUSTOMIZER_DATA.optionsBySection || {};
+    
     // Секции и соответствующие поля в defaults
     const sectionDefaults = {
         spheres: defaults.SPHERES,
@@ -36,12 +47,12 @@ export function applyModelDefaults(modelCode) {
             return;
         }
 
-        // Ищем опцию в секции
-        const sectionOptions = window.CUSTOMIZER_DATA.options?.[model.ID]?.[sectionKey] || [];
-        const defaultOption = sectionOptions.find(opt => opt.variantCode === defaultVariantCode);
+        // Используем глобальный список опций по секциям
+        const options = sectionOptionsMap[sectionKey] || [];
+        const defaultOption = options.find(opt => opt.variantCode === defaultVariantCode);
 
         if (!defaultOption) {
-            console.warn(`[ModelDefaults] Default option not found: ${sectionKey} -> ${defaultVariantCode}`);
+            console.warn(`[ModelDefaults] Default option not found: ${sectionKey} -> ${defaultVariantCode}`, 'Available options:', options.map(o => o.variantCode));
             return;
         }
 
@@ -82,6 +93,6 @@ export function applyModelDefaults(modelCode) {
  * @returns {boolean}
  */
 export function isDefaultModel(modelCode) {
-    const model = window.CUSTOMIZER_DATA?.models?.[modelCode];
+    const model = window.CUSTOMIZER_DATA?.modelsByCode?.[modelCode];
     return !!model?.IS_DEFAULT_MODEL;
 }
