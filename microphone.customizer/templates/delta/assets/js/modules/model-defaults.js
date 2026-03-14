@@ -5,6 +5,18 @@ import { stateManager } from '../core/state.js';
 import { updateSectionLayers } from './appearance-new.js';
 
 /**
+ * Получает цену опции из SECTION_OPTIONS
+ * @param {string} sectionKey - ключ секции
+ * @param {string} variantCode - код варианта
+ * @returns {number} цена
+ */
+function getOptionPrice(sectionKey, variantCode) {
+    const sectionOptions = window.CUSTOMIZER_DATA.sectionOptions?.[sectionKey] || [];
+    const option = sectionOptions.find(opt => opt.variantCode === variantCode);
+    return option?.price || 0;
+}
+
+/**
  * Применяет значения по умолчанию для модели из HL данных
  * @param {string} modelCode - код модели
  */
@@ -26,6 +38,19 @@ export function applyModelDefaults(modelCode) {
     const defaults = model.DEFAULTS || {};
     
     console.log('[ModelDefaults] Applying defaults for model:', modelCode, defaults);
+
+    // Логирование доступных опций по секциям
+    console.group(`[Defaults] ${modelCode}`);
+    Object.keys(defaults).forEach(section => {
+        const def = defaults[section];
+        const options = (window.CUSTOMIZER_DATA.sectionOptions?.[section] || [])
+            .map(o => o.variantCode);
+        console.log(
+            `Section ${section}: default=${def.variantCode}, options=`,
+            options
+        );
+    });
+    console.groupEnd();
 
     // Используем глобальный список опций по секциям, как в остальном коде
     const sectionOptionsMap = window.CUSTOMIZER_DATA.sectionOptions || window.CUSTOMIZER_DATA.optionsBySection || {};
@@ -60,6 +85,7 @@ export function applyModelDefaults(modelCode) {
 
         // Обновляем state секции
         const currentState = stateManager.get()[sectionKey] || {};
+        const optionPrice = getOptionPrice(sectionKey, defaultVariantCode);
         const newState = {
             ...currentState,
             variantCode: defaultOption.variantCode,
@@ -73,7 +99,8 @@ export function applyModelDefaults(modelCode) {
             svgTargetMode: defaultOption.svgTargetMode,
             svgLayerGroup: defaultOption.svgLayerGroup,
             svgFilterId: defaultOption.svgFilterId,
-            svgSpecialKey: defaultOption.svgSpecialKey
+            svgSpecialKey: defaultOption.svgSpecialKey,
+            price: optionPrice
         };
 
         stateManager.set(sectionKey, newState);
@@ -82,6 +109,16 @@ export function applyModelDefaults(modelCode) {
         if (sectionKey !== 'shockmount' && sectionKey !== 'shockmountPins') {
             updateSectionLayers(sectionKey, newState);
         }
+    });
+
+    console.log('[ModelDefaults] Applied state snapshot:', {
+        model: stateManager.get('currentModelCode'),
+        spheres: stateManager.get('spheres')?.variant,
+        body: stateManager.get('body')?.variant,
+        logo: stateManager.get('logo')?.variant,
+        logobg: stateManager.get('logobg')?.variant,
+        shockmount: stateManager.get('shockmount')?.variant,
+        shockmountPins: stateManager.get('shockmountPins')?.variant,
     });
 
     console.log('[ModelDefaults] All defaults applied for model:', modelCode);

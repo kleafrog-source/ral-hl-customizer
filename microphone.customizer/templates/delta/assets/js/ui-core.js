@@ -7,7 +7,7 @@ import { updateLogoSVG, updateMalfaLogoOptionsVisibility } from './modules/logo.
 import { updateShockmountLayers, updateShockmountVisibility, updateShockmountPreview, updateShockmountPinsPreview } from './modules/shockmount-new.js';
 import { syncToggles } from './modules/toggles.js';
 import { applyModelDefaults } from './modules/model-defaults.js';
-import { calculateTotal, getBreakdown, formatPrice } from './modules/price-calculator.js';
+import { calculateTotal, getBreakdown, formatPrice, debugPrices } from './modules/price-calculator.js';
 import { initHLDataManager } from './modules/hl-data-manager.js';
 import { switchLayer, updateMicVariant } from './modules/camera-effect.js';
 
@@ -18,6 +18,9 @@ export function updateUI() {
     const state = stateManager.get();
     const breakdown = getBreakdown(state);
     const total = calculateTotal(state);
+    
+    // Логирование цен для отладки
+    debugPrices(state);
 
     const basePriceEl = document.getElementById('base-price');
     if (basePriceEl) basePriceEl.textContent = `${(state.basePrice || 0).toLocaleString('ru-RU')}₽`;
@@ -110,6 +113,7 @@ function applyOptionFromElement(element) {
         || element.querySelector('.option-name')?.textContent?.trim()
         || variantCode;
     const ralCode = element.dataset.ral || element.dataset.ralCode || (isRal ? variantCode : null);
+    const price = parseInt(element.dataset.price || '0', 10);
 
     batch(`${section}.variantCode`, variantCode);
     batch(`${section}.variant`, variantCode);
@@ -123,6 +127,7 @@ function applyOptionFromElement(element) {
     batch(`${section}.svgLayerGroup`, element.dataset.svgLayerGroup || null);
     batch(`${section}.svgFilterId`, element.dataset.svgFilterId || null);
     batch(`${section}.svgSpecialKey`, element.dataset.svgSpecialKey || null);
+    batch(`${section}.price`, price);
     stateManager.endBatch();
 
     if (section === 'logobg') {

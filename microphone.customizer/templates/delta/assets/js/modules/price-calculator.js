@@ -77,6 +77,21 @@ export function getBreakdown(state) {
     };
 }
 
+// Логирование цен для отладки
+export function debugPrices(state) {
+    console.log('[Price] Breakdown', {
+        model: state.currentModelCode,
+        basePrice: state.basePrice,
+        spheres: state.spheres?.price,
+        body: state.body?.price,
+        logo: state.logo?.price,
+        logobg: state.logobg?.price,
+        shockmount: state.shockmount?.price,
+        shockmountPins: state.shockmountPins?.price,
+        case: state.case?.price,
+    });
+}
+
 export function calculateTotal(state) {
     const breakdown = getBreakdown(state);
     return Object.values(breakdown).reduce((sum, price) => sum + safeNumber(price), 0);

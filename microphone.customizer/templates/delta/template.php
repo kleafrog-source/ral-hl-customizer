@@ -440,9 +440,9 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                         </div>
                         
                         <div class="submenu-content">
-                            <div class="section-description">
+                            <!-- <div class="section-description">
                                 <p>Измените <?= htmlspecialchars($sectionTitle) ?></p>
-                            </div>
+                            </div> -->
 
                             <?php if ($sectionKey === 'logo'): ?>
                                 <!-- Special logo section -->
@@ -674,7 +674,7 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                                 if (!empty($freeOptions)):
                                 ?>
                                     <div class="option-group">
-                                        <h4>Бесплатные варианты</h4>
+                                        <!-- <h4>Бесплатные варианты</h4> -->
                                         <?php foreach ($freeOptions as $option): ?>
                                             <?php
                                             $isRal = !empty($option['UF_IS_RAL']);
