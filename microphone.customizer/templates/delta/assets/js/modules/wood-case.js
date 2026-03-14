@@ -25,11 +25,9 @@ const WoodCase = {
         const caseFileInput = document.getElementById('case-file-input');
         const caseClearBtn = document.getElementById('case-clear-btn');
         
-        if (caseUploadBtn && caseFileInput) {
-            caseUploadBtn.addEventListener('click', () => {
-                caseFileInput.click();
-            });
-        }
+        // Убираем обработчик клика на кнопку, чтобы избежать множественных вызовов
+        // Клик обрабатывается через inline onclick в HTML
+        
         if (caseFileInput) {
             caseFileInput.addEventListener('change', (e) => this.handleUpload(e));
         }
@@ -203,6 +201,7 @@ const WoodCase = {
                 stateManager.set('case.customLogo', this.userImgSrc);
                 
                 if (woodCaseLoader) woodCaseLoader.style.display = 'none';
+                this.showNotification('Изображение для футляра успешно загружено', 'success');
             };
 
             if (this.isSvg) {
@@ -485,6 +484,55 @@ const WoodCase = {
                 <text class="r-text" x="${(lr1.x+lr2.x)/2-10}" y="${(lr1.y+lr2.y)/2}" text-anchor="end" dominant-baseline="middle">${Math.round(cH/pxPerMM)} мм</text>
             `;
         }
+    },
+
+    showNotification(message, type = 'info') {
+        // Create notification element if it doesn't exist
+        let notification = document.querySelector('.notification');
+        if (!notification) {
+            notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 12px 20px;
+                border-radius: 8px;
+                font-size: 14px;
+                font-weight: 500;
+                z-index: 10000;
+                opacity: 0;
+                transform: translateX(100%);
+                transition: all 0.3s ease;
+            `;
+            document.body.appendChild(notification);
+        }
+
+        // Set message and styling based on type
+        notification.textContent = message;
+        notification.className = `notification notification--${type}`;
+        
+        const colors = {
+            success: { bg: '#10b981', text: '#ffffff' },
+            error: { bg: '#ef4444', text: '#ffffff' },
+            info: { bg: '#3b82f6', text: '#ffffff' }
+        };
+        
+        const color = colors[type] || colors.info;
+        notification.style.backgroundColor = color.bg;
+        notification.style.color = color.text;
+
+        // Show notification
+        setTimeout(() => {
+            notification.style.opacity = '1';
+            notification.style.transform = 'translateX(0)';
+        }, 10);
+
+        // Hide after 3 seconds
+        setTimeout(() => {
+            notification.style.opacity = '0';
+            notification.style.transform = 'translateX(100%)';
+        }, 3000);
     },
 
     showRulers() {
