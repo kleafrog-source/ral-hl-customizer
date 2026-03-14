@@ -130,6 +130,11 @@ function applyOptionFromElement(element) {
     updateSVG();
     updateLogoSVG();
     
+    // Update section layers for shockmount to handle color changes
+    if (section === 'shockmount' || section === 'shockmountPins') {
+        updateSectionLayers(section, stateManager.get()[section]);
+    }
+    
     // Update section layers for logo to handle original/gradient modes
     if (section === 'logo') {
         updateSectionLayers('logo', stateManager.get().logo);

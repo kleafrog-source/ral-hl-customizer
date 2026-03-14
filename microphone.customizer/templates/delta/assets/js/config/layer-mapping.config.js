@@ -33,8 +33,8 @@ export const SECTION_LAYER_MAP = {
   shockmount: {
     'standard': {
       originals: ['layer9', 'layer10'],
-      colorizedGroup: null,
-      monoGroup: null
+      colorizedGroup: 'shockmount-frame-colorized',
+      monoGroup: 'shockmount-frame-mono'
     }
   },
   shockmountPins: {

@@ -81,7 +81,7 @@ export function initHLDataManager() {
         stateManager.set('shockmount.available', available);
         stateManager.set('shockmount.included', included);
         stateManager.set('shockmount.enabled', enabled);
-        stateManager.set('shockmount.togglePrice', toggleData.shockmount.price || 0);
+        stateManager.set('shockmount.togglePrice', shockmountPrice || 0);
     }
 
     loadCustomPrices(data.prices || {});
