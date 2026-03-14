@@ -76,10 +76,8 @@ export function toggleCustomLogo() {
 }
 
 export function init() {
-    const uploadButton = document.querySelector('#custom-logo-upload');
-    if (uploadButton) {
-        eventRegistry.add(uploadButton, 'click', uploadCustomLogo);
-    }
+    // Убираем обработчик клика на всю область, чтобы избежать множественных вызовов
+    // Клик обрабатывается через inline onclick в HTML
 
     const input = document.getElementById('logo-file-input');
     if (input) {
@@ -148,7 +146,14 @@ function handleLogoFileUpload(file) {
     // Process file
     const reader = new FileReader();
     reader.onload = event => {
+        // Устанавливаем state для кастомного логотипа
+        stateManager.set('logo.useCustom', true);
         stateManager.set('logo.customLogoData', event.target.result);
+        
+        // Показываем кнопку удаления
+        const removeBtn = document.getElementById('custom-logo-remove');
+        if (removeBtn) removeBtn.style.display = '';
+        
         updateLogoItemsLockState();
         updateLogoSVG();
         showNotification('Логотип успешно загружен', 'success');
@@ -301,28 +306,12 @@ export function updateLogoSVG() {
 }
 
 export function updateLogoItemsLockState() {
-    const state = stateManager.get();
-    const hasCustomLogo = state.logo.useCustom;
-    const logoItems = document.querySelectorAll('#submenu-logo .variant-item[data-variant]:not([data-variant="custom"])');
-    const logobgItems = document.querySelectorAll('#submenu-logobg .variant-item');
+    // Упрощаем логику - убираем .locked с variant-item
+    // Управление происходит через .disabled на самих секциях
+    // CSS будет блокировать клики через pointer-events: none на .disabled секциях
     
-    // Lock/unlock logo items based on custom logo state
-    logoItems.forEach(item => {
-        if (hasCustomLogo) {
-            item.classList.add('locked');
-        } else {
-            item.classList.remove('locked');
-        }
-    });
-    
-    // Lock/unlock logo background items based on custom logo state
-    logobgItems.forEach(item => {
-        if (hasCustomLogo) {
-            item.classList.add('locked');
-        } else {
-            item.classList.remove('locked');
-        }
-    });
+    // Эта функция оставлена для совместимости, но больше не добавляет .locked
+    // Блокировка происходит на уровне секций через CSS
 }
 
 export function uploadCustomLogo() {
@@ -369,11 +358,12 @@ export function uploadCustomLogo() {
 }
 
 export function clearCustomLogo() {
-    // Удаляем кастомный логотип из StateManager
+    // Сбрасываем state кастомного логотипа
+    stateManager.set('logo.useCustom', false);
     stateManager.set('logo.customLogoData', null);
     
     // Скрываем кнопку удаления
-    const removeBtn = document.querySelector('.remove-logo-btn');
+    const removeBtn = document.getElementById('custom-logo-remove');
     if (removeBtn) {
         removeBtn.style.display = 'none';
     }

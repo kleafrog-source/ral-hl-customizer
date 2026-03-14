@@ -354,6 +354,14 @@ body {
     filter: grayscale(0.4);
 }
 
+/* Блокировка кликов для logo и logobg секций при кастомном логотипе */
+.menu-item[data-section="logo"].disabled,
+.menu-item[data-section="logobg"].disabled {
+    opacity: 0.5;
+    pointer-events: none;
+    filter: grayscale(0.4);
+}
+
 .item-icon {
  width: 40px;
  height: 40px;

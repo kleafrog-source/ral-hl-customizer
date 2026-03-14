@@ -25,11 +25,9 @@ const WoodCase = {
         const caseFileInput = document.getElementById('case-file-input');
         const caseClearBtn = document.getElementById('case-clear-btn');
         
-        if (caseUploadBtn && caseFileInput) {
-            caseUploadBtn.addEventListener('click', () => {
-                caseFileInput.click();
-            });
-        }
+        // Убираем обработчик клика на кнопку, чтобы избежать множественных вызовов
+        // Клик обрабатывается через inline onclick в HTML
+        
         if (caseFileInput) {
             caseFileInput.addEventListener('change', (e) => this.handleUpload(e));
         }
@@ -203,6 +201,7 @@ const WoodCase = {
                 stateManager.set('case.customLogo', this.userImgSrc);
                 
                 if (woodCaseLoader) woodCaseLoader.style.display = 'none';
+                this.showNotification('Изображение для футляра успешно загружено', 'success');
             };
 
             if (this.isSvg) {

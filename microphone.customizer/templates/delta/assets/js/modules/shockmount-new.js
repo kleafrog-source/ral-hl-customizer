@@ -36,10 +36,11 @@ export function updateShockmountVisibility() {
     }
 
     if (!available) {
-        if (shockmountMenuItem) shockmountMenuItem.style.display = 'none';
-        if (shockmountPinsMenuItem) shockmountPinsMenuItem.style.display = 'none';
-        if (shockmountSubmenu) shockmountSubmenu.style.display = 'none';
-        if (shockmountPinsSubmenu) shockmountPinsSubmenu.style.display = 'none';
+        // Для моделей с UF_SHOCKMOUNT_ENABLED=1: подвес включен в комплект, всегда показываем секции
+        if (shockmountMenuItem) shockmountMenuItem.style.display = 'flex';
+        if (shockmountPinsMenuItem) shockmountPinsMenuItem.style.display = 'flex';
+        if (shockmountSubmenu) shockmountSubmenu.style.display = 'block';
+        if (shockmountPinsSubmenu) shockmountPinsSubmenu.style.display = 'block';
         return;
     }
 
@@ -69,7 +70,7 @@ export function updateShockmountLayers(currentState = null) {
         layer.style.display = 'none';
     });
 
-    if (state.shockmount?.enabled && state.shockmount?.available) {
+    if (state.shockmount?.enabled) {
         const targetLayer = shockmountSVG.querySelector(`#${targetLayerId}`);
         if (targetLayer) targetLayer.style.display = 'inline';
     }

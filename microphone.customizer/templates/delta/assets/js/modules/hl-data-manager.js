@@ -67,13 +67,16 @@ export function initHLDataManager() {
     // Initialize toggles
     const toggleData = data.liquidToggles || {};
     if (toggleData.shockmount) {
-        // Shockmount behavior per model:
-        // - 023-the-bomblet: toggle available, user can enable/disable
-        // - other models: toggle hidden, always enabled
-        const isBomblet = data.currentModelCode === '023-the-bomblet';
-        const available = isBomblet;
-        const included = false;
-        const enabled = isBomblet ? false : true; // Non-bomblet models always have shockmount enabled
+        // Shockmount behavior based on HL data:
+        const currentModel = data.modelsByCode?.[data.currentModelCode] || null;
+        const shockmountEnabled = !!currentModel?.SHOCKMOUNT_ENABLED;
+        const shockmountPrice = currentModel?.SHOCKMOUNT_PRICE || 0;
+        
+        // Если UF_SHOCKMOUNT_ENABLED = 1, то подвес включен в комплект (toggle скрыт, всегда включен)
+        // Если UF_SHOCKMOUNT_ENABLED = 0, то подвес платный (toggle виден, пользователь решает)
+        const available = !shockmountEnabled; // Toggle доступен только если подвес не включен в комплект
+        const included = shockmountEnabled && shockmountPrice === 0;
+        const enabled = shockmountEnabled; // Если включен в комплект, то всегда включен
 
         stateManager.set('shockmount.available', available);
         stateManager.set('shockmount.included', included);
