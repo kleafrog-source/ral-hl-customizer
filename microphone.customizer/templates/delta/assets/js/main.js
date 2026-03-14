@@ -8,6 +8,7 @@ import { loadSVG, updateSVG } from './engine.js';
 import { initializeWoodCase } from './modules/wood-case.js';
 import { init as initLogo } from './modules/logo.js';
 import { initCameraEffect } from './modules/camera-effect.js';
+import { applyModelDefaults, isDefaultModel } from './modules/model-defaults.js';
 import { stateManager } from './core/state.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -20,7 +21,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     await loadSVG();
 
     initHLDataManager();
-    initCameraEffect(stateManager.get('currentModelCode') || window.CUSTOMIZER_DATA?.currentModelCode);
+    
+    // Применяем значения по умолчанию для текущей модели
+    const currentModelCode = stateManager.get('currentModelCode') || window.CUSTOMIZER_DATA?.currentModelCode;
+    if (currentModelCode) {
+        applyModelDefaults(currentModelCode);
+    }
+    
+    initCameraEffect(currentModelCode);
     initEventListeners();
     initLogo();
     initializeWoodCase();

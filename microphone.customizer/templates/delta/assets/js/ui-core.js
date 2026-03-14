@@ -1,7 +1,12 @@
+// UI Core (delta)
+
 import { stateManager } from './core/state.js';
 import { updateSVG } from './engine.js';
-import { updateLogoSVG, updateMalfaLogoOptionsVisibility } from './modules/logo.js';
-import { updateShockmountVisibility, updateShockmountLayers, updateShockmountPreview, updateShockmountPinsPreview } from './modules/shockmount-new.js';
+import { updateSectionLayers } from './modules/appearance-new.js';
+import { updateLogoSVG } from './modules/logo.js';
+import { updateShockmountLayers, updateShockmountVisibility, updateShockmountPreview, updateShockmountPinsPreview } from './modules/shockmount-new.js';
+import { syncToggles } from './modules/toggles.js';
+import { applyModelDefaults } from './modules/model-defaults.js';
 import { calculateTotal, getBreakdown, formatPrice } from './modules/price-calculator.js';
 import { initHLDataManager } from './modules/hl-data-manager.js';
 import { updateSectionLayers } from './modules/appearance-new.js';
@@ -191,6 +196,10 @@ export function initEventListeners() {
 
             initHLDataManager();
             syncToggles();
+            
+            // Применяем значения по умолчанию для новой модели
+            applyModelDefaults(modelCode);
+            
             updateShockmountVisibility();
             updateShockmountLayers(stateManager.get());
             updateShockmountPreview();

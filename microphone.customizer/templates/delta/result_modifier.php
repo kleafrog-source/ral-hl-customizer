@@ -65,7 +65,7 @@ if ($cache->initCache($cacheTime, $cacheId, $cacheDir)) {
     $modelRows = $getHlData(
         10,
         [],
-        ['ID', 'UF_CODE', 'UF_NAME', 'UF_BASE_PRICE', 'UF_DESCRIPTION', 'UF_SHOCKMOUNT_ENABLED', 'UF_SHOCKMOUNT_PRICE', 'UF_SORT', 'UF_MODEL_SERIES'],
+        ['ID', 'UF_CODE', 'UF_NAME', 'UF_BASE_PRICE', 'UF_DESCRIPTION', 'UF_SHOCKMOUNT_ENABLED', 'UF_SHOCKMOUNT_PRICE', 'UF_SHOCKMOUNT_TOGGLE', 'UF_SHOCKMOUNT_VISIBLE', 'UF_IS_DEFAULT_MODEL', 'UF_DEFAULT_SPHERES', 'UF_DEFAULT_BODY', 'UF_DEFAULT_LOGO', 'UF_DEFAULT_LOGOBG', 'UF_DEFAULT_SHOCKMOUNT', 'UF_DEFAULT_SHOCKMOUNT_PINS', 'UF_SORT', 'UF_MODEL_SERIES'],
         ['UF_SORT' => 'ASC']
     );
     $models = [];
@@ -79,6 +79,17 @@ if ($cache->initCache($cacheTime, $cacheId, $cacheDir)) {
             'DESCRIPTION' => $model['UF_DESCRIPTION'],
             'SHOCKMOUNT_ENABLED' => (int)$model['UF_SHOCKMOUNT_ENABLED'],
             'SHOCKMOUNT_PRICE' => (int)$model['UF_SHOCKMOUNT_PRICE'],
+            'SHOCKMOUNT_TOGGLE' => (int)$model['UF_SHOCKMOUNT_TOGGLE'],
+            'SHOCKMOUNT_VISIBLE' => (int)$model['UF_SHOCKMOUNT_VISIBLE'],
+            'IS_DEFAULT_MODEL' => (int)$model['UF_IS_DEFAULT_MODEL'],
+            'DEFAULTS' => [
+                'SPHERES' => (string)$model['UF_DEFAULT_SPHERES'],
+                'BODY' => (string)$model['UF_DEFAULT_BODY'],
+                'LOGO' => (string)$model['UF_DEFAULT_LOGO'],
+                'LOGOBG' => (string)$model['UF_DEFAULT_LOGOBG'],
+                'SHOCKMOUNT' => (string)$model['UF_DEFAULT_SHOCKMOUNT'],
+                'SHOCKMOUNT_PINS' => (string)$model['UF_DEFAULT_SHOCKMOUNT_PINS'],
+            ],
             'MODEL_SERIES' => $model['UF_MODEL_SERIES'],
             'SORT' => (int)$model['UF_SORT'],
         ];
@@ -160,7 +171,22 @@ if ($cache->initCache($cacheTime, $cacheId, $cacheDir)) {
     $arResult['PRICES'] = $prices;
 
     // Current model
-    $currentModelCode = $arParams['MODEL_CODE'] ?? '023-the-bomblet';
+    $currentModelCode = $arParams['MODEL_CODE'] ?? null;
+    
+    // Если модель не передана, ищем модель с флагом IS_DEFAULT_MODEL = 1
+    if (!$currentModelCode) {
+        foreach ($modelsByCode as $code => $model) {
+            if ($model['IS_DEFAULT_MODEL'] === 1) {
+                $currentModelCode = $code;
+                break;
+            }
+        }
+        // Fallback если модель по умолчанию не найдена
+        if (!$currentModelCode) {
+            $currentModelCode = '023-the-bomblet';
+        }
+    }
+    
     $currentModel = $modelsByCode[$currentModelCode] ?? null;
     $currentModelId = $currentModel['ID'] ?? null;
 
