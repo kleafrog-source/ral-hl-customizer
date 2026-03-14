@@ -1,6 +1,6 @@
 
-#case-preview-container{z-index:1}
-#shockmount-preview-container{
+.case-preview-container{z-index:1}
+.shockmount-preview-container{
   z-index:3;
 }
 .layer {

@@ -23,6 +23,7 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
      data-sessid="<?= bitrix_sessid() ?>">
 
     <div id="start-screen" class="hidden">
+        <!-- эта функция отвечает за стартовый экран. false в конце означает, что компонент не будет кэшироваться . Если поставить true то компонент будет кэшироваться -->
         <?$APPLICATION->IncludeComponent("bitrix:main.include", "", array("AREA_FILE_SHOW" => "file", "PATH" => $templateFolder."/start-screen.php"), false);?>
     </div>
 
@@ -438,7 +439,7 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                         
                         <div class="submenu-content">
                             <div class="section-description">
-                                <p>Выберите опцию для <?= htmlspecialchars($sectionTitle) ?></p>
+                                <p>Измените <?= htmlspecialchars($sectionTitle) ?></p>
                             </div>
 
                             <?php if ($sectionKey === 'logo'): ?>
@@ -695,33 +696,6 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                                                 <span class="option-name"><?= htmlspecialchars($option['UF_VARIANT_NAME'] ?? '') ?></span>
                                             </button>
                                         <?php endforeach; ?>
-                                        
-                                        <?php
-                                        // Добавляем бесплатные RAL цвета из палитры
-                                        list($freeRalOptions, $paidRalOptions) = buildRalPaletteData(
-                                            $sectionOptions,
-                                            $arResult['RAL_COLORS'] ?? [],
-                                            $pricesData,
-                                            $sectionKey,
-                                            $currentModelCode
-                                        );
-                                        if (!empty($freeRalOptions)):
-                                            foreach ($freeRalOptions as $option): ?>
-                                                <?php
-                                                $optionPrice = 0;
-                                                $hex = $option['RAL_DATA']['UF_HEX'] ?? '';
-                                                $ralCode = $option['RAL_DATA']['UF_CODE'] ?? '';
-                                                $ralName = $option['RAL_DATA']['UF_NAME'] ?? 'RAL ' . $ralCode;
-                                                ?>
-                                                <button
-                                                    class="option-button variant-item"
-                                                    data-ral="<?= htmlspecialchars($ralCode) ?>"
-                                                    <?= buildOptionDataAttrs($sectionKey, $option, $optionPrice, false) ?>
-                                                >
-                                                    <span class="option-name"><?= htmlspecialchars($ralName) ?></span>
-                                                </button>
-                                            <?php endforeach;
-                                        endif; ?>
                                     </div>
                                 <?php endif; ?>
 
@@ -771,6 +745,28 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                                                 </div>
                                             </div>
                                         </div>
+                                    </div>
+                                <?php endif; ?>
+
+                                <?php if (!empty($freeRalOptions)): ?>
+                                    <div class="option-group">
+                                        <h4>Бесплатные RAL цвета</h4>
+                                        <?php foreach ($freeRalOptions as $option): ?>
+                                            <?php
+                                            $optionPrice = 0;
+                                            $hex = $option['RAL_DATA']['UF_HEX'] ?? '';
+                                            $rgb = $option['RAL_DATA']['UF_RGB_CODE'] ?? '';
+                                            $ralCode = $option['RAL_DATA']['UF_CODE'] ?? '';
+                                            $ralName = $option['RAL_DATA']['UF_NAME'] ?? 'RAL ' . $ralCode;
+                                            ?>
+                                            <button
+                                                class="option-button variant-item"
+                                                data-ral="<?= htmlspecialchars($ralCode) ?>"
+                                                <?= buildOptionDataAttrs($sectionKey, $option, $optionPrice, false) ?>
+                                            >
+                                                <span class="option-name"><?= htmlspecialchars($ralName) ?></span>
+                                            </button>
+                                        <?php endforeach; ?>
                                     </div>
                                 <?php endif; ?>
 

@@ -187,9 +187,9 @@ if ($cache->initCache($cacheTime, $cacheId, $cacheDir)) {
     $currentSeries = $currentModel['MODEL_SERIES'] ?? '';
     if (!empty($currentSeries)) {
         foreach ($currentModelOptions as $sectionCode => $sectionOptions) {
-            // Temporarily disable series filtering for logo section to show all variants
-            if ($sectionCode === 'logo') {
-                // For logo section, show all options (including MALFA)
+            // Temporarily disable series filtering for logo and logobg sections to show all variants
+            if ($sectionCode === 'logo' || $sectionCode === 'logobg') {
+                // For logo and logobg sections, show all options (including MALFA and free RAL)
                 $currentModelOptions[$sectionCode] = array_values($sectionOptions);
             } else {
                 // For other sections, apply strict filtering
