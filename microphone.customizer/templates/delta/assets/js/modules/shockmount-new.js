@@ -155,3 +155,29 @@ export function updateShockmountPinsPreview() {
         updateShockmountColor(filterId, pinsState.colorValue);
     }
 }
+
+export function toggleShockmount() {
+    const state = stateManager.get();
+    const s = state.shockmount || {};
+
+    if (!s.available) {
+        console.log('[Shockmount] Not available for current model');
+        return;
+    }
+
+    if (!s.canToggle) {
+        console.log('[Shockmount] Toggle is disabled for current model');
+        return;
+    }
+
+    const nextEnabled = !s.enabled;
+
+    stateManager.batch(batch => {
+        batch('shockmount.enabled', nextEnabled);
+    });
+
+    updateShockmountVisibility();
+    updateShockmountLayers(stateManager.get());
+    updateShockmountPreview();
+    updateShockmountPinsPreview();
+}

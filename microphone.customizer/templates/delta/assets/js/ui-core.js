@@ -4,7 +4,7 @@ import { stateManager } from './core/state.js';
 import { updateSVG } from './engine.js';
 import { updateSectionLayers } from './modules/appearance-new.js';
 import { updateLogoSVG, updateMalfaLogoOptionsVisibility } from './modules/logo.js';
-import { updateShockmountLayers, updateShockmountVisibility, updateShockmountPreview, updateShockmountPinsPreview } from './modules/shockmount-new.js';
+import { updateShockmountLayers, updateShockmountVisibility, updateShockmountPreview, updateShockmountPinsPreview, toggleShockmount } from './modules/shockmount-new.js';
 import { syncToggles } from './modules/toggles.js';
 import { applyModelDefaults } from './modules/model-defaults.js';
 import { calculateTotal, getBreakdown, formatPrice, debugPrices } from './modules/price-calculator.js';
@@ -46,6 +46,38 @@ export function updateUI() {
     if (shockmountRow) {
         const showShockmount = !!state.shockmount?.enabled && !state.shockmount?.included && !!state.shockmount?.available;
         shockmountRow.style.display = showShockmount ? 'flex' : 'none';
+    }
+
+    // Обновление строки Shockmount в ценах на основе HL-полей
+    const shockRow = document.getElementById('shockmount-price-row-container');
+    const shockValue = document.getElementById('shockmount-price-row');
+
+    if (shockRow && shockValue) {
+        const s = state.shockmount || {};
+        const price = s.price || 0;
+
+        // Показываем строку только если:
+        //  - подвес доступен (available),
+        //  - есть возможность переключать (canToggle) ИЛИ подвес не включён в комплект (included == false),
+        //  - цена > 0.
+        const showRow = s.available && (s.canToggle || !s.included) && price > 0;
+
+        shockRow.style.display = showRow ? 'flex' : 'none';
+        shockValue.textContent = showRow ? price.toLocaleString('ru-RU') : '0';
+    }
+
+    // Обновление видимости меню-пунктов shockmount/shockmountPins
+    const shockMenu = document.getElementById('shockmount-section');
+    if (shockMenu) {
+        const s = state.shockmount || {};
+        shockMenu.style.display = s.available ? '' : 'none';
+    }
+
+    const shockPinsMenu = document.getElementById('shockmountPins-section');
+    if (shockPinsMenu) {
+        const s = state.shockmount || {};
+        // Pins показываем только если подвес вообще доступен
+        shockPinsMenu.style.display = s.available ? '' : 'none';
     }
 
     const setColorDisplay = (id, color) => {
@@ -196,6 +228,26 @@ export function initEventListeners() {
             window.CUSTOMIZER_DATA.currentModelCode = modelCode;
             window.CUSTOMIZER_DATA.currentModelId = window.CUSTOMIZER_DATA.modelsByCode[modelCode].ID;
             window.CUSTOMIZER_DATA.currentModelOptions = window.CUSTOMIZER_DATA.options[window.CUSTOMIZER_DATA.currentModelId] || window.CUSTOMIZER_DATA.options[0] || {};
+
+            // Инициализация state для shockmount на основе HL-полей модели
+            const model = window.CUSTOMIZER_DATA.modelsByCode[modelCode];
+            
+            // Детальное логирование HL-значений для модели
+            console.group(`[Model] ${modelCode} - HL Values`);
+            console.log('SHOCKMOUNT_ENABLED:', model.SHOCKMOUNT_ENABLED, '=>', model.SHOCKMOUNT_ENABLED === 1 ? 'включен в комплект' : 'не включен в комплект');
+            console.log('SHOCKMOUNT_TOGGLE:', model.SHOCKMOUNT_TOGGLE, '=>', model.SHOCKMOUNT_TOGGLE === 1 ? 'можно переключать' : 'нельзя переключать');
+            console.log('SHOCKMOUNT_VISIBLE:', model.SHOCKMOUNT_VISIBLE, '=>', model.SHOCKMOUNT_VISIBLE === 1 ? 'доступен в UI' : 'скрыт в UI');
+            console.log('SHOCKMOUNT_PRICE:', model.SHOCKMOUNT_PRICE, '=>', model.SHOCKMOUNT_PRICE > 0 ? `+${model.SHOCKMOUNT_PRICE}₽` : 'бесплатно');
+            console.log('DEFAULTS:', model.DEFAULTS);
+            console.groupEnd();
+            
+            const batch = stateManager.startBatch();
+            batch('shockmount.available', model.SHOCKMOUNT_VISIBLE === 1);
+            batch('shockmount.canToggle', model.SHOCKMOUNT_TOGGLE === 1);
+            batch('shockmount.price', model.SHOCKMOUNT_PRICE || 0);
+            batch('shockmount.included', model.SHOCKMOUNT_ENABLED === 1 && (model.SHOCKMOUNT_PRICE || 0) === 0);
+            batch('shockmount.enabled', model.SHOCKMOUNT_ENABLED === 1);
+            stateManager.endBatch();
 
             initHLDataManager();
             syncToggles();
