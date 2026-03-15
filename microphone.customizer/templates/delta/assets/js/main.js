@@ -11,10 +11,26 @@ import { initCameraEffect } from './modules/camera-effect.js';
 import { applyModelDefaults, isDefaultModel } from './modules/model-defaults.js';
 import { stateManager } from './core/state.js';
 import { initDebugHelper } from './debug/ui-debug-helper.js';
+import { initValidation } from './services/validation.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
     const appRoot = document.getElementById('customizer-app-root');
     if (!appRoot) return;
+
+    const startScreen = document.getElementById('start-screen');
+    const hasSeenStart = sessionStorage.getItem('customizer_start_seen');
+    if (startScreen && !hasSeenStart) {
+        startScreen.classList.remove('hidden');
+    }
+
+    const startCta = document.querySelector('.start-screen-hero-cta');
+    if (startCta && startScreen) {
+        startCta.addEventListener('click', (e) => {
+            e.preventDefault();
+            startScreen.classList.add('hidden');
+            sessionStorage.setItem('customizer_start_seen', 'true');
+        });
+    }
 
     stateManager.set('ajaxPath', appRoot.dataset.ajaxPath || '');
     stateManager.set('sessid', appRoot.dataset.sessid || '');
@@ -62,4 +78,5 @@ document.addEventListener('DOMContentLoaded', async () => {
     updateSVG();
     updateUI();
     initDebugHelper();
+    initValidation();
 });

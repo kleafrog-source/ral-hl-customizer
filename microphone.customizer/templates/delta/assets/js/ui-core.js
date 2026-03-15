@@ -10,6 +10,8 @@ import { applyModelDefaults } from './modules/model-defaults.js';
 import { calculateTotal, getBreakdown, formatPrice, debugPrices } from './modules/price-calculator.js';
 import { initHLDataManager } from './modules/hl-data-manager.js';
 import { switchLayer, updateMicVariant } from './modules/camera-effect.js';
+import { sendOrder } from './services/report.js';
+import { validateForm } from './services/validation.js';
 
 export function updateUI() {
     // Update MALFA logo options visibility based on current model
@@ -111,6 +113,24 @@ export function updateUI() {
     setSubtitle('case-subtitle', getLabel(state.case));
     setSubtitle('shockmount-subtitle', getLabel(state.shockmount));
     setSubtitle('shockmountPins-subtitle', getLabel(state.shockmountPins));
+
+    // Update selected states and accessibility for swatches and option buttons
+    document.querySelectorAll('.variant-item, .swatch, .option-button').forEach(el => {
+        const section = el.dataset.optionPart;
+        if (!section) return;
+
+        const currentVariant = state[section]?.variant;
+        const isSelected = el.dataset.variantCode === currentVariant || el.dataset.variant === currentVariant;
+
+        el.classList.toggle('selected', isSelected);
+        el.setAttribute('aria-checked', isSelected ? 'true' : 'false');
+
+        if (el.classList.contains('swatch')) {
+            el.setAttribute('role', 'radio');
+            const ralName = el.dataset.ralName || el.dataset.ral || '';
+            el.setAttribute('aria-label', `Color ${ralName}`);
+        }
+    });
 }
 
 function applyOptionFromElement(element) {
@@ -195,6 +215,7 @@ export function initEventListeners() {
     initControlAnimations();
     initPriceSectionToggle();
     initOrderModal();
+    initHelpButton();
 
     document.querySelectorAll('.menu-item[data-section]').forEach(item => {
         item.addEventListener('click', () => {
@@ -409,9 +430,32 @@ function initOrderModal() {
 
     const form = document.getElementById('order-form');
     if (form) {
-        form.addEventListener('submit', (e) => {
-            // TODO: confirm field mapping with CRM
-            serializeConfig();
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            if (!validateForm()) {
+                return;
+            }
+
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Отправка...';
+
+            try {
+                const formData = new FormData(form);
+                const clientData = Object.fromEntries(formData.entries());
+
+                await sendOrder(clientData);
+                alert('Заказ успешно отправлен!');
+                close();
+                form.reset();
+            } catch (error) {
+                alert('Ошибка при отправке заказа: ' + error.message);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalText;
+            }
         });
     }
 }
@@ -465,7 +509,7 @@ function applySidebarState(state, animate = true) {
     const sidebar = document.getElementById('customization-sidebar');
     if (!sidebar) return;
 
-    const allowedStates = ['compact', 'normal', 'expanded'];
+    const allowedStates = ['compact', 'normal'];
     const nextState = allowedStates.includes(state) ? state : 'normal';
     sidebar.dataset.sidebarState = nextState;
     localStorage.setItem('sidebarState', nextState);
@@ -568,7 +612,7 @@ function initFullscreenControl() {
 }
 
 function initControlAnimations() {
-    const buttons = document.querySelectorAll('#fullscreen-toggle, #theme-toggle');
+    const buttons = document.querySelectorAll('#fullscreen-toggle, #theme-toggle, #sidebar-help-btn');
     if (!buttons.length || !window.anime) return;
 
     buttons.forEach(btn => {
@@ -596,5 +640,15 @@ function initControlAnimations() {
         btn.addEventListener('focus', animateIn);
         btn.addEventListener('mouseleave', animateOut);
         btn.addEventListener('blur', animateOut);
+    });
+}
+
+function initHelpButton() {
+    const helpBtn = document.getElementById('sidebar-help-btn');
+    const startScreen = document.getElementById('start-screen');
+    if (!helpBtn || !startScreen) return;
+
+    helpBtn.addEventListener('click', () => {
+        startScreen.classList.remove('hidden');
     });
 }
