@@ -12,7 +12,6 @@ Asset::getInstance()->addCss($templateFolder . "/assets/css/woodcase.css");
 Asset::getInstance()->addCss($templateFolder . "/assets/css/forms.css");
 Asset::getInstance()->addCss($templateFolder . "/assets/css/camera-effect.css");
 Asset::getInstance()->addCss($templateFolder . "/assets/css/start-screen.css");
-Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/interactjs@1.10.19/dist/interact.min.js");
 Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js");
 ?>
 
@@ -576,133 +575,117 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
             
         <div class="modal-overlay" id="order-modal">
             <div class="modal-container">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-                <h3 style="font-size:20px; font-weight:700;">Ваша конфигурация</h3>
-                <button style="background:none; border:none; font-size:24px; cursor:pointer; color:var(--text-secondary);">×</button>
+                <div class="modal-header">
+                    <h3 class="modal-title">Ваша конфигурация</h3>
+                    <button class="modal-close-btn">×</button>
+                </div>
+                <form id="order-form" novalidate>
+                    <div class="form-group">
+                        <label class="form-label">Фамилия *</label>
+                        <input type="text" class="form-input" name="lastname" id="input-lastname" required>
+                        <div class="error-message">Минимум 2 символа</div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Имя *</label>
+                        <input type="text" class="form-input" name="name" id="input-name" required>
+                        <div class="error-message">Минимум 2 символа</div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Телефон *</label>
+                        <input type="tel" class="form-input" name="phone" id="input-phone" required>
+                        <div class="error-message">Некорректный номер телефона</div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Email *</label>
+                        <input type="email" class="form-input" name="email" id="input-email" required>
+                        <div class="error-message">Некорректный email адрес</div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Страна</label>
+                        <input type="text" class="form-input" name="country" id="input-country">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Город</label>
+                        <input type="text" class="form-input" name="city" id="input-city">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Комментарий</label>
+                        <textarea class="form-textarea" name="comment" rows="3"></textarea>
+                    </div>
+                    <button type="submit" class="order-button">Отправить конфигурацию</button>
+                </form>
             </div>
-            <form id="order-form" novalidate>
-                <div class="form-group">
-                    <label class="form-label">Фамилия *</label>
-                    <input type="text" class="form-input" name="lastname" id="input-lastname" required>
-                    <div class="error-message">Минимум 2 символа</div>
-                </div>
-                 <div class="form-group">
-                    <label class="form-label">Имя *</label>
-                    <input type="text" class="form-input" name="name" id="input-name" required>
-                    <div class="error-message">Минимум 2 символа</div>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Телефон *</label>
-                    <input type="tel" class="form-input" name="phone" id="input-phone" required>
-                    <div class="error-message">Некорректный номер телефона</div>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Email *</label>
-                    <input type="email" class="form-input" name="email" id="input-email" required>
-                    <div class="error-message">Некорректный email адрес</div>
-                </div>
-             <div class="form-group">
-                    <label class="form-label">Страна</label>
-                    <input type="text" class="form-input" name="country" id="input-country">
-                    <div class="error-message">Минимум 2 символа</div>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Город</label>
-                    <input type="text" class="form-input" name="city" id="input-city">
-                    <div class="error-message">Минимум 2 символа</div>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Комментарий</label>
-                    <textarea class="form-textarea" name="comment" rows="3"></textarea>
-                </div>
-                <button type="submit" class="order-button">Отправить конфигурацию</button>
-            </form>
         </div>
-                <!-- HIDDEN STORAGE -->
-        <div id="ral-storage"></div>
-        <div id="variant-storage"></div>
-    </div>
 
-    <!-- Report Modal -->
-    <div class="modal-overlay" id="report-modal">
-        <div class="modal-container report-container">
-            <div class="report-header">
-                <h2 style="font-size:24px; font-weight:800;">Конфигурация сохранена</h2>
-                <button style="background:none; border:none; font-size:24px; cursor:pointer; color:var(--text-secondary);">×</button>
-            </div>
-            <div class="report-body">
-                <div class="report-visual" id="report-visual-container">
-                    <!-- SVG Clone will be inserted here -->
+        <!-- Report Modal -->
+        <div class="modal-overlay" id="report-modal">
+            <div class="modal-container report-container">
+                <div class="report-header">
+                    <h2 class="report-title">Конфигурация сохранена</h2>
+                    <button class="modal-close-btn">×</button>
                 </div>
-                <div class="report-details">
-                    <div class="report-section">
-                        <h3>Данные клиента</h3>
-                        <div class="report-data-row">
-                            <span class="report-data-label">Фамилия:</span>
-                            <span class="report-data-value" id="report-lastname"></span>
-                        </div>
-                          <div class="report-data-row">
-                            <span class="report-data-label">Имя:</span>
-                            <span class="report-data-value" id="report-name"></span>
-                        </div>
-                        <div class="report-data-row">
-                            <span class="report-data-label">Телефон:</span>
-                            <span class="report-data-value" id="report-phone"></span>
-                        </div>
-                        <div class="report-data-row">
-                            <span class="report-data-label">Email:</span>
-                            <span class="report-data-value" id="report-email"></span>
-                        </div>
-                        <div class="report-data-row">
-                            <span class="report-data-label">Комментарий:</span>
-                            <span class="report-data-value" id="report-comment" style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"></span>
-                        </div>
+                <div class="report-body">
+                    <div class="report-visual" id="report-visual-container">
+                        <!-- SVG Clone will be inserted here -->
                     </div>
-                    
-                    <div class="report-section">
-                        <h3>Конфигурация</h3>
-                        <div class="report-data-row">
-                            <span class="report-data-label">Модель:</span>
-                            <span class="report-data-value" id="report-model"></span>
+                    <div class="report-details">
+                        <div class="report-section">
+                            <h3>Данные клиента</h3>
+                            <div class="report-data-row">
+                                <span class="report-data-label">Фамилия:</span>
+                                <span class="report-data-value" id="report-lastname"></span>
+                            </div>
+                            <div class="report-data-row">
+                                <span class="report-data-label">Имя:</span>
+                                <span class="report-data-value" id="report-name"></span>
+                            </div>
+                            <div class="report-data-row">
+                                <span class="report-data-label">Телефон:</span>
+                                <span class="report-data-value" id="report-phone"></span>
+                            </div>
+                            <div class="report-data-row">
+                                <span class="report-data-label">Email:</span>
+                                <span class="report-data-value" id="report-email"></span>
+                            </div>
                         </div>
-                        <div class="report-data-row">
-                            <span class="report-data-label">Силуэт:</span>
-                            <span class="report-data-value" id="report-spheres"></span>
-                        </div>
-                        <div class="report-data-row">
-                            <span class="report-data-label">Корпус:</span>
-                            <span class="report-data-value" id="report-body"></span>
-                        </div>
-                        <div class="report-data-row">
-                            <span class="report-data-label">Эмблема:</span>
-                            <span class="report-data-value" id="report-logo"></span>
-                        </div>
-                        <div class="report-data-row">
-                            <span class="report-data-label">Футляр:</span>
-                            <span class="report-data-value" id="report-case"></span>
-                        </div>
-                        <div class="report-data-row" id="report-shockmount-row" style="display: none;">
-                            <span class="report-data-label">Подвес (корпус):</span>
-                            <span class="report-data-value" id="report-shockmount"></span>
-                        </div>
-                        <div class="report-data-row" id="report-shockmount-pins-row" style="display: none;">
-                            <span class="report-data-label">Подвес (пины):</span>
-                            <span class="report-data-value" id="report-shockmount-pins"></span>
-                        </div>
-                        <!-- Hidden inputs for custom logos -->
-                        <input type="hidden" id="report-custom-logo-data" value="">
-                        <input type="hidden" id="report-case-logo-data" value="">
-                    </div>
 
-                    <div class="report-total">
-                        <span>Итого:</span>
-                        <span id="report-total-price"></span>
+                        <div class="report-section">
+                            <h3>Конфигурация</h3>
+                            <div class="report-data-row">
+                                <span class="report-data-label">Модель:</span>
+                                <span class="report-data-value" id="report-model"></span>
+                            </div>
+                            <div class="report-data-row">
+                                <span class="report-data-label">Силуэт:</span>
+                                <span class="report-data-value" id="report-spheres"></span>
+                            </div>
+                            <div class="report-data-row">
+                                <span class="report-data-label">Корпус:</span>
+                                <span class="report-data-value" id="report-body"></span>
+                            </div>
+                            <div class="report-data-row">
+                                <span class="report-data-label">Эмблема:</span>
+                                <span class="report-data-value" id="report-logo"></span>
+                            </div>
+                            <div class="report-data-row">
+                                <span class="report-data-label">Футляр:</span>
+                                <span class="report-data-value" id="report-case"></span>
+                            </div>
+                            <div class="report-data-row" id="report-shockmount-row" style="display: none;">
+                                <span class="report-data-label">Подвес:</span>
+                                <span class="report-data-value" id="report-shockmount"></span>
+                            </div>
+                        </div>
+
+                        <div class="report-total">
+                            <span>Итого:</span>
+                            <span id="report-total-price"></span>
+                        </div>
                     </div>
                 </div>
+                <button class="print-btn">Сохранить в PDF</button>
             </div>
-            <button class="print-btn">Сохранить в PDF</button>
         </div>
-    </div>
 
     <div class="notification" id="notification"> 
     </div>

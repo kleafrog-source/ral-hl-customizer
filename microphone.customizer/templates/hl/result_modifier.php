@@ -64,7 +64,13 @@ if ($cache->initCache($cacheTime, $cacheId, $cacheDir)) {
     }
 
     // 2. Загрузка MicrophoneModels (ID 10)
-    $models = getHlData(10, [], ['ID', 'UF_CODE', 'UF_NAME', 'UF_BASE_PRICE', 'UF_DESCRIPTION', 'UF_SHOCKMOUNT_ENABLED', 'UF_SHOCKMOUNT_PRICE', 'UF_SORT', 'UF_MODEL_SERIES'], ['UF_SORT' => 'ASC']);
+    $models = getHlData(10, [], [
+        'ID', 'UF_CODE', 'UF_NAME', 'UF_BASE_PRICE', 'UF_DESCRIPTION',
+        'UF_SHOCKMOUNT_ENABLED', 'UF_SHOCKMOUNT_PRICE', 'UF_SHOCKMOUNT_TOGGLE', 'UF_SHOCKMOUNT_VISIBLE',
+        'UF_DEFAULT_SHOCKMOUNT', 'UF_DEFAULT_SHOCKMOUNT_PINS',
+        'UF_SORT', 'UF_MODEL_SERIES'
+    ], ['UF_SORT' => 'ASC']);
+
     $arResult['MODELS'] = [];
     $arResult['MODELS_BY_CODE'] = [];
     foreach ($models as $model) {
@@ -75,8 +81,19 @@ if ($cache->initCache($cacheTime, $cacheId, $cacheDir)) {
             'NAME' => $model['UF_NAME'],
             'BASE_PRICE' => (int)$model['UF_BASE_PRICE'],
             'DESCRIPTION' => $model['UF_DESCRIPTION'],
+
+            // Shockmount logic fields
+            'shockmountEnabled'     => (int)$model['UF_SHOCKMOUNT_ENABLED'],
+            'shockmountToggle'      => (int)$model['UF_SHOCKMOUNT_TOGGLE'],
+            'shockmountVisible'     => (int)$model['UF_SHOCKMOUNT_VISIBLE'],
+            'shockmountPrice'       => (int)$model['UF_SHOCKMOUNT_PRICE'],
+            'defaultShockmount'     => (string)$model['UF_DEFAULT_SHOCKMOUNT'],
+            'defaultShockmountPins' => (string)$model['UF_DEFAULT_SHOCKMOUNT_PINS'],
+
+            // Legacy support
             'SHOCKMOUNT_ENABLED' => (int)$model['UF_SHOCKMOUNT_ENABLED'],
             'SHOCKMOUNT_PRICE' => (int)$model['UF_SHOCKMOUNT_PRICE'],
+
             'MODEL_SERIES' => $model['UF_MODEL_SERIES'],
             'SORT' => (int)$model['UF_SORT']
         ];

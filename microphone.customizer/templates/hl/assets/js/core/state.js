@@ -72,7 +72,7 @@ class StateManager {
             hlData: data,
             initialConfig: null,
             hasChanged: false,
-            savedMicConfigs: {}
+            perModelState: {} // Snapshots per model code
         };
     }
 
@@ -165,6 +165,19 @@ class StateManager {
     }
 
     /**
+     * Helper to perform a batch of updates
+     * @param {function} callback
+     */
+    batch(callback) {
+        const update = this.startBatch();
+        try {
+            callback(update);
+        } finally {
+            this.endBatch();
+        }
+    }
+
+    /**
      * Start a batch operation that will collect updates and apply them together.
      * @returns {function} A function to apply updates within the batch.
      */
@@ -248,6 +261,45 @@ class StateManager {
         // A more complex implementation could pass what changed.
         // Триггерит render() и другие подписанные функции
         this.#notify({ path, value });
+    }
+
+    /**
+     * Save a snapshot of the current state for a specific model
+     * @param {string} modelCode
+     */
+    saveModelSnapshot(modelCode) {
+        const state = this.get();
+        // We only want to save relevant configuration parts
+        const snapshot = {
+            spheres: state.spheres,
+            body: state.body,
+            logo: state.logo,
+            logobg: state.logobg,
+            case: state.case,
+            shockmount: state.shockmount,
+            shockmountPins: state.shockmountPins,
+            modelSeries: state.modelSeries,
+            basePrice: state.basePrice
+        };
+        this.#state.perModelState[modelCode] = JSON.parse(JSON.stringify(snapshot));
+    }
+
+    /**
+     * Restore state from a saved snapshot
+     * @param {string} modelCode
+     * @returns {boolean} True if snapshot was found and restored
+     */
+    restoreModelSnapshot(modelCode) {
+        const snapshot = this.#state.perModelState[modelCode];
+        if (!snapshot) return false;
+
+        this.batch(batch => {
+            Object.entries(snapshot).forEach(([key, value]) => {
+                batch(key, value);
+            });
+            batch('currentModelCode', modelCode);
+        });
+        return true;
     }
 
     /**

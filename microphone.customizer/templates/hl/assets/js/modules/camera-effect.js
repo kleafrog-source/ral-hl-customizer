@@ -22,6 +22,11 @@ const microphoneAnimations = {
             microphone: { transform: 'translateX(116%) translateY(12%) scale(0.7)', opacity: 0, duration: 800, easing: 'easeInQuad' },
             shockmount: { transform: 'translateX(103%) translateY(35%) scale(0.66)', opacity: 0, duration: 800, easing: 'easeInQuad' },
             case: { transform: 'translateX(10%) translateY(-5%) scale(1.15)', opacity: 1, duration: 1000, easing: 'easeOutQuad', pointerEvents: 'auto' }
+        },
+        'logo-view': {
+            microphone: { transform: 'translateX(350%) translateY(-15%) scale(2.5)', opacity: 1, duration: 1200, easing: 'easeOutCubic' },
+            shockmount: { transform: 'translateX(103%) translateY(35%) scale(0.66)', opacity: 0, duration: 800, easing: 'easeInQuad' },
+            case: { transform: 'translateX(10%) translateY(-5%) scale(0.5)', opacity: 0, duration: 800, easing: 'easeInQuad' }
         }
     },
     
@@ -114,6 +119,11 @@ const microphoneAnimations = {
             microphone: { transform: 'translateX(116%) translateY(12%) scale(0.7)', opacity: 0, duration: 800, easing: 'easeInQuad' },
             shockmount: { transform: 'translateX(103%) translateY(35%) scale(0.66)', opacity: 0, duration: 800, easing: 'easeInQuad' },
             case: { transform: 'translateX(10%) translateY(-5%) scale(1.15)', opacity: 1, duration: 1000, easing: 'easeOutQuad', pointerEvents: 'auto' }
+        },
+        'logo-view': {
+            microphone: { transform: 'translateX(350%) translateY(-15%) scale(2.5)', opacity: 1, duration: 1200, easing: 'easeOutCubic' },
+            shockmount: { transform: 'translateX(103%) translateY(35%) scale(0.66)', opacity: 0, duration: 800, easing: 'easeInQuad' },
+            case: { transform: 'translateX(10%) translateY(-5%) scale(0.5)', opacity: 0, duration: 800, easing: 'easeInQuad' }
         }
     }
 };
@@ -254,7 +264,7 @@ export function switchLayer(newActiveLayerId) {
         return;
     }
 
-    if (!layers[newActiveLayerId]) {
+    if (newActiveLayerId !== 'logo-view' && !layers[newActiveLayerId]) {
         console.warn(`Cannot switch to layer '${newActiveLayerId}': element not found.`);
         return;
     }
@@ -264,7 +274,8 @@ export function switchLayer(newActiveLayerId) {
     const stateMap = {
         'microphone': 'mic-active',
         'shockmount': 'shockmount-active',
-        'case': 'case-active'
+        'case': 'case-active',
+        'logo-view': 'logo-view'
     };
     const stateName = stateMap[newActiveLayerId];
     

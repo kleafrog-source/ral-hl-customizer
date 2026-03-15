@@ -164,21 +164,32 @@ function initializeModelPricing(modelsByCode, modelCode) {
     const basePrice = currentModel.UF_BASE_PRICE || currentModel.BASE_PRICE || 0;
     stateManager.set('basePrice', basePrice);
     
-    // Устанавливаем информацию о подвесе
-    const shockmountEnabled = (currentModel.UF_SHOCKMOUNT_ENABLED !== undefined) 
-        ? currentModel.UF_SHOCKMOUNT_ENABLED === 1 
-        : currentModel.SHOCKMOUNT_ENABLED === 1;
-    
-    const shockmountPrice = currentModel.UF_SHOCKMOUNT_PRICE || currentModel.SHOCKMOUNT_PRICE || 0;
-
     // Устанавливаем информацию о текущей модели в стейт
     stateManager.set('currentModel', {
         id: currentModel.ID,
         code: currentModel.UF_CODE || currentModel.CODE || modelCode,
         name: currentModel.UF_NAME || currentModel.NAME || '',
         basePrice: basePrice,
-        shockmountEnabled: shockmountEnabled,
-        shockmountPrice: shockmountPrice
+
+        // Shockmount HL flags
+        shockmountEnabled: parseInt(currentModel.shockmountEnabled) || 0,
+        shockmountToggle: parseInt(currentModel.shockmountToggle) || 0,
+        shockmountVisible: parseInt(currentModel.shockmountVisible) || 0,
+        shockmountPrice: parseInt(currentModel.shockmountPrice) || 0,
+        defaultShockmount: currentModel.defaultShockmount,
+        defaultShockmountPins: currentModel.defaultShockmountPins
+    });
+
+    // Batched update for shockmount state based on HL model data
+    stateManager.batch(batch => {
+        batch('shockmount.available', currentModel.shockmountVisible === 1);
+        batch('shockmount.canToggle', currentModel.shockmountToggle === 1);
+        batch('shockmount.price', currentModel.shockmountPrice || 0);
+        batch('shockmount.included', currentModel.shockmountEnabled === 1 && (currentModel.shockmountPrice || 0) === 0);
+        batch('shockmount.enabled', currentModel.shockmountEnabled === 1);
+
+        batch('shockmount.variant', currentModel.defaultShockmount || 'standard');
+        batch('shockmountPins.variant', currentModel.defaultShockmountPins || 'standard');
     });
 
     console.log('[HL Data Manager] Model pricing initialized:', {

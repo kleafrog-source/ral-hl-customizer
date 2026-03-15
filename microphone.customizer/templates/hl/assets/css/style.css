@@ -1069,9 +1069,10 @@ body {
    КНОПКА ОТПРАВКИ (CTA)
    ============================ */
 .order-button {
-    margin-top: 14px;
+    margin-top: 10px; /* Reduced margin */
+    padding: 10px 14px; /* Reduced vertical padding */
     border-radius: 10px;
-    font-size: 12px;
+    font-size: 11px; /* Slightly smaller font */
     letter-spacing: 0.12em;
     text-transform: uppercase;
     background: linear-gradient(135deg, var(--brass) 0%, var(--brass-light) 100%);

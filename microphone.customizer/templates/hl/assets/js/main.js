@@ -17,11 +17,49 @@ import { startSessionRefresh } from './utils/bitrix.js';
 import { initializeWoodCase } from './modules/wood-case.js';
 import { initToggles as initToggleStates } from './modules/toggles.js';
 import { initHLDataManager } from './modules/hl-data-manager.js';
+import { initDebugHelper } from './debug/ui-debug-helper.js';
 
 // Make toggleFaq global for onclick attributes in start-screen.php
 window.toggleFaq = toggleFaq;
 
+/**
+ * Restrict page zoom on mobile devices to keep SVG/layout stable.
+ * NOTE: zoom disabled intentionally to keep SVG/layout stable on mobile.
+ */
+function restrictZoom() {
+    // 1. Viewport meta tag
+    let viewport = document.querySelector('meta[name="viewport"]');
+    if (viewport) {
+        viewport.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no';
+    } else {
+        viewport = document.createElement('meta');
+        viewport.name = 'viewport';
+        viewport.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no';
+        document.getElementsByTagName('head')[0].appendChild(viewport);
+    }
+
+    // 2. Prevent pinch-zoom via touch events
+    document.addEventListener('touchmove', function (event) {
+        if (event.scale !== 1) {
+            event.preventDefault();
+        }
+    }, { passive: false });
+
+    // 3. Prevent double-tap zoom
+    let lastTouchEnd = 0;
+    document.addEventListener('touchend', function (event) {
+        const now = (new Date()).getTime();
+        if (now - lastTouchEnd <= 300) {
+            event.preventDefault();
+        }
+        lastTouchEnd = now;
+    }, false);
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
+    // Apply zoom restrictions
+    restrictZoom();
+
     const appRoot = document.getElementById('customizer-app-root');
     if (!appRoot) {
         console.log('Customizer app root not found, customizer will not load.');
@@ -86,6 +124,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     
     console.log('[Main] Initializing toggle states...');
     initToggleStates();
+
+    // Initialize Debug Helper
+    initDebugHelper();
 
     // Final render after all initialization is complete
     console.log('[Main] Performing final render...');

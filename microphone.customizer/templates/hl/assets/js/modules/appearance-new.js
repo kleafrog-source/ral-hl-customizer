@@ -36,8 +36,8 @@ export function initPalettes() {
     // Get all sections that have RAL options enabled from the mapping
     Object.values(viewTypeMap).forEach(section => {
         // We use IDs for palettes in template like: logobg-swatches, spheres-swatches etc
-        // Check both variants (pal- and -swatches) used in template.php
-        let container = document.getElementById('pal-' + section) || document.getElementById(section + '-swatches');
+        // Unified palette ID: pal-<section>
+        let container = document.getElementById('pal-' + section);
         
         if (!container) return; 
         container.innerHTML = '';
@@ -76,10 +76,10 @@ export function initPalettes() {
 }
 
 export function togglePalette(section) {
-    const wrapper = document.getElementById(`palette-wrapper-${section}`);
-    const toggleBtn = wrapper?.previousElementSibling;
+    const wrapper = document.getElementById(`${section}-palette`);
+    const toggleBtn = document.querySelector(`.palette-toggle-btn[data-section="${section}"]`);
     
-    const submenuId = section === 'pins' ? 'submenu-pins' : `submenu-${section}`;
+    const submenuId = (section === 'pins' || section === 'shockmountPins') ? 'submenu-shockmountPins' : `submenu-${section}`;
     const submenu = document.getElementById(submenuId);
     
     if (!wrapper || !toggleBtn || !submenu) {
@@ -173,7 +173,7 @@ export function handleColorSelection(section, color, ralName) {
     colorData.colorName = ralLabel;
 
     // Start batch operation to prevent multiple renders
-    const batchSet = stateManager.startBatch();
+    stateManager.batch(batchSet => {
     
     // Update state based on section type
     if (section === 'spheres' || section === 'body') {
@@ -216,7 +216,7 @@ export function handleColorSelection(section, color, ralName) {
         // Set price from HL data
         batchSet('prices.shockmount', ralOption.UF_PRICE || 0);
         
-    } else if (section === 'pins') {
+    } else if (section === 'pins' || section === 'shockmountPins') {
         // Handle pins color using HL data
         handleShockmountPinSelection('custom', color, ralName);
         
@@ -224,8 +224,7 @@ export function handleColorSelection(section, color, ralName) {
         batchSet('prices.shockmount', ralOption.UF_PRICE || 0);
     }
     
-    // End batch and apply all changes at once
-    stateManager.endBatch();
+    }); // End batch
     
     // Update UI once after all changes
     updateUI();
@@ -535,7 +534,7 @@ export function handleStyleSelection(section, variant) {
     const optionData = getColorDataFromOption(selectedOption);
 
     // Update state using batch operation
-    const batchSet = stateManager.startBatch();
+    stateManager.batch(batchSet => {
     batchSet(`${section}.variant`, variant);
     batchSet(`${section}.color`, selectedOption.UF_RAL_COLOR_ID || null);
     batchSet(`${section}.colorValue`, selectedOption.RAL_DATA?.UF_HEX || null);
@@ -552,7 +551,7 @@ export function handleStyleSelection(section, variant) {
     batchSet(`${section}.svgFilterId`, selectedOption.svgFilterId);
     batchSet(`${section}.svgSpecialKey`, selectedOption.svgSpecialKey);
     
-    stateManager.endBatch();
+    }); // End batch
 
     // Apply changes using new color utils
     applyColorToSection(section, optionData);

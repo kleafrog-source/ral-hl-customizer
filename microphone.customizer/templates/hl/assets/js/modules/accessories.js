@@ -16,7 +16,7 @@ export function initPreviewSwitching() {
     switchContainer.className = 'preview-switch-container';
     switchContainer.innerHTML = `
         <button class="preview-switch-btn active" data-preview="microphone">Микрофон</button>
-        <button class="preview-switch-btn" data-preview="case">Деревянный футляр</button>
+        <button class="preview-switch-btn" data-preview="case">Футляр</button>
         <button class="preview-switch-btn" data-preview="shockmount" id="shockmount-preview-btn">Подвес</button>
          <button class="preview-switch-btn" data-preview="global-view" id="global-view-preview-btn">Общий вид</button>
     `;
