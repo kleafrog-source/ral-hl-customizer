@@ -172,6 +172,16 @@ class StateManager {
     }
 
     /**
+     * Helper to perform a batched update via a callback.
+     * @param {function} callback - Function that receives the batch update function.
+     */
+    batch(callback) {
+        const batchFn = this.startBatch();
+        callback(batchFn);
+        this.endBatch();
+    }
+
+    /**
      * Gets a deep copy of the current state or a part of it.
      * @param {string} [path] - Optional path to a specific part of the state (e.g., 'spheres.color').
      * @returns {*} The requested state value.
@@ -230,6 +240,41 @@ class StateManager {
     setInitialConfig(config) {
         this.set('initialConfig', JSON.parse(JSON.stringify(config)));
         this.set('hasChanged', false);
+    }
+
+    /**
+     * Saves the current model state slice to perModelState storage.
+     * @param {string} modelCode
+     */
+    saveCurrentModelState(modelCode) {
+        if (!modelCode) return;
+        const s = this.#state;
+        this.#state.savedMicConfigs[modelCode] = JSON.parse(JSON.stringify({
+            spheres: s.spheres,
+            body: s.body,
+            logo: s.logo,
+            logobg: s.logobg,
+            case: s.case,
+            shockmount: s.shockmount,
+            shockmountPins: s.shockmountPins,
+            prices: s.prices
+        }));
+    }
+
+    /**
+     * Restores model state from perModelState storage if it exists.
+     * @param {string} modelCode
+     * @returns {boolean} True if state was restored.
+     */
+    restoreModelState(modelCode) {
+        if (!modelCode || !this.#state.savedMicConfigs[modelCode]) return false;
+        const saved = this.#state.savedMicConfigs[modelCode];
+        this.batch(batch => {
+            Object.entries(saved).forEach(([key, value]) => {
+                batch(key, value);
+            });
+        });
+        return true;
     }
 }
 

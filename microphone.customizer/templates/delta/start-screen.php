@@ -29,13 +29,13 @@
       </div>
       <div class="start-screen-hero-image">
         <img 
-          src="https://soyuzmicrophones.ru/image/custom/start/hero-mobile-360@1x.webp" 
+          src="../microphone.customizer/images/custom/start/hero-mobile-360@1x.webp"
           srcset="
-            https://soyuzmicrophones.ru/image/custom/start/hero-mobile-360@1x.webp 360w,
-            https://soyuzmicrophones.ru/image/custom/start/hero-mobile-360@2x.webp 720w,
-            https://soyuzmicrophones.ru/image/custom/start/hero-tablet-1024@1x.webp 1024w,
-            https://soyuzmicrophones.ru/image/custom/start/hero-pc-1920@1x.webp 1920w,
-            https://soyuzmicrophones.ru/image/custom/start/hero-pc-1920@2x.webp 3840w
+            ../microphone.customizer/images/custom/start/hero-mobile-360@1x.webp 360w,
+            ../microphone.customizer/images/custom/start/hero-mobile-360@2x.webp 720w,
+            ../microphone.customizer/images/custom/start/hero-tablet-1024@1x.webp 1024w,
+            ../microphone.customizer/images/custom/start/hero-pc-1920@1x.webp 1920w,
+            ../microphone.customizer/images/custom/start/hero-pc-1920@2x.webp 3840w
           "
           sizes="(max-width: 360px) 360px, (max-width: 1024px) 1024px, 1920px"
           alt="Кастомный микрофон СОЮЗ"

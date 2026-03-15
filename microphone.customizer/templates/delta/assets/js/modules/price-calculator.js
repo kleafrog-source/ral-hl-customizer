@@ -42,29 +42,18 @@ export function getSurcharge(sectionCode, variantCode = '', modelCode = '', isRa
 export function getBreakdown(state) {
     const modelCode = state.currentModelCode || '';
 
-    const spheresPrice = getSurcharge('spheres', state.spheres?.variantCode || '', modelCode, !!state.spheres?.isRal);
-    const bodyPrice = getSurcharge('body', state.body?.variantCode || '', modelCode, !!state.body?.isRal);
-    const logoPrice = state.logo?.useCustom
-        ? getSurcharge('logo', 'custom-microphone-logo', modelCode, false)
-        : getSurcharge('logo', state.logo?.variantCode || '', modelCode, !!state.logo?.isRal);
-    const logobgPrice = getSurcharge('logobg', state.logobg?.variantCode || '', modelCode, !!state.logobg?.isRal);
+    const spheresPrice = safeNumber(state.spheres?.price);
+    const bodyPrice = safeNumber(state.body?.price);
+    const logoPrice = safeNumber(state.logo?.price);
+    const logobgPrice = safeNumber(state.logobg?.price);
+    const casePrice = safeNumber(state.case?.price);
 
-    const caseBasePrice = getSurcharge('case', state.case?.variantCode || '', modelCode, !!state.case?.isRal);
-    const engravingPrice = state.case?.laserEngravingEnabled
-        ? getSurcharge('case', 'custom-woodcase-image', modelCode, false)
-        : 0;
+    const s = state.shockmount || {};
+    const showShockmountPrice = s.available && (s.canToggle || !s.included) && (s.price || 0) > 0;
+    const shockmountPrice = showShockmountPrice ? safeNumber(s.price) : 0;
 
-    const shockmountEnabled = !!state.shockmount?.enabled && !!state.shockmount?.available;
-    let shockmountPrice = 0;
-    if (state.shockmount?.included) {
-        shockmountPrice = 0;
-    } else if (shockmountEnabled) {
-        shockmountPrice = getSurcharge('shockmount', state.shockmount?.variantCode || '', modelCode, !!state.shockmount?.isRal);
-    }
-
-    const pinsPrice = shockmountEnabled && state.shockmountPins?.variantCode
-        ? getSurcharge('shockmountPins', state.shockmountPins.variantCode || '', modelCode, !!state.shockmountPins?.isRal)
-        : 0;
+    // pins price usually 0 or included in shockmount price in HL, but we read it if exists
+    const pinsPrice = safeNumber(state.shockmountPins?.price);
 
     return {
         base: safeNumber(state.basePrice),
@@ -72,7 +61,7 @@ export function getBreakdown(state) {
         body: bodyPrice,
         logo: logoPrice,
         logobg: logobgPrice,
-        case: caseBasePrice + engravingPrice,
+        case: casePrice,
         shockmount: shockmountPrice + pinsPrice
     };
 }

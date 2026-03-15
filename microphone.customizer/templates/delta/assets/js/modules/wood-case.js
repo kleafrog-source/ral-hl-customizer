@@ -13,7 +13,7 @@ const WoodCase = {
 
     init() {
         Object.keys(CASE_GEOMETRY.cases).forEach(k => { this.history[k] = { x: 0, y: 0, scale: 0.5 }; });
-        this.setupInteract();
+        this.setupNativeInteractions();
         this.setupRulerEvents();
         window.addEventListener('resize', () => this.render());
 
@@ -312,7 +312,7 @@ const WoodCase = {
         }
     },
 
-    updateTransform() {
+    updateTransform(animate = false) {
         if(!this.userImgSrc) return;
         const state = this.history[this.currentCase];
         const container = document.getElementById('user-logo-container');
@@ -326,7 +326,20 @@ const WoodCase = {
             bW = img ? img.naturalWidth : 100; bH = img ? img.naturalHeight : 100;
         }
         container.style.width = bW + 'px'; container.style.height = bH + 'px';
-        container.style.transform = `translate(${state.x}px, ${state.y}px) scale(${state.scale})`;
+
+        if (window.anime && animate) {
+            window.anime.remove(container);
+            window.anime({
+                targets: container,
+                translateX: state.x,
+                translateY: state.y,
+                scale: state.scale,
+                duration: 200,
+                easing: 'easeOutQuad'
+            });
+        } else {
+            container.style.transform = `translate(${state.x}px, ${state.y}px) scale(${state.scale})`;
+        }
 
         stateManager.set('case.logoTransform', { x: state.x, y: state.y, scale: state.scale });
         const pxPerMM = this.getPixelsPerMM(this.currentCase);
@@ -336,38 +349,94 @@ const WoodCase = {
         this.drawRulers();
     },
 
-    setupInteract() {
-        const isMobile = window.innerWidth <= 768;
-        //данная функция нужна для того, чтобы можно было зумить и драгать логотип
-        //в функц
-        interact('#wood-case-logo-wrapper').gesturable({
-            onmove: (e) => {
-                const state = this.history[this.currentCase];
-                const ds = e.ds;
-                state.scale *= (1 + ds);
-                // Clamp scale
-                state.scale = Math.max(0.01, Math.min(5, state.scale));
-                this.updateTransform();
-                this.showRulers();
-            }
-        }).draggable({
-            onmove: (e) => {
-                const state = this.history[this.currentCase];
-                
-                state.x += e.dx;
-                state.y += e.dy;
-                this.updateTransform();
-                this.showRulers();
-            }
-        });
-        
-        document.getElementById('wood-case-logo-wrapper').addEventListener('wheel', (e) => {
-            e.preventDefault();
+    setupNativeInteractions() {
+        const wrapper = document.getElementById('wood-case-logo-wrapper');
+        if (!wrapper) return;
+
+        let isDragging = false;
+        let startX, startY;
+        let initialPinchDistance = null;
+        let initialScale = 1;
+
+        const getDistance = (touches) => {
+            return Math.hypot(touches[0].pageX - touches[1].pageX, touches[0].pageY - touches[1].pageY);
+        };
+
+        const handleMove = (dx, dy) => {
             const state = this.history[this.currentCase];
-            const delta = e.deltaY > 0 ? 0.95 : 1.05;
-            state.scale *= delta;
+            state.x += dx;
+            state.y += dy;
+            // NOTE: simple bounds check could be added here
             this.updateTransform();
             this.showRulers();
+        };
+
+        const handleScale = (ds) => {
+            const state = this.history[this.currentCase];
+            state.scale *= ds;
+            state.scale = Math.max(0.01, Math.min(5, state.scale));
+            this.updateTransform();
+            this.showRulers();
+        };
+
+        wrapper.addEventListener('pointerdown', (e) => {
+            if (e.pointerType === 'touch') return; // Handled by touch events for multi-touch
+            isDragging = true;
+            startX = e.clientX;
+            startY = e.clientY;
+            wrapper.setPointerCapture(e.pointerId);
+        });
+
+        wrapper.addEventListener('pointermove', (e) => {
+            if (!isDragging) return;
+            const dx = e.clientX - startX;
+            const dy = e.clientY - startY;
+            startX = e.clientX;
+            startY = e.clientY;
+            handleMove(dx, dy);
+        });
+
+        wrapper.addEventListener('pointerup', () => isDragging = false);
+        wrapper.addEventListener('pointercancel', () => isDragging = false);
+
+        wrapper.addEventListener('touchstart', (e) => {
+            if (e.touches.length === 1) {
+                isDragging = true;
+                startX = e.touches[0].clientX;
+                startY = e.touches[0].clientY;
+            } else if (e.touches.length === 2) {
+                isDragging = false;
+                initialPinchDistance = getDistance(e.touches);
+                initialScale = this.history[this.currentCase].scale;
+            }
+        }, { passive: true });
+
+        wrapper.addEventListener('touchmove', (e) => {
+            if (e.touches.length === 1 && isDragging) {
+                const dx = e.touches[0].clientX - startX;
+                const dy = e.touches[0].clientY - startY;
+                startX = e.touches[0].clientX;
+                startY = e.touches[0].clientY;
+                handleMove(dx, dy);
+            } else if (e.touches.length === 2 && initialPinchDistance) {
+                const currentDistance = getDistance(e.touches);
+                const ds = currentDistance / initialPinchDistance;
+                const state = this.history[this.currentCase];
+                state.scale = Math.max(0.01, Math.min(5, initialScale * ds));
+                this.updateTransform();
+                this.showRulers();
+            }
+        }, { passive: true });
+
+        wrapper.addEventListener('touchend', () => {
+            isDragging = false;
+            initialPinchDistance = null;
+        });
+
+        wrapper.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            const delta = e.deltaY > 0 ? 0.95 : 1.05;
+            handleScale(delta);
         }, { passive: false });
     },
 
@@ -649,6 +718,24 @@ export function toggleLaserEngraving() {
     }
     
     console.log(`[Wood Case] Laser engraving ${newState ? 'enabled' : 'disabled'}`);
+}
+
+export function getWoodCaseTransformState() {
+    const s = WoodCase.history[WoodCase.currentCase];
+    return {
+        translateX: s.x,
+        translateY: s.y,
+        scale: s.scale,
+        rotation: 0 // rotation not currently implemented in UI
+    };
+}
+
+export function setWoodCaseTransformState(nextState) {
+    const s = WoodCase.history[WoodCase.currentCase];
+    if (nextState.translateX !== undefined) s.x = nextState.translateX;
+    if (nextState.translateY !== undefined) s.y = nextState.translateY;
+    if (nextState.scale !== undefined) s.scale = nextState.scale;
+    WoodCase.updateTransform(true);
 }
 
 export function initializeWoodCase() {
