@@ -387,12 +387,6 @@ export function clearCustomLogo() {
 
 // Управление видимостью MALFA вариантов логотипа
 export function updateMalfaLogoOptionsVisibility() {
-    const state = stateManager.get();
-    const isMalfaModel = isMalfaMic(state);
-    
-    // Управляем видимостью MALFA группы
-    const malfaGroup = document.getElementById('malfa-logo-group');
-    if (malfaGroup) {
-        malfaGroup.style.display = isMalfaModel ? 'block' : 'none';
-    }
+    // NOTE: MALFA variants are now handled via HL data filtering in result_modifier.php
+    // and dynamically rendered in the sidebar, so no manual group visibility is needed.
 }

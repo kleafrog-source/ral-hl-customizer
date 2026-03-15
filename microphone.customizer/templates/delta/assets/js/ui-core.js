@@ -182,6 +182,13 @@ function applyOptionFromElement(element) {
 }
 
 export function initEventListeners() {
+    // NOTE: zoom disabled intentionally to keep SVG/layout stable on mobile
+    document.addEventListener('touchstart', (e) => {
+        if (e.touches.length > 1) {
+            e.preventDefault();
+        }
+    }, { passive: false });
+
     initSidebarControls();
     initThemeControl();
     initFullscreenControl();
@@ -219,8 +226,12 @@ export function initEventListeners() {
 
     document.querySelectorAll('.variant-button').forEach(btn => {
         btn.addEventListener('click', () => {
+            const oldModelCode = window.CUSTOMIZER_DATA.currentModelCode;
             const modelCode = btn.dataset.variant;
             if (!modelCode || !window.CUSTOMIZER_DATA?.modelsByCode?.[modelCode]) return;
+
+            // Save old state
+            stateManager.saveCurrentModelState(oldModelCode);
 
             document.querySelectorAll('.variant-button').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
@@ -229,31 +240,39 @@ export function initEventListeners() {
             window.CUSTOMIZER_DATA.currentModelId = window.CUSTOMIZER_DATA.modelsByCode[modelCode].ID;
             window.CUSTOMIZER_DATA.currentModelOptions = window.CUSTOMIZER_DATA.options[window.CUSTOMIZER_DATA.currentModelId] || window.CUSTOMIZER_DATA.options[0] || {};
 
-            // Инициализация state для shockmount на основе HL-полей модели
-            const model = window.CUSTOMIZER_DATA.modelsByCode[modelCode];
-            
-            // Детальное логирование HL-значений для модели
-            console.group(`[Model] ${modelCode} - HL Values`);
-            console.log('SHOCKMOUNT_ENABLED:', model.SHOCKMOUNT_ENABLED, '=>', model.SHOCKMOUNT_ENABLED === 1 ? 'включен в комплект (toggle в активном положении)' : 'не включен в комплект');
-            console.log('SHOCKMOUNT_TOGGLE:', model.SHOCKMOUNT_TOGGLE, '=>', model.SHOCKMOUNT_TOGGLE === 1 ? 'можно переключать (toggle виден)' : 'нельзя переключать (toggle скрыт)');
-            console.log('SHOCKMOUNT_VISIBLE:', model.SHOCKMOUNT_VISIBLE, '=>', model.SHOCKMOUNT_VISIBLE === 1 ? 'отображается в UI' : 'скрыт в UI');
-            console.log('SHOCKMOUNT_PRICE:', model.SHOCKMOUNT_PRICE, '=>', model.SHOCKMOUNT_PRICE > 0 ? `+${model.SHOCKMOUNT_PRICE}₽` : 'бесплатно');
-            console.log('DEFAULTS:', model.DEFAULTS);
-            console.groupEnd();
-            
-            const batch = stateManager.startBatch();
-            batch('shockmount.available', true); // Всегда виден в UI
-            batch('shockmount.canToggle', true); // Всегда можно переключать
-            batch('shockmount.price', model.SHOCKMOUNT_PRICE || 0);
-            batch('shockmount.included', model.SHOCKMOUNT_ENABLED === 1); // Включен в комплект?
-            batch('shockmount.enabled', true); // Всегда активен
-            stateManager.endBatch();
+            stateManager.set('currentModelCode', modelCode);
+            stateManager.set('currentModelId', window.CUSTOMIZER_DATA.currentModelId);
 
-            initHLDataManager();
-            syncToggles();
-            
-            // Применяем значения по умолчанию для новой модели
-            applyModelDefaults(modelCode);
+            // Try to restore
+            const restored = stateManager.restoreModelState(modelCode);
+
+            if (!restored) {
+                // Инициализация state для shockmount на основе HL-полей модели
+                const model = window.CUSTOMIZER_DATA.modelsByCode[modelCode];
+
+                stateManager.batch(batch => {
+                    batch('shockmount.available', model.shockmountVisible === 1);
+                    batch('shockmount.canToggle', model.shockmountToggle === 1);
+                    batch('shockmount.price', model.shockmountPrice || 0);
+                    batch(
+                      'shockmount.included',
+                      model.shockmountEnabled === 1 && (model.shockmountPrice || 0) === 0
+                    );
+                    batch('shockmount.enabled', model.shockmountEnabled === 1);
+
+                    batch('shockmount.variant', model.defaultShockmount || null);
+                    batch('shockmountPins.variant', model.defaultShockmountPins || null);
+                });
+
+                initHLDataManager();
+                syncToggles();
+
+                // Применяем значения по умолчанию для новой модели
+                applyModelDefaults(modelCode);
+            } else {
+                initHLDataManager();
+                syncToggles();
+            }
             
             updateShockmountVisibility();
             updateShockmountLayers(stateManager.get());
@@ -325,6 +344,47 @@ function initPriceSectionToggle() {
     });
 }
 
+function serializeConfig() {
+    const state = stateManager.get();
+    const breakdown = getBreakdown(state);
+    const total = calculateTotal(state);
+
+    const config = {
+        modelCode: state.currentModelCode,
+        options: {
+            spheres: state.spheres?.variantCode,
+            body: state.body?.variantCode,
+            logo: state.logo?.variantCode,
+            logobg: state.logobg?.variantCode,
+            case: state.case?.variantCode,
+            shockmount: state.shockmount?.variantCode,
+            shockmountPins: state.shockmountPins?.variantCode
+        },
+        prices: {
+            base: state.basePrice,
+            spheres: breakdown.spheres,
+            body: breakdown.body,
+            logo: breakdown.logo,
+            logobg: breakdown.logobg,
+            case: breakdown.case,
+            shockmount: breakdown.shockmount,
+            total: total
+        },
+        woodCaseEngraving: {
+            enabled: state.case?.laserEngravingEnabled,
+            logoTransform: state.case?.logoTransform,
+            logoWidthMM: state.case?.logoWidthMM,
+            logoOffsetMM: state.case?.logoOffsetMM
+        }
+    };
+
+    const configJson = JSON.stringify(config);
+    const input = document.getElementById('customizer-config-json');
+    if (input) input.value = configJson;
+
+    return config;
+}
+
 function initOrderModal() {
     const modal = document.getElementById('order-modal');
     const openBtn = document.querySelector('.price-section .order-button');
@@ -332,6 +392,7 @@ function initOrderModal() {
 
     const closeBtn = modal.querySelector('[data-modal-close]') || modal.querySelector('button');
     const open = () => {
+        serializeConfig();
         modal.style.display = 'flex';
         modal.setAttribute('aria-hidden', 'false');
     };
@@ -345,6 +406,14 @@ function initOrderModal() {
     modal.addEventListener('click', (e) => {
         if (e.target === modal) close();
     });
+
+    const form = document.getElementById('order-form');
+    if (form) {
+        form.addEventListener('submit', (e) => {
+            // TODO: confirm field mapping with CRM
+            serializeConfig();
+        });
+    }
 }
 
 export function toggleSubmenu(section, forceClose = false) {

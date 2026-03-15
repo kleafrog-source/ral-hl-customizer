@@ -12,7 +12,11 @@ Asset::getInstance()->addCss($templateFolder . "/assets/css/woodcase.css");
 Asset::getInstance()->addCss($templateFolder . "/assets/css/forms.css");
 Asset::getInstance()->addCss($templateFolder . "/assets/css/camera-effect.css");
 Asset::getInstance()->addCss($templateFolder . "/assets/css/start-screen.css");
-Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/interactjs@1.10.19/dist/interact.min.js");
+?>
+<!-- NOTE: zoom disabled intentionally to keep SVG/layout stable on mobile -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<?
+// interact.js removed as per overhaul requirements
 Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js");
 ?>
 
@@ -487,48 +491,7 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                                     <?php endforeach; ?>
                                 </div>
                                 
-                                <!-- MALFA variants (hardcoded like in old template) -->
-                                <div class="option-group" id="malfa-logo-group" style="display: none;">
-                                    <h4>MALFA Edition</h4>
-                                    
-                                    <!-- MALFA - Серебро -->
-                                    <button
-                                        class="option-button variant-item"
-                                        data-option-part="logo"
-                                        data-variant-code="malfasilver"
-                                        data-price="0"
-                                        data-is-ral="0"
-                                        data-option-id="10"
-                                        data-model-id="2"
-                                        data-svg-target-mode="gradient"
-                                        data-svg-layer-group="malfa-logo-text-path"
-                                        data-svg-filter-id=""
-                                        data-svg-special-key="malfa_silver"
-                                        data-is-ral-paid="0"
-                                        data-variant="malfasilver"
-                                    >
-                                        <span class="option-name">MALFA - Серебро</span>
-                                    </button>
-                                    
-                                    <!-- MALFA - Золото -->
-                                    <button
-                                        class="option-button variant-item"
-                                        data-option-part="logo"
-                                        data-variant-code="malfagold"
-                                        data-price="0"
-                                        data-is-ral="0"
-                                        data-option-id="11"
-                                        data-model-id="2"
-                                        data-svg-target-mode="gradient"
-                                        data-svg-layer-group="malfa-logo-text-path"
-                                        data-svg-filter-id=""
-                                        data-svg-special-key="malfa_gold"
-                                        data-is-ral-paid="0"
-                                        data-variant="malfagold"
-                                    >
-                                        <span class="option-name">MALFA - Золото</span>
-                                    </button>
-                                </div>
+                                <!-- TODO: MALFA logos fully controlled via HL; removed hardcoded block -->
 
                             <?php elseif ($sectionKey === 'case'): ?>
                                 <!-- Special case section -->
@@ -1416,22 +1379,26 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
 
     <!-- Скрытая форма Битрикса для надежной отправки заказа -->
     <div style="display:none;">
-        <?$APPLICATION->IncludeComponent(
-            "bitrix:form.result.new",
-            "",
-            Array(
-                "WEB_FORM_ID" => "1",
-                "IGNORE_CUSTOM_TEMPLATE" => "Y",
-                "USE_EXTENDED_ERRORS" => "Y",
-                "SEF_MODE" => "N",
-                "CACHE_TYPE" => "N",
-                "LIST_URL" => "",
-                "EDIT_URL" => "",
-                "SUCCESS_URL" => "",
-                "CHAIN_ITEM_TEXT" => "",
-                "CHAIN_ITEM_LINK" => ""
-            )
-        );?>
+        <div id="bitrix-form-container">
+            <?$APPLICATION->IncludeComponent(
+                "bitrix:form.result.new",
+                "",
+                Array(
+                    "WEB_FORM_ID" => "1",
+                    "IGNORE_CUSTOM_TEMPLATE" => "Y",
+                    "USE_EXTENDED_ERRORS" => "Y",
+                    "SEF_MODE" => "N",
+                    "CACHE_TYPE" => "N",
+                    "LIST_URL" => "",
+                    "EDIT_URL" => "",
+                    "SUCCESS_URL" => "",
+                    "CHAIN_ITEM_TEXT" => "",
+                    "CHAIN_ITEM_LINK" => ""
+                )
+            );?>
+        </div>
+        <!-- Additional hidden fields for customization data -->
+        <input type="hidden" id="customizer-config-json" name="config_json" value="">
     </div>
 
 

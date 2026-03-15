@@ -22,6 +22,11 @@ const microphoneAnimations = {
             microphone: { transform: 'translateX(116%) translateY(12%) scale(0.7)', opacity: 0, duration: 800, easing: 'easeInQuad' },
             shockmount: { transform: 'translateX(103%) translateY(35%) scale(0.66)', opacity: 0, duration: 800, easing: 'easeInQuad' },
             case: { transform: 'translateX(10%) translateY(-5%) scale(1.15)', opacity: 1, duration: 1000, easing: 'easeOutQuad', pointerEvents: 'auto' }
+        },
+        'logo-view': {
+            microphone: { transform: 'translateX(340%) translateY(-45%) scale(1.8)', opacity: 1, duration: 1200, easing: 'easeOutCubic' },
+            shockmount: { transform: 'translateX(241%) translateY(33%) scale(1)', opacity: 0, duration: 800, easing: 'easeInQuad' },
+            case: { transform: 'translateX(46%) translateY(-33%) scale(1.33)', opacity: 0, duration: 800, easing: 'easeInQuad' }
         }
     },
     '017-FET': {
@@ -44,6 +49,11 @@ const microphoneAnimations = {
             microphone: { transform: 'translateX(116%) translateY(12%) scale(0.7)', opacity: 0, duration: 800, easing: 'easeInQuad' },
             shockmount: { transform: 'translateX(103%) translateY(35%) scale(0.66)', opacity: 0, duration: 800, easing: 'easeInQuad' },
             case: { transform: 'translateX(10%) translateY(-5%) scale(1.15)', opacity: 1, duration: 1000, easing: 'easeOutQuad', pointerEvents: 'auto' }
+        },
+        'logo-view': {
+            microphone: { transform: 'translateX(340%) translateY(-45%) scale(1.8)', opacity: 1, duration: 1200, easing: 'easeOutCubic' },
+            shockmount: { transform: 'translateX(241%) translateY(33%) scale(1)', opacity: 0, duration: 800, easing: 'easeInQuad' },
+            case: { transform: 'translateX(46%) translateY(-33%) scale(1.33)', opacity: 0, duration: 800, easing: 'easeInQuad' }
         }
     },
     '023-BOMBLET': {
@@ -66,6 +76,11 @@ const microphoneAnimations = {
             microphone: { transform: 'translateX(116%) translateY(12%) scale(0.7)', opacity: 0, duration: 800, easing: 'easeInQuad' },
             shockmount: { transform: 'translateX(103%) translateY(35%) scale(0.66)', opacity: 0, duration: 800, easing: 'easeInQuad' },
             case: { transform: 'translateX(10%) translateY(-5%) scale(1.15)', opacity: 1, duration: 1000, easing: 'easeOutQuad', pointerEvents: 'auto' }
+        },
+        'logo-view': {
+            microphone: { transform: 'translateX(340%) translateY(-45%) scale(1.8)', opacity: 1, duration: 1200, easing: 'easeOutCubic' },
+            shockmount: { transform: 'translateX(241%) translateY(33%) scale(1)', opacity: 0, duration: 800, easing: 'easeInQuad' },
+            case: { transform: 'translateX(46%) translateY(-33%) scale(1.33)', opacity: 0, duration: 800, easing: 'easeInQuad' }
         }
     },
     '023-MALFA': {
@@ -88,6 +103,11 @@ const microphoneAnimations = {
             microphone: { transform: 'translateX(116%) translateY(12%) scale(0.7)', opacity: 0, duration: 800, easing: 'easeInQuad' },
             shockmount: { transform: 'translateX(103%) translateY(35%) scale(0.66)', opacity: 0, duration: 800, easing: 'easeInQuad' },
             case: { transform: 'translateX(10%) translateY(-5%) scale(1.15)', opacity: 1, duration: 1000, easing: 'easeOutQuad', pointerEvents: 'auto' }
+        },
+        'logo-view': {
+            microphone: { transform: 'translateX(340%) translateY(-45%) scale(1.8)', opacity: 1, duration: 1200, easing: 'easeOutCubic' },
+            shockmount: { transform: 'translateX(6%) translateY(54%) scale(0.8)', opacity: 0, duration: 800, easing: 'easeInQuad' },
+            case: { transform: 'translateX(-17%) translateY(-13%) scale(0.9)', opacity: 0, duration: 800, easing: 'easeInQuad' }
         }
     },
     '023-DELUXE': {
@@ -110,6 +130,11 @@ const microphoneAnimations = {
             microphone: { transform: 'translateX(116%) translateY(12%) scale(0.7)', opacity: 0, duration: 800, easing: 'easeInQuad' },
             shockmount: { transform: 'translateX(103%) translateY(35%) scale(0.66)', opacity: 0, duration: 800, easing: 'easeInQuad' },
             case: { transform: 'translateX(10%) translateY(-5%) scale(1.15)', opacity: 1, duration: 1000, easing: 'easeOutQuad', pointerEvents: 'auto' }
+        },
+        'logo-view': {
+            microphone: { transform: 'translateX(340%) translateY(-45%) scale(1.8)', opacity: 1, duration: 1200, easing: 'easeOutCubic' },
+            shockmount: { transform: 'translateX(103%) translateY(35%) scale(0.66)', opacity: 0, duration: 800, easing: 'easeInQuad' },
+            case: { transform: 'translateX(10%) translateY(-12%) scale(1)', opacity: 0, duration: 800, easing: 'easeInQuad' }
         }
     }
 };
@@ -265,7 +290,8 @@ export function switchLayer(newActiveLayerId) {
     const stateMap = {
         microphone: 'mic-active',
         shockmount: 'shockmount-active',
-        case: 'case-active'
+        case: 'case-active',
+        logo: 'logo-view'
     };
     const stateName = stateMap[newActiveLayerId];
     if (!stateName) return;

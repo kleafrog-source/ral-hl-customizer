@@ -214,15 +214,8 @@ export function toggleShockmount() {
     const state = stateManager.get();
     const s = state.shockmount || {};
 
-    if (!s.available) {
-        console.log('[Shockmount] Not available for current model');
-        return;
-    }
-
-    if (!s.canToggle) {
-        console.log('[Shockmount] Toggle is disabled for current model');
-        return;
-    }
+    if (!s.available) return;
+    if (!s.canToggle) return;
 
     const nextEnabled = !s.enabled;
 

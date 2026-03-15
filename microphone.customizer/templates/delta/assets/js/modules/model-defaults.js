@@ -5,14 +5,28 @@ import { stateManager } from '../core/state.js';
 import { updateSectionLayers } from './appearance-new.js';
 
 /**
- * Получает цену опции из SECTION_OPTIONS
+ * Получает цену опции из SECTION_OPTIONS или PRICES
  * @param {string} sectionKey - ключ секции
  * @param {string} variantCode - код варианта
  * @returns {number} цена
  */
 function getOptionPrice(sectionKey, variantCode) {
+    // Try to resolve via PRICES first (it's more reliable for specific model/variant pairs)
+    const prices = window.CUSTOMIZER_DATA.prices?.[sectionKey];
+    const modelCode = stateManager.get('currentModelCode');
+
+    if (prices) {
+        if (modelCode && variantCode && prices[modelCode]?.[variantCode] !== undefined) {
+            return Number(prices[modelCode][variantCode]);
+        }
+        if (prices['']?.[''] !== undefined) {
+            return Number(prices['']['']);
+        }
+    }
+
     const sectionOptions = window.CUSTOMIZER_DATA.sectionOptions?.[sectionKey] || [];
     const option = sectionOptions.find(opt => opt.variantCode === variantCode);
+    // FIXME: default price path differs from click handler (should ideally use resolveOptionPrice logic)
     return option?.price || 0;
 }
 
