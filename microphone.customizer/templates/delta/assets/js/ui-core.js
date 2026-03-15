@@ -114,7 +114,7 @@ export function updateUI() {
     setSubtitle('shockmount-subtitle', getLabel(state.shockmount));
     setSubtitle('shockmountPins-subtitle', getLabel(state.shockmountPins));
 
-    // Update selected states and accessibility for swatches and option buttons
+    // Update selected states for swatches and option buttons
     document.querySelectorAll('.variant-item, .swatch, .option-button').forEach(el => {
         const section = el.dataset.optionPart;
         if (!section) return;
@@ -123,13 +123,6 @@ export function updateUI() {
         const isSelected = el.dataset.variantCode === currentVariant || el.dataset.variant === currentVariant;
 
         el.classList.toggle('selected', isSelected);
-        el.setAttribute('aria-checked', isSelected ? 'true' : 'false');
-
-        if (el.classList.contains('swatch')) {
-            el.setAttribute('role', 'radio');
-            const ralName = el.dataset.ralName || el.dataset.ral || '';
-            el.setAttribute('aria-label', `Color ${ralName}`);
-        }
     });
 }
 
