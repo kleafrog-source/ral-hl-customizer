@@ -234,19 +234,19 @@ export function initEventListeners() {
             
             // Детальное логирование HL-значений для модели
             console.group(`[Model] ${modelCode} - HL Values`);
-            console.log('SHOCKMOUNT_ENABLED:', model.SHOCKMOUNT_ENABLED, '=>', model.SHOCKMOUNT_ENABLED === 1 ? 'включен в комплект' : 'не включен в комплект');
-            console.log('SHOCKMOUNT_TOGGLE:', model.SHOCKMOUNT_TOGGLE, '=>', model.SHOCKMOUNT_TOGGLE === 1 ? 'можно переключать' : 'нельзя переключать');
-            console.log('SHOCKMOUNT_VISIBLE:', model.SHOCKMOUNT_VISIBLE, '=>', model.SHOCKMOUNT_VISIBLE === 1 ? 'доступен в UI' : 'скрыт в UI');
+            console.log('SHOCKMOUNT_ENABLED:', model.SHOCKMOUNT_ENABLED, '=>', model.SHOCKMOUNT_ENABLED === 1 ? 'включен в комплект (toggle в активном положении)' : 'не включен в комплект');
+            console.log('SHOCKMOUNT_TOGGLE:', model.SHOCKMOUNT_TOGGLE, '=>', model.SHOCKMOUNT_TOGGLE === 1 ? 'можно переключать (toggle виден)' : 'нельзя переключать (toggle скрыт)');
+            console.log('SHOCKMOUNT_VISIBLE:', model.SHOCKMOUNT_VISIBLE, '=>', model.SHOCKMOUNT_VISIBLE === 1 ? 'отображается в UI' : 'скрыт в UI');
             console.log('SHOCKMOUNT_PRICE:', model.SHOCKMOUNT_PRICE, '=>', model.SHOCKMOUNT_PRICE > 0 ? `+${model.SHOCKMOUNT_PRICE}₽` : 'бесплатно');
             console.log('DEFAULTS:', model.DEFAULTS);
             console.groupEnd();
             
             const batch = stateManager.startBatch();
-            batch('shockmount.available', model.SHOCKMOUNT_VISIBLE === 1);
-            batch('shockmount.canToggle', model.SHOCKMOUNT_TOGGLE === 1);
+            batch('shockmount.available', true); // Всегда виден в UI
+            batch('shockmount.canToggle', true); // Всегда можно переключать
             batch('shockmount.price', model.SHOCKMOUNT_PRICE || 0);
-            batch('shockmount.included', model.SHOCKMOUNT_ENABLED === 1 && (model.SHOCKMOUNT_PRICE || 0) === 0);
-            batch('shockmount.enabled', model.SHOCKMOUNT_ENABLED === 1);
+            batch('shockmount.included', model.SHOCKMOUNT_ENABLED === 1); // Включен в комплект?
+            batch('shockmount.enabled', true); // Всегда активен
             stateManager.endBatch();
 
             initHLDataManager();

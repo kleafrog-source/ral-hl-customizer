@@ -3,7 +3,9 @@
 import { SECTION_LAYER_MAP } from '../config/layer-mapping.config.js';
 
 export function updateSectionLayers(section, state) {
-    const svg = document.querySelector('.svg-wrapper svg');
+    const svg = document
+   .getElementById('microphone-svg-container')
+   ?.querySelector('svg')
     if (!svg) return;
 
     // Special handling for logo section
@@ -225,7 +227,9 @@ function updateLogoLayers(svg, state) {
 
 export function updateFilter(filterId, section, colorValue) {
   if (!colorValue || !filterId) return;
-  const svg = document.querySelector('.svg-wrapper svg');
+  const svg = document
+   .getElementById('microphone-svg-container')
+   ?.querySelector('svg')
   if (!svg) return;
  const flood = svg.querySelector(`#${filterId}`);
   if (flood) {

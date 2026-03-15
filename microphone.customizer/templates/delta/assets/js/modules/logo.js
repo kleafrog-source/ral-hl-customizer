@@ -181,7 +181,9 @@ function showNotification(message, type = 'info') {
 
 //Управляет видимостью и стилями элементов эмблемы(логотипа микрофона)
 export function updateLogoSVG() {
-    const svg = document.querySelector('.svg-wrapper svg');
+    const svg = document
+   .getElementById('microphone-svg-container')
+   ?.querySelector('svg')
     if (!svg) return;
     
     const customLayer = svg.querySelector('#custom-logo-layer');

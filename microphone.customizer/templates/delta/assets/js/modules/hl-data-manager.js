@@ -64,22 +64,22 @@ export function initHLDataManager() {
         stateManager.set('logo.bgColorValue', logobgState.colorValue || null);
     }
 
-    // Initialize toggles
+    // Initialize toggles - всегда выполняем инициализацию shockmount
     const toggleData = data.liquidToggles || {};
-    if (toggleData.shockmount) {
-        // Shockmount behavior per model:
-        // - 023-the-bomblet: toggle available, user can enable/disable
-        // - other models: toggle hidden, always enabled
-        const isBomblet = data.currentModelCode === '023-the-bomblet';
-        const available = isBomblet;
-        const included = false;
-        const enabled = isBomblet ? false : true; // Non-bomblet models always have shockmount enabled
+    
+    // Используем уже существующую переменную currentModel
+    const visible = true; // Всегда виден в UI
+    const canToggle = true; // Всегда можно переключать
+    const enabled = true; // Всегда активен
+    const price = currentModel?.SHOCKMOUNT_PRICE || 0;
+    const included = currentModel?.SHOCKMOUNT_ENABLED === 1; // Включен в комплект?
 
-        stateManager.set('shockmount.available', available);
-        stateManager.set('shockmount.included', included);
-        stateManager.set('shockmount.enabled', enabled);
-        stateManager.set('shockmount.togglePrice', toggleData.shockmount.price || 0);
-    }
+    stateManager.set('shockmount.available', visible);
+    stateManager.set('shockmount.canToggle', canToggle);
+    stateManager.set('shockmount.included', included);
+    stateManager.set('shockmount.enabled', enabled);
+    stateManager.set('shockmount.price', price);
+    stateManager.set('shockmount.togglePrice', toggleData.shockmount?.price || 0);
 
     loadCustomPrices(data.prices || {});
 }

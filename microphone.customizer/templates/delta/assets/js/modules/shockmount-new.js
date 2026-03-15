@@ -4,7 +4,62 @@ import { stateManager } from '../core/state.js';
 import { SECTION_LAYER_MAP } from '../config/layer-mapping.config.js';
 import { formatPrice } from './price-calculator.js';
 
+/**
+ * Применение правил из модели
+ */
+export function applyShockmountConfig(model) {
+    const visible = Number(model.SHOCKMOUNT_VISIBLE) === 1;
+    const toggle = Number(model.SHOCKMOUNT_TOGGLE) === 1;
+    const enabled = Number(model.SHOCKMOUNT_ENABLED) === 1;
+    const price = Number(model.SHOCKMOUNT_PRICE) || 0;
+
+    const container = document.querySelector('#shockmount-module');
+    const toggleInput = document.querySelector('#shockmount-toggle');
+
+    if (!container || !toggleInput) return;
+
+    // видимость модуля
+    container.style.display = visible ? '' : 'none';
+
+    // состояние toggle
+    toggleInput.disabled = !toggle;
+
+    // начальное состояние
+    toggleInput.checked = enabled;
+
+    // сохранить в state
+    stateManager.set('shockmountEnabled', enabled);
+    stateManager.set('shockmountPrice', price);
+}
+
+/**
+ * Обработчик переключения toggle
+ */
+export function initShockmountToggle() {
+    const toggleInput = document.querySelector('#shockmount-toggle');
+    if (!toggleInput) return;
+
+    toggleInput.addEventListener('change', () => {
+        stateManager.set('shockmountEnabled', toggleInput.checked);
+        document.dispatchEvent(new CustomEvent('price:update'));
+    });
+}
+
+/**
+ * Инициализация модуля
+ */
 export function initShockmount() {
+    initShockmountToggle();
+    
+    // Подписываемся на изменения shockmount state для обновления UI
+    stateManager.subscribeSection('shockmount', () => {
+        updateShockmountVisibility();
+        updateShockmountLayers(stateManager.get());
+        updateShockmountPreview();
+        updateShockmountPinsPreview();
+    });
+    
+    // Первоначальное обновление
     updateShockmountVisibility();
     updateShockmountLayers(stateManager.get());
     updateShockmountPreview();
@@ -14,44 +69,43 @@ export function initShockmount() {
 export function updateShockmountVisibility() {
     const state = stateManager.get();
     const shockmountToggle = document.getElementById('shockmount-toggle');
+    const switchContainer = document.getElementById('shockmount-switch-container');
     const shockmountMenuItem = document.getElementById('shockmount-section');
     const shockmountPinsMenuItem = document.getElementById('shockmountPins-section');
     const shockmountSubmenu = document.getElementById('submenu-shockmount');
     const shockmountPinsSubmenu = document.getElementById('submenu-shockmountPins');
-    const switchContainer = document.getElementById('shockmount-switch-container');
-    const includedText = document.getElementById('shockmount-included-text');
-    const togglePrice = document.getElementById('shockmount-toggle-price');
 
-    const enabled = !!state.shockmount?.enabled;
-    const included = !!state.shockmount?.included;
-    const available = !!state.shockmount?.available;
+    const available = !!state.shockmount?.available; // SHOCKMOUNT_VISIBLE
+    const canToggle = !!state.shockmount?.canToggle; // SHOCKMOUNT_TOGGLE
+    const enabled = !!state.shockmount?.enabled; // SHOCKMOUNT_ENABLED
 
-    if (togglePrice) {
-        const priceValue = state.shockmount?.togglePrice || 0;
-        togglePrice.textContent = formatPrice(priceValue);
-    }
-
-    if (shockmountToggle) {
-        shockmountToggle.style.display = available ? 'flex' : 'none';
-    }
-
-    if (!available) {
-        if (shockmountMenuItem) shockmountMenuItem.style.display = 'none';
-        if (shockmountPinsMenuItem) shockmountPinsMenuItem.style.display = 'none';
-        if (shockmountSubmenu) shockmountSubmenu.style.display = 'none';
-        if (shockmountPinsSubmenu) shockmountPinsSubmenu.style.display = 'none';
-        return;
-    }
-
+    // Скрываем/показываем контейнер toggle, а не сам input
     if (switchContainer) {
-        switchContainer.style.display = included ? 'none' : 'flex';
+        switchContainer.style.display = available ? 'flex' : 'none';
     }
-    if (includedText) {
-        includedText.style.display = included ? 'block' : 'none';
+    
+    // Управляем состоянием toggle input
+    if (shockmountToggle) {
+        shockmountToggle.disabled = !canToggle;
+        shockmountToggle.checked = enabled;
     }
 
-    if (shockmountMenuItem) shockmountMenuItem.style.display = enabled ? 'flex' : 'none';
-    if (shockmountPinsMenuItem) shockmountPinsMenuItem.style.display = enabled ? 'flex' : 'none';
+    // Управляем видимостью меню
+    if (shockmountMenuItem) {
+        shockmountMenuItem.style.display = available ? '' : 'none';
+    }
+    if (shockmountPinsMenuItem) {
+        shockmountPinsMenuItem.style.display = available ? '' : 'none';
+    }
+
+    // Управляем видимостью подменю
+    const showSubmenus = available && enabled;
+    if (shockmountSubmenu) {
+        shockmountSubmenu.style.display = showSubmenus ? 'block' : 'none';
+    }
+    if (shockmountPinsSubmenu) {
+        shockmountPinsSubmenu.style.display = showSubmenus ? 'block' : 'none';
+    }
 }
 
 export function updateShockmountLayers(currentState = null) {
