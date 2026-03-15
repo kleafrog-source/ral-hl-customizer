@@ -54,66 +54,77 @@ export function initShockmount() {
     updateShockmountPinsPreview();
 }
 
+/**
+ * Update shockmount visibility based on HL model data flags.
+ * FIXME: using state flags to avoid hardcoded modelCode checks.
+ */
 export function updateShockmountVisibility() {
-    const shockmountMenuItem = document.getElementById('shockmount-menu-item');
-    const shockmountPinsMenuItem = document.getElementById('pins-menu-item');
-    const shockmountOptionsSection = document.getElementById('shockmount-options-section');
+    const shockmountMenuItem = document.getElementById('shockmount-section');
+    const shockmountPinsMenuItem = document.getElementById('shockmountPins-section');
+    const shockmountToggleItem = document.getElementById('shockmount-toggle-item');
     const switchContainer = document.getElementById('shockmount-switch-container');
     const includedText = document.getElementById('shockmount-included-text');
-    const shockmountToggle = document.getElementById('shockmount-toggle');
 
-    if (!shockmountMenuItem) return;
+    const state = stateManager.get();
+    const s = state.shockmount || {};
 
-    // Get current model from HL data
-    const currentModelCode = stateManager.get('currentModelCode') || '023-the-bomblet';
-    const isBomblet = currentModelCode === '023-the-bomblet';
+    const available = s.available;
+    const canToggle = s.canToggle;
+    const isEnabled = s.enabled;
+    const isIncluded = s.included;
+
+    if (shockmountToggleItem) {
+        shockmountToggleItem.style.display = (available && canToggle) ? 'flex' : 'none';
+    }
     
-    // Get shockmount info from HL data
-    const shockmountInfo = stateManager.get('shockmount') || {};
-    const isEnabled = shockmountInfo.enabled || false;
-    
-    if (isBomblet) {
-        // Для 023-the-bomblet показываем toggle для подвеса
-        if (shockmountToggle) shockmountToggle.style.display = 'flex';
-        if (switchContainer) switchContainer.style.display = 'flex';
-        if (includedText) includedText.style.display = 'none';
-        
-        // Показываем секции только если включен toggle
-        if (shockmountMenuItem) shockmountMenuItem.style.display = isEnabled ? 'flex' : 'none';
-        if (shockmountPinsMenuItem) shockmountPinsMenuItem.style.display = isEnabled ? 'flex' : 'none';
-        if (shockmountOptionsSection) shockmountOptionsSection.style.display = isEnabled ? 'block' : 'none';
-        
-        // Устанавливаем состояние переключателя
-        const shockmountSwitch = document.getElementById('shockmount-switch');
-        if (shockmountSwitch) shockmountSwitch.checked = isEnabled;
-        
-    } else {
-        // Для остальных моделей скрываем toggle и показываем подвес по умолчанию
-        if (shockmountToggle) shockmountToggle.style.display = 'none';
-        if (switchContainer) switchContainer.style.display = 'none';
-        if (includedText) includedText.style.display = 'none';
-        
-        // Всегда показываем секции подвеса (включен в базовую цену)
-        if (shockmountMenuItem) shockmountMenuItem.style.display = 'flex';
-        if (shockmountPinsMenuItem) shockmountPinsMenuItem.style.display = 'flex';
-        if (shockmountOptionsSection) shockmountOptionsSection.style.display = 'block';
-        
-        // Устанавливаем enabled=true для остальных моделей
-        if (stateManager.get('shockmount.enabled') !== true) {
-            stateManager.set('shockmount.enabled', true);
-        }
+    if (switchContainer) {
+        switchContainer.style.display = canToggle ? 'flex' : 'none';
     }
 
-    // Переключаем превью если нужно
-    if (!stateManager.get('shockmount.enabled') && document.querySelector('.preview-switch-btn.active')?.dataset.preview === 'shockmount') {
+    if (includedText) {
+        includedText.style.display = isIncluded ? 'block' : 'none';
+    }
+
+    if (shockmountMenuItem) {
+        shockmountMenuItem.style.display = (available && isEnabled) ? 'flex' : 'none';
+    }
+    
+    if (shockmountPinsMenuItem) {
+        shockmountPinsMenuItem.style.display = (available && isEnabled) ? 'flex' : 'none';
+    }
+
+    // Update switch state
+    const shockmountSwitch = document.getElementById('shockmount-switch');
+    if (shockmountSwitch) {
+        shockmountSwitch.checked = isEnabled;
+    }
+
+    // Switch preview if disabled
+    if (!isEnabled && document.querySelector('.preview-switch-btn.active')?.dataset.preview === 'shockmount') {
         switchPreview('microphone');
     }
 }
 
+/**
+ * Toggle shockmount enabled state.
+ * Relies only on state.shockmount flags.
+ */
 export function toggleShockmount() {
-    const isEnabled = document.getElementById('shockmount-switch').checked;
-    stateManager.set('shockmount.enabled', isEnabled);
+    const state = stateManager.get();
+    const s = state.shockmount || {};
+
+    if (!s.available || !s.canToggle) return;
+
+    const nextEnabled = !s.enabled;
+
+    stateManager.batch(batch => {
+        batch('shockmount.enabled', nextEnabled);
+    });
+
     updateShockmountVisibility();
+    updateShockmountLayers(stateManager.get());
+    updateShockmountPreview();
+    updateShockmountPinsPreview();
 }
 
 // Mapping of variants to shockmount layer IDs
@@ -186,7 +197,7 @@ export function handleShockmountVariantSelection(variant) {
     const optionData = getColorDataFromOption(selectedOption);
 
     // Update state using batch operation
-    const batchSet = stateManager.startBatch();
+    stateManager.batch(batchSet => {
     batchSet('shockmount.variant', variant);
     batchSet('shockmount.color', selectedOption.UF_RAL_COLOR_ID || null);
     batchSet('shockmount.colorValue', selectedOption.RAL_DATA?.UF_HEX || null);
@@ -202,8 +213,7 @@ export function handleShockmountVariantSelection(variant) {
     batchSet('shockmount.svgLayerGroup', selectedOption.svgLayerGroup);
     batchSet('shockmount.svgFilterId', selectedOption.svgFilterId);
     batchSet('shockmount.svgSpecialKey', selectedOption.svgSpecialKey);
-    
-    stateManager.endBatch();
+    });
 
     // Apply changes using new color utils
     applyColorToSection('shockmount', optionData);
@@ -243,7 +253,7 @@ export function handleShockmountColorSelection(color, ralName) {
     colorData.colorName = `RAL ${ralName}`;
 
     // Update state using batch operation
-    const batchSet = stateManager.startBatch();
+    stateManager.batch(batchSet => {
     batchSet('shockmount.variant', 'ral');
     batchSet('shockmount.color', ralName);
     batchSet('shockmount.colorValue', color);
@@ -257,8 +267,7 @@ export function handleShockmountColorSelection(color, ralName) {
     batchSet('shockmount.svgLayerGroup', ralOption.svgLayerGroup);
     batchSet('shockmount.svgFilterId', ralOption.svgFilterId);
     batchSet('shockmount.svgSpecialKey', ralOption.svgSpecialKey);
-    
-    stateManager.endBatch();
+    });
 
     // Apply changes using new color utils
     applyColorToSection('shockmount', colorData);
@@ -324,7 +333,7 @@ export function handleShockmountPinSelection(variant, color = null, ralName = nu
     }
 
     // Update state using batch operation
-    const batchSet = stateManager.startBatch();
+    stateManager.batch(batchSet => {
     batchSet('shockmountPins.variant', variant);
     batchSet('shockmountPins.color', selectedOption.UF_RAL_COLOR_ID || null);
     batchSet('shockmountPins.colorValue', selectedOption.RAL_DATA?.UF_HEX || color || null);
@@ -340,8 +349,7 @@ export function handleShockmountPinSelection(variant, color = null, ralName = nu
     batchSet('shockmountPins.svgLayerGroup', selectedOption.svgLayerGroup);
     batchSet('shockmountPins.svgFilterId', selectedOption.svgFilterId);
     batchSet('shockmountPins.svgSpecialKey', selectedOption.svgSpecialKey);
-    
-    stateManager.endBatch();
+    });
 
     // Apply changes using new color utils
     applyColorToSection('pins', optionData);
@@ -500,7 +508,10 @@ export function updateShockmountPinsPreview() {
 }
 
 function initShockmountEventListeners() {
-    eventRegistry.add(document.getElementById('shockmount-switch'), 'change', toggleShockmount);
+    const sw = document.getElementById('shockmount-switch');
+    if (sw) {
+        eventRegistry.add(sw, 'change', toggleShockmount);
+    }
 
     document.querySelectorAll('#shockmount-options-section .variant-item').forEach(item => {
         //Навешивается на элементы в quick-select-shockmount

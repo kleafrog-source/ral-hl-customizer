@@ -10,29 +10,22 @@ import { calculateTotal, getBreakdown, formatPrice } from './modules/price-calcu
 import { initHLDataManager } from './modules/hl-data-manager.js';
 import { variantNames, CONFIG, MALFA_SILVER_RAL, MALFA_GOLD_RAL } from './config.js';
 
-// Global state storage for microphone configurations
-const micStates = {};
-
-// Helper function to set state using stateManager
-function setState(path, value) {
-    stateManager.set(path, value);
-
-    // Save current variant state to micStates for persistence
-    const currentVariant = stateManager.get('currentModelCode');
-    if (currentVariant && !micStates[currentVariant]) {
-        micStates[currentVariant] = {};
-    }
-    if (currentVariant) {
-        const currentState = stateManager.get();
-        micStates[currentVariant] = JSON.parse(JSON.stringify(currentState));
-    }
-}
-
-// Helper function to restore microphone state using HL data
+/**
+ * Helper function to restore microphone state using HL data or saved snapshot
+ * @param {string} variant Model code
+ */
 function restoreMicState(variant) {
-    const savedState = micStates[variant];
+    const currentState = stateManager.get();
+    const oldVariant = currentState.currentModelCode;
 
-    // Update global HL data for the new model
+    if (oldVariant === variant) return;
+
+    // 1. Save snapshot of current model before switching
+    if (oldVariant) {
+        stateManager.saveModelSnapshot(oldVariant);
+    }
+
+    // 2. Update global HL data context for the new model
     const data = window.CUSTOMIZER_DATA;
     if (data && data.modelsByCode && data.modelsByCode[variant]) {
         data.currentModelCode = variant;
@@ -40,33 +33,15 @@ function restoreMicState(variant) {
         data.currentModelOptions = data.options[data.currentModelId] || data.options[0] || {};
     }
 
-    // Re-initialize HL data manager with new model context (sets defaults from HL blocks)
-    initHLDataManager();
+    // 3. Try to restore snapshot for the new model
+    const restored = stateManager.restoreModelSnapshot(variant);
 
-    if (savedState) {
-        // Restore saved state (overrides defaults)
-        Object.keys(savedState).forEach(key => {
-            // Skip managed keys that are re-initialized by HL Data Manager
-            if (['hlData', 'currentModelCode', 'currentModelId', 'currentModelOptions'].includes(key)) {
-                return;
-            }
-            
-            // Restore section states
-            if (['spheres', 'body', 'shockmount', 'pins', 'logobg', 'logo', 'case'].includes(key)) {
-                const sectionState = savedState[key];
-                if (sectionState && typeof sectionState === 'object') {
-                    Object.keys(sectionState).forEach(subKey => {
-                        stateManager.set(`${key}.${subKey}`, sectionState[subKey]);
-                    });
-                }
-            } else {
-                // Restore other state properties
-                stateManager.set(key, savedState[key]);
-            }
-        });
+    if (!restored) {
+        // 4. If no snapshot, initialize with HL defaults
+        initHLDataManager();
     }
 
-    // Update UI components
+    // 5. Update UI and Engine
     updateMALFAVisibility();
     updateShockmountVisibility();
     updateShockmountLayers(stateManager.get());
@@ -330,13 +305,15 @@ export function initEventListeners() {
             }
 
             if (confirmReset) {
-                const currentVariant = currentState.variant;
+                const currentVariant = currentState.currentModelCode;
 
-                // Clear saved state for this variant
-                delete micStates[currentVariant];
+                // Clear saved snapshot for this variant if any
+                if (stateManager.perModelState) {
+                    delete stateManager.perModelState[currentVariant];
+                }
 
-                // Re-restore from defaults (Highload data)
-                restoreMicState(currentVariant);
+                // Force re-init from HL defaults
+                initHLDataManager();
 
                 updateSVG();
                 updateUI();
@@ -348,8 +325,10 @@ export function initEventListeners() {
     // Remove logo button handler
     document.querySelectorAll('.remove-logo-btn').forEach(btn => {
         btn.addEventListener('click', function() {
-            setState('logo.customLogo', null);
-            setState('prices.logo', 0);
+            stateManager.batch(batch => {
+                batch('logo.customLogo', null);
+                batch('prices.logo', 0);
+            });
             this.style.display = 'none';
             document.getElementById('logo-overlay')?.classList.remove('active');
 
@@ -378,12 +357,12 @@ export function initEventListeners() {
             }
 
             // Special handling for shockmount pins section
-            if (section === 'shockmount-pins') {
-                section = 'pins';
+            if (section === 'shockmount-pins' || section === 'pins') {
+                section = 'shockmountPins';
             }
 
             // Handle style selection using HL data
-            handleStyleSelection(section, this.dataset.variant || this.dataset.variantCode || this.dataset.value);
+            handleStyleSelection(section, this.dataset.variant || this.dataset.value);
 
             // Switch to microphone preview when spheres or body options are selected
             if (['spheres', 'body', 'logobg', 'logo'].includes(section)) {
@@ -507,8 +486,10 @@ function initDragAndDrop() {
                     import('./modules/logo.js').then(m => {
                         const reader = new FileReader();
                         reader.onload = event => {
-                            setState('logo.customLogo', event.target.result);
-                            setState('prices.logo', CONFIG.optionPrice);
+                    stateManager.batch(batch => {
+                        batch('logo.customLogo', event.target.result);
+                        batch('prices.logo', CONFIG.optionPrice);
+                    });
                             document.querySelector('.remove-logo-btn').style.display = 'block';
                             document.getElementById('logo-overlay')?.classList.add('active');
 
@@ -534,12 +515,12 @@ export function handleShockmountColorSelection(color, ralName) {
     
     section.querySelectorAll('.swatch').forEach(i => i.classList.remove('selected'));
 
-    const batch = stateManager.startBatch();
-    batch('shockmount.variant', 'custom');
-    batch('shockmount.color', ralName);
-    batch('shockmount.colorValue', color);
-    batch('shockmount.colorName', `RAL ${ralName}`);
-    stateManager.endBatch();
+    stateManager.batch(batch => {
+        batch('shockmount.variant', 'custom');
+        batch('shockmount.color', ralName);
+        batch('shockmount.colorValue', color);
+        batch('shockmount.colorName', `RAL ${ralName}`);
+    });
 
     updateUI();
 }
@@ -550,24 +531,24 @@ export function handleShockmountPinSelection(variant, color = null, ralName = nu
     
     section.querySelectorAll('.variant-item, .swatch').forEach(item => item.classList.remove('selected'));
 
-    const batch = stateManager.startBatch();
-    if (variant === 'custom') {
-        batch('shockmountPins', { 
-            variant: 'custom', 
-            colorValue: color, 
-            colorName: `RAL ${ralName}`,
-            name: `RAL ${ralName}` 
-        });
-    } else {
-        const pinsNames = { 'brass': 'Латунь', 'RAL9003': 'Белый', 'RAL1013': 'Кремовый', 'RAL9005': 'Черный' };
-        batch('shockmountPins', { 
-            variant: variant, 
-            colorValue: color, 
-            colorName: pinsNames[variant] || variant,
-            name: pinsNames[variant] || variant 
-        });
-    }
-    stateManager.endBatch();
+    stateManager.batch(batch => {
+        if (variant === 'custom') {
+            batch('shockmountPins', {
+                variant: 'custom',
+                colorValue: color,
+                colorName: `RAL ${ralName}`,
+                name: `RAL ${ralName}`
+            });
+        } else {
+            const pinsNames = { 'brass': 'Латунь', 'RAL9003': 'Белый', 'RAL1013': 'Кремовый', 'RAL9005': 'Черный' };
+            batch('shockmountPins', {
+                variant: variant,
+                colorValue: color,
+                colorName: pinsNames[variant] || variant,
+                name: pinsNames[variant] || variant
+            });
+        }
+    });
 
     updateUI();
 }
@@ -648,4 +629,4 @@ export function showNotification(msg, type) {
 }
 
 // Export helper functions for other modules
-export { setState, restoreMicState, micStates };
+export { restoreMicState };

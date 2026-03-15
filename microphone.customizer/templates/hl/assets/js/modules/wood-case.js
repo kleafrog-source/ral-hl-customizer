@@ -284,35 +284,88 @@ const WoodCase = {
     },
 
     setupInteract() {
-        const isMobile = window.innerWidth <= 768;
-        //данная функция нужна для того, чтобы можно было зумить и драгать логотип
-        //в фун
-        interact('#wood-case-logo-wrapper').gesturable({
-            onmove: (e) => {
-                const state = this.history[this.currentCase];
-                const ds = e.ds;
-                state.scale *= (1 + ds);
-                // Clamp scale
-                state.scale = Math.max(0.01, Math.min(5, state.scale));
-                this.updateTransform();
-                this.showRulers();
+        const wrapper = document.getElementById('wood-case-logo-wrapper');
+        if (!wrapper) return;
+
+        let isPointerDown = false;
+        let lastX = 0;
+        let lastY = 0;
+        let initialDistance = 0;
+        let initialScale = 1;
+
+        const getDistance = (touches) => {
+            return Math.sqrt(
+                Math.pow(touches[0].clientX - touches[1].clientX, 2) +
+                Math.pow(touches[0].clientY - touches[1].clientY, 2)
+            );
+        };
+
+        const handleDown = (e) => {
+            isPointerDown = true;
+            if (e.touches && e.touches.length === 2) {
+                initialDistance = getDistance(e.touches);
+                initialScale = this.history[this.currentCase].scale;
+            } else {
+                const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+                const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+                lastX = clientX;
+                lastY = clientY;
             }
-        }).draggable({
-            onmove: (e) => {
-                const state = this.history[this.currentCase];
+        };
+
+        const handleMove = (e) => {
+            if (!isPointerDown) return;
+            const state = this.history[this.currentCase];
+
+            if (e.touches && e.touches.length === 2) {
+                // Pinch to zoom
+                const distance = getDistance(e.touches);
+                const scale = initialScale * (distance / initialDistance);
+                state.scale = Math.max(0.01, Math.min(5, scale));
+            } else {
+                // Drag
+                const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+                const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+                const dx = clientX - lastX;
+                const dy = clientY - lastY;
                 
-                state.x += e.dx;
-                state.y += e.dy;
-                this.updateTransform();
-                this.showRulers();
+                state.x += dx;
+                state.y += dy;
+                lastX = clientX;
+                lastY = clientY;
             }
-        });
-        //данная функция нужна для того, чтобы можно было зумить колесиком мыши и драгать логотип
-        document.getElementById('wood-case-logo-wrapper').addEventListener('wheel', (e) => {
+            this.updateTransform();
+            this.showRulers();
+        };
+
+        const handleUp = () => {
+            isPointerDown = false;
+        };
+
+        // Pointer Events for better cross-device support
+        wrapper.addEventListener('pointerdown', handleDown);
+        window.addEventListener('pointermove', handleMove);
+        window.addEventListener('pointerup', handleUp);
+
+        // Touch events fallback/additional
+        wrapper.addEventListener('touchstart', (e) => {
+            if (e.touches.length > 1) e.preventDefault();
+            handleDown(e);
+        }, { passive: false });
+        window.addEventListener('touchmove', (e) => {
+            if (isPointerDown) {
+                if (e.touches.length > 1) e.preventDefault();
+                handleMove(e);
+            }
+        }, { passive: false });
+        window.addEventListener('touchend', handleUp);
+
+        // Wheel zoom
+        wrapper.addEventListener('wheel', (e) => {
             e.preventDefault();
             const state = this.history[this.currentCase];
             const delta = e.deltaY > 0 ? 0.95 : 1.05;
-            state.scale *= delta;
+            state.scale = Math.max(0.01, Math.min(5, state.scale * delta));
             this.updateTransform();
             this.showRulers();
         }, { passive: false });
