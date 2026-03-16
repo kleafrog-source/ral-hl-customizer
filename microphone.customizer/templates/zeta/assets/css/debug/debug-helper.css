@@ -1,0 +1,87 @@
+.debug-panel {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 320px;
+    max-height: 80vh;
+    background: rgba(0, 0, 0, 0.85);
+    color: #fff;
+    padding: 15px;
+    border-radius: 10px;
+    z-index: 10000;
+    font-family: monospace;
+    font-size: 12px;
+    overflow-y: auto;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    border: 1px solid #444;
+}
+
+.debug-panel h3 {
+    margin-top: 0;
+    border-bottom: 1px solid #444;
+    padding-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.debug-section {
+    margin-bottom: 15px;
+    border-bottom: 1px solid #333;
+    padding-bottom: 10px;
+}
+
+.debug-section h4 {
+    margin: 5px 0;
+    color: #aaa;
+}
+
+.debug-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.debug-row label {
+    flex: 1;
+}
+
+.debug-row input[type="range"] {
+    flex: 2;
+}
+
+.debug-row input[type="text"],
+.debug-row input[type="number"] {
+    width: 60px;
+    background: #222;
+    border: 1px solid #444;
+    color: #fff;
+    padding: 2px 5px;
+}
+
+.debug-state-viewer {
+    background: #111;
+    padding: 10px;
+    border-radius: 5px;
+    white-space: pre-wrap;
+    font-size: 10px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.debug-overlay-stencil {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.5;
+    max-width: 100vw;
+    max-height: 100vh;
+}
+
+.debug-panel-collapsed {
+    width: auto;
+    height: auto;
+    padding: 10px;
+}

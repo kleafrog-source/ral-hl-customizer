@@ -50,45 +50,12 @@ export function initHLDataManager() {
     stateManager.set('modelSeries', currentModel?.MODEL_SERIES || null);
     stateManager.set('basePrice', currentModel?.BASE_PRICE || 0);
 
-    // Initialize options for each section based on current model defaults
+    // Initialize options for each section based on current model options
     const sectionOptions = data.currentModelOptions || {};
-    
-    // Helper function to find option by variant code
-    const findOptionByVariantCode = (sectionOptions, variantCode) => {
-        if (!variantCode) return null;
-        return sectionOptions.find(option => option.UF_VARIANT_CODE === variantCode);
-    };
-    
-    // Default values mapping
-    const defaultMapping = {
-        spheres: currentModel?.DEFAULT_SPHERES,
-        body: currentModel?.DEFAULT_BODY,
-        logo: currentModel?.DEFAULT_LOGO,
-        logobg: currentModel?.DEFAULT_LOGOBG,
-        shockmount: currentModel?.DEFAULT_SHOCKMOUNT,
-        shockmountPins: currentModel?.DEFAULT_SHOCKMOUNT_PINS
-    };
-    
-    // Initialize each section with default value or first option
-    Object.keys(defaultMapping).forEach(section => {
-        const options = sectionOptions[section] || [];
-        const defaultVariantCode = defaultMapping[section];
-        
-        let selectedOption = null;
-        
-        // Try to find default option first
-        if (defaultVariantCode) {
-            selectedOption = findOptionByVariantCode(options, defaultVariantCode);
-        }
-        
-        // Fallback to first option if default not found
-        if (!selectedOption && options.length > 0) {
-            selectedOption = options[0];
-        }
-        
-        if (selectedOption) {
-            stateManager.set(section, mapOptionToState(selectedOption));
-        }
+    Object.keys(sectionOptions).forEach(section => {
+        const firstOption = sectionOptions[section]?.[0];
+        if (!firstOption) return;
+        stateManager.set(section, mapOptionToState(firstOption));
     });
 
     const logobgState = stateManager.get('logobg');
@@ -97,27 +64,22 @@ export function initHLDataManager() {
         stateManager.set('logo.bgColorValue', logobgState.colorValue || null);
     }
 
-    // Initialize toggles
+    // Initialize toggles - всегда выполняем инициализацию shockmount
     const toggleData = data.liquidToggles || {};
-    if (toggleData.shockmount) {
-        // Shockmount behavior based on HL data:
-        const shockmountEnabled = !!currentModel?.SHOCKMOUNT_ENABLED;
-        const shockmountPrice = currentModel?.SHOCKMOUNT_PRICE || 0;
-        const shockmountToggle = !!currentModel?.SHOCKMOUNT_TOGGLE;
-        const shockmountVisible = !!currentModel?.SHOCKMOUNT_VISIBLE;
-        
-        // Если UF_SHOCKMOUNT_ENABLED = 1, то подвес включен в комплект (toggle скрыт, всегда включен)
-        // Если UF_SHOCKMOUNT_ENABLED = 0, то подвес платный (toggle виден, пользователь решает)
-        // UF_SHOCKMOUNT_TOGGLE и UF_SHOCKMOUNT_VISIBLE управляют видимостью toggle и секций
-        const available = shockmountToggle && shockmountVisible && !shockmountEnabled; // Toggle доступен только если подвес не включен в комплект и включен toggle
-        const included = shockmountEnabled && shockmountPrice === 0;
-        const enabled = shockmountEnabled || (shockmountToggle && shockmountVisible); // Если включен в комплект или включен toggle
+    
+    // Используем уже существующую переменную currentModel
+    const visible = true; // Всегда виден в UI
+    const canToggle = true; // Всегда можно переключать
+    const enabled = true; // Всегда активен
+    const price = currentModel?.SHOCKMOUNT_PRICE || 0;
+    const included = currentModel?.SHOCKMOUNT_ENABLED === 1; // Включен в комплект?
 
-        stateManager.set('shockmount.available', available);
-        stateManager.set('shockmount.included', included);
-        stateManager.set('shockmount.enabled', enabled);
-        stateManager.set('shockmount.togglePrice', shockmountPrice || 0);
-    }
+    stateManager.set('shockmount.available', visible);
+    stateManager.set('shockmount.canToggle', canToggle);
+    stateManager.set('shockmount.included', included);
+    stateManager.set('shockmount.enabled', enabled);
+    stateManager.set('shockmount.price', price);
+    stateManager.set('shockmount.togglePrice', toggleData.shockmount?.price || 0);
 
     loadCustomPrices(data.prices || {});
 }

@@ -65,7 +65,7 @@ if ($cache->initCache($cacheTime, $cacheId, $cacheDir)) {
     $modelRows = $getHlData(
         10,
         [],
-        ['ID', 'UF_CODE', 'UF_NAME', 'UF_BASE_PRICE', 'UF_DESCRIPTION', 'UF_SHOCKMOUNT_ENABLED', 'UF_SHOCKMOUNT_PRICE', 'UF_SHOCKMOUNT_TOGGLE', 'UF_SHOCKMOUNT_VISIBLE', 'UF_SORT', 'UF_MODEL_SERIES', 'UF_DEFAULT_SPHERES', 'UF_DEFAULT_BODY', 'UF_DEFAULT_LOGO', 'UF_DEFAULT_LOGOBG', 'UF_DEFAULT_SHOCKMOUNT', 'UF_DEFAULT_SHOCKMOUNT_PINS', 'UF_IS_DEFAULT_MODEL'],
+        ['ID', 'UF_CODE', 'UF_NAME', 'UF_BASE_PRICE', 'UF_DESCRIPTION', 'UF_SHOCKMOUNT_ENABLED', 'UF_SHOCKMOUNT_PRICE', 'UF_SHOCKMOUNT_TOGGLE', 'UF_SHOCKMOUNT_VISIBLE', 'UF_IS_DEFAULT_MODEL', 'UF_DEFAULT_SPHERES', 'UF_DEFAULT_BODY', 'UF_DEFAULT_LOGO', 'UF_DEFAULT_LOGOBG', 'UF_DEFAULT_SHOCKMOUNT', 'UF_DEFAULT_SHOCKMOUNT_PINS', 'UF_SORT', 'UF_MODEL_SERIES'],
         ['UF_SORT' => 'ASC']
     );
     $models = [];
@@ -75,21 +75,30 @@ if ($cache->initCache($cacheTime, $cacheId, $cacheDir)) {
             'ID' => (int)$model['ID'],
             'CODE' => $model['UF_CODE'],
             'NAME' => $model['UF_NAME'],
-            'BASE_PRICE' => (int)$model['UF_BASE_PRICE'],
-            'DESCRIPTION' => $model['UF_DESCRIPTION'],
-            'SHOCKMOUNT_ENABLED' => (int)$model['UF_SHOCKMOUNT_ENABLED'],
-            'SHOCKMOUNT_PRICE' => (int)$model['UF_SHOCKMOUNT_PRICE'],
-            'SHOCKMOUNT_TOGGLE' => (int)$model['UF_SHOCKMOUNT_TOGGLE'],
-            'SHOCKMOUNT_VISIBLE' => (int)$model['UF_SHOCKMOUNT_VISIBLE'],
-            'MODEL_SERIES' => $model['UF_MODEL_SERIES'],
-            'SORT' => (int)$model['UF_SORT'],
-            'DEFAULT_SPHERES' => $model['UF_DEFAULT_SPHERES'] ?? '',
-            'DEFAULT_BODY' => $model['UF_DEFAULT_BODY'] ?? '',
-            'DEFAULT_LOGO' => $model['UF_DEFAULT_LOGO'] ?? '',
-            'DEFAULT_LOGOBG' => $model['UF_DEFAULT_LOGOBG'] ?? '',
-            'DEFAULT_SHOCKMOUNT' => $model['UF_DEFAULT_SHOCKMOUNT'] ?? '',
-            'DEFAULT_SHOCKMOUNT_PINS' => $model['UF_DEFAULT_SHOCKMOUNT_PINS'] ?? '',
+            'BASE_PRICE' => (int)($model['UF_BASE_PRICE'] ?? 0),
+            'DESCRIPTION' => $model['UF_DESCRIPTION'] ?? '',
+            'shockmountEnabled'      => (int)$model['UF_SHOCKMOUNT_ENABLED'],
+            'shockmountToggle'       => (int)$model['UF_SHOCKMOUNT_TOGGLE'],
+            'shockmountVisible'      => (int)$model['UF_SHOCKMOUNT_VISIBLE'],
+            'shockmountPrice'        => (int)$model['UF_SHOCKMOUNT_PRICE'],
+            'defaultShockmount'      => (string)$model['UF_DEFAULT_SHOCKMOUNT'],
+            'defaultShockmountPins'  => (string)$model['UF_DEFAULT_SHOCKMOUNT_PINS'],
+            // FIXME: Old SHOCKMOUNT_* keys kept for compatibility; consider unifying after refactor
+            'SHOCKMOUNT_ENABLED' => (int)($model['UF_SHOCKMOUNT_ENABLED'] ?? 0),
+            'SHOCKMOUNT_TOGGLE' => (int)($model['UF_SHOCKMOUNT_TOGGLE'] ?? 0),
+            'SHOCKMOUNT_VISIBLE' => (int)($model['UF_SHOCKMOUNT_VISIBLE'] ?? 0),
+            'SHOCKMOUNT_PRICE' => (int)($model['UF_SHOCKMOUNT_PRICE'] ?? 0),
             'IS_DEFAULT_MODEL' => (int)($model['UF_IS_DEFAULT_MODEL'] ?? 0),
+            'DEFAULTS' => [
+                'SPHERES' => (string)($model['UF_DEFAULT_SPHERES'] ?? ''),
+                'BODY' => (string)($model['UF_DEFAULT_BODY'] ?? ''),
+                'LOGO' => (string)($model['UF_DEFAULT_LOGO'] ?? ''),
+                'LOGOBG' => (string)($model['UF_DEFAULT_LOGOBG'] ?? ''),
+                'SHOCKMOUNT' => (string)($model['UF_DEFAULT_SHOCKMOUNT'] ?? ''),
+                'SHOCKMOUNT_PINS' => (string)($model['UF_DEFAULT_SHOCKMOUNT_PINS'] ?? ''),
+            ],
+            'SORT' => (int)($model['UF_SORT'] ?? 0),
+            'MODEL_SERIES' => (string)($model['UF_MODEL_SERIES'] ?? ''),
         ];
         $models[$modelData['ID']] = $modelData;
         $modelsByCode[$modelData['CODE']] = $modelData;
@@ -169,7 +178,22 @@ if ($cache->initCache($cacheTime, $cacheId, $cacheDir)) {
     $arResult['PRICES'] = $prices;
 
     // Current model
-    $currentModelCode = $arParams['MODEL_CODE'] ?? '023-the-bomblet';
+    $currentModelCode = $arParams['MODEL_CODE'] ?? null;
+    
+    // Если модель не передана, ищем модель с флагом IS_DEFAULT_MODEL = 1
+    if (!$currentModelCode) {
+        foreach ($modelsByCode as $code => $model) {
+            if ($model['IS_DEFAULT_MODEL'] === 1) {
+                $currentModelCode = $code;
+                break;
+            }
+        }
+        // Fallback если модель по умолчанию не найдена
+        if (!$currentModelCode) {
+            $currentModelCode = '023-the-bomblet';
+        }
+    }
+    
     $currentModel = $modelsByCode[$currentModelCode] ?? null;
     $currentModelId = $currentModel['ID'] ?? null;
 
@@ -192,28 +216,58 @@ if ($cache->initCache($cacheTime, $cacheId, $cacheDir)) {
         }
     }
     
-    // Filter options by model series (SERIES_VAR) when provided
+    // Filter options by model series (SERIES_VAR) and model ID when provided
     $currentSeries = $currentModel['MODEL_SERIES'] ?? '';
     if (!empty($currentSeries)) {
         foreach ($currentModelOptions as $sectionCode => $sectionOptions) {
-            // Temporarily disable series filtering for logo and logobg sections to show all variants
-            if ($sectionCode === 'logo' || $sectionCode === 'logobg') {
-                // For logo and logobg sections, show all options (including MALFA and free RAL)
-                $currentModelOptions[$sectionCode] = array_values($sectionOptions);
-            } else {
-                // For other sections, apply strict filtering
-                $currentModelOptions[$sectionCode] = array_values(array_filter($sectionOptions, function ($opt) use ($currentSeries) {
-                    $seriesVar = $opt['SERIES_VAR'] ?? ($opt['UF_SERIESVAR'] ?? '');
-                    if (empty($seriesVar)) {
-                        return true;
-                    }
-                    return (string)$seriesVar === (string)$currentSeries;
-                }));
-            }
+            $currentModelOptions[$sectionCode] = array_values(array_filter($sectionOptions, function ($opt) use ($currentSeries, $currentModelId) {
+                $optModelId = (int)($opt['UF_MODEL_ID'] ?? 0);
+                if ($optModelId > 0 && $optModelId !== $currentModelId) {
+                    return false;
+                }
+
+                $seriesVar = $opt['SERIES_VAR'] ?? ($opt['UF_SERIESVAR'] ?? '');
+                if (empty($seriesVar)) {
+                    return true;
+                }
+                return (string)$seriesVar === (string)$currentSeries;
+            }));
         }
     }
     $arResult['CURRENT_MODEL_OPTIONS'] = $currentModelOptions;
     $arResult['OPTIONS_BY_SECTION'] = $currentModelOptions;
+
+    // SECTION_OPTIONS — список опций по секциям для текущей модели,
+    // в формате, который использует model-defaults.js и UI.
+    $sectionOptions = [];
+
+    foreach ($currentModelOptions as $sectionKey => $sectionOptionsList) {
+        if (!is_array($sectionOptionsList)) {
+            continue;
+        }
+
+        $sectionOptions[$sectionKey] = [];
+
+        foreach ($sectionOptionsList as $opt) {
+            $ralData = $opt['RAL_DATA'] ?? [];
+
+            $sectionOptions[$sectionKey][] = [
+                'variantCode'   => (string)($opt['UF_VARIANT_CODE'] ?? ''),
+                'variantName'   => (string)($opt['UF_VARIANT_NAME'] ?? ''),
+                'isRal'         => (bool)($opt['UF_IS_RAL'] ?? false),
+                'color'         => (string)($opt['UF_RAL_COLOR_CODE'] ?? ''),
+                'colorValue'    => (string)($ralData['UF_HEX'] ?? ''),
+                'colorName'     => (string)($ralData['UF_NAME'] ?? ''),
+                'modelId'       => (int)($opt['UF_MODEL_ID'] ?? 0),
+                'svgTargetMode' => (string)($opt['UF_SVG_TARGET_MODE'] ?? ''),
+                'svgLayerGroup' => (string)($opt['UF_SVG_LAYER_GROUP'] ?? ''),
+                'svgFilterId'   => (string)($opt['UF_SVG_FILTER_ID'] ?? ''),
+                'svgSpecialKey' => (string)($opt['UF_SVG_SPECIAL_KEY'] ?? ''),
+            ];
+        }
+    }
+
+    $arResult['SECTION_OPTIONS'] = $sectionOptions;
 
     $arResult['LIQUID_TOGGLES'] = [
         'custom_logo' => [
@@ -229,7 +283,7 @@ if ($cache->initCache($cacheTime, $cacheId, $cacheDir)) {
             'price_rule' => 'custom-woodcase-image'
         ],
         'shockmount' => [
-            'enabled' => (int)($currentModel['SHOCKMOUNT_TOGGLE'] ?? 0) && (int)($currentModel['SHOCKMOUNT_VISIBLE'] ?? 0),
+            'enabled' => (int)($currentModel['SHOCKMOUNT_ENABLED'] ?? 0),
             'included' => (int)($currentModel['SHOCKMOUNT_ENABLED'] ?? 0) === 1,
             'price' => (int)($currentModel['SHOCKMOUNT_PRICE'] ?? 0),
             'title' => 'Добавить подвес',
