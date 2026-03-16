@@ -43,29 +43,63 @@ document.addEventListener('DOMContentLoaded', async () => {
     const currentModelCode = stateManager.get('currentModelCode') || window.CUSTOMIZER_DATA?.currentModelCode;
     if (currentModelCode) {
         // Инициализация state для shockmount на основе HL-полей модели
-        const model = window.CUSTOMIZER_DATA.modelsByCode[currentModelCode];
-        if (model) {
-            stateManager.batch(batch => {
-                // Правильная интерпретация HL полей:
-                batch('shockmount.canToggle', model.shockmountToggle === 1);
-                batch('shockmount.enabled', model.shockmountEnabled === 1);
-                batch('shockmount.visible', model.shockmountVisible === 1);
-                batch('shockmount.price', model.shockmountPrice || 0);
-                batch(
-                  'shockmount.included',
-                  model.shockmountEnabled === 1 && (model.shockmountPrice || 0) === 0
-                );
+        // Сначала ждем загрузки HL данных
+        setTimeout(() => {
+            const hlData = stateManager.get('hlData');
+            console.log('[Main.js] HL Data:', hlData);
+            console.log('[Main.js] Current Model Code:', currentModelCode);
+            const model = hlData?.modelsByCode?.[currentModelCode];
+            console.log('[Main.js] Model from HL Data:', model);
+            
+            if (model) {
+                console.log('[Main.js] Setting shockmount state from model:', {
+                    shockmountToggle: model.shockmountToggle,
+                    shockmountEnabled: model.shockmountEnabled,
+                    shockmountVisible: model.shockmountVisible,
+                    shockmountPrice: model.shockmountPrice
+                });
+                
+                // Проверяем типы данных
+                console.log('[Main.js] Data types:', {
+                    shockmountToggle: typeof model.shockmountToggle,
+                    shockmountEnabled: typeof model.shockmountEnabled,
+                    shockmountVisible: typeof model.shockmountVisible,
+                    shockmountPrice: typeof model.shockmountPrice
+                });
+                
+                stateManager.batch(batch => {
+                    // Правильная интерпретация HL полей - приводим к числам
+                    batch('shockmount.canToggle', parseInt(model.shockmountToggle) === 1);
+                    batch('shockmount.enabled', parseInt(model.shockmountEnabled) === 1);
+                    batch('shockmount.visible', parseInt(model.shockmountVisible) === 1);
+                    batch('shockmount.price', parseInt(model.shockmountPrice) || 0);
+                    batch(
+                      'shockmount.included',
+                      parseInt(model.shockmountEnabled) === 1 && (parseInt(model.shockmountPrice) || 0) === 0
+                    );
 
-                batch('shockmount.variant', model.defaultShockmount || null);
-                batch('shockmountPins.variant', model.defaultShockmountPins || null);
-            });
-        }
-        
-        applyModelDefaults(currentModelCode);
+                    batch('shockmount.variant', model.defaultShockmount || null);
+                    batch('shockmountPins.variant', model.defaultShockmountPins || null);
+                });
+                
+                console.log('[Main.js] Shockmount state set:', {
+                    canToggle: parseInt(model.shockmountToggle) === 1,
+                    enabled: parseInt(model.shockmountEnabled) === 1,
+                    visible: parseInt(model.shockmountVisible) === 1,
+                    price: parseInt(model.shockmountPrice) || 0,
+                    included: parseInt(model.shockmountEnabled) === 1 && (parseInt(model.shockmountPrice) || 0) === 0
+                });
+                
+                // Синхронизируем UI с установленным состоянием
+                syncToggles();
+                
+                // Применяем значения по умолчанию для текущей модели
+                applyModelDefaults(currentModelCode);
+            } else {
+                console.error('[Main.js] Model not found in HL Data for code:', currentModelCode);
+            }
+        }, 100); // Небольшая задержка для гарантии загрузки данных
     }
-    
-    // Синхронизируем UI с установленным состоянием после инициализации
-    syncToggles();
     
     initCameraEffect(currentModelCode);
     initEventListeners();

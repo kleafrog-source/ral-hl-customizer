@@ -46,11 +46,16 @@ export function initToggles() {
         shockmountToggle.addEventListener('change', () => {
             const enabled = shockmountToggle.checked;
             stateManager.set('shockmount.enabled', enabled);
-            updateShockmountVisibility();
-            updateShockmountLayers(stateManager.get());
-            updateShockmountPreview();
-            updateShockmountPinsPreview();
-            updateUI();
+            
+            // Даем время на обновление state перед вызовом UI
+            setTimeout(() => {
+                updateShockmountVisibility();
+                updateShockmountLayers(stateManager.get());
+                updateShockmountPreview();
+                updateShockmountPinsPreview();
+                updateUI();
+                updateShockmountVisibility(); // Повторный вызов для гарантии обновления меню
+            }, 10);
         });
     }
 

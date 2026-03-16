@@ -117,6 +117,11 @@ export function applyModelDefaults(modelCode) {
             price: optionPrice
         };
 
+        // Для shockmount НЕ переопределяем price если уже установлено из HL данных
+        if (sectionKey === 'shockmount' && currentState.price !== undefined) {
+            newState.price = currentState.price;
+        }
+
         stateManager.set(sectionKey, newState);
 
         // Обновляем SVG если это не shockmount (чтобы не сломать текущую логику)

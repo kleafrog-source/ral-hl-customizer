@@ -30,6 +30,8 @@ export function initHLDataManager() {
     }
 
     const data = window.CUSTOMIZER_DATA;
+    console.log('[HL Data Manager] CUSTOMIZER_DATA:', data);
+    console.log('[HL Data Manager] modelsByCode:', data.modelsByCode);
 
     stateManager.set('hlData', {
         ralColors: data.ralColors || {},

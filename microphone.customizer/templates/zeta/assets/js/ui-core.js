@@ -263,18 +263,38 @@ export function initEventListeners() {
 
             // Инициализация или обновление state для shockmount на основе HL-полей модели
             const model = window.CUSTOMIZER_DATA.modelsByCode[modelCode];
+            console.log('[UI-Core] Model switch to:', modelCode);
+            console.log('[UI-Core] Model data:', {
+                shockmountToggle: model.shockmountToggle,
+                shockmountEnabled: model.shockmountEnabled,
+                shockmountVisible: model.shockmountVisible,
+                shockmountPrice: model.shockmountPrice
+            });
 
             if (!restored) {
                 // При переключении на новую модель без сохраненного состояния
-                // НЕ инициализируем shockmount здесь - это делается в main.js
+                // Устанавливаем shockmount состояние из HL данных
+                stateManager.batch(batch => {
+                    batch('shockmount.canToggle', parseInt(model.shockmountToggle) === 1);
+                    batch('shockmount.enabled', parseInt(model.shockmountEnabled) === 1);
+                    batch('shockmount.visible', parseInt(model.shockmountVisible) === 1);
+                    batch('shockmount.price', parseInt(model.shockmountPrice) || 0);
+                    batch(
+                      'shockmount.included',
+                      parseInt(model.shockmountEnabled) === 1 && (parseInt(model.shockmountPrice) || 0) === 0
+                    );
+                    // Обновляем базовую цену из HL данных
+                    batch('basePrice', parseInt(model.BASE_PRICE) || 0);
+                });
                 
                 // Применяем значения по умолчанию для новой модели
                 applyModelDefaults(modelCode);
             } else {
                 // При переключении моделей обновляем только canToggle для новой модели
                 // Сохраняем текущее состояние пользователя (enabled, visible, price)
+                console.log('[UI-Core] Updating canToggle to:', model.shockmountToggle);
                 stateManager.batch(batch => {
-                    batch('shockmount.canToggle', model.shockmountToggle === 1);
+                    batch('shockmount.canToggle', parseInt(model.shockmountToggle) === 1);
                 });
             }
 
@@ -285,8 +305,12 @@ export function initEventListeners() {
             updateShockmountLayers(stateManager.get());
             updateShockmountPreview();
             updateShockmountPinsPreview();
-            updateSVG();
             updateUI();
+            
+            // Дополнительное обновление видимости меню после всех изменений
+            setTimeout(() => {
+                updateShockmountVisibility();
+            }, 50);
             updateMicVariant(modelCode);
 
             if (window.WoodCase) {

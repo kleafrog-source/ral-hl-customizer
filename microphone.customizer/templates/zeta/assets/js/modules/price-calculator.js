@@ -41,6 +41,17 @@ export function getSurcharge(sectionCode, variantCode = '', modelCode = '', isRa
 
 export function getBreakdown(state) {
     const modelCode = state.currentModelCode || '';
+    const hlData = state.hlData || {};
+    const model = hlData.modelsByCode?.[modelCode] || {};
+    
+    // Базовая цена из HL данных модели
+    const basePrice = safeNumber(model.BASE_PRICE || state.basePrice);
+    console.log('[Price Calculator] Base price:', {
+        modelCode,
+        basePriceFromHL: model.BASE_PRICE,
+        basePriceFromState: state.basePrice,
+        finalBasePrice: basePrice
+    });
 
     const spheresPrice = safeNumber(state.spheres?.price);
     const bodyPrice = safeNumber(state.body?.price);
@@ -49,14 +60,21 @@ export function getBreakdown(state) {
     const casePrice = safeNumber(state.case?.price);
 
     const s = state.shockmount || {};
+    console.log('[Price Calculator] Shockmount state:', s);
     const showShockmountPrice = s.visible && (s.canToggle || !s.included) && (s.price || 0) > 0;
+    console.log('[Price Calculator] Show price:', showShockmountPrice, {
+        visible: s.visible,
+        canToggle: s.canToggle,
+        included: s.included,
+        price: s.price
+    });
     const shockmountPrice = showShockmountPrice ? safeNumber(s.price) : 0;
 
     // pins price usually 0 or included in shockmount price in HL, but we read it if exists
     const pinsPrice = safeNumber(state.shockmountPins?.price);
 
     return {
-        base: safeNumber(state.basePrice),
+        base: basePrice,
         spheres: spheresPrice,
         body: bodyPrice,
         logo: logoPrice,
