@@ -5,7 +5,7 @@ import { updateSVG } from './engine.js';
 import { updateSectionLayers } from './modules/appearance-new.js';
 import { updateLogoSVG, updateMalfaLogoOptionsVisibility } from './modules/logo.js';
 import { updateShockmountLayers, updateShockmountVisibility, updateShockmountPreview, updateShockmountPinsPreview, toggleShockmount } from './modules/shockmount-new.js';
-import { syncToggles } from './modules/toggles.js';
+import { syncToggles, initToggles } from './modules/toggles.js';
 import { applyModelDefaults } from './modules/model-defaults.js';
 import { calculateTotal, getBreakdown, formatPrice, debugPrices } from './modules/price-calculator.js';
 import { initHLDataManager } from './modules/hl-data-manager.js';

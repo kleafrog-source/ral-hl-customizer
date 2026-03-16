@@ -250,3 +250,54 @@
       </div>
     </div>
   </div>
+  <script>
+function toggleFaq(element) {
+    // Закрываем все другие открытые FAQ
+    const allFaqItems = document.querySelectorAll('.start-screen-faq-item');
+    const currentItem = element.closest('.start-screen-faq-item');
+    
+    if (!currentItem) return;
+    
+    // Проверяем, открыт ли текущий элемент
+    const isActive = currentItem.classList.contains('active');
+    
+    if (!isActive) {
+        // Закрываем все остальные открытые FAQ
+        allFaqItems.forEach(item => {
+            if (item !== currentItem && item.classList.contains('active')) {
+                item.classList.remove('active');
+                const icon = item.querySelector('.start-screen-faq-icon');
+                if (icon) {
+                    icon.style.transform = 'rotate(0deg)';
+                }
+            }
+        });
+        
+        // Открываем текущий
+        currentItem.classList.add('active');
+        const icon = currentItem.querySelector('.start-screen-faq-icon');
+        if (icon) {
+            icon.style.transform = 'rotate(45deg)';
+        }
+    } else {
+        // Закрываем текущий
+        currentItem.classList.remove('active');
+        const icon = currentItem.querySelector('.start-screen-faq-icon');
+        if (icon) {
+            icon.style.transform = 'rotate(0deg)';
+        }
+    }
+}
+
+// Инициализация: закрываем все FAQ при загрузке страницы
+document.addEventListener('DOMContentLoaded', function() {
+    const faqItems = document.querySelectorAll('.start-screen-faq-item');
+    faqItems.forEach(item => {
+        item.classList.remove('active');
+        const icon = item.querySelector('.start-screen-faq-icon');
+        if (icon) {
+            icon.style.transform = 'rotate(0deg)';
+        }
+    });
+});
+</script>

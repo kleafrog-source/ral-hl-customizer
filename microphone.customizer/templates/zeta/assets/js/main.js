@@ -3,7 +3,7 @@
 import { initEventListeners, updateUI } from './ui-core.js';
 import { initHLDataManager } from './modules/hl-data-manager.js';
 import { initShockmount, updateShockmountVisibility, updateShockmountLayers, updateShockmountPreview, updateShockmountPinsPreview } from './modules/shockmount-new.js';
-import { initToggles } from './modules/toggles.js';
+import { initToggles, syncToggles } from './modules/toggles.js';
 import { loadSVG, updateSVG } from './engine.js';
 import { initializeWoodCase } from './modules/wood-case.js';
 import { init as initLogo } from './modules/logo.js';
@@ -64,12 +64,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         applyModelDefaults(currentModelCode);
     }
     
+    // Синхронизируем UI с установленным состоянием после инициализации
+    syncToggles();
+    
     initCameraEffect(currentModelCode);
     initEventListeners();
     initLogo();
     initializeWoodCase();
     initShockmount();
-    // НЕ вызываем initToggles() здесь - это делается в ui-core при переключении моделей
+    initToggles(); // Добавляем вызов для инициализации обработчиков
 
     updateShockmountVisibility();
     updateShockmountLayers(stateManager.get());
