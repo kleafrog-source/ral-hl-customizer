@@ -77,6 +77,13 @@ if ($cache->initCache($cacheTime, $cacheId, $cacheDir)) {
             'NAME' => $model['UF_NAME'],
             'BASE_PRICE' => (int)($model['UF_BASE_PRICE'] ?? 0),
             'DESCRIPTION' => $model['UF_DESCRIPTION'] ?? '',
+            'shockmountEnabled'      => (int)$model['UF_SHOCKMOUNT_ENABLED'],
+            'shockmountToggle'       => (int)$model['UF_SHOCKMOUNT_TOGGLE'],
+            'shockmountVisible'      => (int)$model['UF_SHOCKMOUNT_VISIBLE'],
+            'shockmountPrice'        => (int)$model['UF_SHOCKMOUNT_PRICE'],
+            'defaultShockmount'      => (string)$model['UF_DEFAULT_SHOCKMOUNT'],
+            'defaultShockmountPins'  => (string)$model['UF_DEFAULT_SHOCKMOUNT_PINS'],
+            // FIXME: Old SHOCKMOUNT_* keys kept for compatibility; consider unifying after refactor
             'SHOCKMOUNT_ENABLED' => (int)($model['UF_SHOCKMOUNT_ENABLED'] ?? 0),
             'SHOCKMOUNT_TOGGLE' => (int)($model['UF_SHOCKMOUNT_TOGGLE'] ?? 0),
             'SHOCKMOUNT_VISIBLE' => (int)($model['UF_SHOCKMOUNT_VISIBLE'] ?? 0),
@@ -209,24 +216,22 @@ if ($cache->initCache($cacheTime, $cacheId, $cacheDir)) {
         }
     }
     
-    // Filter options by model series (SERIES_VAR) when provided
+    // Filter options by model series (SERIES_VAR) and model ID when provided
     $currentSeries = $currentModel['MODEL_SERIES'] ?? '';
     if (!empty($currentSeries)) {
         foreach ($currentModelOptions as $sectionCode => $sectionOptions) {
-            // Temporarily disable series filtering for logo and logobg sections to show all variants
-            if ($sectionCode === 'logo' || $sectionCode === 'logobg') {
-                // For logo and logobg sections, show all options (including MALFA and free RAL)
-                $currentModelOptions[$sectionCode] = array_values($sectionOptions);
-            } else {
-                // For other sections, apply strict filtering
-                $currentModelOptions[$sectionCode] = array_values(array_filter($sectionOptions, function ($opt) use ($currentSeries) {
-                    $seriesVar = $opt['SERIES_VAR'] ?? ($opt['UF_SERIESVAR'] ?? '');
-                    if (empty($seriesVar)) {
-                        return true;
-                    }
-                    return (string)$seriesVar === (string)$currentSeries;
-                }));
-            }
+            $currentModelOptions[$sectionCode] = array_values(array_filter($sectionOptions, function ($opt) use ($currentSeries, $currentModelId) {
+                $optModelId = (int)($opt['UF_MODEL_ID'] ?? 0);
+                if ($optModelId > 0 && $optModelId !== $currentModelId) {
+                    return false;
+                }
+
+                $seriesVar = $opt['SERIES_VAR'] ?? ($opt['UF_SERIESVAR'] ?? '');
+                if (empty($seriesVar)) {
+                    return true;
+                }
+                return (string)$seriesVar === (string)$currentSeries;
+            }));
         }
     }
     $arResult['CURRENT_MODEL_OPTIONS'] = $currentModelOptions;
