@@ -46,14 +46,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         const model = window.CUSTOMIZER_DATA.modelsByCode[currentModelCode];
         if (model) {
             stateManager.batch(batch => {
-                batch('shockmount.available', model.shockmountVisible === 1);
+                // Правильная интерпретация HL полей:
                 batch('shockmount.canToggle', model.shockmountToggle === 1);
+                batch('shockmount.enabled', model.shockmountEnabled === 1);
+                batch('shockmount.visible', model.shockmountVisible === 1);
                 batch('shockmount.price', model.shockmountPrice || 0);
                 batch(
                   'shockmount.included',
                   model.shockmountEnabled === 1 && (model.shockmountPrice || 0) === 0
                 );
-                batch('shockmount.enabled', model.shockmountEnabled === 1);
 
                 batch('shockmount.variant', model.defaultShockmount || null);
                 batch('shockmountPins.variant', model.defaultShockmountPins || null);

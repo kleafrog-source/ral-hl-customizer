@@ -59,10 +59,10 @@ export function updateUI() {
         const price = s.price || 0;
 
         // Показываем строку только если:
-        //  - подвес доступен (available),
+        //  - подвес видим (visible),
         //  - есть возможность переключать (canToggle) ИЛИ подвес не включён в комплект (included == false),
         //  - цена > 0.
-        const showRow = s.available && (s.canToggle || !s.included) && price > 0;
+        const showRow = s.visible && (s.canToggle || !s.included) && price > 0;
 
         shockRow.style.display = showRow ? 'flex' : 'none';
         shockValue.textContent = showRow ? price.toLocaleString('ru-RU') : '0';
@@ -72,14 +72,14 @@ export function updateUI() {
     const shockMenu = document.getElementById('shockmount-section');
     if (shockMenu) {
         const s = state.shockmount || {};
-        shockMenu.style.display = s.available ? '' : 'none';
+        shockMenu.style.display = s.visible ? '' : 'none';
     }
 
     const shockPinsMenu = document.getElementById('shockmountPins-section');
     if (shockPinsMenu) {
         const s = state.shockmount || {};
         // Pins показываем только если подвес вообще доступен
-        shockPinsMenu.style.display = s.available ? '' : 'none';
+        shockPinsMenu.style.display = s.visible ? '' : 'none';
     }
 
     const setColorDisplay = (id, color) => {
@@ -122,7 +122,7 @@ export function updateUI() {
         const currentVariant = state[section]?.variant;
         const isSelected = el.dataset.variantCode === currentVariant || el.dataset.variant === currentVariant;
 
-        el.classList.toggle('selected', isSelected);
+        // el.classList.toggle('selected', isSelected); // Убрано добавление класса .selected
     });
 }
 
@@ -260,34 +260,26 @@ export function initEventListeners() {
             // Try to restore
             const restored = stateManager.restoreModelState(modelCode);
 
+            // Инициализация или обновление state для shockmount на основе HL-полей модели
+            const model = window.CUSTOMIZER_DATA.modelsByCode[modelCode];
+
             if (!restored) {
-                // Инициализация state для shockmount на основе HL-полей модели
-                const model = window.CUSTOMIZER_DATA.modelsByCode[modelCode];
-
-                stateManager.batch(batch => {
-                    batch('shockmount.available', model.shockmountVisible === 1);
-                    batch('shockmount.canToggle', model.shockmountToggle === 1);
-                    batch('shockmount.price', model.shockmountPrice || 0);
-                    batch(
-                      'shockmount.included',
-                      model.shockmountEnabled === 1 && (model.shockmountPrice || 0) === 0
-                    );
-                    batch('shockmount.enabled', model.shockmountEnabled === 1);
-
-                    batch('shockmount.variant', model.defaultShockmount || null);
-                    batch('shockmountPins.variant', model.defaultShockmountPins || null);
-                });
-
-                initHLDataManager();
-                syncToggles();
-
+                // При переключении на новую модель без сохраненного состояния
+                // НЕ инициализируем shockmount здесь - это делается в main.js
+                
                 // Применяем значения по умолчанию для новой модели
                 applyModelDefaults(modelCode);
             } else {
-                initHLDataManager();
-                syncToggles();
+                // При переключении моделей обновляем только canToggle для новой модели
+                // Сохраняем текущее состояние пользователя (enabled, visible, price)
+                stateManager.batch(batch => {
+                    batch('shockmount.canToggle', model.shockmountToggle === 1);
+                });
             }
-            
+
+            // Синхронизируем UI с финальным состоянием
+            syncToggles();
+
             updateShockmountVisibility();
             updateShockmountLayers(stateManager.get());
             updateShockmountPreview();

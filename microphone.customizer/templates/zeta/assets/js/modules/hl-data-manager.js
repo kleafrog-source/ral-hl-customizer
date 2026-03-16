@@ -68,13 +68,13 @@ export function initHLDataManager() {
     const toggleData = data.liquidToggles || {};
     
     // Используем уже существующую переменную currentModel
-    const visible = true; // Всегда виден в UI
-    const canToggle = true; // Всегда можно переключать
-    const enabled = true; // Всегда активен
+    const visible = currentModel?.SHOCKMOUNT_VISIBLE === 1; // Видим только когда включен
+    const canToggle = currentModel?.SHOCKMOUNT_TOGGLE === 1; // Toggle видим/скрыт
+    const enabled = currentModel?.SHOCKMOUNT_ENABLED === 1; // Toggle положение
     const price = currentModel?.SHOCKMOUNT_PRICE || 0;
     const included = currentModel?.SHOCKMOUNT_ENABLED === 1; // Включен в комплект?
 
-    stateManager.set('shockmount.available', visible);
+    stateManager.set('shockmount.visible', visible);
     stateManager.set('shockmount.canToggle', canToggle);
     stateManager.set('shockmount.included', included);
     stateManager.set('shockmount.enabled', enabled);

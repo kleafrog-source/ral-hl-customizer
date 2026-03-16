@@ -7,12 +7,23 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
 
 use Bitrix\Main\Page\Asset;
 
-Asset::getInstance()->addCss($templateFolder . "/assets/css/style.css");
-Asset::getInstance()->addCss($templateFolder . "/assets/css/woodcase.css");
-Asset::getInstance()->addCss($templateFolder . "/assets/css/forms.css");
-Asset::getInstance()->addCss($templateFolder . "/assets/css/camera-effect.css");
-Asset::getInstance()->addCss($templateFolder . "/assets/css/start-screen.css");
+$APPLICATION->SetAdditionalCSS($templateFolder . "/assets/css/style.css");
+$APPLICATION->SetAdditionalCSS($templateFolder . "/assets/css/woodcase.css");
+$APPLICATION->SetAdditionalCSS($templateFolder . "/assets/css/forms.css");
+$APPLICATION->SetAdditionalCSS($templateFolder . "/assets/css/camera-effect.css");
+$APPLICATION->SetAdditionalCSS($templateFolder . "/assets/css/start-screen.css");
 ?>
+
+<?php
+// Сохраняем путь с версией в переменную
+$jsPathWithVersion = CUtil::GetAdditionalFileURL($templateFolder . '/assets/js/main.js');
+
+// Добавляем в head
+$APPLICATION->AddHeadString('
+    <script type="module" src="' . $jsPathWithVersion . '"></script>
+');
+?>
+
 <!-- NOTE: zoom disabled intentionally to keep SVG/layout stable on mobile -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <?
@@ -1405,5 +1416,3 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
 
 
 
-
-    <script type="module" src="<?= $templateFolder ?>/assets/js/main.js"></script>

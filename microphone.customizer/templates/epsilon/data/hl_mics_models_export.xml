@@ -60,9 +60,9 @@
 			<uf_name>023 Deluxe</uf_name>
 			<uf_base_price>159990</uf_base_price>
 			<uf_description>деревянный футляр, аттенюатор, антивибрационный подвес, клипса, микрофонный кабель</uf_description>
-			<uf_shockmount_enabled>0</uf_shockmount_enabled>
+			<uf_shockmount_enabled>1</uf_shockmount_enabled>
 			<uf_shockmount_toggle>0</uf_shockmount_toggle>
-			<uf_shockmount_visible>0</uf_shockmount_visible>
+			<uf_shockmount_visible>1</uf_shockmount_visible>
 			<uf_shockmount_price>0</uf_shockmount_price>
 			<uf_sort>30</uf_sort>
 			<uf_is_default_model>0</uf_is_default_model>

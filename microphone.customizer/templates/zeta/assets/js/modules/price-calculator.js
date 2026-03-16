@@ -49,7 +49,7 @@ export function getBreakdown(state) {
     const casePrice = safeNumber(state.case?.price);
 
     const s = state.shockmount || {};
-    const showShockmountPrice = s.available && (s.canToggle || !s.included) && (s.price || 0) > 0;
+    const showShockmountPrice = s.visible && (s.canToggle || !s.included) && (s.price || 0) > 0;
     const shockmountPrice = showShockmountPrice ? safeNumber(s.price) : 0;
 
     // pins price usually 0 or included in shockmount price in HL, but we read it if exists

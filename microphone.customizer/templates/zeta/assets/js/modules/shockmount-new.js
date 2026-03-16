@@ -75,31 +75,34 @@ export function updateShockmountVisibility() {
     const shockmountSubmenu = document.getElementById('submenu-shockmount');
     const shockmountPinsSubmenu = document.getElementById('submenu-shockmountPins');
 
-    const available = !!state.shockmount?.available; // SHOCKMOUNT_VISIBLE
-    const canToggle = !!state.shockmount?.canToggle; // SHOCKMOUNT_TOGGLE
-    const enabled = !!state.shockmount?.enabled; // SHOCKMOUNT_ENABLED
+    const canToggle = !!state.shockmount?.canToggle; // SHOCKMOUNT_TOGGLE: 0=скрыт, 1=видим
+    const enabled = !!state.shockmount?.enabled; // SHOCKMOUNT_ENABLED: 0=выключен, 1=включен
+    const visible = !!state.shockmount?.visible; // SHOCKMOUNT_VISIBLE: 0=никогда не виден, 1=виден когда включен
 
-    // Скрываем/показываем контейнер toggle, а не сам input
+    // Видимость toggle контейнера зависит только от canToggle
     if (switchContainer) {
-        switchContainer.style.display = available ? 'flex' : 'none';
+        switchContainer.style.display = canToggle ? 'flex' : 'none';
     }
     
     // Управляем состоянием toggle input
     if (shockmountToggle) {
-        shockmountToggle.disabled = !canToggle;
+        shockmountToggle.disabled = false; // toggle всегда активен когда видим
         shockmountToggle.checked = enabled;
     }
 
+    // Видимость shockmount и меню зависит от visible и enabled
+    const shouldShowShockmount = visible && enabled;
+    
     // Управляем видимостью меню
     if (shockmountMenuItem) {
-        shockmountMenuItem.style.display = available ? '' : 'none';
+        shockmountMenuItem.style.display = shouldShowShockmount ? '' : 'none';
     }
     if (shockmountPinsMenuItem) {
-        shockmountPinsMenuItem.style.display = available ? '' : 'none';
+        shockmountPinsMenuItem.style.display = shouldShowShockmount ? '' : 'none';
     }
 
     // Управляем видимостью подменю
-    const showSubmenus = available && enabled;
+    const showSubmenus = shouldShowShockmount;
     if (shockmountSubmenu) {
         shockmountSubmenu.style.display = showSubmenus ? 'block' : 'none';
     }
@@ -123,7 +126,7 @@ export function updateShockmountLayers(currentState = null) {
         layer.style.display = 'none';
     });
 
-    if (state.shockmount?.enabled && state.shockmount?.available) {
+    if (state.shockmount?.enabled && state.shockmount?.visible) {
         const targetLayer = shockmountSVG.querySelector(`#${targetLayerId}`);
         if (targetLayer) targetLayer.style.display = 'inline';
     }

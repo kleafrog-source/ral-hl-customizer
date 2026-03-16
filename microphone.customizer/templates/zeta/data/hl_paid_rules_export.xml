@@ -65,7 +65,7 @@
 		</item>
 		<item>
 			<id>7</id>
-			<uf_section_code>shockmount</uf_section_code>
+			<uf_section_code>shockmount-toggle</uf_section_code>
 			<uf_model_code>1</uf_model_code>
 			<uf_variant_code>additional-023-the-bomblet-shockmount</uf_variant_code>
 			<uf_price>10000</uf_price>

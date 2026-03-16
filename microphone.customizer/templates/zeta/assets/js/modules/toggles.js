@@ -10,7 +10,6 @@ let listenersBound = false;
 
 export function initToggles() {
     if (listenersBound) {
-        syncToggles();
         return;
     }
     listenersBound = true;
@@ -55,7 +54,7 @@ export function initToggles() {
         });
     }
 
-    syncToggles();
+    // НЕ вызываем syncToggles() здесь - она вызывается из ui-core при инициализации
 }
 
 export function syncToggles() {
@@ -80,9 +79,9 @@ export function syncToggles() {
     const shockmountToggle = document.getElementById('shockmount-switch');
     if (shockmountToggle) {
         const included = !!stateManager.get('shockmount.included');
-        const available = !!stateManager.get('shockmount.available');
-        shockmountToggle.checked = available && !!stateManager.get('shockmount.enabled');
-        shockmountToggle.disabled = included || !available;
+        const canToggle = !!stateManager.get('shockmount.canToggle');
+        shockmountToggle.checked = !!stateManager.get('shockmount.enabled');
+        shockmountToggle.disabled = included || !canToggle;
     }
 
     updateShockmountVisibility();

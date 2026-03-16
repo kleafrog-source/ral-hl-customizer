@@ -1,4 +1,4 @@
-<!-- Бесплатные варианты отделки (spheres/body/logo/logobg/case/shockmount/pins) -->
+<!-- Варианты отделки (spheres/body/logo/logobg/case/shockmount/pins) -->
 
 <!-- Highload-block: free visual variants for all microphone parts. Each item describes one selectable option (code, name, RAL link, SVG behavior flags). Used as the main source for CUSTOMIZER_DATA.options. -->
 <!-- uf_view_type содержит привязку к секциям 1: spheres; 2: body; 3: logo; 34: logobg; 5: case; 6: shockmount; 7: pins -->
@@ -194,7 +194,7 @@
 			<uf_variant_name>RAL 5017 Ультрамариновый синий</uf_variant_name>
 			<uf_is_free>1</uf_is_free>
 			<uf_price>0</uf_price>
-			<uf_sort>54</uf_sort>
+			<uf_sort>55</uf_sort>
 			<uf_additional_image>0</uf_additional_image>
 			<uf_svg_layer_group />
 			<uf_svg_special_key>clip-logobg-malfa</uf_svg_special_key>
@@ -356,7 +356,7 @@
 			<uf_variant_name>RAL 9005 Матовый черный</uf_variant_name>
 			<uf_is_free>1</uf_is_free>
 			<uf_price>0</uf_price>
-			<uf_sort>55</uf_sort>
+			<uf_sort>57</uf_sort>
 			<uf_additional_image>0</uf_additional_image>
 			<uf_svg_layer_group />
 			<uf_svg_special_key>clip-logobg-malfa</uf_svg_special_key>
@@ -620,7 +620,7 @@
 		<item>
 			<id>45</id>
 			<uf_is_ral>1</uf_is_ral>
-			<uf_view_type>6</uf_view_type>
+			<uf_view_type>7</uf_view_type>
 			<uf_ral_color_id />
 			<uf_variant_code>shockmountpinspaidral</uf_variant_code>
 			<uf_variant_name>Премиум цвет пинов подвеса</uf_variant_name>
@@ -655,4 +655,3 @@
 		</item>
 	</items>
 </hiblock>
-
