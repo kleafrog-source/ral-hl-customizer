@@ -12,7 +12,11 @@ Asset::getInstance()->addCss($templateFolder . "/assets/css/woodcase.css");
 Asset::getInstance()->addCss($templateFolder . "/assets/css/forms.css");
 Asset::getInstance()->addCss($templateFolder . "/assets/css/camera-effect.css");
 Asset::getInstance()->addCss($templateFolder . "/assets/css/start-screen.css");
-Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/interactjs@1.10.19/dist/interact.min.js");
+?>
+<!-- NOTE: zoom disabled intentionally to keep SVG/layout stable on mobile -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<?
+// interact.js removed as per overhaul requirements
 Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js");
 ?>
 
@@ -109,7 +113,7 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                           <feComposite id="feComposite12" in2="result1" operator="out"/>
                           <feComposite id="feComposite13" in2="SourceGraphic" k1="-6" k2="8" k3="1" k4="-1.8" operator="arithmetic"/>
                         </filter>
-                        <image xlink:href="https://soyuzmicrophones.ru/image/custom/shockmount_017_tube-017_fet.png" id="image" width="2731" height="2731"/>
+                        <image xlink:href="../microphone.customizer/images/custom/shockmount_017_tube-017_fet.png" id="image" width="2731" height="2731"/>
                       </defs>
                       <sodipodi:namedview inkscape:current-layer="g2" inkscape:cx="889.0625" inkscape:cy="1048.4375" inkscape:deskcolor="#d1d1d1" inkscape:pagecheckerboard="0" inkscape:pageopacity="0.0" inkscape:showpageshadow="2" inkscape:window-height="837" inkscape:window-maximized="1" inkscape:window-width="1600" inkscape:window-x="1912" inkscape:window-y="173" inkscape:zoom="0.32" id="namedview4" bordercolor="#000000" borderopacity="0.25" pagecolor="#ffffff"/>
                                            <g inkscape:groupmode="layer" inkscape:label="shockmount-017-series" id="layer10" style="display:inline">
@@ -120,7 +124,7 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                           <clipPath id="SVGID_00000072264505335877728650000013084431893547372678_">
                             <use xlink:href="#SVGID_1_" id="use1" style="overflow:visible"/>
                           </clipPath>
-                          <image inkscape:label="shockmount-017-main-image" xlink:href="https://soyuzmicrophones.ru/image/custom/shockmount_017_tube-017_fet.png" id="shockmount-body-image-colorize" width="2731" height="2731" style="enable-background:new;display:inline;overflow:visible" transform="scale(0.75)"/>
+                          <image inkscape:label="shockmount-017-main-image" xlink:href="../microphone.customizer/images/custom/shockmount_017_tube-017_fet.png" id="shockmount-body-image-colorize" width="2731" height="2731" style="enable-background:new;display:inline;overflow:visible" transform="scale(0.75)"/>
                         </g>
                         <g inkscape:label="shockmount-017-body-colorize-group" id="g2" style="display:none">
                           <defs id="defs2">
@@ -130,7 +134,7 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                             <use xlink:href="#SVGID_00000087404628409273299560000004968368527721897396_" id="use2" style="overflow:visible"/>
                           </clipPath>
                           <g inkscape:label="shockmount-017-body-colorize" id="shockmount-body-monochrome" clip-path="url(#SVGID_00000096761519463578940970000013302362427397493686_)" style="display:inline;filter:url(#filter7)">
-                            <image inkscape:label="shockmount-017-body-image-colorize" xlink:href="https://soyuzmicrophones.ru/image/custom/shockmount_017_tube-017_fet.png" id="shockmount-body-image-monochrome" width="2731" height="2731" style="display:inline;overflow:visible;enable-background:new" transform="scale(0.75)"/>
+                            <image inkscape:label="shockmount-017-body-image-colorize" xlink:href="../microphone.customizer/images/custom/shockmount_017_tube-017_fet.png" id="shockmount-body-image-monochrome" width="2731" height="2731" style="display:inline;overflow:visible;enable-background:new" transform="scale(0.75)"/>
                           </g>
                         </g>
                         <g inkscape:label="shockmount-017-body-monochrome-group" id="g12" style="display:inline">
@@ -141,7 +145,7 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                             <use xlink:href="#SVGID_00000087404628409273299560000004968368527721897396_" id="use11" style="overflow:visible"/>
                           </clipPath>
                           <g inkscape:label="shockmount-017-body-monochrome" id="g11" clip-path="url(#SVGID_00000096761519463578940970000013302362427397493686_)" style="display:inline;filter:url(#filter11)">
-                            <image inkscape:label="shockmount-body-image-monochrome" xlink:href="https://soyuzmicrophones.ru/image/custom/shockmount_017_tube-017_fet.png" id="image11" width="2731" height="2731" style="display:inline;overflow:visible;enable-background:new" transform="scale(0.75)"/>
+                            <image inkscape:label="shockmount-body-image-monochrome" xlink:href="../microphone.customizer/images/custom/shockmount_017_tube-017_fet.png" id="image11" width="2731" height="2731" style="display:inline;overflow:visible;enable-background:new" transform="scale(0.75)"/>
                           </g>
                         </g>
                         <g inkscape:label="shockmount-017-pins-colorize-group" id="g3" style="display:inline">
@@ -152,7 +156,7 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                             <use xlink:href="#SVGID_00000072271108459268794390000003895150342499759748_" id="use3" style="overflow:visible"/>
                           </clipPath>
                           <g inkscape:label="shockmount-017-pins-colorize" id="shockmount-pins-colorize" clip-path="url(#SVGID_00000094609787536572818680000003164330342968576676_)" style="display:inline;filter:url(#filter9)">
-                            <image xlink:href="https://soyuzmicrophones.ru/image/custom/shockmount_017_tube-017_fet.png" id="shockmount-pins-image-colorize" width="2731" height="2731" style="display:inline;overflow:visible;enable-background:new" transform="scale(0.75)"/>
+                            <image xlink:href="../microphone.customizer/images/custom/shockmount_017_tube-017_fet.png" id="shockmount-pins-image-colorize" width="2731" height="2731" style="display:inline;overflow:visible;enable-background:new" transform="scale(0.75)"/>
                           </g>
                         </g>
                         <g inkscape:label="shockmount-017-pins-monochrome-group" id="g4" style="display:inline">
@@ -163,39 +167,39 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                             <use xlink:href="#SVGID_00000060745630073815933660000011436097578274254747_" id="use4" style="overflow:visible"/>
                           </clipPath>
                           <g id="shockmount-pins-monochrome" clip-path="url(#SVGID_00000035491660504279696820000001050204011129981073_)" style="filter:url(#filter13)">
-                            <image xlink:href="https://soyuzmicrophones.ru/image/custom/shockmount_017_tube-017_fet.png" id="shockmount-pins-image-monochrome" width="2731" height="2731" style="display:inline;overflow:visible;enable-background:new" transform="scale(0.75)"/>
+                            <image xlink:href="../microphone.customizer/images/custom/shockmount_017_tube-017_fet.png" id="shockmount-pins-image-monochrome" width="2731" height="2731" style="display:inline;overflow:visible;enable-background:new" transform="scale(0.75)"/>
                           </g>
                         </g>
                         <g inkscape:groupmode="layer" inkscape:label="shockmount-017-pins-brass-group" id="shockmount-017-pins-brass-group" style="display:inline">
-                          <image xlink:href="https://soyuzmicrophones.ru/image/custom/shockmount_017-pins-raster.png" id="shockmount-017-pins-brass" width="1906.5" height="1804.5" x="80.227" y="228.057" style="display:inline"/>
+                          <image xlink:href="../microphone.customizer/images/custom/shockmount_017-pins-raster.png" id="shockmount-017-pins-brass" width="1906.5" height="1804.5" x="80.227" y="228.057" style="display:inline"/>
                         </g>
                       </g>
                       <g inkscape:groupmode="layer" inkscape:label="shockmount-023-series" id="layer9" style="display:inline">
                         <g inkscape:label="shockmount-023-main-group" id="g17" style="display:inline" transform="translate(264.57063,-145.97)">
-                          <image inkscape:label="shockmount-023-main-image" xlink:href="https://soyuzmicrophones.ru/image/custom/shockmount_023_bomblet-023_malfa-023_deluxe.png" id="shockmount-023-raster" width="2731" height="2731" style="display:inline;isolation:isolate" transform="matrix(0.75,0,0,0.75,-210.125,154.875)"/>
+                          <image inkscape:label="shockmount-023-main-image" xlink:href="../microphone.customizer/images/custom/shockmount_023_bomblet-023_malfa-023_deluxe.png" id="shockmount-023-raster" width="2731" height="2731" style="display:inline;isolation:isolate" transform="matrix(0.75,0,0,0.75,-210.125,154.875)"/>
                         </g>
                         <g inkscape:label="shockmount-023-body-colorize-group" id="g15" style="display:inline">
                           <g inkscape:label="shockmount-023-colorize" id="g9" clip-path="url(#clipPath27)" style="display:inline;filter:url(#filter7)" transform="translate(264.57063,-145.97)">
-                            <image inkscape:label="shockmount-023-colorize-image" xlink:href="https://soyuzmicrophones.ru/image/custom/shockmount_023_bomblet-023_malfa-023_deluxe.png" id="shockmount-023-raster-5" width="2048.25" height="2048.25" x="-210.125" y="154.875" style="display:inline;isolation:isolate"/>
+                            <image inkscape:label="shockmount-023-colorize-image" xlink:href="../microphone.customizer/images/custom/shockmount_023_bomblet-023_malfa-023_deluxe.png" id="shockmount-023-raster-5" width="2048.25" height="2048.25" x="-210.125" y="154.875" style="display:inline;isolation:isolate"/>
                           </g>
                         </g>
                         <g inkscape:label="shockmount-023-body-monochrome-group" id="g19" style="display:inline">
                           <g inkscape:label="shockmount-023-body-monochrome" id="g9-2" clip-path="url(#clipPath28)" style="display:inline;filter:url(#filter11)" transform="translate(264.57063,-145.97)">
-                            <image inkscape:label="shockmount-023-monochrome-image" xlink:href="https://soyuzmicrophones.ru/image/custom/shockmount_023_bomblet-023_malfa-023_deluxe.png" id="shockmount-023-raster-5-21" width="2048.25" height="2048.25" x="-210.125" y="154.875" style="display:inline;isolation:isolate"/>
+                            <image inkscape:label="shockmount-023-monochrome-image" xlink:href="../microphone.customizer/images/custom/shockmount_023_bomblet-023_malfa-023_deluxe.png" id="shockmount-023-raster-5-21" width="2048.25" height="2048.25" x="-210.125" y="154.875" style="display:inline;isolation:isolate"/>
                           </g>
                         </g>
                         <g inkscape:label="shockmount-023-pins-colorize-group" id="g14" style="display:inline">
                           <g inkscape:label="shockmount-023-pins-colorize-group" id="g13" clip-path="url(#clipPath29)" style="display:inline;filter:url(#filter9)">
-                            <image inkscape:label="shockmount-023-pins-colorize-image" xlink:href="https://soyuzmicrophones.ru/image/custom/shockmount_023_bomblet-023_malfa-023_deluxe.png" id="shockmount-023-raster-5-2" width="2048.25" height="2048.25" x="-210.125" y="154.875" style="display:inline;isolation:isolate" transform="translate(264.57063,-145.97)"/>
+                            <image inkscape:label="shockmount-023-pins-colorize-image" xlink:href="../microphone.customizer/images/custom/shockmount_023_bomblet-023_malfa-023_deluxe.png" id="shockmount-023-raster-5-2" width="2048.25" height="2048.25" x="-210.125" y="154.875" style="display:inline;isolation:isolate" transform="translate(264.57063,-145.97)"/>
                           </g>
                         </g>
                         <g inkscape:groupmode="layer" inkscape:label="shockmount-023-pins-monochrome-group" id="layer7" style="display:inline">
                           <g inkscape:label="shockmount-023-pins-monochrome" id="g13-2" clip-path="url(#clipPath30)" style="display:inline;filter:url(#filter13)" transform="translate(3.0321047e-6,-3.6108347e-5)">
-                            <image inkscape:label="shockmount-023-pins-colorize-image" xlink:href="https://soyuzmicrophones.ru/image/custom/shockmount_023_bomblet-023_malfa-023_deluxe.png" id="shockmount-023-raster-5-2-4" width="2048.25" height="2048.25" x="-210.125" y="154.875" style="display:inline;isolation:isolate" transform="translate(264.57063,-145.97)"/>
+                            <image inkscape:label="shockmount-023-pins-colorize-image" xlink:href="../microphone.customizer/images/custom/shockmount_023_bomblet-023_malfa-023_deluxe.png" id="shockmount-023-raster-5-2-4" width="2048.25" height="2048.25" x="-210.125" y="154.875" style="display:inline;isolation:isolate" transform="translate(264.57063,-145.97)"/>
                           </g>
                         </g>
                         <g inkscape:groupmode="layer" inkscape:label="shockmount-023-pins-brass-group" id="shockmount-023-pins-brass-group" style="display:inline">
-                          <image inkscape:label="shockmount-023-pins-brass-image" xlink:href="https://soyuzmicrophones.ru/image/custom/shockmount_023-pins-raster.png" id="shockmount-023-pins-brass-raster" width="1663" height="1865" x="168.016" y="184.535" style="display:inline"/>
+                          <image inkscape:label="shockmount-023-pins-brass-image" xlink:href="../microphone.customizer/images/custom/shockmount_023-pins-raster.png" id="shockmount-023-pins-brass-raster" width="1663" height="1865" x="168.016" y="184.535" style="display:inline"/>
                         </g>
                       </g>
                         </svg>
@@ -256,6 +260,13 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                     <div class="sidebar-subtitle">Microphone</div>
                 </div> -->
                 <div class="sidebar-state-controls" role="group" aria-label="Sidebar size">
+                    <button class="sidebar-help-btn" type="button" id="sidebar-help-btn" aria-label="Help" title="Help" data-tooltip="Help">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                        </svg>
+                    </button>
                     <button class="sidebar-state-btn" type="button" data-sidebar-state-btn="compact" aria-label="Compact sidebar" title="Compact" data-tooltip="Compact">
                         <svg viewBox="0 0 24 24" aria-hidden="true">
                             <rect x="4" y="5" width="6" height="14" rx="1"></rect>
@@ -265,11 +276,6 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                     <button class="sidebar-state-btn" type="button" data-sidebar-state-btn="normal" aria-label="Normal sidebar" title="Normal" data-tooltip="Normal">
                         <svg viewBox="0 0 24 24" aria-hidden="true">
                             <rect x="4" y="5" width="16" height="14" rx="1"></rect>
-                        </svg>
-                    </button>
-                    <button class="sidebar-state-btn" type="button" data-sidebar-state-btn="expanded" aria-label="Expanded sidebar" title="Expanded" data-tooltip="Expanded">
-                        <svg viewBox="0 0 24 24" aria-hidden="true">
-                            <rect x="2" y="5" width="20" height="14" rx="1"></rect>
                         </svg>
                     </button>
                 </div>
@@ -487,48 +493,7 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                                     <?php endforeach; ?>
                                 </div>
                                 
-                                <!-- MALFA variants (hardcoded like in old template) -->
-                                <div class="option-group" id="malfa-logo-group" style="display: none;">
-                                    <h4>MALFA Edition</h4>
-                                    
-                                    <!-- MALFA - Серебро -->
-                                    <button
-                                        class="option-button variant-item"
-                                        data-option-part="logo"
-                                        data-variant-code="malfasilver"
-                                        data-price="0"
-                                        data-is-ral="0"
-                                        data-option-id="10"
-                                        data-model-id="2"
-                                        data-svg-target-mode="gradient"
-                                        data-svg-layer-group="malfa-logo-text-path"
-                                        data-svg-filter-id=""
-                                        data-svg-special-key="malfa_silver"
-                                        data-is-ral-paid="0"
-                                        data-variant="malfasilver"
-                                    >
-                                        <span class="option-name">MALFA - Серебро</span>
-                                    </button>
-                                    
-                                    <!-- MALFA - Золото -->
-                                    <button
-                                        class="option-button variant-item"
-                                        data-option-part="logo"
-                                        data-variant-code="malfagold"
-                                        data-price="0"
-                                        data-is-ral="0"
-                                        data-option-id="11"
-                                        data-model-id="2"
-                                        data-svg-target-mode="gradient"
-                                        data-svg-layer-group="malfa-logo-text-path"
-                                        data-svg-filter-id=""
-                                        data-svg-special-key="malfa_gold"
-                                        data-is-ral-paid="0"
-                                        data-variant="malfagold"
-                                    >
-                                        <span class="option-name">MALFA - Золото</span>
-                                    </button>
-                                </div>
+                                <!-- TODO: MALFA logos fully controlled via HL; removed hardcoded block -->
 
                             <?php elseif ($sectionKey === 'case'): ?>
                                 <!-- Special case section -->
@@ -1416,22 +1381,26 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
 
     <!-- Скрытая форма Битрикса для надежной отправки заказа -->
     <div style="display:none;">
-        <?$APPLICATION->IncludeComponent(
-            "bitrix:form.result.new",
-            "",
-            Array(
-                "WEB_FORM_ID" => "1",
-                "IGNORE_CUSTOM_TEMPLATE" => "Y",
-                "USE_EXTENDED_ERRORS" => "Y",
-                "SEF_MODE" => "N",
-                "CACHE_TYPE" => "N",
-                "LIST_URL" => "",
-                "EDIT_URL" => "",
-                "SUCCESS_URL" => "",
-                "CHAIN_ITEM_TEXT" => "",
-                "CHAIN_ITEM_LINK" => ""
-            )
-        );?>
+        <div id="bitrix-form-container">
+            <?$APPLICATION->IncludeComponent(
+                "bitrix:form.result.new",
+                "",
+                Array(
+                    "WEB_FORM_ID" => "1",
+                    "IGNORE_CUSTOM_TEMPLATE" => "Y",
+                    "USE_EXTENDED_ERRORS" => "Y",
+                    "SEF_MODE" => "N",
+                    "CACHE_TYPE" => "N",
+                    "LIST_URL" => "",
+                    "EDIT_URL" => "",
+                    "SUCCESS_URL" => "",
+                    "CHAIN_ITEM_TEXT" => "",
+                    "CHAIN_ITEM_LINK" => ""
+                )
+            );?>
+        </div>
+        <!-- Additional hidden fields for customization data -->
+        <input type="hidden" id="customizer-config-json" name="config_json" value="">
     </div>
 
 
