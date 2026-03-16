@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     initLogo();
     initializeWoodCase();
     initShockmount();
-    initToggles();
+    // НЕ вызываем initToggles() здесь - это делается в ui-core при переключении моделей
 
     updateShockmountVisibility();
     updateShockmountLayers(stateManager.get());

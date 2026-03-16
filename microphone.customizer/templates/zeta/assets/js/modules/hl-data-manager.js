@@ -64,22 +64,11 @@ export function initHLDataManager() {
         stateManager.set('logo.bgColorValue', logobgState.colorValue || null);
     }
 
-    // Initialize toggles - всегда выполняем инициализацию shockmount
+    // Initialize toggles - НЕ выполняем инициализацию shockmount здесь, так как она делается в main.js
     const toggleData = data.liquidToggles || {};
     
-    // Используем уже существующую переменную currentModel
-    const visible = currentModel?.SHOCKMOUNT_VISIBLE === 1; // Видим только когда включен
-    const canToggle = currentModel?.SHOCKMOUNT_TOGGLE === 1; // Toggle видим/скрыт
-    const enabled = currentModel?.SHOCKMOUNT_ENABLED === 1; // Toggle положение
-    const price = currentModel?.SHOCKMOUNT_PRICE || 0;
-    const included = currentModel?.SHOCKMOUNT_ENABLED === 1; // Включен в комплект?
-
-    stateManager.set('shockmount.visible', visible);
-    stateManager.set('shockmount.canToggle', canToggle);
-    stateManager.set('shockmount.included', included);
-    stateManager.set('shockmount.enabled', enabled);
-    stateManager.set('shockmount.price', price);
-    stateManager.set('shockmount.togglePrice', toggleData.shockmount?.price || 0);
+    // НЕ переопределяем shockmount состояние - оно уже установлено в main.js
+    // Это позволяет избежать конфликта инициализации
 
     loadCustomPrices(data.prices || {});
 }

@@ -207,6 +207,7 @@ export function initEventListeners() {
     initFullscreenControl();
     initControlAnimations();
     initPriceSectionToggle();
+    initToggles();
     initOrderModal();
     initHelpButton();
 
