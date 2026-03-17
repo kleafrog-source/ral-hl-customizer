@@ -12,6 +12,10 @@ import { resolveConfiguredPrice } from './price-calculator.js';
  * @returns {number} цена
  */
 function getOptionPrice(sectionKey, option = {}) {
+    if (option.isRal && (option.isFree || option.isRalPaid === false)) {
+        return 0;
+    }
+
     const variantCode = option.variantCode || '';
     const modelCode = stateManager.get('currentModelCode');
     const resolvedPrice = resolveConfiguredPrice(sectionKey, variantCode, modelCode, !!option.isRal);

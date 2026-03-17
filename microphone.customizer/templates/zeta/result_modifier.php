@@ -236,6 +236,14 @@ if ($cache->initCache($cacheTime, $cacheId, $cacheDir)) {
             }));
         }
     }
+
+    if (($currentModelCode ?? '') !== '023-malfa' && !empty($currentModelOptions['logo'])) {
+        $currentModelOptions['logo'] = array_values(array_filter($currentModelOptions['logo'], function ($opt) {
+            $variantCode = (string)($opt['UF_VARIANT_CODE'] ?? '');
+            return !in_array($variantCode, ['malfasilver', 'malfagold'], true);
+        }));
+    }
+
     $arResult['CURRENT_MODEL_OPTIONS'] = $currentModelOptions;
     $arResult['OPTIONS_BY_SECTION'] = $currentModelOptions;
 
@@ -257,6 +265,9 @@ if ($cache->initCache($cacheTime, $cacheId, $cacheDir)) {
                 'variantCode'   => (string)($opt['UF_VARIANT_CODE'] ?? ''),
                 'variantName'   => (string)($opt['UF_VARIANT_NAME'] ?? ''),
                 'isRal'         => (bool)($opt['UF_IS_RAL'] ?? false),
+                'isFree'        => (bool)($opt['UF_IS_FREE'] ?? false),
+                'isRalPaid'     => isset($opt['IS_RAL_PAID']) ? (bool)$opt['IS_RAL_PAID'] : !(bool)($opt['UF_IS_FREE'] ?? false),
+                'price'         => (int)($opt['UF_PRICE'] ?? 0),
                 'color'         => (string)($opt['UF_RAL_COLOR_CODE'] ?? ''),
                 'colorValue'    => (string)($ralData['UF_HEX'] ?? ''),
                 'colorName'     => (string)($ralData['UF_NAME'] ?? ''),

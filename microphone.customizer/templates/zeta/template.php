@@ -693,6 +693,10 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                                 $freeOptions = array_filter($sectionOptions, function($opt) use ($sectionKey) {
                                     $isFree = $opt['UF_IS_FREE'] ?? true;
                                     $isRal = $opt['UF_IS_RAL'] ?? false;
+                                    $variantCode = $opt['UF_VARIANT_CODE'] ?? '';
+                                    if ($sectionKey === 'logo' && in_array($variantCode, ['malfasilver', 'malfagold'], true)) {
+                                        return false;
+                                    }
                                     // For logobg, exclude RAL options from free variants (they'll be rendered via palette)
                                     if ($sectionKey === 'logobg') {
                                         return $isFree && !$isRal;
@@ -1466,5 +1470,4 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
         <!-- Additional hidden fields for customization data -->
         <input type="hidden" id="customizer-config-json" name="config_json" value="">
     </div>
-
 

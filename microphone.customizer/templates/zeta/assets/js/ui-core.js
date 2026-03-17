@@ -280,6 +280,7 @@ export function initEventListeners() {
                     batch('shockmount.canToggle', parseInt(model.shockmountToggle) === 1);
                     batch('shockmount.enabled', parseInt(model.shockmountEnabled) === 1);
                     batch('shockmount.visible', parseInt(model.shockmountVisible) === 1);
+                    batch('shockmount.available', parseInt(model.shockmountVisible) === 1 || parseInt(model.shockmountEnabled) === 1);
                     // НЕ устанавливаем цену здесь - она будет установлена в applyModelDefaults
                     // batch('shockmount.price', parseInt(model.shockmountPrice) || 0);
                     batch(
@@ -300,6 +301,7 @@ export function initEventListeners() {
                 console.log('[UI-Core] Updating canToggle to:', model.shockmountToggle);
                 stateManager.batch(batch => {
                     batch('shockmount.canToggle', parseInt(model.shockmountToggle) === 1);
+                    batch('shockmount.available', parseInt(model.shockmountVisible) === 1 || parseInt(model.shockmountEnabled) === 1);
                     // Обновляем базовую цену при переключении моделей
                     batch('basePrice', parseInt(model.BASE_PRICE) || 0);
                     // Обновляем defaultShockmountOption

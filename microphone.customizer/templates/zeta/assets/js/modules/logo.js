@@ -14,9 +14,10 @@ export function isMalfaMic(state = null) {
     const modelData = getModelData(modelCode);
     const modelId = modelData?.ID;
     // Проверяем по MODEL_SERIES или прямому совпадению кода модели
-    return modelData?.MODEL_SERIES === '023' || 
-           modelId === '2' || 
-           modelCode === '2';
+    return modelCode === '023-malfa' ||
+           modelData?.CODE === '023-malfa' ||
+           modelId === 2 ||
+           modelId === '2';
 }
 
 export function isMalfaLogo(state = null) {

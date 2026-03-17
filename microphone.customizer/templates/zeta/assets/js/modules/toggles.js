@@ -5,6 +5,7 @@ import { updateUI } from '../ui-core.js';
 import { updateShockmountVisibility, updateShockmountLayers, updateShockmountPreview, updateShockmountPinsPreview } from './shockmount-new.js';
 import { updateSVG } from '../engine.js';
 import { updateLogoSVG } from './logo.js';
+import { updateMicVariant } from './camera-effect.js';
 
 let listenersBound = false;
 
@@ -81,6 +82,7 @@ export function initToggles() {
             const enabled = shockmountToggle.checked;
             stateManager.set('shockmount.enabled', enabled);
             syncShockmountOptionState(enabled);
+            updateMicVariant(stateManager.get('currentModelCode'));
 
             // Give state a moment to settle before the UI refresh.
             setTimeout(() => {

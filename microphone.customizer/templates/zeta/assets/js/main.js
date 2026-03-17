@@ -7,7 +7,7 @@ import { initToggles, syncToggles } from './modules/toggles.js';
 import { loadSVG, updateSVG } from './engine.js';
 import { initializeWoodCase } from './modules/wood-case.js';
 import { init as initLogo } from './modules/logo.js';
-import { initCameraEffect } from './modules/camera-effect.js';
+import { initCameraEffect, updateMicVariant } from './modules/camera-effect.js';
 import { applyModelDefaults, isDefaultModel } from './modules/model-defaults.js';
 import { stateManager } from './core/state.js';
 import { initDebugHelper } from './debug/ui-debug-helper.js';
@@ -73,6 +73,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     batch('shockmount.canToggle', parseInt(model.shockmountToggle) === 1);
                     batch('shockmount.enabled', parseInt(model.shockmountEnabled) === 1);
                     batch('shockmount.visible', parseInt(model.shockmountVisible) === 1);
+                    batch('shockmount.available', parseInt(model.shockmountVisible) === 1 || parseInt(model.shockmountEnabled) === 1);
                     // НЕ устанавливаем цену здесь - она будет установлена в applyModelDefaults
                     // batch('shockmount.price', parseInt(model.shockmountPrice) || 0);
                     batch(
@@ -100,6 +101,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 
                 // Применяем значения по умолчанию для текущей модели
                 applyModelDefaults(currentModelCode);
+                updateMicVariant(currentModelCode);
                 
                 // Обновляем UI ПОСЛЕ применения дефолтов
                 updateUI();
