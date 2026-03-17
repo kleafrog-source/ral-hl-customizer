@@ -47,6 +47,8 @@ export function initHLDataManager() {
     });
 
     const currentModel = data.modelsByCode?.[data.currentModelCode] || null;
+    console.log('[HL Data Manager] Current model:', currentModel);
+    console.log('[HL Data Manager] MODEL_SERIES:', currentModel?.MODEL_SERIES);
     stateManager.set('currentModelCode', data.currentModelCode || null);
     stateManager.set('currentModelId', data.currentModelId || null);
     stateManager.set('modelSeries', currentModel?.MODEL_SERIES || null);

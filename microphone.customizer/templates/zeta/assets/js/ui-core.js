@@ -252,11 +252,16 @@ export function initEventListeners() {
             btn.classList.add('active');
 
             window.CUSTOMIZER_DATA.currentModelCode = modelCode;
-            window.CUSTOMIZER_DATA.currentModelId = window.CUSTOMIZER_DATA.modelsByCode[modelCode].ID;
-            window.CUSTOMIZER_DATA.currentModelOptions = window.CUSTOMIZER_DATA.options[window.CUSTOMIZER_DATA.currentModelId] || window.CUSTOMIZER_DATA.options[0] || {};
+            window.CUSTOMIZER_DATA.currentModelOptions = window.CUSTOMIZER_DATA.models[modelCode];
 
             stateManager.set('currentModelCode', modelCode);
             stateManager.set('currentModelId', window.CUSTOMIZER_DATA.currentModelId);
+            
+            // Обновляем modelSeries из данных модели
+            const modelData = window.CUSTOMIZER_DATA.models[modelCode];
+            if (modelData) {
+                stateManager.set('modelSeries', modelData.MODEL_SERIES || '');
+            }
 
             // Try to restore
             const restored = stateManager.restoreModelState(modelCode);
@@ -295,17 +300,21 @@ export function initEventListeners() {
                 console.log('[UI-Core] Updating canToggle to:', model.shockmountToggle);
                 stateManager.batch(batch => {
                     batch('shockmount.canToggle', parseInt(model.shockmountToggle) === 1);
+                    // Обновляем базовую цену при переключении моделей
+                    batch('basePrice', parseInt(model.BASE_PRICE) || 0);
                 });
             }
 
             // Синхронизируем UI с финальным состоянием
             syncToggles();
 
+            // Сразу обновляем UI чтобы цены применились
+            updateUI();
+
             updateShockmountVisibility();
             updateShockmountLayers(stateManager.get());
             updateShockmountPreview();
             updateShockmountPinsPreview();
-            updateUI();
             
             // Дополнительное обновление видимости меню после всех изменений
             setTimeout(() => {

@@ -3,12 +3,13 @@
   Источник: экспорт с продакшн-версии soyuzmicrophones.ru.
   Эти данные используются ИИ и шаблоном delta для:
   - инициализации списка моделей и базовых цен;
+   - определения опций подвеса (UF_DEFAULT_SHOCKMOUNT_OPTION)
   - чтения флагов подвеса (UF_SHOCKMOUNT_ENABLED, UF_SHOCKMOUNT_PRICE);
   - управления видимостью и логикой переключателя подвеса (UF_SHOCKMOUNT_TOGGLE, UF_SHOCKMOUNT_VISIBLE);
   - выбора стартовой модели при загрузке (UF_IS_DEFAULT_MODEL);
   - задания initial state по умолчанию для каждой модели
     (UF_DEFAULT_SPHERES, UF_DEFAULT_BODY, UF_DEFAULT_LOGO, UF_DEFAULT_LOGOBG,
-     UF_DEFAULT_SHOCKMOUNT, UF_DEFAULT_SHOCKMOUNT_PINS).
+     UF_DEFAULT_SHOCKMOUNT, UF_DEFAULT_SHOCKMOUNT_PINS, UF_DEFAULT_SHOCKMOUNT_OPTION).
   Файлы в папке /data служат только справочными: их не нужно импортировать обратно в PROD.
 -->
 <?xml version="1.0" encoding="UTF-8"?>
@@ -33,6 +34,7 @@
 			<uf_default_logobg>logobg-3001</uf_default_logobg>
 			<uf_default_shockmount>shockmount-9005</uf_default_shockmount>
 			<uf_default_shockmount_pins>pins-9005</uf_default_shockmount_pins>
+			<uf_default_shockmount_option>shockmount-option-not_included_023-the-bomblet</uf_default_shockmount_option>
 		</item>
 		<item>
 			<id>2</id>
@@ -53,6 +55,7 @@
 			<uf_default_logobg>logobg-9005</uf_default_logobg>
 			<uf_default_shockmount>shockmount-9005</uf_default_shockmount>
 			<uf_default_shockmount_pins>pins-9005</uf_default_shockmount_pins>
+			<uf_default_shockmount_option>shockmount-option-included_023-malfa</uf_default_shockmount_option>
 		</item>
 		<item>
 			<id>3</id>
@@ -73,6 +76,7 @@
 			<uf_default_logobg>logobg-3001</uf_default_logobg>
 			<uf_default_shockmount>shockmount-9005</uf_default_shockmount>
 			<uf_default_shockmount_pins>pins-9005</uf_default_shockmount_pins>
+			<uf_default_shockmount_option>shockmount-option-included_023-deluxe</uf_default_shockmount_option>
 		</item>
 		<item>
 			<id>4</id>
@@ -93,6 +97,7 @@
 			<uf_default_logobg>logobg-6001</uf_default_logobg>
 			<uf_default_shockmount>shockmount-1013</uf_default_shockmount>
 			<uf_default_shockmount_pins>pins-brass-017</uf_default_shockmount_pins>
+			<uf_default_shockmount_option>shockmount-option-included_017-fet</uf_default_shockmount_option>
 		</item>
 		<item>
 			<id>5</id>
@@ -113,6 +118,7 @@
 			<uf_default_logobg>logobg-5017</uf_default_logobg>
 			<uf_default_shockmount>shockmount-1013</uf_default_shockmount>
 			<uf_default_shockmount_pins>pins-brass-017</uf_default_shockmount_pins>
+			<uf_default_shockmount_option>shockmount-option-included_017-tube</uf_default_shockmount_option>
 		</item>
 	</items>
 </hiblock>

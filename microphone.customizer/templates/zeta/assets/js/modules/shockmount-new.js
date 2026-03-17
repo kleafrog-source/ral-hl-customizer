@@ -123,11 +123,18 @@ export function updateShockmountLayers(currentState = null) {
     const state = currentState || stateManager.get();
     const currentModelCode = state.currentModelCode || '';
     const modelSeries = (state.modelSeries || '').toString();
-    // Правильно определяем серию: 017 модели должны использовать layer10
-    const is023Series = modelSeries === '023' && currentModelCode.includes('023');
+    // Правильно определяем серию: используем только modelSeries
+    const is023Series = modelSeries === '023';
     const targetLayerId = is023Series ? 'layer9' : 'layer10';
     
-    console.log('[Shockmount Layers] Model series:', modelSeries, 'is023Series:', is023Series, 'targetLayerId:', targetLayerId);
+    console.log('[Shockmount Layers] Debug:', {
+        currentModelCode,
+        modelSeries,
+        is023Series,
+        targetLayerId,
+        modelSeriesType: typeof modelSeries,
+        modelSeriesValue: state.modelSeries
+    });
 
     const allLayers = shockmountSVG.querySelectorAll('#layer10, #layer9');
     allLayers.forEach(layer => {
@@ -158,16 +165,24 @@ export function updateShockmountPreview() {
     const isFilterMode = state.shockmount?.svgTargetMode === 'filter';
     const hasCustomColor = isFilterMode && !!state.shockmount?.colorValue;
     const currentModelCode = state.currentModelCode || '';
-    const is023Series = currentModelCode.includes('023');
+    const modelSeries = (state.modelSeries || '').toString();
+    // Правильно определяем серию: используем только modelSeries
+    const is023Series = modelSeries === '023';
     
-    // Определяем правильный filterId для каждой серии
+    console.log('[Shockmount Preview] Debug:', {
+        currentModelCode,
+        modelSeries,
+        is023Series,
+        modelSeriesType: typeof modelSeries,
+        modelSeriesValue: state.modelSeries
+    });
+    
+    // Определяем правильный filterId для каркаса (feFlood6 для обеих серий)
     let filterId = state.shockmount?.svgFilterId || 'feFlood6';
-    if (!is023Series) {
-        // Для 017 серии используем filterId из варианта или feFlood8 по умолчанию
-        filterId = state.shockmount?.svgFilterId && state.shockmount?.svgFilterId.includes('8') 
-            ? state.shockmount.svgFilterId 
-            : 'feFlood8';
-    }
+    // feFlood6 используется для каркаса обеих серий
+    // feFlood8 используется для пинов (не здесь)
+    
+    console.log('[Shockmount Preview] Filter ID:', filterId, 'for series:', modelSeries);
     
     const main017 = shockmountSvg.querySelector('#shockmount-017-pins-brass-group');
     const main023 = shockmountSvg.querySelector('#shockmount-023-pins-brass-group');

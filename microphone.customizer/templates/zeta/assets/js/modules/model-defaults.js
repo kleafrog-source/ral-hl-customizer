@@ -117,9 +117,27 @@ export function applyModelDefaults(modelCode) {
             price: optionPrice
         };
 
-        // Для shockmount НЕ переопределяем price если уже установлено из HL данных
-        if (sectionKey === 'shockmount' && currentState.price !== undefined) {
-            newState.price = currentState.price;
+        // Для shockmount суммируем базовую цену с ценой опции если это не бесплатный цвет
+        if (sectionKey === 'shockmount') {
+            const basePrice = currentState.price || 0; // Базовая цена из HL (10000 для bomblet)
+            const optionPriceValue = optionPrice || 0; // Цена цвета (3000)
+            
+            console.log('[ModelDefaults] Shockmount price calculation:', {
+                sectionKey,
+                basePrice,
+                optionPriceValue,
+                oldPrice: currentState.price
+            });
+            
+            if (optionPriceValue > 0) {
+                // Если платный цвет - суммируем с базовой ценой
+                newState.price = basePrice + optionPriceValue;
+                console.log('[ModelDefaults] Paid color - total price:', newState.price);
+            } else {
+                // Если бесплатный цвет - сохраняем базовую цену
+                newState.price = basePrice;
+                console.log('[ModelDefaults] Free color - base price:', newState.price);
+            }
         }
 
         stateManager.set(sectionKey, newState);
