@@ -738,7 +738,7 @@
 			<uf_additional_image>0</uf_additional_image>
 			<uf_svg_layer_group>malfa-logo-text-path</uf_svg_layer_group>
 			<uf_svg_special_key>malfa_silver</uf_svg_special_key>
-			<uf_model_id>2</uf_model_id>
+			<uf_model_id>0</uf_model_id>
 			<uf_svg_target_mode>gradient</uf_svg_target_mode>
 			<uf_seriesvar>023</uf_seriesvar>
 			<uf_svg_filter_id />
@@ -756,7 +756,7 @@
 			<uf_additional_image>0</uf_additional_image>
 			<uf_svg_layer_group>malfa-logo-text-path</uf_svg_layer_group>
 			<uf_svg_special_key>malfa_gold</uf_svg_special_key>
-			<uf_model_id>2</uf_model_id>
+			<uf_model_id>0</uf_model_id>
 			<uf_svg_target_mode>gradient</uf_svg_target_mode>
 			<uf_seriesvar>023</uf_seriesvar>
 			<uf_svg_filter_id />

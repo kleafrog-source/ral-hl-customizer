@@ -12,7 +12,11 @@ export function isMalfaMic(state = null) {
     
     // Используем данные из Bitrix для определения MALFA
     const modelData = getModelData(modelCode);
-    return modelData?.MODEL_SERIES === 'MALFA' || modelCode === '023-malfa' || modelCode === '023-MALFA';
+    const modelId = modelData?.ID;
+    // Проверяем по MODEL_SERIES или прямому совпадению кода модели
+    return modelData?.MODEL_SERIES === '023' || 
+           modelId === '2' || 
+           modelCode === '2';
 }
 
 export function isMalfaLogo(state = null) {

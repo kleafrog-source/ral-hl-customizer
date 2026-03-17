@@ -66,6 +66,27 @@ export function applyModelDefaults(modelCode) {
     });
     console.groupEnd();
 
+    // Проверяем наличие вариантов для пинов подвеса
+    const pinsVariant = defaults.SHOCKMOUNT_PINS;
+    const pinsOptions = (window.CUSTOMIZER_DATA.sectionOptions?.['shockmountPins'] || [])
+        .map(o => o.variantCode);
+    
+    console.log('[ModelDefaults] Shockmount pins check:', {
+        requestedVariant: pinsVariant,
+        availableOptions: pinsOptions,
+        isAvailable: pinsOptions.includes(pinsVariant)
+    });
+
+    if (pinsVariant && !pinsOptions.includes(pinsVariant)) {
+        console.warn('[ModelDefaults] Shockmount pins variant not found:', pinsVariant, 'Available:', pinsOptions);
+        // Ищем подходящий вариант
+        const fallbackVariant = pinsOptions.find(opt => opt.includes('brass')) || pinsOptions[0];
+        if (fallbackVariant) {
+            console.log('[ModelDefaults] Using fallback pins variant:', fallbackVariant);
+            defaults.SHOCKMOUNT_PINS = { variantCode: fallbackVariant };
+        }
+    }
+
     // Используем глобальный список опций по секциям, как в остальном коде
     const sectionOptionsMap = window.CUSTOMIZER_DATA.sectionOptions || window.CUSTOMIZER_DATA.optionsBySection || {};
     

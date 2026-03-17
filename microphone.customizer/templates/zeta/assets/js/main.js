@@ -100,10 +100,16 @@ document.addEventListener('DOMContentLoaded', async () => {
                 
                 // Применяем значения по умолчанию для текущей модели
                 applyModelDefaults(currentModelCode);
+                
+                // Обновляем UI ПОСЛЕ применения дефолтов
+                updateUI();
             } else {
                 console.error('[Main.js] Model not found in HL Data for code:', currentModelCode);
             }
         }, 100); // Небольшая задержка для гарантии загрузки данных
+    } else {
+        // Если нет текущей модели, все равно инициализируем UI
+        updateUI();
     }
     
     initCameraEffect(currentModelCode);
@@ -119,7 +125,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     updateShockmountPinsPreview();
 
     updateSVG();
-    updateUI();
+    // Убираем updateUI отсюда - он вызывается внутри setTimeout после applyModelDefaults
     initDebugHelper();
     initValidation();
 });

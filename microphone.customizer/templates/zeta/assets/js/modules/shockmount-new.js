@@ -69,7 +69,7 @@ export function initShockmount() {
 export function updateShockmountVisibility() {
     const state = stateManager.get();
     const shockmountToggle = document.getElementById('shockmount-toggle');
-    const switchContainer = document.getElementById('shockmount-switch-container');
+    const switchContainer = document.getElementById('shockmount-toggle');
     const shockmountMenuItem = document.getElementById('shockmount-section');
     const shockmountPinsMenuItem = document.getElementById('shockmountPins-section');
     const shockmountSubmenu = document.getElementById('submenu-shockmount');

@@ -510,7 +510,52 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                                     <?php endforeach; ?>
                                 </div>
                                 
-                                <!-- TODO: MALFA logos fully controlled via HL; removed hardcoded block -->
+                                <!-- MALFA logos section - динамически из HL данных -->
+                                <?php 
+                                // Фильтруем MALFA варианты из HL данных
+                                $malfaOptions = array_filter($sectionOptions, function($opt) use ($currentModelCode) {
+                                    $variantCode = $opt['UF_VARIANT_CODE'] ?? '';
+                                    $seriesVar = $opt['UF_SERIESVAR'] ?? '';
+                                    
+                                    // Ищем MALFA варианты по коду и серии
+                                    return in_array($variantCode, ['malfasilver', 'malfagold']) && 
+                                           $seriesVar === '023';
+                                });
+                                
+                                // Отображаем только для модели 023-malfa
+                                if (!empty($malfaOptions) && $currentModelCode === '023-malfa'): ?>
+                                    <div class="option-group">
+                                        <h4>MALFA Эмблема</h4>
+                                        <?php foreach ($malfaOptions as $option): ?>
+                                            <?php
+                                            $optionPrice = resolveOptionPrice(
+                                                $pricesData,
+                                                $sectionKey,
+                                                $currentModelCode,
+                                                $option['UF_VARIANT_CODE'] ?? '',
+                                                !empty($option['UF_IS_RAL']),
+                                                $option['UF_PRICE'] ?? 0
+                                            );
+                                            ?>
+                                            <button
+                                                class="option-button variant-item"
+                                                data-option-part="<?= htmlspecialchars($sectionKey) ?>"
+                                                data-variant-code="<?= htmlspecialchars($option['UF_VARIANT_CODE'] ?? '') ?>"
+                                                data-price="<?= (int)$optionPrice ?>"
+                                                data-is-ral="<?= (int)($option['UF_IS_RAL'] ?? 0) ?>"
+                                                data-option-id="<?= (int)($option['ID'] ?? 0) ?>"
+                                                data-model-id="<?= (int)($option['UF_MODEL_ID'] ?? 0) ?>"
+                                                data-svg-target-mode="<?= htmlspecialchars($option['UF_SVG_TARGET_MODE'] ?? '') ?>"
+                                                data-svg-layer-group="<?= htmlspecialchars($option['UF_SVG_LAYER_GROUP'] ?? '') ?>"
+                                                data-svg-filter-id="<?= htmlspecialchars($option['UF_SVG_FILTER_ID'] ?? '') ?>"
+                                                data-svg-special-key="<?= htmlspecialchars($option['UF_SVG_SPECIAL_KEY'] ?? '') ?>"
+                                                data-variant="<?= htmlspecialchars($option['UF_VARIANT_CODE'] ?? '') ?>"
+                                            >
+                                                <span class="option-name"><?= htmlspecialchars($option['UF_VARIANT_NAME'] ?? '') ?></span>
+                                            </button>
+                                        <?php endforeach; ?>
+                                    </div>
+                                <?php endif; ?>
 
                             <?php elseif ($sectionKey === 'case'): ?>
                                 <!-- Special case section -->

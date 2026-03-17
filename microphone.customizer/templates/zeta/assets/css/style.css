@@ -28,6 +28,50 @@
             --sidebar-width-normal: 420px;
             --sidebar-width-expanded: 480px;
             --sidebar-width-compact: 88px;
+
+/* ============================================
+           КНОПКА HELP
+           ============================================ */
+
+.sidebar-help-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 8px;
+    background: var(--cream-base);
+    color: var(--text-light);
+    cursor: pointer;
+    transition: var(--transition-fluid);
+    position: relative;
+    overflow: hidden;
+}
+
+.sidebar-help-btn:hover {
+    background: var(--accent);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(184, 115, 51, 0.3);
+}
+
+.sidebar-help-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(184, 115, 51, 0.4);
+}
+
+.sidebar-help-btn svg {
+    width: 20px;
+    height: 20px;
+    stroke-width: 2;
+    transition: var(--transition-fluid);
+}
+
+.sidebar-help-btn:hover svg {
+    stroke: white;
+    transform: scale(1.1);
+}
             --sidebar-height-normal: 50vh;
             --sidebar-height-expanded: 62vh;
             --sidebar-height-compact: 72px;
