@@ -8,11 +8,45 @@ import { updateLogoSVG } from './logo.js';
 
 let listenersBound = false;
 
+function syncShockmountOptionState(enabled) {
+    const currentState = stateManager.get();
+    const modelCode = currentState.currentModelCode || '';
+
+    if (modelCode !== '023-the-bomblet') {
+        return;
+    }
+
+    const optionCode = enabled
+        ? 'shockmount-option-included_023-the-bomblet'
+        : 'shockmount-option-not_included_023-the-bomblet';
+    const optionState = (window.CUSTOMIZER_DATA?.sectionOptions?.shockmountOption || [])
+        .find(option => option.variantCode === optionCode) || {};
+    const modelData = window.CUSTOMIZER_DATA?.modelsByCode?.[modelCode] || {};
+    const optionPrice = enabled ? Number(modelData.shockmountPrice || modelData.SHOCKMOUNT_PRICE || 0) : 0;
+
+    stateManager.batch(batch => {
+        batch('shockmountOption.variantCode', optionCode);
+        batch('shockmountOption.variant', optionCode);
+        batch('shockmountOption.variantName', optionState.variantName || optionCode);
+        batch('shockmountOption.isRal', !!optionState.isRal);
+        batch('shockmountOption.color', optionState.color || null);
+        batch('shockmountOption.colorValue', optionState.colorValue || null);
+        batch('shockmountOption.colorName', optionState.colorName || null);
+        batch('shockmountOption.modelId', optionState.modelId || currentState.currentModelId || 0);
+        batch('shockmountOption.svgTargetMode', optionState.svgTargetMode || null);
+        batch('shockmountOption.svgLayerGroup', optionState.svgLayerGroup || null);
+        batch('shockmountOption.svgFilterId', optionState.svgFilterId || null);
+        batch('shockmountOption.svgSpecialKey', optionState.svgSpecialKey || null);
+        batch('shockmountOption.price', optionPrice);
+    });
+}
+
 export function initToggles() {
     if (listenersBound) {
         return;
     }
     listenersBound = true;
+
     const logoToggle = document.getElementById('logo-mode-toggle');
     if (logoToggle) {
         logoToggle.addEventListener('change', () => {
@@ -46,20 +80,19 @@ export function initToggles() {
         shockmountToggle.addEventListener('change', () => {
             const enabled = shockmountToggle.checked;
             stateManager.set('shockmount.enabled', enabled);
-            
-            // Даем время на обновление state перед вызовом UI
+            syncShockmountOptionState(enabled);
+
+            // Give state a moment to settle before the UI refresh.
             setTimeout(() => {
                 updateShockmountVisibility();
                 updateShockmountLayers(stateManager.get());
                 updateShockmountPreview();
                 updateShockmountPinsPreview();
                 updateUI();
-                updateShockmountVisibility(); // Повторный вызов для гарантии обновления меню
+                updateShockmountVisibility();
             }, 10);
         });
     }
-
-    // НЕ вызываем syncToggles() здесь - она вызывается из ui-core при инициализации
 }
 
 export function syncToggles() {
@@ -85,8 +118,10 @@ export function syncToggles() {
     if (shockmountToggle) {
         const included = !!stateManager.get('shockmount.included');
         const canToggle = !!stateManager.get('shockmount.canToggle');
-        shockmountToggle.checked = !!stateManager.get('shockmount.enabled');
+        const enabled = !!stateManager.get('shockmount.enabled');
+        shockmountToggle.checked = enabled;
         shockmountToggle.disabled = included || !canToggle;
+        syncShockmountOptionState(enabled);
     }
 
     updateShockmountVisibility();

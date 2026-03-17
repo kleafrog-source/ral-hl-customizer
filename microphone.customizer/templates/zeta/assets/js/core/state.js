@@ -256,6 +256,7 @@ class StateManager {
             logobg: s.logobg,
             case: s.case,
             shockmount: s.shockmount,
+            shockmountOption: s.shockmountOption,
             shockmountPins: s.shockmountPins,
             prices: s.prices
         }));
