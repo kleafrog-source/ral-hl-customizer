@@ -117,7 +117,9 @@ export function updateShockmountVisibility() {
 }
 
 export function updateShockmountLayers(currentState = null) {
-    const shockmountSVG = document.getElementById('shockmount-svg');
+    const shockmountSVG = document
+   .getElementById('shockmount-svg-container')
+   ?.querySelector('svg')
     if (!shockmountSVG) return;
 
     const state = currentState || stateManager.get();
@@ -149,9 +151,11 @@ export function updateShockmountLayers(currentState = null) {
 
 function updateShockmountColor(floodId, hex, opacity = null) {
     if (!hex) return;
-    const shockmountSvg = document.getElementById('shockmount-svg');
-    if (!shockmountSvg) return;
-    const el = shockmountSvg.querySelector(`#${floodId}`);
+    const shockmountSVG = document
+   .getElementById('shockmount-svg-container')
+   ?.querySelector('svg');
+    if (!shockmountSVG) return;
+    const el = shockmountSVG.querySelector(`#${floodId}`);
     if (el) {
         el.setAttribute('flood-color', hex);
         if (opacity !== null) {
@@ -162,8 +166,10 @@ function updateShockmountColor(floodId, hex, opacity = null) {
 
 export function updateShockmountPreview() {
     const state = stateManager.get();
-    const shockmountSvg = document.getElementById('shockmount-svg');
-    if (!shockmountSvg) return;
+    const shockmountSVG = document
+   .getElementById('shockmount-svg-container')
+   ?.querySelector('svg');
+    if (!shockmountSVG) return;
 
     if (!state.shockmount?.enabled || !state.shockmount?.visible) return;
 
@@ -172,7 +178,7 @@ export function updateShockmountPreview() {
     const currentModelCode = state.currentModelCode || '';
     const modelSeries = (state.modelSeries || '').toString();
     // Правильно определяем серию: используем только modelSeries
-    const is023Series = modelSeries === '023';
+    // const is023Series = modelSeries === '023';
     
     // console.log('[Shockmount Preview] Debug:', {
     //     currentModelCode,
@@ -189,9 +195,9 @@ export function updateShockmountPreview() {
     
     // console.log('[Shockmount Preview] Filter ID:', filterId, 'for series:', modelSeries);
     
-    const main017 = shockmountSvg.querySelector('#shockmount-017-pins-brass-group');
-    const main023 = shockmountSvg.querySelector('#shockmount-023-pins-brass-group');
-    const colorize = shockmountSvg.querySelector(`#${filterId}`);
+    const main017 = shockmountSVG.querySelector('#shockmount-017-pins-brass-group');
+    const main023 = shockmountSVG.querySelector('#shockmount-023-pins-brass-group');
+    const colorize = shockmountSVG.querySelector(`#${filterId}`);
 
     if (main017) main017.style.display = hasCustomColor ? 'none' : 'inline';
     if (main023) main023.style.display = hasCustomColor ? 'none' : 'inline';
@@ -205,8 +211,10 @@ export function updateShockmountPreview() {
 }
 
 export function updateShockmountPinsPreview() {
-    const shockmountSvg = document.getElementById('shockmount-svg');
-    if (!shockmountSvg) return;
+    const shockmountSVG = document
+   .getElementById('shockmount-svg-container')
+   ?.querySelector('svg');
+    if (!shockmountSVG) return;
 
     const state = stateManager.get();
     const pinsState = state.shockmountPins || {};
@@ -222,12 +230,12 @@ export function updateShockmountPinsPreview() {
         };
     }
 
-    const brass017 = shockmountSvg.querySelector('#shockmount-017-pins-brass-group');
-    const brass023 = shockmountSvg.querySelector('#shockmount-023-pins-brass-group');
-    const colorize017 = shockmountSvg.querySelector('#g3');
-    const colorize023 = shockmountSvg.querySelector('#g13');
-    const mono017 = shockmountSvg.querySelector('#g4');
-    const mono023 = shockmountSvg.querySelector('#g13-2');
+    const brass017 = shockmountSVG.querySelector('#shockmount-017-pins-brass-group');
+    const brass023 = shockmountSVG.querySelector('#shockmount-023-pins-brass-group');
+    const colorize017 = shockmountSVG.querySelector('#g3');
+    const colorize023 = shockmountSVG.querySelector('#g14');
+    const mono017 = shockmountSVG.querySelector('#g4');
+    const mono023 = shockmountSVG.querySelector('#layer7');
 
     const isFilterMode = pinsState.svgTargetMode === 'filter';
     const isOriginalMode = pinsState.svgTargetMode === 'original';

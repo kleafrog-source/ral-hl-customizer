@@ -275,7 +275,7 @@ if ($cache->initCache($cacheTime, $cacheId, $cacheDir)) {
         'custom_logo' => [
             'enabled' => true,
             'title' => 'Собственная эмблема',
-            'description' => 'Загрузите собственный логотип для микрофона',
+            'description' => 'Загрузите ваше индивидуальное изображение',
             'price_rule' => 'custom-microphone-logo'
         ],
         'laser_engraving' => [

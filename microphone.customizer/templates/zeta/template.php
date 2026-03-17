@@ -515,7 +515,7 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                             <?php elseif ($sectionKey === 'case'): ?>
                                 <!-- Special case section -->
                                 <div class="option-group">
-                                    <h4>Варианты футляра</h4>
+                                    <!-- <h4>Варианты футляра</h4> -->
                                     <?php 
                                     $caseOptions = array_filter($sectionOptions, function($opt) {
                                         return !($opt['UF_IS_LASER_ENGRAVING'] ?? false);
@@ -556,7 +556,7 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                                 </div>
                                 
                                 <div class="option-group">
-                                    <h4>Лазерная гравировка</h4>
+                                    <!-- <h4>Лазерная гравировка</h4> -->
                                     <?php 
                                     $engravingOptions = array_filter($sectionOptions, function($opt) {
                                         return $opt['UF_IS_LASER_ENGRAVING'] ?? false;
@@ -817,7 +817,7 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                             <p><?= htmlspecialchars($arResult['LIQUID_TOGGLES']['custom_logo']['description']) ?></p>
                             <div id="custom-logo-upload-area" style="display: none;">
                                 <div class="option-group">
-                                    <h4>Кастомная эмблема</h4>
+                                    <!-- <h4>Кастомная эмблема</h4> -->
                                     <?php 
                                     if (isset($currentOptions['logo'])):
                                         $customOptions = array_filter($currentOptions['logo'], function($opt) {
