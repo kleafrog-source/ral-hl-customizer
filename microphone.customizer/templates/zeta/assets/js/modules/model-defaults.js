@@ -122,15 +122,8 @@ export function applyModelDefaults(modelCode) {
         if (sectionKey === 'shockmount') {
             const optionPriceValue = optionPrice || 0; // Цена цвета (3000)
             
-            console.log('[ModelDefaults] Shockmount price calculation:', {
-                sectionKey,
-                optionPriceValue,
-                oldPrice: currentState.price
-            });
-            
             // Устанавливаем только цену цвета, без суммирования с базовой ценой
             newState.price = optionPriceValue;
-            console.log('[ModelDefaults] Color price only:', newState.price);
         }
         
         // Для shockmountOption устанавливаем цену из правил ценообразования
@@ -138,13 +131,6 @@ export function applyModelDefaults(modelCode) {
             // Цена для shockmountOption берется из PRICES по правилу shockmountOption
             const prices = window.CUSTOMIZER_DATA.prices?.['shockmountOption'];
             const optionPriceForShockmount = prices?.[modelCode]?.[defaultVariantCode] || 0;
-            
-            console.log('[ModelDefaults] ShockmountOption price calculation:', {
-                sectionKey,
-                modelCode,
-                variantCode: defaultVariantCode,
-                price: optionPriceForShockmount
-            });
             
             newState.price = optionPriceForShockmount;
         }

@@ -79,10 +79,10 @@ export function updateShockmountVisibility() {
     const enabled = !!state.shockmount?.enabled; // SHOCKMOUNT_ENABLED: 0=выкл, 1=вкл
     const visible = !!state.shockmount?.visible; // SHOCKMOUNT_VISIBLE: 0=никогда, 1=когда включен
 
-    console.log('[Shockmount Visibility] State:', {
-        canToggle, enabled, visible,
-        shouldShowShockmount: visible && enabled
-    });
+    // console.log('[Shockmount Visibility] State:', {
+    //     canToggle, enabled, visible,
+    //     shouldShowShockmount: visible && enabled
+    // });
 
     // Видимость toggle контейнера зависит только от canToggle
     if (switchContainer) {
@@ -127,14 +127,14 @@ export function updateShockmountLayers(currentState = null) {
     const is023Series = modelSeries === '023';
     const targetLayerId = is023Series ? 'layer9' : 'layer10';
     
-    console.log('[Shockmount Layers] Debug:', {
-        currentModelCode,
-        modelSeries,
-        is023Series,
-        targetLayerId,
-        modelSeriesType: typeof modelSeries,
-        modelSeriesValue: state.modelSeries
-    });
+    // console.log('[Shockmount Layers] Debug:', {
+    //     currentModelCode,
+    //     modelSeries,
+    //     is023Series,
+    //     targetLayerId,
+    //     modelSeriesType: typeof modelSeries,
+    //     modelSeriesValue: state.modelSeries
+    // });
 
     const allLayers = shockmountSVG.querySelectorAll('#layer10, #layer9');
     allLayers.forEach(layer => {
@@ -174,20 +174,20 @@ export function updateShockmountPreview() {
     // Правильно определяем серию: используем только modelSeries
     const is023Series = modelSeries === '023';
     
-    console.log('[Shockmount Preview] Debug:', {
-        currentModelCode,
-        modelSeries,
-        is023Series,
-        modelSeriesType: typeof modelSeries,
-        modelSeriesValue: state.modelSeries
-    });
+    // console.log('[Shockmount Preview] Debug:', {
+    //     currentModelCode,
+    //     modelSeries,
+    //     is023Series,
+    //     modelSeriesType: typeof modelSeries,
+    //     modelSeriesValue: state.modelSeries
+    // });
     
     // Определяем правильный filterId для каркаса (feFlood6 для обеих серий)
     let filterId = state.shockmount?.svgFilterId || 'feFlood6';
     // feFlood6 используется для каркаса обеих серий
     // feFlood8 используется для пинов (не здесь)
     
-    console.log('[Shockmount Preview] Filter ID:', filterId, 'for series:', modelSeries);
+    // console.log('[Shockmount Preview] Filter ID:', filterId, 'for series:', modelSeries);
     
     const main017 = shockmountSvg.querySelector('#shockmount-017-pins-brass-group');
     const main023 = shockmountSvg.querySelector('#shockmount-023-pins-brass-group');
@@ -195,7 +195,8 @@ export function updateShockmountPreview() {
 
     if (main017) main017.style.display = hasCustomColor ? 'none' : 'inline';
     if (main023) main023.style.display = hasCustomColor ? 'none' : 'inline';
-    if (colorize) colorize.style.display = hasCustomColor ? 'inline' : 'none';
+    // НЕ применяем display к SVG фильтру - это ломает его работу!
+    // if (colorize) colorize.style.display = hasCustomColor ? 'inline' : 'none';
 
     if (hasCustomColor) {
         const opacity = state.shockmount?.floodOpacity || null;
@@ -246,6 +247,9 @@ export function updateShockmountPinsPreview() {
     if (colorize023) colorize023.style.display = isColorizedVariant ? 'inline' : 'none';
     if (mono017) mono017.style.display = isColorizedVariant ? 'inline' : 'none';
     if (mono023) mono023.style.display = isColorizedVariant ? 'inline' : 'none';
+    // НЕ применяем display к SVG фильтрам - это ломает их работу!
+    // if (colorize017) colorize017.style.display = isColorizedVariant ? 'inline' : 'none';
+    // if (colorize023) colorize023.style.display = isColorizedVariant ? 'inline' : 'none';
 
     if (isColorizedVariant && pinsState.colorValue) {
         const filterId = pinsState.svgFilterId || 'feFlood8';

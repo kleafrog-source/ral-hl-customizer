@@ -317,6 +317,8 @@ export function initEventListeners() {
             // Сразу обновляем UI чтобы цены применились
             updateUI();
 
+            // Обновляем SVG превью
+            updateSVG();
             updateShockmountVisibility();
             updateShockmountLayers(stateManager.get());
             updateShockmountPreview();

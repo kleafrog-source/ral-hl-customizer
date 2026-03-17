@@ -604,17 +604,17 @@
 			<uf_is_ral>1</uf_is_ral>
 			<uf_view_type>6</uf_view_type>
 			<uf_ral_color_id />
-			<uf_variant_code>shockmountpaidral</uf_variant_code>
+			<uf_variant_code>shockmount-017-paidral</uf_variant_code>
 			<uf_variant_name>Премиум цвет каркаса подвеса</uf_variant_name>
 			<uf_is_free>0</uf_is_free>
-			<uf_price>0</uf_price>
+			<uf_price>3000</uf_price>
 			<uf_sort>201</uf_sort>
 			<uf_additional_image>0</uf_additional_image>
 			<uf_svg_layer_group />
 			<uf_svg_special_key />
 			<uf_model_id />
 			<uf_svg_target_mode>filter</uf_svg_target_mode>
-			<uf_seriesvar />
+			<uf_seriesvar>017</uf_seriesvar>
 			<uf_svg_filter_id>feFlood6</uf_svg_filter_id>
 		</item>
 		<item>
@@ -760,6 +760,60 @@
 			<uf_svg_target_mode>gradient</uf_svg_target_mode>
 			<uf_seriesvar>023</uf_seriesvar>
 			<uf_svg_filter_id />
+		</item>
+		<item>
+			<id>55</id>
+			<uf_is_ral>1</uf_is_ral>
+			<uf_view_type>6</uf_view_type>
+			<uf_ral_color_id />
+			<uf_variant_code>shockmount-017-ral</uf_variant_code>
+			<uf_variant_name>RAL цвет каркаса подвеса 017</uf_variant_name>
+			<uf_is_free>1</uf_is_free>
+			<uf_price>0</uf_price>
+			<uf_sort>205</uf_sort>
+			<uf_additional_image>0</uf_additional_image>
+			<uf_svg_layer_group />
+			<uf_svg_special_key />
+			<uf_model_id />
+			<uf_svg_target_mode>filter</uf_svg_target_mode>
+			<uf_seriesvar>017</uf_seriesvar>
+			<uf_svg_filter_id>feFlood6</uf_svg_filter_id>
+		</item>
+		<item>
+			<id>56</id>
+			<uf_is_ral>1</uf_is_ral>
+			<uf_view_type>6</uf_view_type>
+			<uf_ral_color_id />
+			<uf_variant_code>shockmount-023-paidral</uf_variant_code>
+			<uf_variant_name>Премиум цвет каркаса подвеса 023</uf_variant_name>
+			<uf_is_free>0</uf_is_free>
+			<uf_price>3000</uf_price>
+			<uf_sort>207</uf_sort>
+			<uf_additional_image>0</uf_additional_image>
+			<uf_svg_layer_group />
+			<uf_svg_special_key />
+			<uf_model_id />
+			<uf_svg_target_mode>filter</uf_svg_target_mode>
+			<uf_seriesvar>023</uf_seriesvar>
+			<uf_svg_filter_id>feFlood6</uf_svg_filter_id>
+		</item>
+		<item>
+			<id>57</id>
+			<uf_is_ral>1</uf_is_ral>
+			<uf_view_type>6</uf_view_type>
+			<uf_ral_color_id />
+			<uf_variant_code>shockmount-023-ral</uf_variant_code>
+			<uf_variant_name>RAL цвет каркаса подвеса 023</uf_variant_name>
+			<uf_is_free>1</uf_is_free>
+			<uf_price>0</uf_price>
+			<uf_sort>205</uf_sort>
+			<uf_additional_image>0</uf_additional_image>
+			<uf_svg_layer_group />
+			<uf_svg_special_key />
+			<uf_model_id />
+			<uf_svg_target_mode>filter</uf_svg_target_mode>
+			<uf_seriesvar>023</uf_seriesvar>
+			<uf_svg_filter_id>feFlood6</uf_svg_filter_id>
 		</item>
 	</items>
 </hiblock>

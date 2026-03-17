@@ -95,7 +95,7 @@
 			<uf_default_body>body-1013</uf_default_body>
 			<uf_default_logo>brass-logo</uf_default_logo>
 			<uf_default_logobg>logobg-6001</uf_default_logobg>
-			<uf_default_shockmount>shockmount-1013</uf_default_shockmount>
+			<uf_default_shockmount>shockmount-017-ral</uf_default_shockmount>
 			<uf_default_shockmount_pins>pins-brass-017</uf_default_shockmount_pins>
 			<uf_default_shockmount_option>shockmount-option-included_017-fet</uf_default_shockmount_option>
 		</item>
@@ -116,7 +116,7 @@
 			<uf_default_body>body-1013</uf_default_body>
 			<uf_default_logo>brass-logo</uf_default_logo>
 			<uf_default_logobg>logobg-5017</uf_default_logobg>
-			<uf_default_shockmount>shockmount-1013</uf_default_shockmount>
+			<uf_default_shockmount>shockmount-017-ral</uf_default_shockmount>
 			<uf_default_shockmount_pins>pins-brass-017</uf_default_shockmount_pins>
 			<uf_default_shockmount_option>shockmount-option-included_017-tube</uf_default_shockmount_option>
 		</item>
