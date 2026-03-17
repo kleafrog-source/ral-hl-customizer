@@ -44,11 +44,11 @@ export function updateUI() {
     const totalEl = document.getElementById('total-price');
     if (totalEl) totalEl.textContent = `${total.toLocaleString('ru-RU')}₽`;
 
-    const shockmountRow = document.getElementById('shockmount-price-row-container');
-    if (shockmountRow) {
-        const showShockmount = !!state.shockmount?.enabled && !state.shockmount?.included && !!state.shockmount?.available;
-        shockmountRow.style.display = showShockmount ? 'flex' : 'none';
-    }
+    // const shockmountRow = document.getElementById('shockmount-price-row-container');
+    // if (shockmountRow) {
+    //     const showShockmount = !!state.shockmount?.enabled && !state.shockmount?.included && !!state.shockmount?.available;
+    //     shockmountRow.style.display = showShockmount ? 'flex' : 'none';
+    // }
 
     // Обновление строки Shockmount в ценах на основе HL-полей
     const shockRow = document.getElementById('shockmount-price-row-container');
@@ -56,16 +56,12 @@ export function updateUI() {
 
     if (shockRow && shockValue) {
         const s = state.shockmount || {};
-        const price = s.price || 0;
+        const price = breakdown.shockmount || 0;
 
-        // Показываем строку только если:
-        //  - подвес видим (visible),
-        //  - есть возможность переключать (canToggle) ИЛИ подвес не включён в комплект (included == false),
-        //  - цена > 0.
-        const showRow = s.visible && (s.canToggle || !s.included) && price > 0;
+        const showRow = s.visible && s.enabled && price > 0;
 
         shockRow.style.display = showRow ? 'flex' : 'none';
-        shockValue.textContent = showRow ? price.toLocaleString('ru-RU') : '0';
+        shockValue.textContent = showRow ? formatPrice(price) : formatPrice(0);
     }
 
     // Обновление видимости меню-пунктов shockmount/shockmountPins

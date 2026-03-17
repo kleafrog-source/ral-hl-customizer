@@ -1,4 +1,4 @@
-import { currentState } from '../state.js';
+import { stateManager } from '../core/state.js';
 import { CONFIG, variantNames } from '../config.js';
 
 // Функция для конвертации Base64 в Blob

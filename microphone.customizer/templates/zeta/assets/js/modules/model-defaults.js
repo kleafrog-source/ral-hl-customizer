@@ -3,6 +3,7 @@
 
 import { stateManager } from '../core/state.js';
 import { updateSectionLayers } from './appearance-new.js';
+import { resolveConfiguredPrice } from './price-calculator.js';
 
 /**
  * Получает цену опции из SECTION_OPTIONS или PRICES
@@ -10,23 +11,15 @@ import { updateSectionLayers } from './appearance-new.js';
  * @param {string} variantCode - код варианта
  * @returns {number} цена
  */
-function getOptionPrice(sectionKey, variantCode) {
-    // Try to resolve via PRICES first (it's more reliable for specific model/variant pairs)
-    const prices = window.CUSTOMIZER_DATA.prices?.[sectionKey];
+function getOptionPrice(sectionKey, option = {}) {
+    const variantCode = option.variantCode || '';
     const modelCode = stateManager.get('currentModelCode');
+    const resolvedPrice = resolveConfiguredPrice(sectionKey, variantCode, modelCode, !!option.isRal);
 
-    if (prices) {
-        if (modelCode && variantCode && prices[modelCode]?.[variantCode] !== undefined) {
-            return Number(prices[modelCode][variantCode]);
-        }
-        if (prices['']?.[''] !== undefined) {
-            return Number(prices['']['']);
-        }
+    if (resolvedPrice !== null) {
+        return resolvedPrice;
     }
 
-    const sectionOptions = window.CUSTOMIZER_DATA.sectionOptions?.[sectionKey] || [];
-    const option = sectionOptions.find(opt => opt.variantCode === variantCode);
-    // FIXME: default price path differs from click handler (should ideally use resolveOptionPrice logic)
     return option?.price || 0;
 }
 
@@ -121,7 +114,7 @@ export function applyModelDefaults(modelCode) {
 
         // Обновляем state секции
         const currentState = stateManager.get()[sectionKey] || {};
-        const optionPrice = getOptionPrice(sectionKey, defaultVariantCode);
+        const optionPrice = getOptionPrice(sectionKey, defaultOption);
         const newState = {
             ...currentState,
             variantCode: defaultOption.variantCode,
@@ -149,11 +142,7 @@ export function applyModelDefaults(modelCode) {
         
         // Для shockmountOption устанавливаем цену из правил ценообразования
         if (sectionKey === 'shockmountOption') {
-            // Цена для shockmountOption берется из PRICES по правилу shockmountOption
-            const prices = window.CUSTOMIZER_DATA.prices?.['shockmountOption'];
-            const optionPriceForShockmount = prices?.[modelCode]?.[defaultVariantCode] || 0;
-            
-            newState.price = optionPriceForShockmount;
+            newState.price = optionPrice;
         }
 
         stateManager.set(sectionKey, newState);

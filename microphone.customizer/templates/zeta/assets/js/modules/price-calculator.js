@@ -11,32 +11,39 @@ function safeNumber(value) {
     return isNaN(num) ? 0 : num;
 }
 
-export function getSurcharge(sectionCode, variantCode = '', modelCode = '', isRal = false) {
+export function resolveConfiguredPrice(sectionCode, variantCode = '', modelCode = '', isRal = false) {
     if (!customPricesData || !customPricesData[sectionCode]) {
-        return 0;
+        return null;
     }
 
     const sectionData = customPricesData[sectionCode];
-    const modelKey = modelCode || '';
-    const variantKey = variantCode || '';
 
     if (modelCode && variantCode && sectionData[modelCode]?.[variantCode] !== undefined) {
         return safeNumber(sectionData[modelCode][variantCode]);
     }
 
-    if (sectionData[modelKey] && sectionData[modelKey][''] !== undefined) {
-        return safeNumber(sectionData[modelKey]['']);
+    if (variantCode && sectionData['']?.[variantCode] !== undefined) {
+        return safeNumber(sectionData[''][variantCode]);
+    }
+
+    if (modelCode && sectionData[modelCode]?.[''] !== undefined) {
+        return safeNumber(sectionData[modelCode]['']);
     }
 
     if (isRal && sectionData['_ral_surcharge'] !== undefined) {
         return safeNumber(sectionData['_ral_surcharge']);
     }
 
-    if (sectionData[''] && sectionData[''][''] !== undefined) {
+    if (sectionData['']?.[''] !== undefined) {
         return safeNumber(sectionData['']['']);
     }
 
-    return 0;
+    return null;
+}
+
+export function getSurcharge(sectionCode, variantCode = '', modelCode = '', isRal = false) {
+    const resolvedPrice = resolveConfiguredPrice(sectionCode, variantCode, modelCode, isRal);
+    return resolvedPrice === null ? 0 : resolvedPrice;
 }
 
 export function getBreakdown(state) {
@@ -55,15 +62,23 @@ export function getBreakdown(state) {
 
     const spheresPrice = safeNumber(state.spheres?.price);
     const bodyPrice = safeNumber(state.body?.price);
-    const logoPrice = safeNumber(state.logo?.price);
+    const logoPrice = state.logo?.useCustom
+        ? getSurcharge('logo', 'custom-microphone-logo', modelCode, false)
+        : safeNumber(state.logo?.price);
     const logobgPrice = safeNumber(state.logobg?.price);
-    const casePrice = safeNumber(state.case?.price);
+    const caseBasePrice = safeNumber(state.case?.price);
+    const engravingPrice = state.case?.laserEngravingEnabled
+        ? getSurcharge('case', 'custom-woodcase-image', modelCode, false)
+        : 0;
+    const casePrice = caseBasePrice + engravingPrice;
 
     const s = state.shockmount || {};
+    const shockmountActive = !!s.visible && !!s.enabled;
     console.log('[Price Calculator] Shockmount state:', s);
-    const showShockmountPrice = s.visible && (s.canToggle || !s.included) && (s.price || 0) > 0;
+    const showShockmountPrice = shockmountActive && (s.price || 0) > 0;
     console.log('[Price Calculator] Show price:', showShockmountPrice, {
         visible: s.visible,
+        enabled: s.enabled,
         canToggle: s.canToggle,
         included: s.included,
         price: s.price
@@ -71,10 +86,10 @@ export function getBreakdown(state) {
     const shockmountPrice = showShockmountPrice ? safeNumber(s.price) : 0;
 
     // pins price usually 0 or included in shockmount price in HL, but we read it if exists
-    const pinsPrice = safeNumber(state.shockmountPins?.price);
+    const pinsPrice = shockmountActive ? safeNumber(state.shockmountPins?.price) : 0;
     
     // shockmountOption price (base shockmount inclusion price)
-    const shockmountOptionPrice = safeNumber(state.shockmountOption?.price);
+    const shockmountOptionPrice = shockmountActive ? safeNumber(state.shockmountOption?.price) : 0;
     
     // Total shockmount price: base (shockmountOption) + frame color (shockmount) + pins (shockmountPins)
     const totalShockmountPrice = shockmountPrice + pinsPrice + shockmountOptionPrice;
@@ -111,7 +126,15 @@ export function debugPrices(state) {
 
 export function calculateTotal(state) {
     const breakdown = getBreakdown(state);
-    return Object.values(breakdown).reduce((sum, price) => sum + safeNumber(price), 0);
+    return [
+        breakdown.base,
+        breakdown.spheres,
+        breakdown.body,
+        breakdown.logo,
+        breakdown.logobg,
+        breakdown.case,
+        breakdown.shockmount
+    ].reduce((sum, price) => sum + safeNumber(price), 0);
 }
 
 export function formatPrice(price) {

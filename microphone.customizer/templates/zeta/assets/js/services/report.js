@@ -39,7 +39,9 @@ export async function sendOrder(clientData) {
     }
 
     const formData = new FormData(bitrixForm);
-    const state = stateManager.get();
+    
+    // Получаем актуальное состояние из stateManager
+    const currentState = stateManager.get();
 
     // 1. Добавляем текстовые данные (маппинг согласно ТЗ)
     formData.set('form_text_24', clientData.name || '');
@@ -90,22 +92,24 @@ export async function sendOrder(clientData) {
         }
     }
 
-    // Поле 43 - WOODCASE_IMAGE_FORM
-    if (state.case?.customLogoData) {
+    // Поле 43 - WOODCASE_IMAGE_FORM (изображение для гравировки на футляре)
+    if (currentState.case?.customLogo) {
         let caseBlob;
-        const data = state.case.customLogoData;
+        const data = currentState.case.customLogo;
         if (typeof data === 'string' && data.includes(';base64,')) {
             caseBlob = base64ToBlob(data);
         } else if (typeof data === 'string' && data.trim().startsWith('<svg')) {
             caseBlob = svgToBlob(data);
         }
-        if (caseBlob) formData.append('form_file_43', caseBlob, 'case_logo' + (caseBlob.type.includes('svg') ? '.svg' : '.png'));
+        if (caseBlob) {
+            formData.append('form_file_43', caseBlob, 'case_logo' + (caseBlob.type.includes('svg') ? '.svg' : '.png'));
+        }
     }
 
     // Поле 44 - MIC_LOGO_CUSTOM_FORM
-    if (state.logo?.customLogoData) {
+    if (currentState.logo?.customLogoData) {
         let logoBlob;
-        const data = state.logo.customLogoData;
+        const data = currentState.logo.customLogoData;
         if (typeof data === 'string' && data.includes(';base64,')) {
             logoBlob = base64ToBlob(data);
         } else if (typeof data === 'string' && data.trim().startsWith('<svg')) {

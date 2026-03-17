@@ -286,7 +286,7 @@ body {
     border: 2px dashed var(--border-color);
     border-radius: 16px;
     padding: 32px 20px;
-    background: var(--surface);
+    background: var(--item-bg);
     transition: var(--transition-bounce);
     position: relative;
     overflow: hidden;
@@ -429,7 +429,7 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 12px 16px;
-    background: var(--surface);
+    background: var(--item-bg);;
     border: 1px solid var(--border-color);
     border-radius: 12px;
     transition: var(--transition-bounce);
@@ -452,7 +452,7 @@ body {
 
 #submenu-case .input-group:hover {
     border-color: var(--beige);
-    background: var(--surface-strong);
+    
 }
 
 #submenu-case .input-group:focus-within {
@@ -2590,7 +2590,7 @@ body {
 }
 
         .price-section-body {
-            overflow: hidden;
+          
             transition: max-height 0.4s ease, opacity 0.3s ease;
             max-height: 500px;
             opacity: 1;

@@ -337,10 +337,12 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                     }
                     $sectionData = $pricesData[$sectionCode];
                     $modelKey = $modelCode ?: '';
-                    $variantKey = $variantCode ?: '';
 
                     if ($modelCode && $variantCode && isset($sectionData[$modelCode][$variantCode])) {
                         return (int)$sectionData[$modelCode][$variantCode];
+                    }
+                    if ($variantCode !== '' && isset($sectionData[''][$variantCode])) {
+                        return (int)$sectionData[''][$variantCode];
                     }
                     if (isset($sectionData[$modelKey][''])) {
                         return (int)$sectionData[$modelKey][''];
@@ -512,12 +514,12 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                                 
                                 <!-- MALFA logos section - динамически из HL данных -->
                                 <?php 
-                                // Фильтруем MALFA варианты из HL данных
-                                $malfaOptions = array_filter($sectionOptions, function($opt) use ($currentModelCode) {
+                                // Фильтруем MALFA варианты из HL данных (теперь uf_model_id=0)
+                                $malfaOptions = array_filter($sectionOptions, function($opt) {
                                     $variantCode = $opt['UF_VARIANT_CODE'] ?? '';
                                     $seriesVar = $opt['UF_SERIESVAR'] ?? '';
                                     
-                                    // Ищем MALFA варианты по коду и серии
+                                    // Ищем MALFA варианты по коду и серии 023
                                     return in_array($variantCode, ['malfasilver', 'malfagold']) && 
                                            $seriesVar === '023';
                                 });
@@ -1243,7 +1245,7 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                                 <span>Футляр:</span>
                                 <span id="case-price-row">0₽</span>
                             </div>
-                            <div class="price-row" id="shockmount-price-row-container" style="display: none;">
+                            <div class="price-row" id="shockmount-price-row-container">
                                 <span>Подвес:</span>
                                 <span id="shockmount-price-row">0₽</span>
                             </div>
@@ -1464,6 +1466,5 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
         <!-- Additional hidden fields for customization data -->
         <input type="hidden" id="customizer-config-json" name="config_json" value="">
     </div>
-
 
 

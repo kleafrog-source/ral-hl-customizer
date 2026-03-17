@@ -1,5 +1,5 @@
 import { currentState } from '../state.js';
-import { CONFIG, variantNames } from '../config.js';
+import { CONFIG, variantNames } from './config.js';
 
 // Функция для конвертации Base64 в Blob
 function base64ToBlob(base64String) {
