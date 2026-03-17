@@ -76,7 +76,8 @@ export function applyModelDefaults(modelCode) {
         logo: defaults.LOGO,
         logobg: defaults.LOGOBG,
         shockmount: defaults.SHOCKMOUNT,
-        shockmountPins: defaults.SHOCKMOUNT_PINS
+        shockmountPins: defaults.SHOCKMOUNT_PINS,
+        shockmountOption: model.UF_DEFAULT_SHOCKMOUNT_OPTION
     };
 
     // Применяем значения для каждой секции
@@ -117,33 +118,41 @@ export function applyModelDefaults(modelCode) {
             price: optionPrice
         };
 
-        // Для shockmount суммируем базовую цену с ценой опции если это не бесплатный цвет
+        // Для shockmount устанавливаем только цену цвета, базовая цена будет в shockmountOption
         if (sectionKey === 'shockmount') {
-            const basePrice = currentState.price || 0; // Базовая цена из HL (10000 для bomblet)
             const optionPriceValue = optionPrice || 0; // Цена цвета (3000)
             
             console.log('[ModelDefaults] Shockmount price calculation:', {
                 sectionKey,
-                basePrice,
                 optionPriceValue,
                 oldPrice: currentState.price
             });
             
-            if (optionPriceValue > 0) {
-                // Если платный цвет - суммируем с базовой ценой
-                newState.price = basePrice + optionPriceValue;
-                console.log('[ModelDefaults] Paid color - total price:', newState.price);
-            } else {
-                // Если бесплатный цвет - сохраняем базовую цену
-                newState.price = basePrice;
-                console.log('[ModelDefaults] Free color - base price:', newState.price);
-            }
+            // Устанавливаем только цену цвета, без суммирования с базовой ценой
+            newState.price = optionPriceValue;
+            console.log('[ModelDefaults] Color price only:', newState.price);
+        }
+        
+        // Для shockmountOption устанавливаем цену из правил ценообразования
+        if (sectionKey === 'shockmountOption') {
+            // Цена для shockmountOption берется из PRICES по правилу shockmountOption
+            const prices = window.CUSTOMIZER_DATA.prices?.['shockmountOption'];
+            const optionPriceForShockmount = prices?.[modelCode]?.[defaultVariantCode] || 0;
+            
+            console.log('[ModelDefaults] ShockmountOption price calculation:', {
+                sectionKey,
+                modelCode,
+                variantCode: defaultVariantCode,
+                price: optionPriceForShockmount
+            });
+            
+            newState.price = optionPriceForShockmount;
         }
 
         stateManager.set(sectionKey, newState);
 
         // Обновляем SVG если это не shockmount (чтобы не сломать текущую логику)
-        if (sectionKey !== 'shockmount' && sectionKey !== 'shockmountPins') {
+        if (sectionKey !== 'shockmount' && sectionKey !== 'shockmountPins' && sectionKey !== 'shockmountOption') {
             updateSectionLayers(sectionKey, newState);
         }
     });
@@ -156,6 +165,7 @@ export function applyModelDefaults(modelCode) {
         logobg: stateManager.get('logobg')?.variant,
         shockmount: stateManager.get('shockmount')?.variant,
         shockmountPins: stateManager.get('shockmountPins')?.variant,
+        shockmountOption: stateManager.get('shockmountOption')?.variant,
     });
 
     console.log('[ModelDefaults] All defaults applied for model:', modelCode);

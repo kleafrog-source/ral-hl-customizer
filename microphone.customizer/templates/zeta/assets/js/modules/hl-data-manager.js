@@ -15,6 +15,7 @@ function mapOptionToState(option) {
         color: ralCode,
         colorValue: option.RAL_DATA?.UF_HEX || null,
         colorName: option.RAL_DATA?.UF_NAME || null,
+        floodOpacity: option.RAL_DATA?.UF_FLOOD_OPACITY || null,
         modelId: option.UF_MODEL_ID || 0,
         svgTargetMode: option.UF_SVG_TARGET_MODE || null,
         svgLayerGroup: option.UF_SVG_LAYER_GROUP || null,
@@ -49,10 +50,12 @@ export function initHLDataManager() {
     const currentModel = data.modelsByCode?.[data.currentModelCode] || null;
     console.log('[HL Data Manager] Current model:', currentModel);
     console.log('[HL Data Manager] MODEL_SERIES:', currentModel?.MODEL_SERIES);
+    console.log('[HL Data Manager] DEFAULT_SHOCKMOUNT_OPTION:', currentModel?.UF_DEFAULT_SHOCKMOUNT_OPTION);
     stateManager.set('currentModelCode', data.currentModelCode || null);
     stateManager.set('currentModelId', data.currentModelId || null);
     stateManager.set('modelSeries', currentModel?.MODEL_SERIES || null);
     stateManager.set('basePrice', currentModel?.BASE_PRICE || 0);
+    stateManager.set('defaultShockmountOption', currentModel?.UF_DEFAULT_SHOCKMOUNT_OPTION || null);
 
     // Initialize options for each section based on current model options
     const sectionOptions = data.currentModelOptions || {};

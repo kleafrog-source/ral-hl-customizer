@@ -625,7 +625,7 @@
 			<uf_variant_code>shockmount-option-included_023-the-bomblet</uf_variant_code>
 			<uf_variant_name>Добавить антивибрационный подвес в комплект</uf_variant_name>
 			<uf_is_free>0</uf_is_free>
-			<uf_price />
+			<uf_price>0</uf_price>
 			<uf_sort>250</uf_sort>
 			<uf_additional_image>0</uf_additional_image>
 			<uf_svg_layer_group>layer9</uf_svg_layer_group>
@@ -643,7 +643,7 @@
 			<uf_variant_code>shockmount-option-not_included_023-the-bomblet</uf_variant_code>
 			<uf_variant_name>Антивибрационный подвес не включен в комплект</uf_variant_name>
 			<uf_is_free>1</uf_is_free>
-			<uf_price />
+			<uf_price>0</uf_price>
 			<uf_sort>260</uf_sort>
 			<uf_additional_image>0</uf_additional_image>
 			<uf_svg_layer_group>layer9</uf_svg_layer_group>

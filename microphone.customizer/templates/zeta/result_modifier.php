@@ -12,13 +12,14 @@ $viewTypeMap = [
     5 => 'case',
     6 => 'shockmount',
     7 => 'shockmountPins',
+    35 => 'shockmountOption',
 ];
 
 $arResult['VIEW_TYPE_MAP'] = $viewTypeMap;
 $arResult['VIEW_TYPE_TO_SECTION'] = $viewTypeMap;
 $arResult['SECTION_TO_VIEW_TYPE'] = array_flip($viewTypeMap);
 
-$cacheTime = 3600;
+$cacheTime = 0;
 $cacheId = 'customizer_hl_data_delta_' . ($arParams['MODEL_CODE'] ?? 'default');
 $cacheDir = '/customizer/hl_data';
 
@@ -54,7 +55,7 @@ if ($cache->initCache($cacheTime, $cacheId, $cacheDir)) {
     };
 
     // RAL colors (HL ID 9)
-    $ralRows = $getHlData(9, ['UF_ACTIVE' => 1], ['ID', 'UF_NAME', 'UF_CODE', 'UF_HEX', 'UF_RGB_CODE', 'UF_SORT']);
+    $ralRows = $getHlData(9, ['UF_ACTIVE' => 1], ['ID', 'UF_NAME', 'UF_CODE', 'UF_HEX', 'UF_RGB_CODE', 'UF_SORT', 'UF_FLOOD_OPACITY']);
     $ralColors = [];
     foreach ($ralRows as $color) {
         $ralColors[(int)$color['ID']] = $color;
@@ -65,7 +66,7 @@ if ($cache->initCache($cacheTime, $cacheId, $cacheDir)) {
     $modelRows = $getHlData(
         10,
         [],
-        ['ID', 'UF_CODE', 'UF_NAME', 'UF_BASE_PRICE', 'UF_DESCRIPTION', 'UF_SHOCKMOUNT_ENABLED', 'UF_SHOCKMOUNT_PRICE', 'UF_SHOCKMOUNT_TOGGLE', 'UF_SHOCKMOUNT_VISIBLE', 'UF_IS_DEFAULT_MODEL', 'UF_DEFAULT_SPHERES', 'UF_DEFAULT_BODY', 'UF_DEFAULT_LOGO', 'UF_DEFAULT_LOGOBG', 'UF_DEFAULT_SHOCKMOUNT', 'UF_DEFAULT_SHOCKMOUNT_PINS', 'UF_SORT', 'UF_MODEL_SERIES'],
+        ['ID', 'UF_CODE', 'UF_NAME', 'UF_BASE_PRICE', 'UF_DESCRIPTION', 'UF_SHOCKMOUNT_ENABLED', 'UF_SHOCKMOUNT_PRICE', 'UF_SHOCKMOUNT_TOGGLE', 'UF_SHOCKMOUNT_VISIBLE', 'UF_IS_DEFAULT_MODEL', 'UF_DEFAULT_SPHERES', 'UF_DEFAULT_BODY', 'UF_DEFAULT_LOGO', 'UF_DEFAULT_LOGOBG', 'UF_DEFAULT_SHOCKMOUNT', 'UF_DEFAULT_SHOCKMOUNT_PINS', 'UF_DEFAULT_SHOCKMOUNT_OPTION', 'UF_SORT', 'UF_MODEL_SERIES'],
         ['UF_SORT' => 'ASC']
     );
     $models = [];
@@ -83,6 +84,7 @@ if ($cache->initCache($cacheTime, $cacheId, $cacheDir)) {
             'shockmountPrice'        => (int)$model['UF_SHOCKMOUNT_PRICE'],
             'defaultShockmount'      => (string)$model['UF_DEFAULT_SHOCKMOUNT'],
             'defaultShockmountPins'  => (string)$model['UF_DEFAULT_SHOCKMOUNT_PINS'],
+            'UF_DEFAULT_SHOCKMOUNT_OPTION' => (string)($model['UF_DEFAULT_SHOCKMOUNT_OPTION'] ?? ''),
             // FIXME: Old SHOCKMOUNT_* keys kept for compatibility; consider unifying after refactor
             'SHOCKMOUNT_ENABLED' => (int)($model['UF_SHOCKMOUNT_ENABLED'] ?? 0),
             'SHOCKMOUNT_TOGGLE' => (int)($model['UF_SHOCKMOUNT_TOGGLE'] ?? 0),

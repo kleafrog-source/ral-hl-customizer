@@ -72,6 +72,12 @@ export function getBreakdown(state) {
 
     // pins price usually 0 or included in shockmount price in HL, but we read it if exists
     const pinsPrice = safeNumber(state.shockmountPins?.price);
+    
+    // shockmountOption price (base shockmount inclusion price)
+    const shockmountOptionPrice = safeNumber(state.shockmountOption?.price);
+    
+    // Total shockmount price: base (shockmountOption) + frame color (shockmount) + pins (shockmountPins)
+    const totalShockmountPrice = shockmountPrice + pinsPrice + shockmountOptionPrice;
 
     return {
         base: basePrice,
@@ -80,7 +86,10 @@ export function getBreakdown(state) {
         logo: logoPrice,
         logobg: logobgPrice,
         case: casePrice,
-        shockmount: shockmountPrice + pinsPrice
+        shockmount: totalShockmountPrice,
+        shockmountBase: shockmountOptionPrice,
+        shockmountFrame: shockmountPrice,
+        shockmountPins: pinsPrice
     };
 }
 
@@ -95,6 +104,7 @@ export function debugPrices(state) {
         logobg: state.logobg?.price,
         shockmount: state.shockmount?.price,
         shockmountPins: state.shockmountPins?.price,
+        shockmountOption: state.shockmountOption?.price,
         case: state.case?.price,
     });
 }

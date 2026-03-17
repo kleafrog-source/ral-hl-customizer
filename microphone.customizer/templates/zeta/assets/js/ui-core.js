@@ -252,13 +252,13 @@ export function initEventListeners() {
             btn.classList.add('active');
 
             window.CUSTOMIZER_DATA.currentModelCode = modelCode;
-            window.CUSTOMIZER_DATA.currentModelOptions = window.CUSTOMIZER_DATA.models[modelCode];
+            window.CUSTOMIZER_DATA.currentModelOptions = window.CUSTOMIZER_DATA.modelsByCode[modelCode];
 
             stateManager.set('currentModelCode', modelCode);
             stateManager.set('currentModelId', window.CUSTOMIZER_DATA.currentModelId);
             
             // Обновляем modelSeries из данных модели
-            const modelData = window.CUSTOMIZER_DATA.models[modelCode];
+            const modelData = window.CUSTOMIZER_DATA.modelsByCode[modelCode];
             if (modelData) {
                 stateManager.set('modelSeries', modelData.MODEL_SERIES || '');
             }
@@ -273,7 +273,8 @@ export function initEventListeners() {
                 shockmountToggle: model.shockmountToggle,
                 shockmountEnabled: model.shockmountEnabled,
                 shockmountVisible: model.shockmountVisible,
-                shockmountPrice: model.shockmountPrice
+                shockmountPrice: model.shockmountPrice,
+                defaultShockmountOption: model.UF_DEFAULT_SHOCKMOUNT_OPTION
             });
 
             if (!restored) {
@@ -283,13 +284,16 @@ export function initEventListeners() {
                     batch('shockmount.canToggle', parseInt(model.shockmountToggle) === 1);
                     batch('shockmount.enabled', parseInt(model.shockmountEnabled) === 1);
                     batch('shockmount.visible', parseInt(model.shockmountVisible) === 1);
-                    batch('shockmount.price', parseInt(model.shockmountPrice) || 0);
+                    // НЕ устанавливаем цену здесь - она будет установлена в applyModelDefaults
+                    // batch('shockmount.price', parseInt(model.shockmountPrice) || 0);
                     batch(
                       'shockmount.included',
                       parseInt(model.shockmountEnabled) === 1 && (parseInt(model.shockmountPrice) || 0) === 0
                     );
                     // Обновляем базовую цену из HL данных
                     batch('basePrice', parseInt(model.BASE_PRICE) || 0);
+                    // Устанавливаем defaultShockmountOption
+                    batch('defaultShockmountOption', model.UF_DEFAULT_SHOCKMOUNT_OPTION || null);
                 });
                 
                 // Применяем значения по умолчанию для новой модели
@@ -302,6 +306,8 @@ export function initEventListeners() {
                     batch('shockmount.canToggle', parseInt(model.shockmountToggle) === 1);
                     // Обновляем базовую цену при переключении моделей
                     batch('basePrice', parseInt(model.BASE_PRICE) || 0);
+                    // Обновляем defaultShockmountOption
+                    batch('defaultShockmountOption', model.UF_DEFAULT_SHOCKMOUNT_OPTION || null);
                 });
             }
 

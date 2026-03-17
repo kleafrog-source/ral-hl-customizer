@@ -56,7 +56,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                     shockmountToggle: model.shockmountToggle,
                     shockmountEnabled: model.shockmountEnabled,
                     shockmountVisible: model.shockmountVisible,
-                    shockmountPrice: model.shockmountPrice
+                    shockmountPrice: model.shockmountPrice,
+                    defaultShockmountOption: model.UF_DEFAULT_SHOCKMOUNT_OPTION
                 });
                 
                 // Проверяем типы данных
@@ -72,7 +73,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                     batch('shockmount.canToggle', parseInt(model.shockmountToggle) === 1);
                     batch('shockmount.enabled', parseInt(model.shockmountEnabled) === 1);
                     batch('shockmount.visible', parseInt(model.shockmountVisible) === 1);
-                    batch('shockmount.price', parseInt(model.shockmountPrice) || 0);
+                    // НЕ устанавливаем цену здесь - она будет установлена в applyModelDefaults
+                    // batch('shockmount.price', parseInt(model.shockmountPrice) || 0);
                     batch(
                       'shockmount.included',
                       parseInt(model.shockmountEnabled) === 1 && (parseInt(model.shockmountPrice) || 0) === 0
@@ -80,13 +82,16 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                     batch('shockmount.variant', model.defaultShockmount || null);
                     batch('shockmountPins.variant', model.defaultShockmountPins || null);
+                    // Устанавливаем defaultShockmountOption
+                    batch('defaultShockmountOption', model.UF_DEFAULT_SHOCKMOUNT_OPTION || null);
                 });
                 
                 console.log('[Main.js] Shockmount state set:', {
                     canToggle: parseInt(model.shockmountToggle) === 1,
                     enabled: parseInt(model.shockmountEnabled) === 1,
                     visible: parseInt(model.shockmountVisible) === 1,
-                    price: parseInt(model.shockmountPrice) || 0,
+                    // Цена будет установлена в applyModelDefaults
+                    // price: parseInt(model.shockmountPrice) || 0,
                     included: parseInt(model.shockmountEnabled) === 1 && (parseInt(model.shockmountPrice) || 0) === 0
                 });
                 

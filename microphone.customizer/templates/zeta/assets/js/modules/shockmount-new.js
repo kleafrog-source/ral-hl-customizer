@@ -147,12 +147,17 @@ export function updateShockmountLayers(currentState = null) {
     }
 }
 
-function updateShockmountColor(floodId, hex) {
+function updateShockmountColor(floodId, hex, opacity = null) {
     if (!hex) return;
     const shockmountSvg = document.getElementById('shockmount-svg');
     if (!shockmountSvg) return;
     const el = shockmountSvg.querySelector(`#${floodId}`);
-    if (el) el.setAttribute('flood-color', hex);
+    if (el) {
+        el.setAttribute('flood-color', hex);
+        if (opacity !== null) {
+            el.setAttribute('flood-opacity', opacity);
+        }
+    }
 }
 
 export function updateShockmountPreview() {
@@ -193,7 +198,8 @@ export function updateShockmountPreview() {
     if (colorize) colorize.style.display = hasCustomColor ? 'inline' : 'none';
 
     if (hasCustomColor) {
-        updateShockmountColor(filterId, state.shockmount.colorValue);
+        const opacity = state.shockmount?.floodOpacity || null;
+        updateShockmountColor(filterId, state.shockmount.colorValue, opacity);
     }
 }
 
@@ -243,7 +249,8 @@ export function updateShockmountPinsPreview() {
 
     if (isColorizedVariant && pinsState.colorValue) {
         const filterId = pinsState.svgFilterId || 'feFlood8';
-        updateShockmountColor(filterId, pinsState.colorValue);
+        const opacity = pinsState.floodOpacity || null;
+        updateShockmountColor(filterId, pinsState.colorValue, opacity);
     }
 }
 
