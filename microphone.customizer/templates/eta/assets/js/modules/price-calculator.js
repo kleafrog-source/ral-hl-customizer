@@ -48,6 +48,33 @@ export function getSurcharge(sectionCode, variantCode = '', modelCode = '', isRa
     return resolvedPrice === null ? 0 : resolvedPrice;
 }
 
+function getShockmountBreakdown(state) {
+    const shockmountState = state.shockmount || {};
+    const shockmountActive = !!shockmountState.visible && !!shockmountState.enabled;
+
+    debugLog('[Price Calculator] Shockmount state:', shockmountState);
+
+    const showShockmountPrice = shockmountActive && (shockmountState.price || 0) > 0;
+    debugLog('[Price Calculator] Show price:', showShockmountPrice, {
+        visible: shockmountState.visible,
+        enabled: shockmountState.enabled,
+        canToggle: shockmountState.canToggle,
+        included: shockmountState.included,
+        price: shockmountState.price
+    });
+
+    const framePrice = showShockmountPrice ? safeNumber(shockmountState.price) : 0;
+    const pinsPrice = shockmountActive ? safeNumber(state.shockmountPins?.price) : 0;
+    const basePrice = shockmountActive ? safeNumber(state.shockmountOption?.price) : 0;
+
+    return {
+        total: framePrice + pinsPrice + basePrice,
+        base: basePrice,
+        frame: framePrice,
+        pins: pinsPrice
+    };
+}
+
 export function getBreakdown(state) {
     const modelCode = state.currentModelCode || '';
     const hlData = state.hlData || {};
@@ -73,28 +100,7 @@ export function getBreakdown(state) {
         ? getSurcharge('case', 'custom-woodcase-image', modelCode, false)
         : 0;
     const casePrice = caseBasePrice + engravingPrice;
-
-    const s = state.shockmount || {};
-    const shockmountActive = !!s.visible && !!s.enabled;
-    debugLog('[Price Calculator] Shockmount state:', s);
-    const showShockmountPrice = shockmountActive && (s.price || 0) > 0;
-    debugLog('[Price Calculator] Show price:', showShockmountPrice, {
-        visible: s.visible,
-        enabled: s.enabled,
-        canToggle: s.canToggle,
-        included: s.included,
-        price: s.price
-    });
-    const shockmountPrice = showShockmountPrice ? safeNumber(s.price) : 0;
-
-    // pins price usually 0 or included in shockmount price in HL, but we read it if exists
-    const pinsPrice = shockmountActive ? safeNumber(state.shockmountPins?.price) : 0;
-    
-    // shockmountOption price (base shockmount inclusion price)
-    const shockmountOptionPrice = shockmountActive ? safeNumber(state.shockmountOption?.price) : 0;
-    
-    // Total shockmount price: base (shockmountOption) + frame color (shockmount) + pins (shockmountPins)
-    const totalShockmountPrice = shockmountPrice + pinsPrice + shockmountOptionPrice;
+    const shockmountBreakdown = getShockmountBreakdown(state);
 
     return {
         base: basePrice,
@@ -103,10 +109,10 @@ export function getBreakdown(state) {
         logo: logoPrice,
         logobg: logobgPrice,
         case: casePrice,
-        shockmount: totalShockmountPrice,
-        shockmountBase: shockmountOptionPrice,
-        shockmountFrame: shockmountPrice,
-        shockmountPins: pinsPrice
+        shockmount: shockmountBreakdown.total,
+        shockmountBase: shockmountBreakdown.base,
+        shockmountFrame: shockmountBreakdown.frame,
+        shockmountPins: shockmountBreakdown.pins
     };
 }
 
