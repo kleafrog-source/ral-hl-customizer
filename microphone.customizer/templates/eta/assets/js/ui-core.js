@@ -248,16 +248,11 @@ export function initEventListeners() {
 
             syncCurrentModelOptionData(modelCode);
 
-            
-            // Обновляем modelSeries из данных модели
-
-            // Try to restore
-            // Restore per-model user selections before applying runtime defaults.
+            // Restore any saved per-model customization before applying capabilities.
             const restored = stateManager.restoreModelState(modelCode);
-
-            // Инициализация или обновление state для shockmount на основе HL-полей модели
-            // Re-sync model-aware runtime state from normalized capabilities.
+            // Normalize model-specific runtime state in one place.
             const runtimeData = applyModelRuntimeState(modelCode, { preserveShockmountSelection: restored });
+
             console.log('[UI-Core] Model switch to:', modelCode, {
                 restored,
                 modelId: runtimeData?.modelId,
@@ -265,54 +260,11 @@ export function initEventListeners() {
                 basePrice: runtimeData?.basePrice,
                 shockmountState: runtimeData?.shockmountState
             });
-            const model = runtimeData?.model || window.CUSTOMIZER_DATA.modelsByCode[modelCode];
-            const shockmountState = runtimeData?.shockmountState || {};
 
             if (!restored) {
-                // При переключении на новую модель без сохраненного состояния
-                // Устанавливаем shockmount состояние из HL данных
-                stateManager.batch(batch => {
-                    batch('shockmount.canToggle', parseInt(model.shockmountToggle) === 1);
-                    batch('shockmount.enabled', parseInt(model.shockmountEnabled) === 1);
-                    batch('shockmount.visible', parseInt(model.shockmountVisible) === 1);
-                    batch('shockmount.available', parseInt(model.shockmountVisible) === 1 || parseInt(model.shockmountEnabled) === 1);
-                    // НЕ устанавливаем цену здесь - она будет установлена в applyModelDefaults
-                    // batch('shockmount.price', parseInt(model.shockmountPrice) || 0);
-                    batch(
-                      'shockmount.included',
-                      parseInt(model.shockmountEnabled) === 1 && (parseInt(model.shockmountPrice) || 0) === 0
-                    );
-                    // Обновляем базовую цену из HL данных
-                    batch('basePrice', parseInt(model.BASE_PRICE) || 0);
-                    // Устанавливаем defaultShockmountOption
-                    batch('defaultShockmountOption', model.UF_DEFAULT_SHOCKMOUNT_OPTION || null);
-                });
-                
-                // Применяем значения по умолчанию для новой модели
-                stateManager.batch(batch => {
-                    batch('shockmount.canToggle', shockmountState.canToggle);
-                    batch('shockmount.enabled', shockmountState.enabled);
-                    batch('shockmount.visible', shockmountState.visible);
-                    batch('shockmount.available', shockmountState.available);
-                    batch('shockmount.included', shockmountState.included);
-                    batch('defaultShockmountOption', shockmountState.defaultOption);
-                });
                 applyModelDefaults(modelCode);
-            } else {
-                // При переключении моделей обновляем только canToggle для новой модели
-                // Сохраняем текущее состояние пользователя (enabled, visible, price)
-                console.log('[UI-Core] Updating canToggle to:', model.shockmountToggle);
-                stateManager.batch(batch => {
-                    batch('shockmount.canToggle', parseInt(model.shockmountToggle) === 1);
-                    batch('shockmount.available', parseInt(model.shockmountVisible) === 1 || parseInt(model.shockmountEnabled) === 1);
-                    // Обновляем базовую цену при переключении моделей
-                    batch('basePrice', parseInt(model.BASE_PRICE) || 0);
-                    // Обновляем defaultShockmountOption
-                    batch('defaultShockmountOption', model.UF_DEFAULT_SHOCKMOUNT_OPTION || null);
-                });
             }
 
-            // Синхронизируем UI с финальным состоянием
             syncToggles();
 
             // Сразу обновляем UI чтобы цены применились
