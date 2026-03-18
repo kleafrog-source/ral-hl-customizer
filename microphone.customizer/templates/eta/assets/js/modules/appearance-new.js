@@ -2,10 +2,30 @@
 
 import { SECTION_LAYER_MAP } from '../config/layer-mapping.config.js';
 
+function getMicrophoneSvg() {
+    return document
+        .getElementById('microphone-svg-container')
+        ?.querySelector('svg');
+}
+
+function getSectionConfig(section) {
+    return SECTION_LAYER_MAP[section] || null;
+}
+
+function getLayer(svg, layerId) {
+    return layerId ? svg.querySelector(`#${layerId}`) : null;
+}
+
+function setLayerDisplay(svg, layerId, display) {
+    const layer = getLayer(svg, layerId);
+    if (layer) {
+        layer.style.display = display;
+    }
+    return layer;
+}
+
 export function updateSectionLayers(section, state) {
-    const svg = document
-   .getElementById('microphone-svg-container')
-   ?.querySelector('svg')
+    const svg = getMicrophoneSvg();
     if (!svg) return;
 
     // Special handling for logo section
@@ -36,20 +56,19 @@ export function updateSectionLayers(section, state) {
 
 function applyOriginalMode(svg, section, svgLayerGroup) {
     resetSectionGroups(svg, section);
-    const sectionConfig = SECTION_LAYER_MAP[section];
+    const sectionConfig = getSectionConfig(section);
     if (sectionConfig) {
         Object.values(sectionConfig).forEach(config => {
             if (config.originals && Array.isArray(config.originals)) {
                 config.originals.forEach(layerId => {
-                    const layer = svg.querySelector(`#${layerId}`);
-                    if (layer) layer.style.display = 'none';
+                    setLayerDisplay(svg, layerId, 'none');
                 });
             }
         });
     }
 
     if (svgLayerGroup) {
-        const targetLayer = svg.querySelector(`#${svgLayerGroup}`);
+        const targetLayer = getLayer(svg, svgLayerGroup);
         if (targetLayer) {
             targetLayer.style.display = 'inline';
             targetLayer.style.setProperty('display', 'inline', 'important');
@@ -59,21 +78,19 @@ function applyOriginalMode(svg, section, svgLayerGroup) {
 
 function applyFilterMode(svg, section, svgFilterId, colorValue) {
     resetSectionGroups(svg, section);
-    const sectionConfig = SECTION_LAYER_MAP[section];
+    const sectionConfig = getSectionConfig(section);
     if (sectionConfig) {
         Object.values(sectionConfig).forEach(config => {
             if (config.colorizedGroup) {
-                const layer = svg.querySelector(`#${config.colorizedGroup}`);
-                if (layer) layer.style.display = 'inline';
+                setLayerDisplay(svg, config.colorizedGroup, 'inline');
             }
             if (config.monoGroup) {
-                const layer = svg.querySelector(`#${config.monoGroup}`);
-                if (layer) layer.style.display = 'inline';
+                setLayerDisplay(svg, config.monoGroup, 'inline');
             }
         });
     }
     if (!svgFilterId || !colorValue) return;
-  const flood = svg.querySelector(`#${svgFilterId}`);
+  const flood = getLayer(svg, svgFilterId);
   if (flood) {
     flood.setAttribute('flood-color', colorValue);
     flood.setAttribute('flood-opacity', '1');
@@ -90,13 +107,13 @@ function applyFilterMode(svg, section, svgFilterId, colorValue) {
 
 function applyColorizedMode(svg, section, colorValue) {
     if (!colorValue) return;
-    const sectionConfig = SECTION_LAYER_MAP[section];
+    const sectionConfig = getSectionConfig(section);
     if (!sectionConfig) return;
 
     resetSectionGroups(svg, section);
     Object.values(sectionConfig).forEach(config => {
         if (config.colorizedGroup) {
-            const layer = svg.querySelector(`#${config.colorizedGroup}`);
+            const layer = getLayer(svg, config.colorizedGroup);
             if (layer) {
                 layer.style.display = 'inline';
                 const colorElements = layer.querySelectorAll('[fill], [stroke]');
@@ -107,36 +124,32 @@ function applyColorizedMode(svg, section, colorValue) {
             }
         }
         if (config.monoGroup) {
-            const layer = svg.querySelector(`#${config.monoGroup}`);
-            if (layer) layer.style.display = 'inline';
+            setLayerDisplay(svg, config.monoGroup, 'inline');
         }
     });
 }
 
 function resetSectionGroups(svg, section) {
-    const sectionConfig = SECTION_LAYER_MAP[section];
+    const sectionConfig = getSectionConfig(section);
     if (!sectionConfig) return;
 
     Object.values(sectionConfig).forEach(config => {
         if (config.originals && Array.isArray(config.originals)) {
             config.originals.forEach(layerId => {
-                const layer = svg.querySelector(`#${layerId}`);
-                if (layer) layer.style.display = 'none';
+                setLayerDisplay(svg, layerId, 'none');
             });
         }
         if (config.colorizedGroup) {
-            const layer = svg.querySelector(`#${config.colorizedGroup}`);
-            if (layer) layer.style.display = 'none';
+            setLayerDisplay(svg, config.colorizedGroup, 'none');
         }
         if (config.monoGroup) {
-            const layer = svg.querySelector(`#${config.monoGroup}`);
-            if (layer) layer.style.display = 'none';
+            setLayerDisplay(svg, config.monoGroup, 'none');
         }
     });
 }
 
 function updateLogoLayers(svg, state) {
-    const sectionConfig = SECTION_LAYER_MAP.logo;
+    const sectionConfig = getSectionConfig('logo');
     if (!sectionConfig) return;
 
     const config = sectionConfig.standard;
@@ -153,12 +166,11 @@ function updateLogoLayers(svg, state) {
             config.malfaGroup // malfa-logo-text-path
         ];
         allLayers.forEach(layerId => {
-            const layer = svg.querySelector(`#${layerId}`);
-            if (layer) layer.style.display = 'none';
+            setLayerDisplay(svg, layerId, 'none');
         });
         
         // Show custom layer
-        const customLayer = svg.querySelector(`#${config.customGroup}`);
+        const customLayer = getLayer(svg, config.customGroup);
         if (customLayer) {
             customLayer.style.display = 'inline';
         }
@@ -166,7 +178,7 @@ function updateLogoLayers(svg, state) {
     }
 
     // Hide custom layer for non-custom modes
-    const customLayer = svg.querySelector(`#${config.customGroup}`);
+    const customLayer = getLayer(svg, config.customGroup);
     if (customLayer) {
         customLayer.style.display = 'none';
     }
@@ -175,10 +187,10 @@ function updateLogoLayers(svg, state) {
     switch (svgTargetMode) {
         case 'original':
             // Hide MALFA group, show standard group
-            const malfaLayer = svg.querySelector(`#${config.malfaGroup}`);
+            const malfaLayer = getLayer(svg, config.malfaGroup);
             if (malfaLayer) malfaLayer.style.display = 'none';
             
-            const standardLayer = svg.querySelector(`#${config.standardGroup}`);
+            const standardLayer = getLayer(svg, config.standardGroup);
             if (standardLayer) {
                 standardLayer.style.display = 'inline';
                 
@@ -193,10 +205,10 @@ function updateLogoLayers(svg, state) {
             
         case 'gradient':
             // Hide standard group, show MALFA group
-            const standardLayer2 = svg.querySelector(`#${config.standardGroup}`);
+            const standardLayer2 = getLayer(svg, config.standardGroup);
             if (standardLayer2) standardLayer2.style.display = 'none';
             
-            const malfaLayer2 = svg.querySelector(`#${config.malfaGroup}`);
+            const malfaLayer2 = getLayer(svg, config.malfaGroup);
             if (malfaLayer2) {
                 malfaLayer2.style.display = 'inline';
                 
@@ -214,10 +226,10 @@ function updateLogoLayers(svg, state) {
             
         default:
             // Fallback: show standard group
-            const malfaLayer3 = svg.querySelector(`#${config.malfaGroup}`);
+            const malfaLayer3 = getLayer(svg, config.malfaGroup);
             if (malfaLayer3) malfaLayer3.style.display = 'none';
             
-            const fallbackLayer = svg.querySelector(`#${config.standardGroup}`);
+            const fallbackLayer = getLayer(svg, config.standardGroup);
             if (fallbackLayer) {
                 fallbackLayer.style.display = 'inline';
             }
@@ -227,11 +239,9 @@ function updateLogoLayers(svg, state) {
 
 export function updateFilter(filterId, section, colorValue) {
   if (!colorValue || !filterId) return;
-  const svg = document
-   .getElementById('microphone-svg-container')
-   ?.querySelector('svg')
+  const svg = getMicrophoneSvg();
   if (!svg) return;
- const flood = svg.querySelector(`#${filterId}`);
+ const flood = getLayer(svg, filterId);
   if (flood) {
     flood.setAttribute('flood-color', colorValue);
     flood.setAttribute('flood-opacity', '1');
