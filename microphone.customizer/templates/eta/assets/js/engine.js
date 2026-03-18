@@ -14,6 +14,34 @@ function getMicrophoneSvg() {
     return getMicrophoneContainer()?.querySelector('svg') || null;
 }
 
+function setLayerDisplay(layer, display, important = false) {
+    if (!layer) {
+        return;
+    }
+
+    if (important) {
+        layer.style.setProperty('display', display, 'important');
+        return;
+    }
+
+    layer.style.display = display;
+}
+
+function updateGrillVisibility(svg, spheresState = {}) {
+    const showGrills = !!spheresState.isRal;
+
+    for (let i = 1; i <= 3; i++) {
+        setLayerDisplay(svg.querySelector(`#img-grill-mic${i}`), showGrills ? 'inline' : 'none');
+    }
+}
+
+function updateDefaultSectionLayers(state) {
+    updateSectionLayers('spheres', state.spheres || {});
+    updateSectionLayers('body', state.body || {});
+    updateSectionLayers('logobg', state.logobg || {});
+    updateSectionLayers('logo', state.logo || {});
+}
+
 export function updateResponsiveAssets(svg) {
     if (!svg) return;
     const suffix = getAssetSuffix();
@@ -48,24 +76,9 @@ export function updateSVG() {
         const currentModelCode = state.currentModelCode || '';
         svg.style.transform = currentModelCode.startsWith('023') ? `scale(${CONFIG.scaleFactor})` : 'scale(1)';
 
-        const spheresState = state.spheres || {};
-        const showGrills = !!spheresState.isRal;
-        for (let i = 1; i <= 3; i++) {
-            const grill = svg.querySelector(`#img-grill-mic${i}`);
-            if (grill) {
-                grill.style.display = showGrills ? 'inline' : 'none';
-            }
-        }
+        updateGrillVisibility(svg, state.spheres || {});
 
-        //Переключает видимость слоев spheres-original-1, spheres-original-2, spheres-original-3 в SVG
-        updateSectionLayers('spheres', state.spheres || {});
-        //Переключает видимость слоев body-original-1, body-original-2, body-original-3 в SVG
-        updateSectionLayers('body', state.body || {});
-        //Переключает видимость слоев logobg в SVG
-        updateSectionLayers('logobg', state.logobg || {});
-        //Переключает видимость слоев logo в SVG
-        updateSectionLayers('logo', state.logo || {});
-        //Обновляет логотип в SVG
+        updateDefaultSectionLayers(state);
         updateLogoSVG();
     } catch (e) {
         console.error("SVG Update Error:", e);
@@ -88,7 +101,7 @@ export function initSVGVisibility(svg, initialState) {
     if (spheresVariant === 'satinsteel' || spheresVariant === '3' || spheresVariant === 'non-ral') {
         const spheresOriginal3 = svg.querySelector('#spheres-original-3');
         if (spheresOriginal3) {
-            spheresOriginal3.style.setProperty('display', 'inline', 'important');
+            setLayerDisplay(spheresOriginal3, 'inline', true);
             debugLog('[SVG] Set spheres-original-3 to visible');
         }
     }
@@ -97,7 +110,7 @@ export function initSVGVisibility(svg, initialState) {
     if (bodyVariant === 'satinsteel' || bodyVariant === '3' || bodyVariant === 'non-ral') {
         const bodyOriginal3 = svg.querySelector('#body-original-3');
         if (bodyOriginal3) {
-            bodyOriginal3.style.setProperty('display', 'inline', 'important');
+            setLayerDisplay(bodyOriginal3, 'inline', true);
             debugLog('[SVG] Set body-original-3 to visible');
         }
     }
@@ -106,7 +119,7 @@ export function initSVGVisibility(svg, initialState) {
     if (!logobgVariant || !logobgVariant.includes('RAL')) {
         const logobgBlack = svg.querySelector('#logobg-black');
         if (logobgBlack) {
-            logobgBlack.style.setProperty('display', 'inline', 'important');
+            setLayerDisplay(logobgBlack, 'inline', true);
             debugLog('[SVG] Set logobg-black to visible');
         }
     }
@@ -115,13 +128,13 @@ export function initSVGVisibility(svg, initialState) {
     if (initialState.logo?.useCustom) {
         const logotypeGold = svg.querySelector('#logotype-gold');
         if (logotypeGold) {
-            logotypeGold.style.setProperty('display', 'none', 'important');
+            setLayerDisplay(logotypeGold, 'none', true);
             debugLog('[SVG] Hide logotype-gold for custom logo');
         }
     } else if (!logoVariant || logoVariant === 'brass-logo') {
         const logotypeGold = svg.querySelector('#logotype-gold');
         if (logotypeGold) {
-            logotypeGold.style.setProperty('display', 'inline', 'important');
+            setLayerDisplay(logotypeGold, 'inline', true);
             debugLog('[SVG] Set logotype-gold to visible');
         }
     }
@@ -135,7 +148,7 @@ export function initSVGVisibility(svg, initialState) {
             (layerId.startsWith('body-original-') && layerId !== 'body-original-3');
             
         if (shouldHide) {
-            layer.style.setProperty('display', 'none', 'important');
+            setLayerDisplay(layer, 'none', true);
         }
     });
     
