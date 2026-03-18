@@ -1,4 +1,4 @@
-import { applyModelSelectionUI, initEventListeners, updateUI } from './ui-core.js';
+import { initEventListeners, selectModelVariant, updateUI } from './ui-core.js';
 import { initHLDataManager } from './modules/hl-data-manager.js';
 import { initShockmount } from './modules/shockmount-new.js';
 import { loadSVG, updateSVG } from './engine.js';
@@ -8,7 +8,6 @@ import { initCameraEffect } from './modules/camera-effect.js';
 import { stateManager } from './core/state.js';
 import { initDebugHelper } from './debug/ui-debug-helper.js';
 import { initValidation } from './services/validation.js';
-import { prepareModelSelection } from './modules/model-selection.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
     const appRoot = document.getElementById('customizer-app-root');
@@ -41,14 +40,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     const currentModelCode = stateManager.get('currentModelCode') || window.CUSTOMIZER_DATA?.currentModelCode;
     if (currentModelCode) {
         setTimeout(() => {
-            const runtimeData = prepareModelSelection(currentModelCode)?.runtimeData;
-
-            if (!runtimeData) {
+            const selection = selectModelVariant(currentModelCode);
+            if (!selection?.runtimeData) {
                 console.error('[Main.js] Model runtime data not found for code:', currentModelCode);
                 return;
             }
-
-            applyModelSelectionUI(currentModelCode);
         }, 100);
     } else {
         updateUI();

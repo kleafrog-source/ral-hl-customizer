@@ -41,6 +41,26 @@ export function applyModelSelectionUI(modelCode, options = {}) {
     }
 }
 
+export function selectModelVariant(modelCode, options = {}) {
+    const {
+        restoreSavedState = false,
+        syncWoodCase = false,
+        delayShockmountVisibility = false
+    } = options;
+
+    const selection = prepareModelSelection(modelCode, { restoreSavedState });
+    if (!selection?.runtimeData) {
+        return null;
+    }
+
+    applyModelSelectionUI(modelCode, {
+        syncWoodCase,
+        delayShockmountVisibility
+    });
+
+    return selection;
+}
+
 export function updateUI() {
     // Update MALFA logo options visibility based on current model
     updateMalfaLogoOptionsVisibility();
@@ -264,12 +284,12 @@ export function initEventListeners() {
             document.querySelectorAll('.variant-button').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
 
-            prepareModelSelection(modelCode, { restoreSavedState: true });
-
-            applyModelSelectionUI(modelCode, {
+            const selection = selectModelVariant(modelCode, {
+                restoreSavedState: true,
                 syncWoodCase: true,
                 delayShockmountVisibility: true
             });
+            if (!selection) return;
 
             // Сразу обновляем UI чтобы цены применились
 
