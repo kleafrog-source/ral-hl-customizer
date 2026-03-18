@@ -4,6 +4,7 @@ import { updateSectionLayers } from './modules/appearance-new.js';
 import { updateLogoSVG } from './modules/logo.js';
 import { getAssetSuffix } from './utils.js';
 import { eventRegistry } from './core/events.js';
+import { debugLog } from './utils/debug.js';
 
 export function updateResponsiveAssets(svg) {
     if (!svg) return;
@@ -69,7 +70,7 @@ export function updateSVG() {
 export function initSVGVisibility(svg, initialState) {
     if (!svg || !initialState) return;
     
-    console.log('[SVG] Initializing visibility for initial state:', initialState);
+    debugLog('[SVG] Initializing visibility for initial state:', initialState);
     
     // Показать правильные "original" слои для начального состояния
     const spheresVariant = initialState.spheres?.variant;
@@ -82,7 +83,7 @@ export function initSVGVisibility(svg, initialState) {
         const spheresOriginal3 = svg.querySelector('#spheres-original-3');
         if (spheresOriginal3) {
             spheresOriginal3.style.setProperty('display', 'inline', 'important');
-            console.log('[SVG] Set spheres-original-3 to visible');
+            debugLog('[SVG] Set spheres-original-3 to visible');
         }
     }
     
@@ -91,7 +92,7 @@ export function initSVGVisibility(svg, initialState) {
         const bodyOriginal3 = svg.querySelector('#body-original-3');
         if (bodyOriginal3) {
             bodyOriginal3.style.setProperty('display', 'inline', 'important');
-            console.log('[SVG] Set body-original-3 to visible');
+            debugLog('[SVG] Set body-original-3 to visible');
         }
     }
     
@@ -100,7 +101,7 @@ export function initSVGVisibility(svg, initialState) {
         const logobgBlack = svg.querySelector('#logobg-black');
         if (logobgBlack) {
             logobgBlack.style.setProperty('display', 'inline', 'important');
-            console.log('[SVG] Set logobg-black to visible');
+            debugLog('[SVG] Set logobg-black to visible');
         }
     }
     
@@ -109,13 +110,13 @@ export function initSVGVisibility(svg, initialState) {
         const logotypeGold = svg.querySelector('#logotype-gold');
         if (logotypeGold) {
             logotypeGold.style.setProperty('display', 'none', 'important');
-            console.log('[SVG] Hide logotype-gold for custom logo');
+            debugLog('[SVG] Hide logotype-gold for custom logo');
         }
     } else if (!logoVariant || logoVariant === 'brass-logo') {
         const logotypeGold = svg.querySelector('#logotype-gold');
         if (logotypeGold) {
             logotypeGold.style.setProperty('display', 'inline', 'important');
-            console.log('[SVG] Set logotype-gold to visible');
+            debugLog('[SVG] Set logotype-gold to visible');
         }
     }
     
@@ -132,7 +133,7 @@ export function initSVGVisibility(svg, initialState) {
         }
     });
     
-    console.log('[SVG] Visibility initialization completed');
+    debugLog('[SVG] Visibility initialization completed');
 }
 
 export async function loadSVG(svgPath = null) {
@@ -145,7 +146,7 @@ export async function loadSVG(svgPath = null) {
             svgPath = 'assets/mic-017.svg';
         }
         
-        console.log('Loading SVG from path:', svgPath);
+        debugLog('Loading SVG from path:', svgPath);
         
         const response = await fetch(svgPath);
         if (!response.ok) {
@@ -160,7 +161,7 @@ export async function loadSVG(svgPath = null) {
         }
         
         container.innerHTML = svgText;
-        console.log('SVG loaded successfully');
+        debugLog('SVG loaded successfully');
         
         // Инициализация видимости слоев после загрузки SVG
         const svg = container.querySelector('svg');

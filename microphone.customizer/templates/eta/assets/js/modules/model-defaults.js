@@ -2,6 +2,7 @@ import { stateManager } from '../core/state.js';
 import { buildShockmountState } from '../config/model-capabilities.js';
 import { updateSectionLayers } from './appearance-new.js';
 import { resolveConfiguredPrice } from './price-calculator.js';
+import { debugLog, isRuntimeDebugEnabled } from '../utils/debug.js';
 
 function getDefaultVariantCode(defaultValue) {
     if (!defaultValue) {
@@ -80,20 +81,22 @@ export function applyModelDefaults(modelCode) {
     const sectionOptionsMap = window.CUSTOMIZER_DATA.sectionOptions || window.CUSTOMIZER_DATA.optionsBySection || {};
     const sectionDefaults = getSectionDefaults(model);
 
-    console.log('[ModelDefaults] Applying defaults for model:', modelCode, defaults);
+    debugLog('[ModelDefaults] Applying defaults for model:', modelCode, defaults);
 
-    console.group(`[Defaults] ${modelCode}`);
-    Object.keys(defaults).forEach((section) => {
-        const def = getDefaultVariantCode(defaults[section]);
-        const options = (sectionOptionsMap[section] || []).map((option) => option.variantCode);
-        console.log(`Section ${section}: default=${def}, options=`, options);
-    });
-    console.groupEnd();
+    if (isRuntimeDebugEnabled()) {
+        console.group(`[Defaults] ${modelCode}`);
+        Object.keys(defaults).forEach((section) => {
+            const def = getDefaultVariantCode(defaults[section]);
+            const options = (sectionOptionsMap[section] || []).map((option) => option.variantCode);
+            console.log(`Section ${section}: default=${def}, options=`, options);
+        });
+        console.groupEnd();
+    }
 
     const pinsVariant = getDefaultVariantCode(defaults.SHOCKMOUNT_PINS);
     const pinsOptions = (sectionOptionsMap.shockmountPins || []).map((option) => option.variantCode);
 
-    console.log('[ModelDefaults] Shockmount pins check:', {
+    debugLog('[ModelDefaults] Shockmount pins check:', {
         requestedVariant: pinsVariant,
         availableOptions: pinsOptions,
         isAvailable: pinsOptions.includes(pinsVariant)
@@ -103,7 +106,7 @@ export function applyModelDefaults(modelCode) {
         console.warn('[ModelDefaults] Shockmount pins variant not found:', pinsVariant, 'Available:', pinsOptions);
         const fallbackVariant = pinsOptions.find((option) => option.includes('brass')) || pinsOptions[0] || '';
         if (fallbackVariant) {
-            console.log('[ModelDefaults] Using fallback pins variant:', fallbackVariant);
+            debugLog('[ModelDefaults] Using fallback pins variant:', fallbackVariant);
             defaults.SHOCKMOUNT_PINS = fallbackVariant;
             sectionDefaults.shockmountPins = fallbackVariant;
         }
@@ -114,7 +117,7 @@ export function applyModelDefaults(modelCode) {
         const resolvedVariantCode = defaultVariantCode || getFallbackVariantCode(sectionKey, options);
 
         if (!resolvedVariantCode) {
-            console.log(`[ModelDefaults] No default variant for section: ${sectionKey}`);
+            debugLog(`[ModelDefaults] No default variant for section: ${sectionKey}`);
             return;
         }
 
@@ -129,7 +132,7 @@ export function applyModelDefaults(modelCode) {
             return;
         }
 
-        console.log(`[ModelDefaults] Applying default for ${sectionKey}:`, defaultOption);
+        debugLog(`[ModelDefaults] Applying default for ${sectionKey}:`, defaultOption);
 
         const currentState = stateManager.get()[sectionKey] || {};
         const optionPrice = getOptionPrice(sectionKey, defaultOption);
@@ -165,7 +168,7 @@ export function applyModelDefaults(modelCode) {
         }
     });
 
-    console.log('[ModelDefaults] Applied state snapshot:', {
+    debugLog('[ModelDefaults] Applied state snapshot:', {
         model: stateManager.get('currentModelCode'),
         spheres: stateManager.get('spheres')?.variant,
         body: stateManager.get('body')?.variant,
@@ -176,7 +179,7 @@ export function applyModelDefaults(modelCode) {
         shockmountOption: stateManager.get('shockmountOption')?.variant
     });
 
-    console.log('[ModelDefaults] All defaults applied for model:', modelCode);
+    debugLog('[ModelDefaults] All defaults applied for model:', modelCode);
 }
 
 export function isDefaultModel(modelCode) {

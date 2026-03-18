@@ -1,5 +1,7 @@
 // modules/price-calculator.js (eta)
 
+import { debugLog } from '../utils/debug.js';
+
 let customPricesData = {};
 
 export function loadCustomPrices(pricesData) {
@@ -53,7 +55,7 @@ export function getBreakdown(state) {
     
     // Базовая цена из HL данных модели
     const basePrice = safeNumber(model.BASE_PRICE || state.basePrice);
-    console.log('[Price Calculator] Base price:', {
+    debugLog('[Price Calculator] Base price:', {
         modelCode,
         basePriceFromHL: model.BASE_PRICE,
         basePriceFromState: state.basePrice,
@@ -74,9 +76,9 @@ export function getBreakdown(state) {
 
     const s = state.shockmount || {};
     const shockmountActive = !!s.visible && !!s.enabled;
-    console.log('[Price Calculator] Shockmount state:', s);
+    debugLog('[Price Calculator] Shockmount state:', s);
     const showShockmountPrice = shockmountActive && (s.price || 0) > 0;
-    console.log('[Price Calculator] Show price:', showShockmountPrice, {
+    debugLog('[Price Calculator] Show price:', showShockmountPrice, {
         visible: s.visible,
         enabled: s.enabled,
         canToggle: s.canToggle,
@@ -110,7 +112,7 @@ export function getBreakdown(state) {
 
 // Логирование цен для отладки
 export function debugPrices(state) {
-    console.log('[Price] Breakdown', {
+    debugLog('[Price] Breakdown', {
         model: state.currentModelCode,
         basePrice: state.basePrice,
         spheres: state.spheres?.price,

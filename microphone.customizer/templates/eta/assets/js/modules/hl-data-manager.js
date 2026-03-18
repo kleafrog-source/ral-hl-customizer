@@ -3,6 +3,7 @@
 import { stateManager } from '../core/state.js';
 import { supportsMalfaLogos } from '../config/model-capabilities.js';
 import { loadCustomPrices } from './price-calculator.js';
+import { debugLog } from '../utils/debug.js';
 
 const MALFA_VARIANTS = new Set(['malfasilver', 'malfagold']);
 
@@ -135,8 +136,8 @@ export function initHLDataManager() {
     }
 
     const data = window.CUSTOMIZER_DATA;
-    console.log('[HL Data Manager] CUSTOMIZER_DATA:', data);
-    console.log('[HL Data Manager] modelsByCode:', data.modelsByCode);
+    debugLog('[HL Data Manager] CUSTOMIZER_DATA:', data);
+    debugLog('[HL Data Manager] modelsByCode:', data.modelsByCode);
 
     stateManager.set('hlData', {
         ralColors: data.ralColors || {},
@@ -152,9 +153,9 @@ export function initHLDataManager() {
     });
 
     const currentModel = data.modelsByCode?.[data.currentModelCode] || null;
-    console.log('[HL Data Manager] Current model:', currentModel);
-    console.log('[HL Data Manager] MODEL_SERIES:', currentModel?.MODEL_SERIES);
-    console.log('[HL Data Manager] DEFAULT_SHOCKMOUNT_OPTION:', currentModel?.UF_DEFAULT_SHOCKMOUNT_OPTION);
+    debugLog('[HL Data Manager] Current model:', currentModel);
+    debugLog('[HL Data Manager] MODEL_SERIES:', currentModel?.MODEL_SERIES);
+    debugLog('[HL Data Manager] DEFAULT_SHOCKMOUNT_OPTION:', currentModel?.UF_DEFAULT_SHOCKMOUNT_OPTION);
     stateManager.set('currentModelCode', data.currentModelCode || null);
     stateManager.set('currentModelId', data.currentModelId || null);
     stateManager.set('modelSeries', currentModel?.MODEL_SERIES || null);
