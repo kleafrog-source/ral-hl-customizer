@@ -73,6 +73,16 @@ function getAvailableVariantCodes(options = []) {
     return options.map((option) => option.variantCode);
 }
 
+function getSectionOptionsMap() {
+    return window.CUSTOMIZER_DATA.sectionOptions || window.CUSTOMIZER_DATA.optionsBySection || {};
+}
+
+function shouldUpdateSectionLayers(sectionKey) {
+    return sectionKey !== 'shockmount'
+        && sectionKey !== 'shockmountPins'
+        && sectionKey !== 'shockmountOption';
+}
+
 function logSectionDefaults(modelCode, defaults, sectionOptionsMap) {
     if (!isRuntimeDebugEnabled()) {
         return;
@@ -163,7 +173,7 @@ export function applyModelDefaults(modelCode) {
     }
 
     const defaults = { ...(model.DEFAULTS || {}) };
-    const sectionOptionsMap = window.CUSTOMIZER_DATA.sectionOptions || window.CUSTOMIZER_DATA.optionsBySection || {};
+    const sectionOptionsMap = getSectionOptionsMap();
     const sectionDefaults = getSectionDefaults(model);
 
     debugLog('[ModelDefaults] Applying defaults for model:', modelCode, defaults);
@@ -198,7 +208,7 @@ export function applyModelDefaults(modelCode) {
 
         stateManager.set(sectionKey, nextState);
 
-        if (sectionKey !== 'shockmount' && sectionKey !== 'shockmountPins' && sectionKey !== 'shockmountOption') {
+        if (shouldUpdateSectionLayers(sectionKey)) {
             updateSectionLayers(sectionKey, nextState);
         }
     });
