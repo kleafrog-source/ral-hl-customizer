@@ -1,4 +1,4 @@
-// Shockmount module (delta)
+// Shockmount module (eta)
 
 import { stateManager } from '../core/state.js';
 import { SECTION_LAYER_MAP } from '../config/layer-mapping.config.js';

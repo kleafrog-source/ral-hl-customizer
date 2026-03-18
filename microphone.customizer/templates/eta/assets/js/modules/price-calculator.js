@@ -1,4 +1,4 @@
-// modules/price-calculator.js (delta)
+// modules/price-calculator.js (eta)
 
 let customPricesData = {};
 

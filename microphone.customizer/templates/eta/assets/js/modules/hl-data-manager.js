@@ -1,4 +1,4 @@
-// HL DATA MANAGER (delta)
+// HL DATA MANAGER (eta)
 
 import { stateManager } from '../core/state.js';
 import { supportsMalfaLogos } from '../config/model-capabilities.js';

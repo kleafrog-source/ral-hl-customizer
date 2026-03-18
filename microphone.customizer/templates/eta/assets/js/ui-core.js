@@ -1,16 +1,15 @@
-// UI Core (delta)
+// UI Core (eta)
 
 import { stateManager } from './core/state.js';
 import { updateSVG } from './engine.js';
 import { updateSectionLayers } from './modules/appearance-new.js';
 import { updateLogoSVG, updateMalfaLogoOptionsVisibility } from './modules/logo.js';
-import { updateShockmountLayers, updateShockmountVisibility, updateShockmountPreview, updateShockmountPinsPreview, toggleShockmount } from './modules/shockmount-new.js';
+import { updateShockmountLayers, updateShockmountVisibility, updateShockmountPreview, updateShockmountPinsPreview } from './modules/shockmount-new.js';
 import { syncToggles, initToggles } from './modules/toggles.js';
 import { applyModelDefaults } from './modules/model-defaults.js';
 import { calculateTotal, getBreakdown, formatPrice, debugPrices } from './modules/price-calculator.js';
-import { initHLDataManager, syncCurrentModelOptionData } from './modules/hl-data-manager.js';
+import { syncCurrentModelOptionData } from './modules/hl-data-manager.js';
 import { switchLayer, updateMicVariant } from './modules/camera-effect.js';
-import { buildShockmountState } from './config/model-capabilities.js';
 import { applyModelRuntimeState } from './modules/model-runtime.js';
 import { sendOrder } from './services/report.js';
 import { validateForm } from './services/validation.js';
@@ -251,29 +250,25 @@ export function initEventListeners() {
 
             syncCurrentModelOptionData(modelCode);
 
-            stateManager.set('currentModelCode', modelCode);
-            stateManager.set('currentModelId', window.CUSTOMIZER_DATA.currentModelId);
             
             // Обновляем modelSeries из данных модели
-            const modelData = window.CUSTOMIZER_DATA.modelsByCode[modelCode];
-            if (modelData) {
-                stateManager.set('modelSeries', modelData.MODEL_SERIES || '');
-            }
 
             // Try to restore
+            // Restore per-model user selections before applying runtime defaults.
             const restored = stateManager.restoreModelState(modelCode);
 
             // Инициализация или обновление state для shockmount на основе HL-полей модели
-            const model = window.CUSTOMIZER_DATA.modelsByCode[modelCode];
-            const shockmountState = buildShockmountState(model);
-            console.log('[UI-Core] Model switch to:', modelCode);
-            console.log('[UI-Core] Model data:', {
-                shockmountToggle: model.shockmountToggle,
-                shockmountEnabled: model.shockmountEnabled,
-                shockmountVisible: model.shockmountVisible,
-                shockmountPrice: model.shockmountPrice,
-                defaultShockmountOption: model.UF_DEFAULT_SHOCKMOUNT_OPTION
+            // Re-sync model-aware runtime state from normalized capabilities.
+            const runtimeData = applyModelRuntimeState(modelCode, { preserveShockmountSelection: restored });
+            console.log('[UI-Core] Model switch to:', modelCode, {
+                restored,
+                modelId: runtimeData?.modelId,
+                modelSeries: runtimeData?.modelSeries,
+                basePrice: runtimeData?.basePrice,
+                shockmountState: runtimeData?.shockmountState
             });
+            const model = runtimeData?.model || window.CUSTOMIZER_DATA.modelsByCode[modelCode];
+            const shockmountState = runtimeData?.shockmountState || {};
 
             if (!restored) {
                 // При переключении на новую модель без сохраненного состояния
@@ -320,7 +315,6 @@ export function initEventListeners() {
             }
 
             // Синхронизируем UI с финальным состоянием
-            applyModelRuntimeState(modelCode, { preserveShockmountSelection: restored });
             syncToggles();
 
             // Сразу обновляем UI чтобы цены применились

@@ -1,4 +1,4 @@
-// Toggle handlers (delta)
+// Toggle handlers (eta)
 
 import { stateManager } from '../core/state.js';
 import { buildShockmountState, getShockmountOptionVariantCode } from '../config/model-capabilities.js';

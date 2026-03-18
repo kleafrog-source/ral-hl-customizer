@@ -1,4 +1,4 @@
-// Appearance helpers (delta)
+// Appearance helpers (eta)
 
 import { SECTION_LAYER_MAP } from '../config/layer-mapping.config.js';
 
