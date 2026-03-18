@@ -11,6 +11,7 @@ import { calculateTotal, getBreakdown, formatPrice, debugPrices } from './module
 import { initHLDataManager, syncCurrentModelOptionData } from './modules/hl-data-manager.js';
 import { switchLayer, updateMicVariant } from './modules/camera-effect.js';
 import { buildShockmountState } from './config/model-capabilities.js';
+import { applyModelRuntimeState } from './modules/model-runtime.js';
 import { sendOrder } from './services/report.js';
 import { validateForm } from './services/validation.js';
 
@@ -319,11 +320,7 @@ export function initEventListeners() {
             }
 
             // Синхронизируем UI с финальным состоянием
-            stateManager.batch(batch => {
-                batch('shockmount.canToggle', shockmountState.canToggle);
-                batch('shockmount.available', shockmountState.available);
-                batch('defaultShockmountOption', shockmountState.defaultOption);
-            });
+            applyModelRuntimeState(modelCode, { preserveShockmountSelection: restored });
             syncToggles();
 
             // Сразу обновляем UI чтобы цены применились
