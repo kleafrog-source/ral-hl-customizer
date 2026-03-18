@@ -3,6 +3,21 @@
 import { stateManager } from '../core/state.js';
 import { SECTION_LAYER_MAP } from '../config/layer-mapping.config.js';
 
+function getShockmountSvg() {
+    return document
+        .getElementById('shockmount-svg-container')
+        ?.querySelector('svg') || null;
+}
+
+function getPinsLayerMapping(variant) {
+    return SECTION_LAYER_MAP.shockmountPins?.[variant] || {
+        originals: [],
+        colorizedGroup: 'g3',
+        monoGroup: 'g4',
+        floodFilter: 'feFlood8'
+    };
+}
+
 export function initShockmount() {
     stateManager.subscribeSection('shockmount', () => {
         refreshShockmountUI();
@@ -59,9 +74,7 @@ export function updateShockmountVisibility() {
 }
 
 export function updateShockmountLayers(currentState = null) {
-    const shockmountSVG = document
-        .getElementById('shockmount-svg-container')
-        ?.querySelector('svg');
+    const shockmountSVG = getShockmountSvg();
     if (!shockmountSVG) {
         return;
     }
@@ -88,9 +101,7 @@ function updateShockmountColor(floodId, hex, opacity = null) {
         return;
     }
 
-    const shockmountSVG = document
-        .getElementById('shockmount-svg-container')
-        ?.querySelector('svg');
+    const shockmountSVG = getShockmountSvg();
     if (!shockmountSVG) {
         return;
     }
@@ -106,9 +117,7 @@ function updateShockmountColor(floodId, hex, opacity = null) {
 
 export function updateShockmountPreview() {
     const state = stateManager.get();
-    const shockmountSVG = document
-        .getElementById('shockmount-svg-container')
-        ?.querySelector('svg');
+    const shockmountSVG = getShockmountSvg();
     if (!shockmountSVG) {
         return;
     }
@@ -138,9 +147,7 @@ export function updateShockmountPreview() {
 }
 
 export function updateShockmountPinsPreview() {
-    const shockmountSVG = document
-        .getElementById('shockmount-svg-container')
-        ?.querySelector('svg');
+    const shockmountSVG = getShockmountSvg();
     if (!shockmountSVG) {
         return;
     }
@@ -149,15 +156,7 @@ export function updateShockmountPinsPreview() {
     const pinsState = state.shockmountPins || {};
     const variant = pinsState.variantCode || '';
 
-    let layerMapping = SECTION_LAYER_MAP.shockmountPins?.[variant];
-    if (!layerMapping) {
-        layerMapping = {
-            originals: [],
-            colorizedGroup: 'g3',
-            monoGroup: 'g4',
-            floodFilter: 'feFlood8'
-        };
-    }
+    const layerMapping = getPinsLayerMapping(variant);
 
     const brass017 = shockmountSVG.querySelector('#shockmount-017-pins-brass-group');
     const brass023 = shockmountSVG.querySelector('#shockmount-023-pins-brass-group');
