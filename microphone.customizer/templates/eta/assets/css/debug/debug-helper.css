@@ -2,44 +2,75 @@
     position: fixed;
     top: 20px;
     right: 20px;
-    width: 380px;
-    max-height: 80vh;
-    background: rgba(0, 0, 0, 0.88);
+    width: 460px;
+    height: min(86vh, 920px);
+    min-width: 360px;
+    min-height: 320px;
+    display: flex;
+    flex-direction: column;
+    background: rgba(0, 0, 0, 0.9);
     color: #fff;
-    padding: 15px;
-    border-radius: 10px;
+    border-radius: 12px;
     z-index: 10000;
     font-family: monospace;
     font-size: 12px;
-    overflow-y: auto;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.5);
     border: 1px solid #444;
+    resize: both;
+    overflow: hidden;
+}
+
+.debug-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px 16px 10px;
+    border-bottom: 1px solid #444;
+    cursor: move;
+    user-select: none;
 }
 
 .debug-panel h3 {
-    margin-top: 0;
-    border-bottom: 1px solid #444;
-    padding-bottom: 10px;
+    margin: 0;
+    font-size: 14px;
+}
+
+.debug-header-actions {
     display: flex;
-    justify-content: space-between;
+    gap: 8px;
+}
+
+.debug-content {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 14px 16px 16px;
+    overflow: auto;
+    min-height: 0;
 }
 
 .debug-section {
-    margin-bottom: 15px;
     border-bottom: 1px solid #333;
-    padding-bottom: 10px;
+    padding-bottom: 12px;
+}
+
+.debug-section:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
 }
 
 .debug-section h4 {
-    margin: 5px 0;
+    margin: 0 0 10px;
     color: #aaa;
+    font-size: 12px;
 }
 
 .debug-row {
     display: flex;
     align-items: center;
-    margin-bottom: 5px;
     gap: 8px;
+    margin-bottom: 6px;
 }
 
 .debug-row-wrap {
@@ -69,17 +100,16 @@
     flex: 1;
 }
 
-.debug-row input[type="range"] {
-    flex: 2;
-}
-
 .debug-row input[type="text"],
-.debug-row input[type="number"] {
-    width: 60px;
+.debug-row input[type="number"],
+.debug-transform-controls input[type="text"],
+.debug-transform-controls input[type="number"] {
+    width: 72px;
     background: #222;
     border: 1px solid #444;
     color: #fff;
-    padding: 2px 5px;
+    padding: 4px 6px;
+    border-radius: 6px;
 }
 
 .debug-transform-input {
@@ -109,24 +139,70 @@
 .debug-export-area {
     background: #111;
     padding: 10px;
-    border-radius: 5px;
+    border-radius: 8px;
 }
 
 .debug-state-viewer {
     white-space: pre-wrap;
     font-size: 10px;
-    max-height: 200px;
-    overflow-y: auto;
+    max-height: 220px;
+    overflow: auto;
 }
 
 .debug-export-area {
     width: 100%;
-    height: 120px;
+    height: 140px;
     color: #0f0;
     font-size: 10px;
     border: 1px solid #2f2f2f;
     resize: vertical;
     background: #111;
+}
+
+.debug-transform-grid {
+    display: grid;
+    gap: 12px;
+}
+
+.debug-transform-card {
+    background: #111;
+    border: 1px solid #2f2f2f;
+    border-radius: 8px;
+    padding: 10px;
+}
+
+.debug-transform-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.debug-transform-card-compact {
+    padding: 12px;
+}
+
+.debug-transform-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 10px;
+}
+
+.debug-transform-field:last-child {
+    margin-bottom: 0;
+}
+
+.debug-transform-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.debug-transform-controls input[type="range"] {
+    flex: 1;
+    min-width: 120px;
 }
 
 .debug-overlay-stencil {
@@ -141,8 +217,19 @@
     max-height: 100vh;
 }
 
-.debug-panel-collapsed {
-    width: auto;
-    height: auto;
-    padding: 10px;
+@media (max-width: 768px) {
+    .debug-panel {
+        width: min(94vw, 460px);
+        right: 10px;
+        top: 10px;
+        height: min(88vh, 860px);
+    }
+
+    .debug-transform-controls {
+        flex-wrap: wrap;
+    }
+
+    .debug-transform-controls input[type="range"] {
+        min-width: 100%;
+    }
 }
