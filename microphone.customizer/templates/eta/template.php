@@ -248,7 +248,7 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                                 </filter>
                                 <filter id="burnFilterSVG" x="-20%" y="-20%" width="140%" height="140%">
                                     <feColorMatrix type="matrix" values="0 0 0 0 0.15 0 0 0 0 0.10 0 0 0 0 0.09 0 0 0 1 0"/>
-                                    <feTurbulence type="fractalNoise" baseFrequency="0.011 0.7" numOctaves="1" seed="10" result="noise"/>
+                                    <feTurbulence id="burnFilterSVGNoise" type="fractalNoise" baseFrequency="0.011 0.7" numOctaves="1" seed="10" result="noise"/>
                                     <feDisplacementMap in="SourceGraphic" in2="noise" scale="2" xChannelSelector="R" yChannelSelector="G" result="distorted"/>
                                     <feComposite operator="in" in="distorted" in2="noise" result="burned"/>
                                     <feGaussianBlur stdDeviation="0.4" in="burned"/>

@@ -11,6 +11,7 @@ const WoodCase = {
     history: {},
     currentMatrix: null,
     timer: null,
+    caseImageTimer: null,
 
     updateCaseState(updates) {
         stateManager.batch((batch) => {
@@ -18,6 +19,74 @@ const WoodCase = {
                 batch(`case.${path}`, value);
             });
         });
+    },
+
+    isVerticalBurnFilterCase() {
+        return this.currentCase === '023-the-bomblet' || this.currentCase === '023-malfa';
+    },
+
+    syncBurnFilterOrientation() {
+        const turbulence = document.getElementById('burnFilterSVGNoise');
+        if (!turbulence) {
+            return;
+        }
+
+        turbulence.setAttribute(
+            'baseFrequency',
+            this.isVerticalBurnFilterCase() ? '0.7 0.011' : '0.011 0.7'
+        );
+    },
+
+    isCaseEditingActive() {
+        const caseSubmenu = document.getElementById('submenu-case');
+        const casePositioningControls = document.getElementById('case-positioning-controls');
+        const engravingToggle = document.getElementById('laser-engraving-toggle');
+
+        return !!this.userImgSrc
+            && !!caseSubmenu?.classList.contains('active')
+            && casePositioningControls?.style.display !== 'none'
+            && !!engravingToggle?.checked;
+    },
+
+    hideRulers() {
+        const rulersGroup = document.getElementById('wood-case-rulers-group');
+        if (rulersGroup) {
+            rulersGroup.classList.remove('visible');
+        }
+        clearTimeout(this.timer);
+        this.timer = null;
+    },
+
+    syncEditingState() {
+        if (!this.isCaseEditingActive()) {
+            this.hideRulers();
+        }
+    },
+
+    updateCaseBackgroundImage(bg, nextHref, caseData) {
+        if (!bg || !nextHref) {
+            return;
+        }
+
+        bg.style.transition = 'opacity 180ms ease';
+        bg.setAttribute('x', caseData.x);
+        bg.setAttribute('y', caseData.y);
+        bg.setAttribute('width', caseData.w);
+        bg.setAttribute('height', caseData.h);
+
+        const currentHref = bg.getAttribute('href');
+        if (!currentHref || currentHref === nextHref) {
+            bg.setAttribute('href', nextHref);
+            bg.style.opacity = '1';
+            return;
+        }
+
+        clearTimeout(this.caseImageTimer);
+        bg.style.opacity = '0';
+        this.caseImageTimer = setTimeout(() => {
+            bg.setAttribute('href', nextHref);
+            bg.style.opacity = '1';
+        }, 90);
     },
 
     init() {
@@ -32,6 +101,7 @@ const WoodCase = {
         // Add null checks for elements that might not exist
         const caseFileInput = document.getElementById('case-file-input');
         const caseClearBtn = document.getElementById('case-clear-btn');
+        const engravingToggle = document.getElementById('laser-engraving-toggle');
         
         // Убираем обработчик клика на кнопку, чтобы избежать множественных вызовов
         // Клик обрабатывается через inline onclick в HTML
@@ -42,6 +112,10 @@ const WoodCase = {
         
         if (caseClearBtn) {
             caseClearBtn.addEventListener('click', () => this.clearLogo());
+        }
+
+        if (engravingToggle) {
+            engravingToggle.addEventListener('change', () => this.syncEditingState());
         }
 
         // Add drag&drop for case upload
@@ -69,6 +143,7 @@ const WoodCase = {
 
         this.setupManualInputs();
         this.render();
+        this.syncEditingState();
     },
 
     setupManualInputs() {
@@ -205,6 +280,7 @@ const WoodCase = {
             const loadHandler = () => {
                 this.applyStartConfig(this.currentCase);
                 this.render();
+                this.syncEditingState();
                 this.updateCaseState({
                     variant: 'custom',
                     customLogo: this.userImgSrc
@@ -274,9 +350,7 @@ const WoodCase = {
 
         const bg = document.getElementById('wood-case-bg');
         if (bg) {
-            bg.setAttribute('href', CASE_IMAGES[this.currentCase][dev]);
-            bg.setAttribute('x', caseData.x); bg.setAttribute('y', caseData.y);
-            bg.setAttribute('width', caseData.w); bg.setAttribute('height', caseData.h);
+            this.updateCaseBackgroundImage(bg, CASE_IMAGES[this.currentCase][dev], caseData);
         }
 
         const fo = document.getElementById('wood-case-perspective-fo');
@@ -292,6 +366,7 @@ const WoodCase = {
 
         const container = document.getElementById('user-logo-container');
         if (this.userImgSrc && container) {
+            this.syncBurnFilterOrientation();
             container.style.display = 'block';
             if (this.isSvg) {
                 container.style.filter = 'grayscale(1) brightness(0) url(#woodBurnFilter';
@@ -320,6 +395,8 @@ const WoodCase = {
             }
             this.updateTransform();
         }
+
+        this.syncEditingState();
     },
 
     updateTransform(animate = false) {
@@ -361,12 +438,29 @@ const WoodCase = {
         this.drawRulers();
     },
 
+    getLocalPlanePoint(clientX, clientY) {
+        const plane = document.getElementById('wood-case-perspective-plane');
+        if (!plane) {
+            return null;
+        }
+
+        const rect = plane.getBoundingClientRect();
+        const localWidth = parseFloat(plane.style.width) || rect.width || 1;
+        const localHeight = parseFloat(plane.style.height) || rect.height || 1;
+
+        return {
+            x: ((clientX - rect.left) / (rect.width || 1)) * localWidth,
+            y: ((clientY - rect.top) / (rect.height || 1)) * localHeight
+        };
+    },
+
     setupNativeInteractions() {
         const wrapper = document.getElementById('wood-case-logo-wrapper');
         if (!wrapper) return;
 
         let isDragging = false;
-        let startX, startY;
+        let dragStartPoint = null;
+        let dragStartState = null;
         let initialPinchDistance = null;
         let initialScale = 1;
 
@@ -375,15 +469,22 @@ const WoodCase = {
         };
 
         const handleMove = (dx, dy) => {
+            if (!this.isCaseEditingActive()) {
+                return;
+            }
+
             const state = this.history[this.currentCase];
             state.x += dx;
             state.y += dy;
-            // NOTE: simple bounds check could be added here
             this.updateTransform();
             this.showRulers();
         };
 
         const handleScale = (ds) => {
+            if (!this.isCaseEditingActive()) {
+                return;
+            }
+
             const state = this.history[this.currentCase];
             state.scale *= ds;
             state.scale = Math.max(0.01, Math.min(5, state.scale));
@@ -391,33 +492,68 @@ const WoodCase = {
             this.showRulers();
         };
 
-        wrapper.addEventListener('pointerdown', (e) => {
-            if (e.pointerType === 'touch') return; // Handled by touch events for multi-touch
+        const beginDrag = (clientX, clientY) => {
+            if (!this.isCaseEditingActive()) {
+                return false;
+            }
+
+            const point = this.getLocalPlanePoint(clientX, clientY);
+            if (!point) {
+                return false;
+            }
+
+            const state = this.history[this.currentCase];
             isDragging = true;
-            startX = e.clientX;
-            startY = e.clientY;
+            dragStartPoint = point;
+            dragStartState = { x: state.x, y: state.y };
+            return true;
+        };
+
+        const updateDrag = (clientX, clientY) => {
+            if (!isDragging || !dragStartPoint || !dragStartState) {
+                return;
+            }
+
+            const point = this.getLocalPlanePoint(clientX, clientY);
+            if (!point) {
+                return;
+            }
+
+            const dx = point.x - dragStartPoint.x;
+            const dy = point.y - dragStartPoint.y;
+            const state = this.history[this.currentCase];
+            state.x = dragStartState.x + dx;
+            state.y = dragStartState.y + dy;
+            this.updateTransform();
+            this.showRulers();
+        };
+
+        const endDrag = () => {
+            isDragging = false;
+            dragStartPoint = null;
+            dragStartState = null;
+        };
+
+        wrapper.addEventListener('pointerdown', (e) => {
+            if (e.pointerType === 'touch') return;
+            if (!beginDrag(e.clientX, e.clientY)) {
+                return;
+            }
             wrapper.setPointerCapture(e.pointerId);
         });
 
         wrapper.addEventListener('pointermove', (e) => {
-            if (!isDragging) return;
-            const dx = e.clientX - startX;
-            const dy = e.clientY - startY;
-            startX = e.clientX;
-            startY = e.clientY;
-            handleMove(dx, dy);
+            updateDrag(e.clientX, e.clientY);
         });
 
-        wrapper.addEventListener('pointerup', () => isDragging = false);
-        wrapper.addEventListener('pointercancel', () => isDragging = false);
+        wrapper.addEventListener('pointerup', endDrag);
+        wrapper.addEventListener('pointercancel', endDrag);
 
         wrapper.addEventListener('touchstart', (e) => {
             if (e.touches.length === 1) {
-                isDragging = true;
-                startX = e.touches[0].clientX;
-                startY = e.touches[0].clientY;
+                beginDrag(e.touches[0].clientX, e.touches[0].clientY);
             } else if (e.touches.length === 2) {
-                isDragging = false;
+                endDrag();
                 initialPinchDistance = getDistance(e.touches);
                 initialScale = this.history[this.currentCase].scale;
             }
@@ -425,11 +561,7 @@ const WoodCase = {
 
         wrapper.addEventListener('touchmove', (e) => {
             if (e.touches.length === 1 && isDragging) {
-                const dx = e.touches[0].clientX - startX;
-                const dy = e.touches[0].clientY - startY;
-                startX = e.touches[0].clientX;
-                startY = e.touches[0].clientY;
-                handleMove(dx, dy);
+                updateDrag(e.touches[0].clientX, e.touches[0].clientY);
             } else if (e.touches.length === 2 && initialPinchDistance) {
                 const currentDistance = getDistance(e.touches);
                 const ds = currentDistance / initialPinchDistance;
@@ -441,7 +573,12 @@ const WoodCase = {
         }, { passive: true });
 
         wrapper.addEventListener('touchend', () => {
-            isDragging = false;
+            endDrag();
+            initialPinchDistance = null;
+        });
+
+        wrapper.addEventListener('touchcancel', () => {
+            endDrag();
             initialPinchDistance = null;
         });
 
@@ -570,6 +707,11 @@ const WoodCase = {
     },
 
     showRulers() {
+        if (!this.isCaseEditingActive()) {
+            this.hideRulers();
+            return;
+        }
+
         const g = document.getElementById('wood-case-rulers-group');
         if (g) {
             g.classList.add('visible');
@@ -599,6 +741,7 @@ const WoodCase = {
         if (rulersGroup) {
             rulersGroup.innerHTML = '';
         }
+        this.hideRulers();
         
         ['info-top-tag', 'info-left-tag', 'info-res-tag'].forEach(id => {
             const el = document.getElementById(id);

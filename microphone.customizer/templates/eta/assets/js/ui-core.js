@@ -469,6 +469,10 @@ export function toggleSubmenu(section, forceClose = false) {
         submenu.style.display = 'block';
         requestAnimationFrame(() => submenu.classList.add('active'));
     }
+
+    requestAnimationFrame(() => {
+        window.WoodCase?.syncEditingState?.();
+    });
 }
 
 function initSidebarControls() {
