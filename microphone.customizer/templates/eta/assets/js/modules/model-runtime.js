@@ -6,6 +6,21 @@ function safeNumber(value) {
     return Number.isNaN(num) ? 0 : num;
 }
 
+function applyShockmountRuntimeState(batch, shockmountState, model, preserveShockmountSelection) {
+    batch('shockmount.canToggle', shockmountState.canToggle);
+    batch('shockmount.available', shockmountState.available);
+    batch('shockmount.visible', shockmountState.visible);
+    batch('shockmount.included', shockmountState.included);
+
+    if (preserveShockmountSelection) {
+        return;
+    }
+
+    batch('shockmount.enabled', shockmountState.enabled);
+    batch('shockmount.variant', model.defaultShockmount || null);
+    batch('shockmountPins.variant', model.defaultShockmountPins || null);
+}
+
 export function getModelRuntimeData(modelCode) {
     if (!modelCode) {
         return null;
@@ -42,16 +57,7 @@ export function applyModelRuntimeState(modelCode, options = {}) {
         batch('modelSeries', modelSeries);
         batch('basePrice', basePrice);
         batch('defaultShockmountOption', shockmountState.defaultOption);
-        batch('shockmount.canToggle', shockmountState.canToggle);
-        batch('shockmount.available', shockmountState.available);
-
-        if (!preserveShockmountSelection) {
-            batch('shockmount.enabled', shockmountState.enabled);
-            batch('shockmount.visible', shockmountState.visible);
-            batch('shockmount.included', shockmountState.included);
-            batch('shockmount.variant', model.defaultShockmount || null);
-            batch('shockmountPins.variant', model.defaultShockmountPins || null);
-        }
+        applyShockmountRuntimeState(batch, shockmountState, model, preserveShockmountSelection);
     });
 
     return runtimeData;
