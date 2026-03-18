@@ -1,6 +1,7 @@
 import { stateManager } from '../core/state.js';
 import { getDevice } from '../utils.js';
 import { CASE_IMAGES, CASE_GEOMETRY, getModelData } from '../config.js';
+import { formatPrice, getBreakdown } from './price-calculator.js';
 
 const WoodCase = {
     currentCase: '023-the-bomblet',
@@ -555,55 +556,6 @@ const WoodCase = {
         }
     },
 
-    showNotification(message, type = 'info') {
-        // Create notification element if it doesn't exist
-        let notification = document.querySelector('.notification');
-        if (!notification) {
-            notification = document.createElement('div');
-            notification.className = 'notification';
-            notification.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                padding: 12px 20px;
-                border-radius: 8px;
-                font-size: 14px;
-                font-weight: 500;
-                z-index: 10000;
-                opacity: 0;
-                transform: translateX(100%);
-                transition: all 0.3s ease;
-            `;
-            document.body.appendChild(notification);
-        }
-
-        // Set message and styling based on type
-        notification.textContent = message;
-        notification.className = `notification notification--${type}`;
-        
-        const colors = {
-            success: { bg: '#10b981', text: '#ffffff' },
-            error: { bg: '#ef4444', text: '#ffffff' },
-            info: { bg: '#3b82f6', text: '#ffffff' }
-        };
-        
-        const color = colors[type] || colors.info;
-        notification.style.backgroundColor = color.bg;
-        notification.style.color = color.text;
-
-        // Show notification
-        setTimeout(() => {
-            notification.style.opacity = '1';
-            notification.style.transform = 'translateX(0)';
-        }, 10);
-
-        // Hide after 3 seconds
-        setTimeout(() => {
-            notification.style.opacity = '0';
-            notification.style.transform = 'translateX(100%)';
-        }, 3000);
-    },
-
     showRulers() {
         const g = document.getElementById('wood-case-rulers-group');
         if (g) {
@@ -680,19 +632,19 @@ const WoodCase = {
 
 export function toggleLaserEngraving() {
     const currentState = stateManager.get();
-    const isLaserEnabled = currentState.case?.laserEngraving || false;
+    const isLaserEnabled = currentState.case?.laserEngravingEnabled || false;
     
     // Toggle state
     const newState = !isLaserEnabled;
-    stateManager.set('case.laserEngraving', newState);
+    stateManager.set('case.laserEngravingEnabled', newState);
     
     // Price will be calculated by price calculator based on case.laserEngravingEnabled state
     
     // Update UI
     const casePriceRow = document.getElementById('case-price-row');
     if (casePriceRow) {
-        const currentPrice = stateManager.get().prices?.case || 0;
-        casePriceRow.textContent = currentPrice > 0 ? `+${currentPrice}₽` : '0₽';
+        const currentPrice = getBreakdown(stateManager.get()).case || 0;
+        casePriceRow.textContent = formatPrice(currentPrice);
     }
     
     // Show/hide upload sections inside #submenu-case
