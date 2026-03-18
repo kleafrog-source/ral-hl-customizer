@@ -8,6 +8,12 @@ const layers = {
     case: null
 };
 
+const LAYER_ELEMENT_IDS = {
+    microphone: 'microphone-svg-container',
+    shockmount: 'shockmount-svg-container',
+    case: 'case-preview-container'
+};
+
 const LAYER_STATE_MAP = {
     microphone: 'mic-active',
     shockmount: 'shockmount-active',
@@ -39,9 +45,9 @@ function isAnimeReady() {
 }
 
 function syncLayerElements() {
-    layers.microphone = document.getElementById('microphone-svg-container');
-    layers.shockmount = document.getElementById('shockmount-svg-container');
-    layers.case = document.getElementById('case-preview-container');
+    Object.entries(LAYER_ELEMENT_IDS).forEach(([id, elementId]) => {
+        layers[id] = document.getElementById(elementId);
+    });
 
     Object.entries(layers).forEach(([id, element]) => {
         if (element) {
@@ -97,6 +103,19 @@ function resetLayerPointerEvents() {
     });
 }
 
+function forEachConfiguredLayer(animationConfig, callback) {
+    Object.keys(layers).forEach((layerId) => {
+        const layerElement = layers[layerId];
+        const layerState = animationConfig?.[layerId];
+
+        if (!layerElement || !layerState) {
+            return;
+        }
+
+        callback(layerElement, layerState, layerId);
+    });
+}
+
 function syncActiveClasses(layerId, stateName) {
     Object.values(layers).forEach((element) => element?.classList.remove('active'));
 
@@ -116,14 +135,7 @@ function applyStaticState(animationConfig, stateName) {
 
     resetLayerPointerEvents();
 
-    Object.keys(layers).forEach((layerId) => {
-        const layerElement = layers[layerId];
-        const layerState = animationConfig[layerId];
-
-        if (!layerElement || !layerState) {
-            return;
-        }
-
+    forEachConfiguredLayer(animationConfig, (layerElement, layerState) => {
         layerElement.style.transform = layerState.transform;
         layerElement.style.opacity = layerState.opacity;
     });
@@ -151,14 +163,7 @@ function animateCameraState(modelCode, stateName, newActiveLayerId, state = stat
 
     resetLayerPointerEvents();
 
-    Object.keys(layers).forEach((layerId) => {
-        const layerElement = layers[layerId];
-        const layerState = animationConfig[layerId];
-
-        if (!layerElement || !layerState) {
-            return;
-        }
-
+    forEachConfiguredLayer(animationConfig, (layerElement, layerState) => {
         const transformProps = parseTransform(layerState.transform);
         timeline.add({
             targets: layerElement,
