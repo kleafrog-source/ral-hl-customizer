@@ -1,5 +1,9 @@
+function getViewportWidth() {
+    return typeof window === 'undefined' ? 0 : window.innerWidth;
+}
+
 export function getDevice(breakpoints) {
-    const w = window.innerWidth;
+    const w = getViewportWidth();
     if (w <= breakpoints.mobile.max) return 'mobile';
     if (w <= breakpoints.tablet.max) return 'tablet';
     if (w <= breakpoints.desktop.max) return 'desktop';
@@ -13,7 +17,7 @@ export function getDevice(breakpoints) {
  * _hdmob: default (Desktops <= 1920px and Mobile < 768px)
  */
 export function getAssetSuffix() {
-    const w = window.innerWidth;
+    const w = getViewportWidth();
     if (w > 1920) return '_4k';
     if (w >= 768 && w <= 1024) return '_tablet';
     return '_hdmob';
