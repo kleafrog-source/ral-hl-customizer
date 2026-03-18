@@ -1,6 +1,6 @@
 import { applyModelSelectionUI, initEventListeners, updateUI } from './ui-core.js';
 import { initHLDataManager } from './modules/hl-data-manager.js';
-import { initShockmount, refreshShockmountUI } from './modules/shockmount-new.js';
+import { initShockmount } from './modules/shockmount-new.js';
 import { loadSVG, updateSVG } from './engine.js';
 import { initializeWoodCase } from './modules/wood-case.js';
 import { init as initLogo } from './modules/logo.js';
@@ -59,8 +59,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     initLogo();
     initializeWoodCase();
     initShockmount();
-
-    refreshShockmountUI();
 
     updateSVG();
     initDebugHelper();

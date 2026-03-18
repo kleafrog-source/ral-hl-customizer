@@ -137,17 +137,6 @@ export function updateUI() {
     setSubtitle('case-subtitle', getLabel(state.case));
     setSubtitle('shockmount-subtitle', getLabel(state.shockmount));
     setSubtitle('shockmountPins-subtitle', getLabel(state.shockmountPins));
-
-    // Update selected states for swatches and option buttons
-    document.querySelectorAll('.variant-item, .swatch, .option-button').forEach(el => {
-        const section = el.dataset.optionPart;
-        if (!section) return;
-
-        const currentVariant = state[section]?.variant;
-        const isSelected = el.dataset.variantCode === currentVariant || el.dataset.variant === currentVariant;
-
-        // el.classList.toggle('selected', isSelected); // Убрано добавление класса .selected
-    });
 }
 
 function applyOptionFromElement(element) {
