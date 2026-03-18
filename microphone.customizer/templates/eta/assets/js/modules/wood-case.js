@@ -618,48 +618,6 @@ const WoodCase = {
     }
 };
 
-export function toggleLaserEngraving() {
-    const currentState = stateManager.get();
-    const isLaserEnabled = currentState.case?.laserEngravingEnabled || false;
-    
-    // Toggle state
-    const newState = !isLaserEnabled;
-    stateManager.set('case.laserEngravingEnabled', newState);
-    
-    // Price will be calculated by price calculator based on case.laserEngravingEnabled state
-    
-    // Update UI
-    const casePriceRow = document.getElementById('case-price-row');
-    if (casePriceRow) {
-        const currentPrice = getBreakdown(stateManager.get()).case || 0;
-        casePriceRow.textContent = formatPrice(currentPrice);
-    }
-    
-    // Show/hide upload sections inside #submenu-case
-    const uploadSections = document.querySelectorAll('#submenu-case .submenu-section');
-    const laserDataSection = document.querySelector('.toggle-laser-engraving-data');
-    
-    if (newState) {
-        // Laser engraving enabled - show upload sections
-        uploadSections.forEach(section => {
-            if (!section.closest('.toggle-laser-engraving-data')) {
-                section.style.display = 'block';
-            }
-        });
-        if (laserDataSection) laserDataSection.style.display = 'block';
-    } else {
-        // Laser engraving disabled - hide upload sections
-        uploadSections.forEach(section => {
-            if (!section.closest('.toggle-laser-engraving-data')) {
-                section.style.display = 'none';
-            }
-        });
-        if (laserDataSection) laserDataSection.style.display = 'none';
-    }
-    
-    console.log(`[Wood Case] Laser engraving ${newState ? 'enabled' : 'disabled'}`);
-}
-
 export function getWoodCaseTransformState() {
     const s = WoodCase.history[WoodCase.currentCase];
     return {

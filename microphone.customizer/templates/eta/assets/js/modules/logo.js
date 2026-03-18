@@ -15,61 +15,6 @@ export function isMalfaLogo(state = null) {
     return logoVariant === 'malfasilver' || logoVariant === 'malfagold';
 }
 
-// Toggle for custom logo feature
-export function toggleCustomLogo() {
-    const currentState = stateManager.get();
-    const isCustomLogoEnabled = currentState.logo?.customLogo || false;
-    const logoPrice = Number(currentState.logo?.price || 0);
-    
-    const uploadArea = document.getElementById('custom-logo-upload');
-    const enabled = uploadArea.style.display === 'block';
-    uploadArea.style.display = enabled ? 'none' : 'block';
-
-    // Toggle the state
-    const newState = !isCustomLogoEnabled;
-    stateManager.set('logo.customLogo', newState);
-    
-    // Price will be calculated by price calculator based on logo.useCustom state
-    
-    // Update UI prices
-    // const logoPriceRow = document.getElementById('logo-price-row');
-    // if (logoPriceRow) {
-    //     logoPriceRow.textContent = logoPrice > 0 ? `+${logoPrice}₽` : '0₽';
-    // }
-    
-    // const customLogoPrice = document.getElementById('custom-logo-price');
-    // if (customLogoPrice) {
-    //     customLogoPrice.textContent = logoPrice > 0 ? `+${logoPrice}₽` : '+0₽';
-    // }
-    
-    // Show/hide sections based on toggle state
-    const logoSection = document.querySelector('[data-section="logo"]');
-    const logobgSection = document.querySelector('[data-section="logobg"]');
-    const customLogoSection = document.querySelector('.toggle-logo-section');
-    
-    // Close any open submenus
-    const logoSubmenu = document.getElementById('submenu-logo');
-    const logobgSubmenu = document.getElementById('submenu-logobg');
-    
-    if (newState) {
-        // Custom logo enabled - hide standard sections, show custom upload
-        if (logoSection) logoSection.style.display = 'block';
-        if (logobgSection) logobgSection.style.display = 'block';
-        if (customLogoSection) customLogoSection.style.display = 'block';
-        
-        // Close submenus
-        if (logoSubmenu) logoSubmenu.classList.remove('active');
-        if (logobgSubmenu) logobgSubmenu.classList.remove('active');
-    } else {
-        // Custom logo disabled - show standard sections, hide custom upload
-        if (logoSection) logoSection.style.display = '';
-        if (logobgSection) logobgSection.style.display = '';
-        if (customLogoSection) customLogoSection.style.display = 'none';
-    }
-    
-    console.log(`[Logo] Custom logo ${newState ? 'enabled' : 'disabled'}, price: ${logoPrice}₽`);
-}
-
 export function init() {
     // Убираем обработчик клика на всю область, чтобы избежать множественных вызовов
     // Клик обрабатывается через inline onclick в HTML
