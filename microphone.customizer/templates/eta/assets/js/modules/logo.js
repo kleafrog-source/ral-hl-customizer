@@ -1,10 +1,13 @@
 import { eventRegistry } from '../core/events.js';
 import { stateManager } from '../core/state.js';
-import { CONFIG, getModelData } from '../config.js';
+import { CONFIG } from '../config.js';
+import { isMalfaModel } from '../config/model-capabilities.js';
 import { updateFilter } from './appearance-new.js';
 
 // Utility functions for MALFA detection using Bitrix data
 export function isMalfaMic(state = null) {
+    return isMalfaModel(state || stateManager.get());
+
     const currentState = state || stateManager.get();
     
     // Проверяем разные способы хранения модели в state
@@ -30,6 +33,7 @@ export function isMalfaLogo(state = null) {
 export function toggleCustomLogo() {
     const currentState = stateManager.get();
     const isCustomLogoEnabled = currentState.logo?.customLogo || false;
+    const logoPrice = Number(currentState.logo?.price || 0);
     
     const uploadArea = document.getElementById('custom-logo-upload');
     const enabled = uploadArea.style.display === 'block';

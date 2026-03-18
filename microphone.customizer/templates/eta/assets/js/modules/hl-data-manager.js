@@ -1,6 +1,7 @@
 // HL DATA MANAGER (delta)
 
 import { stateManager } from '../core/state.js';
+import { supportsMalfaLogos } from '../config/model-capabilities.js';
 import { loadCustomPrices } from './price-calculator.js';
 
 const MALFA_VARIANTS = new Set(['malfasilver', 'malfagold']);
@@ -55,6 +56,7 @@ export function buildCurrentModelOptions(modelCode) {
 
     const currentModelId = parseInt(model.ID || '0', 10) || 0;
     const currentSeries = String(model.MODEL_SERIES || '');
+    const allowMalfaLogos = supportsMalfaLogos(modelCode);
     const allOptions = data.options || {};
     const merged = {};
 
@@ -88,7 +90,7 @@ export function buildCurrentModelOptions(modelCode) {
             }
 
             const variantCode = String(option.UF_VARIANT_CODE || '');
-            if (sectionCode === 'logo' && modelCode !== '023-malfa' && MALFA_VARIANTS.has(variantCode)) {
+            if (sectionCode === 'logo' && !allowMalfaLogos && MALFA_VARIANTS.has(variantCode)) {
                 return false;
             }
 

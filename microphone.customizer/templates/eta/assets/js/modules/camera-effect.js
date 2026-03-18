@@ -1,5 +1,5 @@
 import { stateManager } from '../core/state.js';
-import { getModelData } from '../config.js';
+import { getAnimationModelKey, getBaseAnimationModelKey } from '../config/model-capabilities.js';
 
 const microphoneAnimations = {
     '017-TUBE': {
@@ -175,39 +175,11 @@ let activeLayerId = null;
 let currentTimeline = null;
 
 export function normalizeMicModel(modelCode) {
-    if (!modelCode) return '017-TUBE';
-
-    const modelData = getModelData(modelCode);
-    if (modelData?.CODE) {
-        return modelData.CODE.toUpperCase().replace('THE-BOMBLET', 'BOMBLET');
-    }
-
-    switch (modelCode) {
-        case '023-the-bomblet':
-            return '023-BOMBLET';
-        case '023-malfa':
-            return '023-MALFA';
-        case '023-deluxe':
-            return '023-DELUXE';
-        case '017-fet':
-            return '017-FET';
-        case '017-tube':
-            return '017-TUBE';
-        default:
-            return modelCode.toUpperCase();
-    }
+    return getBaseAnimationModelKey(modelCode);
 }
 
 export function resolveAnimationModel(modelCode, state = stateManager.get()) {
-    const normalizedModel = normalizeMicModel(modelCode);
-
-    if (normalizedModel === '023-BOMBLET') {
-        return state?.shockmount?.enabled
-            ? '023-BOMBLET-WITH-SHOCKMOUNT'
-            : '023-BOMBLET-NO-SHOCKMOUNT';
-    }
-
-    return normalizedModel;
+    return getAnimationModelKey(modelCode, state);
 }
 
 export function getAnimationPreset(modelCode, state = stateManager.get()) {

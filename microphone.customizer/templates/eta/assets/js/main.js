@@ -10,6 +10,7 @@ import { init as initLogo } from './modules/logo.js';
 import { initCameraEffect, updateMicVariant } from './modules/camera-effect.js';
 import { applyModelDefaults, isDefaultModel } from './modules/model-defaults.js';
 import { stateManager } from './core/state.js';
+import { buildShockmountState } from './config/model-capabilities.js';
 import { initDebugHelper } from './debug/ui-debug-helper.js';
 import { initValidation } from './services/validation.js';
 
@@ -52,6 +53,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             console.log('[Main.js] Model from HL Data:', model);
             
             if (model) {
+                const shockmountState = buildShockmountState(model);
                 console.log('[Main.js] Setting shockmount state from model:', {
                     shockmountToggle: model.shockmountToggle,
                     shockmountEnabled: model.shockmountEnabled,
@@ -85,6 +87,15 @@ document.addEventListener('DOMContentLoaded', async () => {
                     batch('shockmountPins.variant', model.defaultShockmountPins || null);
                     // Устанавливаем defaultShockmountOption
                     batch('defaultShockmountOption', model.UF_DEFAULT_SHOCKMOUNT_OPTION || null);
+                });
+
+                stateManager.batch(batch => {
+                    batch('shockmount.canToggle', shockmountState.canToggle);
+                    batch('shockmount.enabled', shockmountState.enabled);
+                    batch('shockmount.visible', shockmountState.visible);
+                    batch('shockmount.available', shockmountState.available);
+                    batch('shockmount.included', shockmountState.included);
+                    batch('defaultShockmountOption', shockmountState.defaultOption);
                 });
                 
                 console.log('[Main.js] Shockmount state set:', {

@@ -20,7 +20,7 @@ $arResult['VIEW_TYPE_TO_SECTION'] = $viewTypeMap;
 $arResult['SECTION_TO_VIEW_TYPE'] = array_flip($viewTypeMap);
 
 $cacheTime = 0;
-$cacheId = 'customizer_hl_data_delta_' . ($arParams['MODEL_CODE'] ?? 'default');
+$cacheId = 'customizer_hl_data_eta_' . ($arParams['MODEL_CODE'] ?? 'default');
 $cacheDir = '/customizer/hl_data';
 
 $cache = \Bitrix\Main\Data\Cache::createInstance();

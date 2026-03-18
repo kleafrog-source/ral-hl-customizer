@@ -10,6 +10,7 @@ import { applyModelDefaults } from './modules/model-defaults.js';
 import { calculateTotal, getBreakdown, formatPrice, debugPrices } from './modules/price-calculator.js';
 import { initHLDataManager, syncCurrentModelOptionData } from './modules/hl-data-manager.js';
 import { switchLayer, updateMicVariant } from './modules/camera-effect.js';
+import { buildShockmountState } from './config/model-capabilities.js';
 import { sendOrder } from './services/report.js';
 import { validateForm } from './services/validation.js';
 
@@ -263,6 +264,7 @@ export function initEventListeners() {
 
             // Инициализация или обновление state для shockmount на основе HL-полей модели
             const model = window.CUSTOMIZER_DATA.modelsByCode[modelCode];
+            const shockmountState = buildShockmountState(model);
             console.log('[UI-Core] Model switch to:', modelCode);
             console.log('[UI-Core] Model data:', {
                 shockmountToggle: model.shockmountToggle,
@@ -293,6 +295,14 @@ export function initEventListeners() {
                 });
                 
                 // Применяем значения по умолчанию для новой модели
+                stateManager.batch(batch => {
+                    batch('shockmount.canToggle', shockmountState.canToggle);
+                    batch('shockmount.enabled', shockmountState.enabled);
+                    batch('shockmount.visible', shockmountState.visible);
+                    batch('shockmount.available', shockmountState.available);
+                    batch('shockmount.included', shockmountState.included);
+                    batch('defaultShockmountOption', shockmountState.defaultOption);
+                });
                 applyModelDefaults(modelCode);
             } else {
                 // При переключении моделей обновляем только canToggle для новой модели
@@ -309,6 +319,11 @@ export function initEventListeners() {
             }
 
             // Синхронизируем UI с финальным состоянием
+            stateManager.batch(batch => {
+                batch('shockmount.canToggle', shockmountState.canToggle);
+                batch('shockmount.available', shockmountState.available);
+                batch('defaultShockmountOption', shockmountState.defaultOption);
+            });
             syncToggles();
 
             // Сразу обновляем UI чтобы цены применились

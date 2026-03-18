@@ -1,6 +1,7 @@
 // Toggle handlers (delta)
 
 import { stateManager } from '../core/state.js';
+import { buildShockmountState, getShockmountOptionVariantCode } from '../config/model-capabilities.js';
 import { updateUI } from '../ui-core.js';
 import { updateShockmountVisibility, updateShockmountLayers, updateShockmountPreview, updateShockmountPinsPreview } from './shockmount-new.js';
 import { updateSVG } from '../engine.js';
@@ -12,18 +13,16 @@ let listenersBound = false;
 function syncShockmountOptionState(enabled) {
     const currentState = stateManager.get();
     const modelCode = currentState.currentModelCode || '';
-
-    if (modelCode !== '023-the-bomblet') {
+    const optionCode = getShockmountOptionVariantCode(modelCode, enabled);
+    if (!optionCode) {
         return;
     }
 
-    const optionCode = enabled
-        ? 'shockmount-option-included_023-the-bomblet'
-        : 'shockmount-option-not_included_023-the-bomblet';
     const optionState = (window.CUSTOMIZER_DATA?.sectionOptions?.shockmountOption || [])
         .find(option => option.variantCode === optionCode) || {};
-    const modelData = window.CUSTOMIZER_DATA?.modelsByCode?.[modelCode] || {};
-    const optionPrice = enabled ? Number(modelData.shockmountPrice || modelData.SHOCKMOUNT_PRICE || 0) : 0;
+    const optionPrice = enabled
+        ? buildShockmountState(window.CUSTOMIZER_DATA?.modelsByCode?.[modelCode] || modelCode).price
+        : 0;
 
     stateManager.batch(batch => {
         batch('shockmountOption.variantCode', optionCode);
