@@ -1,7 +1,6 @@
 import { stateManager } from '../core/state.js';
 import { getDevice } from '../utils.js';
 import { CASE_IMAGES, CASE_GEOMETRY, getModelData } from '../config.js';
-import { formatPrice, getBreakdown } from './price-calculator.js';
 import { showNotification as showAppNotification } from '../utils/notifications.js';
 
 const WoodCase = {
@@ -23,7 +22,6 @@ const WoodCase = {
         if (woodCaseLoader) woodCaseLoader.remove();
 
         // Add null checks for elements that might not exist
-        const caseUploadBtn = document.getElementById('case-upload-btn');
         const caseFileInput = document.getElementById('case-file-input');
         const caseClearBtn = document.getElementById('case-clear-btn');
         

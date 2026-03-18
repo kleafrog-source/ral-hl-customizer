@@ -237,49 +237,6 @@ export function updateLogoItemsLockState() {
     // Блокировка происходит на уровне секций через CSS
 }
 
-export function uploadCustomLogo() {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = 'image/*';
-    input.onchange = e => {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = event => {
-                try {
-                    // Сохраняем кастомный логотип в StateManager (единый для всех вариантов)
-                    stateManager.set('logo.customLogoData', event.target.result);
-                    
-                    // Показываем кнопку удаления
-                    const removeBtn = document.querySelector('.remove-logo-btn');
-                    if (removeBtn) {
-                        removeBtn.style.display = 'block';
-                    }
-
-                    // Показываем overlay
-                    const overlay = document.getElementById('logo-overlay');
-                    if (overlay) {
-                        overlay.classList.add('active');
-                    }
-
-                    // Обновляем состояние lock
-                    updateLogoItemsLockState();
-                    
-                    // Обновляем SVG для отображения кастомного логотипа
-                    updateLogoSVG();
-                    
-                    console.log('[Logo] Custom logo uploaded successfully');
-                } catch (err) {
-                    console.error('[Logo] Error uploading custom logo:', err);
-                    showNotification('Ошибка при загрузке логотипа', 'error');
-                }
-            };
-            reader.readAsDataURL(file);
-        }
-    };
-    input.click();
-}
-
 export function clearCustomLogo() {
     // Сбрасываем state кастомного логотипа
     stateManager.set('logo.useCustom', false);
