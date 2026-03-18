@@ -6,6 +6,14 @@ import { getAssetSuffix } from './utils.js';
 import { eventRegistry } from './core/events.js';
 import { debugLog } from './utils/debug.js';
 
+function getMicrophoneContainer() {
+    return document.getElementById('microphone-svg-container');
+}
+
+function getMicrophoneSvg() {
+    return getMicrophoneContainer()?.querySelector('svg') || null;
+}
+
 export function updateResponsiveAssets(svg) {
     if (!svg) return;
     const suffix = getAssetSuffix();
@@ -25,9 +33,7 @@ export function updateResponsiveAssets(svg) {
 
 export function updateSVG() {
     try {
-        const svg = document
-   .getElementById('microphone-svg-container')
-   ?.querySelector('svg')
+        const svg = getMicrophoneSvg();
         if (!svg) {
             console.warn('[SVG] SVG element not found in #microphone-svg-container, skipping update');
             return;
@@ -154,7 +160,7 @@ export async function loadSVG(svgPath = null) {
         }
         const svgText = await response.text();
         
-        const container = document.getElementById('microphone-svg-container');
+        const container = getMicrophoneContainer();
         if (!container) {
             console.error('SVG container not found: #microphone-svg-container');
             return;
@@ -172,7 +178,7 @@ export async function loadSVG(svgPath = null) {
     } catch (e) {
         console.error("Failed to load SVG:", e);
         // Fallback - создаем базовый SVG если загрузка не удалась
-        const container = document.getElementById('microphone-svg-container');
+        const container = getMicrophoneContainer();
         if (container) {
             container.innerHTML = `
                 <svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
@@ -183,9 +189,7 @@ export async function loadSVG(svgPath = null) {
         }
     }
 
-    const svg = document
-   .getElementById('microphone-svg-container')
-   ?.querySelector('svg')
+    const svg = getMicrophoneSvg();
     if (svg) {
         svg.style.transformOrigin = 'center bottom';
         updateResponsiveAssets(svg);
@@ -194,7 +198,7 @@ export async function loadSVG(svgPath = null) {
 
     // Re-update assets on window resize
     eventRegistry.add(window, 'resize', () => {
-        const currentSvg = document.querySelector('#microphone-svg-container svg');
+        const currentSvg = getMicrophoneSvg();
         if (currentSvg) updateResponsiveAssets(currentSvg);
     });
 }
