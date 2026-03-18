@@ -8,6 +8,13 @@ const layers = {
     case: null
 };
 
+const LAYER_STATE_MAP = {
+    microphone: 'mic-active',
+    shockmount: 'shockmount-active',
+    case: 'case-active',
+    logo: 'logo-view'
+};
+
 let activeLayerId = null;
 let currentTimeline = null;
 
@@ -27,6 +34,47 @@ export function getAnimationPreset(modelCode, state = stateManager.get()) {
     };
 }
 
+function isAnimeReady() {
+    return typeof window.anime === 'function';
+}
+
+function syncLayerElements() {
+    layers.microphone = document.getElementById('microphone-svg-container');
+    layers.shockmount = document.getElementById('shockmount-svg-container');
+    layers.case = document.getElementById('case-preview-container');
+
+    Object.entries(layers).forEach(([id, element]) => {
+        if (element) {
+            element.classList.add('layer');
+            element.style.opacity = '1';
+            element.style.display = 'block';
+            return;
+        }
+
+        console.warn(`Camera effect layer element with ID for '${id}' not found.`);
+    });
+}
+
+function getLayerStateName(layerId) {
+    return LAYER_STATE_MAP[layerId] || null;
+}
+
+function getActiveLayerFromState(stateName) {
+    if (stateName === 'global-view') {
+        return null;
+    }
+
+    return Object.keys(LAYER_STATE_MAP).find((layerId) => LAYER_STATE_MAP[layerId] === stateName) || 'case';
+}
+
+function getPresetState(modelCode, stateName, state = stateManager.get()) {
+    const preset = getAnimationPreset(modelCode, state);
+    return {
+        model: preset.model,
+        config: preset.states?.[stateName] || null
+    };
+}
+
 function parseTransform(transformStr) {
     const result = { translateX: 0, translateY: 0, scale: 1 };
     if (!transformStr) return result;
@@ -41,8 +89,50 @@ function parseTransform(transformStr) {
     return result;
 }
 
-function animateMicrophoneState(micModel, stateName, newActiveLayerId) {
-    const animationConfig = CAMERA_PRESETS[micModel]?.[stateName];
+function resetLayerPointerEvents() {
+    Object.values(layers).forEach((element) => {
+        if (element) {
+            element.style.pointerEvents = 'none';
+        }
+    });
+}
+
+function syncActiveClasses(layerId, stateName) {
+    Object.values(layers).forEach((element) => element?.classList.remove('active'));
+
+    if (layerId && layers[layerId]) {
+        layers[layerId].classList.add('active');
+    }
+
+    if (stateName === 'case-active' && layers.case) {
+        layers.case.style.pointerEvents = 'auto';
+    }
+}
+
+function applyStaticState(animationConfig, stateName) {
+    if (!animationConfig) {
+        return;
+    }
+
+    resetLayerPointerEvents();
+
+    Object.keys(layers).forEach((layerId) => {
+        const layerElement = layers[layerId];
+        const layerState = animationConfig[layerId];
+
+        if (!layerElement || !layerState) {
+            return;
+        }
+
+        layerElement.style.transform = layerState.transform;
+        layerElement.style.opacity = layerState.opacity;
+    });
+
+    syncActiveClasses(getActiveLayerFromState(stateName), stateName);
+}
+
+function animateCameraState(modelCode, stateName, newActiveLayerId, state = stateManager.get()) {
+    const { model: micModel, config: animationConfig } = getPresetState(modelCode, stateName, state);
     if (!animationConfig) {
         console.warn(`Animation state '${stateName}' for model '${micModel}' not found.`);
         return;
@@ -54,22 +144,12 @@ function animateMicrophoneState(micModel, stateName, newActiveLayerId) {
 
     const timeline = window.anime.timeline({
         complete: () => {
-            Object.values(layers).forEach((element) => element?.classList.remove('active'));
-            if (layers[newActiveLayerId]) {
-                layers[newActiveLayerId].classList.add('active');
-            }
-            if (stateName === 'case-active' && layers.case) {
-                layers.case.style.pointerEvents = 'auto';
-            }
+            syncActiveClasses(newActiveLayerId, stateName);
             currentTimeline = null;
         }
     });
 
-    Object.values(layers).forEach((element) => {
-        if (element) {
-            element.style.pointerEvents = 'none';
-        }
-    });
+    resetLayerPointerEvents();
 
     Object.keys(layers).forEach((layerId) => {
         const layerElement = layers[layerId];
@@ -93,60 +173,21 @@ function animateMicrophoneState(micModel, stateName, newActiveLayerId) {
 }
 
 export function initCameraEffect(initialVariant, initialState = 'global-view') {
-    if (typeof window.anime !== 'function') {
+    if (!isAnimeReady()) {
         console.error('anime.js is not loaded. Camera effect cannot be initialized.');
         return;
     }
 
-    layers.microphone = document.getElementById('microphone-svg-container');
-    layers.shockmount = document.getElementById('shockmount-svg-container');
-    layers.case = document.getElementById('case-preview-container');
+    syncLayerElements();
 
-    Object.entries(layers).forEach(([id, element]) => {
-        if (element) {
-            element.classList.add('layer');
-            element.style.opacity = '1';
-            element.style.display = 'block';
-            return;
-        }
+    const { config: initialConfig } = getPresetState(initialVariant, initialState);
+    applyStaticState(initialConfig, initialState);
 
-        console.warn(`Camera effect layer element with ID for '${id}' not found.`);
-    });
-
-    const initialMicModel = resolveAnimationModel(initialVariant);
-    const initialConfig = CAMERA_PRESETS[initialMicModel]?.[initialState];
-
-    if (initialConfig) {
-        Object.keys(layers).forEach((layerId) => {
-            const layerElement = layers[layerId];
-            const layerState = initialConfig[layerId];
-            if (!layerElement || !layerState) {
-                return;
-            }
-
-            layerElement.style.transform = layerState.transform;
-            layerElement.style.opacity = layerState.opacity;
-        });
-
-        if (initialState === 'case-active' && layers.case) {
-            layers.case.style.pointerEvents = 'auto';
-            layers.case.classList.add('active');
-        }
-    }
-
-    activeLayerId = initialState === 'global-view'
-        ? null
-        : initialState === 'mic-active'
-            ? 'microphone'
-            : initialState === 'shockmount-active'
-                ? 'shockmount'
-                : initialState === 'logo-view'
-                    ? 'logo'
-                    : 'case';
+    activeLayerId = getActiveLayerFromState(initialState);
 }
 
 export function switchLayer(newActiveLayerId) {
-    if (typeof window.anime !== 'function') {
+    if (!isAnimeReady()) {
         console.error('anime.js is not loaded. Cannot switch layers.');
         return;
     }
@@ -160,28 +201,22 @@ export function switchLayer(newActiveLayerId) {
         return;
     }
 
-    const stateMap = {
-        microphone: 'mic-active',
-        shockmount: 'shockmount-active',
-        case: 'case-active',
-        logo: 'logo-view'
-    };
-    const stateName = stateMap[newActiveLayerId];
+    const stateName = getLayerStateName(newActiveLayerId);
     if (!stateName) {
         return;
     }
 
     const currentState = stateManager.get();
-    const micModel = resolveAnimationModel(currentState.currentModelCode, currentState);
 
     if (newActiveLayerId === 'shockmount') {
         if (currentState.shockmount?.enabled === true && currentState.shockmount?.available) {
-            animateMicrophoneState(micModel, stateName, newActiveLayerId);
+            animateCameraState(currentState.currentModelCode, stateName, newActiveLayerId, currentState);
+            activeLayerId = newActiveLayerId;
         }
         return;
     }
 
-    animateMicrophoneState(micModel, stateName, newActiveLayerId);
+    animateCameraState(currentState.currentModelCode, stateName, newActiveLayerId, currentState);
     activeLayerId = newActiveLayerId;
 }
 
