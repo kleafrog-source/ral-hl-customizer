@@ -2,7 +2,6 @@
 
 import { stateManager } from '../core/state.js';
 import { SECTION_LAYER_MAP } from '../config/layer-mapping.config.js';
-import { formatPrice } from './price-calculator.js';
 
 /**
  * Применение правил из модели
@@ -49,7 +48,6 @@ export function initShockmountToggle() {
  * Инициализация модуля
  */
 export function initShockmount() {
-    initShockmountToggle();
     
     // Подписываемся на изменения shockmount state для обновления UI
     stateManager.subscribeSection('shockmount', () => {
