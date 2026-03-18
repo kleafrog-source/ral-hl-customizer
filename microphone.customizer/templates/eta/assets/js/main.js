@@ -29,8 +29,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
-    stateManager.set('ajaxPath', appRoot.dataset.ajaxPath || '');
-    stateManager.set('sessid', appRoot.dataset.sessid || '');
+    stateManager.batch((batch) => {
+        batch('ajaxPath', appRoot.dataset.ajaxPath || '');
+        batch('sessid', appRoot.dataset.sessid || '');
+    });
 
     await loadSVG();
 
@@ -39,8 +41,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const currentModelCode = stateManager.get('currentModelCode') || window.CUSTOMIZER_DATA?.currentModelCode;
     if (currentModelCode) {
         setTimeout(() => {
-            const selectionData = prepareModelSelection(currentModelCode);
-            const runtimeData = selectionData?.runtimeData;
+            const runtimeData = prepareModelSelection(currentModelCode)?.runtimeData;
 
             if (!runtimeData) {
                 console.error('[Main.js] Model runtime data not found for code:', currentModelCode);

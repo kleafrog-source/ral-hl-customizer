@@ -22,7 +22,6 @@ class StateManager {
     #listeners = [];
     #sectionListeners = {};
     #isNotifying = false;
-    #batchUpdates = null;
 
     constructor() {
         this.#state = {
@@ -131,47 +130,17 @@ class StateManager {
     }
 
     /**
-     * Start a batch operation that will collect updates and apply them together.
-     * @returns {function} A function to apply updates within the batch.
-     */
-    startBatch() {
-        if (this.#batchUpdates) {
-            console.warn('[StateManager] Batch already in progress');
-            return () => {};
-        }
-
-        this.#batchUpdates = [];
-        
-        return (path, value) => {
-            this.#batchUpdates.push({ path, value });
-        };
-    }
-
-    /**
-     * End the current batch operation and apply all collected updates.
-     */
-    endBatch() {
-        if (!this.#batchUpdates) {
-            console.warn('[StateManager] No batch in progress');
-            return;
-        }
-
-        const updates = [...this.#batchUpdates];
-        this.#batchUpdates = null;
-        
-        if (updates.length > 0) {
-            this.batchSet(updates);
-        }
-    }
-
-    /**
      * Helper to perform a batched update via a callback.
      * @param {function} callback - Function that receives the batch update function.
      */
     batch(callback) {
-        const batchFn = this.startBatch();
-        callback(batchFn);
-        this.endBatch();
+        const updates = [];
+        callback((path, value) => {
+            updates.push({ path, value });
+        });
+        if (updates.length > 0) {
+            this.batchSet(updates);
+        }
     }
 
     /**
