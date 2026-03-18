@@ -200,8 +200,10 @@ function applyOptionFromElement(element) {
     });
 
     if (section === 'logobg') {
-        stateManager.set('logo.bgColor', ralCode || null);
-        stateManager.set('logo.bgColorValue', colorValue || null);
+        stateManager.batch((batch) => {
+            batch('logo.bgColor', ralCode || null);
+            batch('logo.bgColorValue', colorValue || null);
+        });
     }
 
     updateSVG();

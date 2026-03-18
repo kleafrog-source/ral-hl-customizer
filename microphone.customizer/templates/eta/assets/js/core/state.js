@@ -23,7 +23,6 @@ class StateManager {
     #sectionListeners = {};
     #isNotifying = false;
     #batchUpdates = null;
-    #batchTimeout = null;
 
     constructor() {
         this.#state = {
