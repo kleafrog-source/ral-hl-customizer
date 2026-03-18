@@ -7,10 +7,21 @@ function restoreSavedModelSelection(modelCode, restoreSavedState) {
     return restoreSavedState ? stateManager.restoreModelState(modelCode) : false;
 }
 
+function syncModelSelectionData(modelCode) {
+    syncCurrentModelOptionData(modelCode);
+}
+
 function applySelectionDefaults(modelCode, restored) {
     if (!restored) {
         applyModelDefaults(modelCode);
     }
+}
+
+function buildSelectionResult(restored, runtimeData) {
+    return {
+        restored,
+        runtimeData
+    };
 }
 
 export function prepareModelSelection(modelCode, options = {}) {
@@ -20,7 +31,7 @@ export function prepareModelSelection(modelCode, options = {}) {
         return null;
     }
 
-    syncCurrentModelOptionData(modelCode);
+    syncModelSelectionData(modelCode);
     const restored = restoreSavedModelSelection(modelCode, restoreSavedState);
 
     const runtimeData = applyModelRuntimeState(modelCode, {
@@ -28,16 +39,10 @@ export function prepareModelSelection(modelCode, options = {}) {
     });
 
     if (!runtimeData) {
-        return {
-            restored,
-            runtimeData: null
-        };
+        return buildSelectionResult(restored, null);
     }
 
     applySelectionDefaults(modelCode, restored);
 
-    return {
-        restored,
-        runtimeData
-    };
+    return buildSelectionResult(restored, runtimeData);
 }
