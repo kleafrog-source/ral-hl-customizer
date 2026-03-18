@@ -1,4 +1,5 @@
 // core/events.js
+import { debugLog } from '../utils/debug.js';
 
 class EventRegistry {
     #listeners = [];
@@ -23,7 +24,7 @@ class EventRegistry {
             return;
         }
         
-        console.log(`[EventRegistry] Cleaning up ${this.#listeners.length} event listeners.`);
+        debugLog(`[EventRegistry] Cleaning up ${this.#listeners.length} event listeners.`);
         this.#listeners.forEach(({ element, event, handler, options }) => {
             element.removeEventListener(event, handler, options);
         });

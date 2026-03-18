@@ -48,6 +48,27 @@ function getFallbackVariantCode(sectionKey, options = []) {
     return options[0].variantCode || '';
 }
 
+function resolveDefaultOption(sectionKey, requestedVariantCode, options = []) {
+    const directMatch = options.find((option) => option.variantCode === requestedVariantCode);
+    if (directMatch) {
+        return directMatch;
+    }
+
+    const fallbackVariantCode = getFallbackVariantCode(sectionKey, options);
+    if (!fallbackVariantCode) {
+        return null;
+    }
+
+    const fallbackOption = options.find((option) => option.variantCode === fallbackVariantCode) || null;
+    if (fallbackOption && requestedVariantCode && requestedVariantCode !== fallbackVariantCode) {
+        debugLog(
+            `[ModelDefaults] Fallback for ${sectionKey}: requested=${requestedVariantCode}, fallback=${fallbackVariantCode}`
+        );
+    }
+
+    return fallbackOption;
+}
+
 function getSectionDefaults(model) {
     const defaults = { ...(model.DEFAULTS || {}) };
     const shockmountState = buildShockmountState(model);
@@ -103,7 +124,7 @@ export function applyModelDefaults(modelCode) {
     });
 
     if (pinsVariant && !pinsOptions.includes(pinsVariant)) {
-        console.warn('[ModelDefaults] Shockmount pins variant not found:', pinsVariant, 'Available:', pinsOptions);
+        debugLog('[ModelDefaults] Shockmount pins variant not found:', pinsVariant, 'Available:', pinsOptions);
         const fallbackVariant = pinsOptions.find((option) => option.includes('brass')) || pinsOptions[0] || '';
         if (fallbackVariant) {
             debugLog('[ModelDefaults] Using fallback pins variant:', fallbackVariant);
@@ -121,7 +142,7 @@ export function applyModelDefaults(modelCode) {
             return;
         }
 
-        const defaultOption = options.find((option) => option.variantCode === resolvedVariantCode);
+        const defaultOption = resolveDefaultOption(sectionKey, resolvedVariantCode, options);
 
         if (!defaultOption) {
             console.warn(

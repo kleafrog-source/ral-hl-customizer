@@ -145,7 +145,7 @@ const WoodCase = {
         // Check file size (3MB limit)
         const maxSize = 3 * 1024 * 1024;
         if (file.size > maxSize) {
-            this.showNotification('Файл слишком большой. Максимальный размер: 3 МБ', 'error');
+            showAppNotification('Файл слишком большой. Максимальный размер: 3 МБ', 'error');
             return;
         }
         
@@ -158,7 +158,7 @@ const WoodCase = {
         const hasValidType = allowedTypes.includes(file.type);
         
         if (!hasValidExtension && !hasValidType) {
-            this.showNotification('Неподдерживаемый формат файла. Допустимые: PNG, SVG, JPG, BMP, WEBP, ICO', 'error');
+            showAppNotification('Неподдерживаемый формат файла. Допустимые: PNG, SVG, JPG, BMP, WEBP, ICO', 'error');
             return;
         }
         
@@ -201,7 +201,7 @@ const WoodCase = {
                 stateManager.set('case.customLogo', this.userImgSrc);
                 
                 if (woodCaseLoader) woodCaseLoader.style.display = 'none';
-                this.showNotification('Изображение для футляра успешно загружено', 'success');
+                showAppNotification('Изображение для футляра успешно загружено', 'success');
             };
 
             if (this.isSvg) {
@@ -571,10 +571,6 @@ const WoodCase = {
                 el.addEventListener('mouseenter', () => this.showRulers());
             }
         });
-    },
-
-    showNotification(message, type = 'info') {
-        showAppNotification(message, type);
     },
 
     clearLogo() {

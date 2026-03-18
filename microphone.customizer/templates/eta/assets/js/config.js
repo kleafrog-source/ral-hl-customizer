@@ -1,3 +1,5 @@
+import { debugLog } from './utils/debug.js';
+
 export const CONFIG = {
     // Цены берутся из HL данных (CUSTOMIZER_DATA), здесь только безопасные дефолты
     basePrice: 0,
@@ -153,7 +155,7 @@ function getCaseImageFromHL(modelCode) {
             // Этот футляр предназначен для нашей модели
             const svgSpecialKey = caseOption.SVG_SPECIAL_KEY;
             if (svgSpecialKey) {
-                console.log(`[CONFIG] Found HL case image for ${modelCode} (model-specific): ${svgSpecialKey}`);
+                debugLog(`[CONFIG] Found HL case image for ${modelCode} (model-specific): ${svgSpecialKey}`);
                 return svgSpecialKey;
             }
         }
@@ -165,7 +167,7 @@ function getCaseImageFromHL(modelCode) {
         if (seriesVar && modelSeries && seriesVar === modelSeries) {
             const svgSpecialKey = caseOption.SVG_SPECIAL_KEY;
             if (svgSpecialKey) {
-                console.log(`[CONFIG] Found HL case image for ${modelCode} (series-based): ${svgSpecialKey}`);
+                debugLog(`[CONFIG] Found HL case image for ${modelCode} (series-based): ${svgSpecialKey}`);
                 return svgSpecialKey;
             }
         }
@@ -174,7 +176,7 @@ function getCaseImageFromHL(modelCode) {
         if ((!caseOption.UF_MODEL_ID || caseOption.UF_MODEL_ID == 0) && !seriesVar) {
             const svgSpecialKey = caseOption.SVG_SPECIAL_KEY;
             if (svgSpecialKey) {
-                console.log(`[CONFIG] Found HL case image for ${modelCode} (universal): ${svgSpecialKey}`);
+                debugLog(`[CONFIG] Found HL case image for ${modelCode} (universal): ${svgSpecialKey}`);
                 return svgSpecialKey;
             }
         }
@@ -191,7 +193,7 @@ export let CASE_IMAGES = {};
 function initializeCaseImages() {
     if (window.CUSTOMIZER_DATA && window.CUSTOMIZER_DATA.models) {
         CASE_IMAGES = getCaseImages();
-        console.log('[CONFIG] CASE_IMAGES initialized:', CASE_IMAGES);
+        debugLog('[CONFIG] CASE_IMAGES initialized:', CASE_IMAGES);
     } else {
         console.warn('[CONFIG] CUSTOMIZER_DATA not available, CASE_IMAGES will be empty');
     }
@@ -325,4 +327,3 @@ export const CASE_GEOMETRY = {
         }
     }
 };
-

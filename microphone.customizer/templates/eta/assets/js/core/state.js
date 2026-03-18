@@ -1,9 +1,5 @@
 // core/state.js
-
-// Debug flag
-const APP_DEBUG = true;
-
-export { APP_DEBUG };
+import { debugLog } from '../utils/debug.js';
 
 /**
  * @typedef {object} State
@@ -128,9 +124,7 @@ class StateManager {
             const oldValue = current[keys[keys.length - 1]];
             current[keys[keys.length - 1]] = value;
 
-            if (APP_DEBUG) {
-                console.log(`[Batch State Change] Path: ${path}, Old:`, oldValue, `New:`, value);
-            }
+            debugLog(`[Batch State Change] Path: ${path}, Old:`, oldValue, `New:`, value);
         }
 
         // Notify once for all changes
@@ -223,9 +217,7 @@ class StateManager {
         const oldValue = current[keys[keys.length - 1]];
         current[keys[keys.length - 1]] = value;
 
-        if (APP_DEBUG) {
-            console.log(`[State Change] Path: ${path}, Old:`, oldValue, `New:`, value);
-        }
+        debugLog(`[State Change] Path: ${path}, Old:`, oldValue, `New:`, value);
 
         // For now, we pass the whole path as the update detail.
         // A more complex implementation could pass what changed.

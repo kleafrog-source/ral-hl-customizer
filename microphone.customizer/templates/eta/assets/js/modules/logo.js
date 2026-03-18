@@ -2,6 +2,7 @@ import { eventRegistry } from '../core/events.js';
 import { stateManager } from '../core/state.js';
 import { isMalfaModel } from '../config/model-capabilities.js';
 import { updateFilter } from './appearance-new.js';
+import { debugLog } from '../utils/debug.js';
 import { showNotification } from '../utils/notifications.js';
 
 // Utility functions for MALFA detection using Bitrix data
@@ -136,7 +137,7 @@ export function updateLogoSVG() {
         g.appendChild(img);
         svg.appendChild(g);
         
-        console.log('[Logo] Custom logo applied to all variants');
+        debugLog('[Logo] Custom logo applied to all variants');
         return;
     }
 
@@ -260,7 +261,7 @@ export function clearCustomLogo() {
     // Обновляем SVG
     updateLogoSVG();
     
-    console.log('[Logo] Custom logo cleared');
+    debugLog('[Logo] Custom logo cleared');
 }
 
 // Управление видимостью MALFA вариантов логотипа
