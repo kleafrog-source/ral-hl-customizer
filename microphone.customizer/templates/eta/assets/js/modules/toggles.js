@@ -41,6 +41,40 @@ function syncShockmountOptionState(enabled) {
     });
 }
 
+function syncLogoToggleState(enabled) {
+    const logoSection = document.querySelector('[data-section="logo"]');
+    const logobgSection = document.querySelector('[data-section="logobg"]');
+    const customLogoUploadArea = document.getElementById('custom-logo-upload-area');
+
+    if (logoSection) logoSection.classList.toggle('disabled', enabled);
+    if (logobgSection) logobgSection.classList.toggle('disabled', enabled);
+    if (customLogoUploadArea) customLogoUploadArea.style.display = enabled ? 'block' : 'none';
+}
+
+function syncEngravingToggleState(enabled) {
+    const dataSection = document.getElementById('laser-engraving-data');
+    if (dataSection) {
+        dataSection.style.display = enabled ? 'block' : 'none';
+    }
+}
+
+function scheduleShockmountRefresh() {
+    // Give state a moment to settle before the UI refresh.
+    setTimeout(() => {
+        refreshShockmountUI(stateManager.get());
+        updateUI();
+    }, 10);
+}
+
+function handleShockmountToggle(enabled) {
+    stateManager.batch((batch) => {
+        batch('shockmount.enabled', enabled);
+    });
+    syncShockmountOptionState(enabled);
+    updateMicVariant(stateManager.get('currentModelCode'));
+    scheduleShockmountRefresh();
+}
+
 export function initToggles() {
     if (listenersBound) {
         return;
@@ -52,12 +86,7 @@ export function initToggles() {
         logoToggle.addEventListener('change', () => {
             const enabled = logoToggle.checked;
             stateManager.set('logo.useCustom', enabled);
-            const logoSection = document.querySelector('[data-section="logo"]');
-            const logobgSection = document.querySelector('[data-section="logobg"]');
-            if (logoSection) logoSection.classList.toggle('disabled', enabled);
-            if (logobgSection) logobgSection.classList.toggle('disabled', enabled);
-            const customLogoUploadArea = document.getElementById('custom-logo-upload-area');
-            if (customLogoUploadArea) customLogoUploadArea.style.display = enabled ? 'block' : 'none';
+            syncLogoToggleState(enabled);
             updateSVG();
             updateLogoSVG();
             updateUI();
@@ -71,8 +100,7 @@ export function initToggles() {
             stateManager.batch((batch) => {
                 batch('case.laserEngravingEnabled', enabled);
             });
-            const dataSection = document.getElementById('laser-engraving-data');
-            if (dataSection) dataSection.style.display = enabled ? 'block' : 'none';
+            syncEngravingToggleState(enabled);
             updateUI();
         });
     }
@@ -80,19 +108,7 @@ export function initToggles() {
     const shockmountToggle = document.getElementById('shockmount-switch');
     if (shockmountToggle) {
         shockmountToggle.addEventListener('change', () => {
-            const enabled = shockmountToggle.checked;
-            stateManager.batch((batch) => {
-                batch('shockmount.enabled', enabled);
-            });
-            syncShockmountOptionState(enabled);
-            updateMicVariant(stateManager.get('currentModelCode'));
-
-            // Give state a moment to settle before the UI refresh.
-            setTimeout(() => {
-                refreshShockmountUI(stateManager.get());
-                updateUI();
-                updateShockmountVisibility();
-            }, 10);
+            handleShockmountToggle(shockmountToggle.checked);
         });
     }
 }
@@ -100,20 +116,16 @@ export function initToggles() {
 export function syncToggles() {
     const logoToggle = document.getElementById('logo-mode-toggle');
     if (logoToggle) {
-        logoToggle.checked = !!stateManager.get('logo.useCustom');
-        const customLogoUploadArea = document.getElementById('custom-logo-upload-area');
-        if (customLogoUploadArea) customLogoUploadArea.style.display = logoToggle.checked ? 'block' : 'none';
-        const logoSection = document.querySelector('[data-section="logo"]');
-        const logobgSection = document.querySelector('[data-section="logobg"]');
-        if (logoSection) logoSection.classList.toggle('disabled', logoToggle.checked);
-        if (logobgSection) logobgSection.classList.toggle('disabled', logoToggle.checked);
+        const enabled = !!stateManager.get('logo.useCustom');
+        logoToggle.checked = enabled;
+        syncLogoToggleState(enabled);
     }
 
     const engravingToggle = document.getElementById('laser-engraving-toggle');
-    const dataSection = document.getElementById('laser-engraving-data');
     if (engravingToggle) {
-        engravingToggle.checked = !!stateManager.get('case.laserEngravingEnabled');
-        if (dataSection) dataSection.style.display = engravingToggle.checked ? 'block' : 'none';
+        const enabled = !!stateManager.get('case.laserEngravingEnabled');
+        engravingToggle.checked = enabled;
+        syncEngravingToggleState(enabled);
     }
 
     const shockmountToggle = document.getElementById('shockmount-switch');
