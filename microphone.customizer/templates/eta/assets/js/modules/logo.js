@@ -1,6 +1,5 @@
 import { eventRegistry } from '../core/events.js';
 import { stateManager } from '../core/state.js';
-import { CONFIG } from '../config.js';
 import { isMalfaModel } from '../config/model-capabilities.js';
 import { updateFilter } from './appearance-new.js';
 import { showNotification } from '../utils/notifications.js';
@@ -8,20 +7,6 @@ import { showNotification } from '../utils/notifications.js';
 // Utility functions for MALFA detection using Bitrix data
 export function isMalfaMic(state = null) {
     return isMalfaModel(state || stateManager.get());
-
-    const currentState = state || stateManager.get();
-    
-    // Проверяем разные способы хранения модели в state
-    const modelCode = currentState.currentModelCode || currentState.variant || currentState.model?.code || currentState.model?.slug;
-    
-    // Используем данные из Bitrix для определения MALFA
-    const modelData = getModelData(modelCode);
-    const modelId = modelData?.ID;
-    // Проверяем по MODEL_SERIES или прямому совпадению кода модели
-    return modelCode === '023-malfa' ||
-           modelData?.CODE === '023-malfa' ||
-           modelId === 2 ||
-           modelId === '2';
 }
 
 export function isMalfaLogo(state = null) {
