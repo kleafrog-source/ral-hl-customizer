@@ -80,27 +80,17 @@ function setConfigurationFields(formData, currentState, woodcaseDesk) {
     formData.set('form_text_38', currentState.shockmountPins?.variantName || currentState.shockmountPins?.variant || '');
 }
 
-export async function sendOrder(clientData) {
-    const bitrixForm = document.querySelector('form[name="SIMPLE_FORM_1"]');
-    if (!bitrixForm) {
-        console.error('Bitrix form not found');
-        return;
-    }
-
-    const formData = new FormData(bitrixForm);
-    const currentState = stateManager.get();
-    const caseState = currentState.case || {};
+function buildWoodcaseDesk(caseState = {}) {
     const caseOffset = caseState.logoOffsetMM || { top: 0, left: 0 };
-    const woodcaseDesk = `Ш:${caseState.logoWidthMM || 0}мм, Сверху:${caseOffset.top || 0}мм, Слева:${caseOffset.left || 0}мм`;
+    return `Ш:${caseState.logoWidthMM || 0}мм, Сверху:${caseOffset.top || 0}мм, Слева:${caseOffset.left || 0}мм`;
+}
 
-    setClientFields(formData, clientData);
-    setConfigurationFields(formData, currentState, woodcaseDesk);
+function getDisplayedTotalPrice() {
+    return document.getElementById('total-price')?.textContent || '0';
+}
 
-    const totalEl = document.getElementById('total-price');
-    const totalPriceText = totalEl ? totalEl.textContent : '0';
-    formData.set('form_text_39', totalPriceText);
-
-    const configJson = JSON.stringify({
+function buildConfigPayload(currentState) {
+    return {
         modelCode: currentState.currentModelCode,
         options: {
             spheres: currentState.spheres?.variant,
@@ -112,8 +102,24 @@ export async function sendOrder(clientData) {
             shockmountPins: currentState.shockmountPins?.variant
         },
         woodCase: currentState.case
-    });
-    formData.set('form_textarea_48', configJson);
+    };
+}
+
+export async function sendOrder(clientData) {
+    const bitrixForm = document.querySelector('form[name="SIMPLE_FORM_1"]');
+    if (!bitrixForm) {
+        console.error('Bitrix form not found');
+        return;
+    }
+
+    const formData = new FormData(bitrixForm);
+    const currentState = stateManager.get();
+    const woodcaseDesk = buildWoodcaseDesk(currentState.case);
+
+    setClientFields(formData, clientData);
+    setConfigurationFields(formData, currentState, woodcaseDesk);
+    formData.set('form_text_39', getDisplayedTotalPrice());
+    formData.set('form_textarea_48', JSON.stringify(buildConfigPayload(currentState)));
 
     const svgElement = document.getElementById('microphone-svg-container')?.innerHTML;
     if (svgElement) {
