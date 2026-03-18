@@ -9,6 +9,14 @@ import { stateManager } from './core/state.js';
 import { initDebugHelper } from './debug/ui-debug-helper.js';
 import { initValidation } from './services/validation.js';
 
+function getAppRoot() {
+    return document.getElementById('customizer-app-root');
+}
+
+function getInitialModelCode() {
+    return stateManager.get('currentModelCode') || window.CUSTOMIZER_DATA?.currentModelCode || '';
+}
+
 function initStartScreen() {
     const startScreen = document.getElementById('start-screen');
     if (!startScreen) {
@@ -53,8 +61,19 @@ function initializeCurrentModelSelection(currentModelCode) {
     }, 100);
 }
 
+function initCustomizerModules(currentModelCode) {
+    initCameraEffect(currentModelCode);
+    initEventListeners();
+    initLogo();
+    initializeWoodCase();
+    initShockmount();
+    updateSVG();
+    initDebugHelper();
+    initValidation();
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
-    const appRoot = document.getElementById('customizer-app-root');
+    const appRoot = getAppRoot();
     if (!appRoot) return;
 
     initStartScreen();
@@ -64,16 +83,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     initHLDataManager();
 
-    const currentModelCode = stateManager.get('currentModelCode') || window.CUSTOMIZER_DATA?.currentModelCode;
+    const currentModelCode = getInitialModelCode();
     initializeCurrentModelSelection(currentModelCode);
-
-    initCameraEffect(currentModelCode);
-    initEventListeners();
-    initLogo();
-    initializeWoodCase();
-    initShockmount();
-
-    updateSVG();
-    initDebugHelper();
-    initValidation();
+    initCustomizerModules(currentModelCode);
 });
