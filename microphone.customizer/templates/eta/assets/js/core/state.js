@@ -23,6 +23,22 @@ class StateManager {
     #sectionListeners = {};
     #isNotifying = false;
 
+    #resolvePathTarget(path) {
+        const keys = path.split('.');
+        let current = this.#state;
+        for (let i = 0; i < keys.length - 1; i++) {
+            if (!current[keys[i]]) {
+                current[keys[i]] = {};
+            }
+            current = current[keys[i]];
+        }
+
+        return {
+            current,
+            key: keys[keys.length - 1]
+        };
+    }
+
     constructor() {
         this.#state = {
             currentModelCode: null,
@@ -111,16 +127,9 @@ class StateManager {
 
         // Apply all updates
         for (const { path, value } of updates) {
-            const keys = path.split('.');
-            let current = this.#state;
-            for (let i = 0; i < keys.length - 1; i++) {
-                if (!current[keys[i]]) {
-                    current[keys[i]] = {};
-                }
-                current = current[keys[i]];
-            }
-            const oldValue = current[keys[keys.length - 1]];
-            current[keys[keys.length - 1]] = value;
+            const { current, key } = this.#resolvePathTarget(path);
+            const oldValue = current[key];
+            current[key] = value;
 
             debugLog(`[Batch State Change] Path: ${path}, Old:`, oldValue, `New:`, value);
         }
@@ -174,16 +183,9 @@ class StateManager {
             return;
         }
 
-        const keys = path.split('.');
-        let current = this.#state;
-        for (let i = 0; i < keys.length - 1; i++) {
-            if (!current[keys[i]]) {
-                current[keys[i]] = {};
-            }
-            current = current[keys[i]];
-        }
-        const oldValue = current[keys[keys.length - 1]];
-        current[keys[keys.length - 1]] = value;
+        const { current, key } = this.#resolvePathTarget(path);
+        const oldValue = current[key];
+        current[key] = value;
 
         debugLog(`[State Change] Path: ${path}, Old:`, oldValue, `New:`, value);
 
