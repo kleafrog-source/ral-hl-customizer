@@ -9,46 +9,63 @@ import { stateManager } from './core/state.js';
 import { initDebugHelper } from './debug/ui-debug-helper.js';
 import { initValidation } from './services/validation.js';
 
-document.addEventListener('DOMContentLoaded', async () => {
-    const appRoot = document.getElementById('customizer-app-root');
-    if (!appRoot) return;
-
+function initStartScreen() {
     const startScreen = document.getElementById('start-screen');
+    if (!startScreen) {
+        return;
+    }
+
     const hasSeenStart = sessionStorage.getItem('customizer_start_seen');
-    if (startScreen && !hasSeenStart) {
+    if (!hasSeenStart) {
         startScreen.classList.remove('hidden');
     }
 
     const startCta = document.querySelector('.start-screen-hero-cta');
-    if (startCta && startScreen) {
-        startCta.addEventListener('click', (e) => {
-            e.preventDefault();
-            startScreen.classList.add('hidden');
-            sessionStorage.setItem('customizer_start_seen', 'true');
-        });
+    if (!startCta) {
+        return;
     }
 
+    startCta.addEventListener('click', (e) => {
+        e.preventDefault();
+        startScreen.classList.add('hidden');
+        sessionStorage.setItem('customizer_start_seen', 'true');
+    });
+}
+
+function initAppRuntimeState(appRoot) {
     stateManager.batch((batch) => {
         batch('ajaxPath', appRoot.dataset.ajaxPath || '');
         batch('sessid', appRoot.dataset.sessid || '');
     });
+}
+
+function initializeCurrentModelSelection(currentModelCode) {
+    if (!currentModelCode) {
+        updateUI();
+        return;
+    }
+
+    setTimeout(() => {
+        const selection = selectModelVariant(currentModelCode);
+        if (!selection?.runtimeData) {
+            console.error('[Main.js] Model runtime data not found for code:', currentModelCode);
+        }
+    }, 100);
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+    const appRoot = document.getElementById('customizer-app-root');
+    if (!appRoot) return;
+
+    initStartScreen();
+    initAppRuntimeState(appRoot);
 
     await loadSVG();
 
     initHLDataManager();
 
     const currentModelCode = stateManager.get('currentModelCode') || window.CUSTOMIZER_DATA?.currentModelCode;
-    if (currentModelCode) {
-        setTimeout(() => {
-            const selection = selectModelVariant(currentModelCode);
-            if (!selection?.runtimeData) {
-                console.error('[Main.js] Model runtime data not found for code:', currentModelCode);
-                return;
-            }
-        }, 100);
-    } else {
-        updateUI();
-    }
+    initializeCurrentModelSelection(currentModelCode);
 
     initCameraEffect(currentModelCode);
     initEventListeners();
