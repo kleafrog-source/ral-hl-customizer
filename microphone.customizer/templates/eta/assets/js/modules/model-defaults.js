@@ -69,6 +69,70 @@ function resolveDefaultOption(sectionKey, requestedVariantCode, options = []) {
     return fallbackOption;
 }
 
+function getAvailableVariantCodes(options = []) {
+    return options.map((option) => option.variantCode);
+}
+
+function logSectionDefaults(modelCode, defaults, sectionOptionsMap) {
+    if (!isRuntimeDebugEnabled()) {
+        return;
+    }
+
+    console.group(`[Defaults] ${modelCode}`);
+    Object.keys(defaults).forEach((section) => {
+        const defaultVariantCode = getDefaultVariantCode(defaults[section]);
+        console.log(
+            `Section ${section}: default=${defaultVariantCode}, options=`,
+            getAvailableVariantCodes(sectionOptionsMap[section] || [])
+        );
+    });
+    console.groupEnd();
+}
+
+function normalizeShockmountPinsDefault(defaults, sectionDefaults, sectionOptionsMap) {
+    const pinsVariant = getDefaultVariantCode(defaults.SHOCKMOUNT_PINS);
+    const pinsOptions = getAvailableVariantCodes(sectionOptionsMap.shockmountPins || []);
+
+    debugLog('[ModelDefaults] Shockmount pins check:', {
+        requestedVariant: pinsVariant,
+        availableOptions: pinsOptions,
+        isAvailable: pinsOptions.includes(pinsVariant)
+    });
+
+    if (!pinsVariant || pinsOptions.includes(pinsVariant)) {
+        return;
+    }
+
+    debugLog('[ModelDefaults] Shockmount pins variant not found:', pinsVariant, 'Available:', pinsOptions);
+    const fallbackVariant = pinsOptions.find((option) => option.includes('brass')) || pinsOptions[0] || '';
+    if (!fallbackVariant) {
+        return;
+    }
+
+    debugLog('[ModelDefaults] Using fallback pins variant:', fallbackVariant);
+    defaults.SHOCKMOUNT_PINS = fallbackVariant;
+    sectionDefaults.shockmountPins = fallbackVariant;
+}
+
+function buildNextSectionState(currentState, defaultOption, optionPrice) {
+    return {
+        ...currentState,
+        variantCode: defaultOption.variantCode,
+        variant: defaultOption.variantCode,
+        variantName: defaultOption.variantName,
+        isRal: defaultOption.isRal,
+        color: defaultOption.color,
+        colorValue: defaultOption.colorValue,
+        colorName: defaultOption.colorName,
+        modelId: defaultOption.modelId,
+        svgTargetMode: defaultOption.svgTargetMode,
+        svgLayerGroup: defaultOption.svgLayerGroup,
+        svgFilterId: defaultOption.svgFilterId,
+        svgSpecialKey: defaultOption.svgSpecialKey,
+        price: optionPrice
+    };
+}
+
 function getSectionDefaults(model) {
     const defaults = { ...(model.DEFAULTS || {}) };
     const shockmountState = buildShockmountState(model);
@@ -103,35 +167,8 @@ export function applyModelDefaults(modelCode) {
     const sectionDefaults = getSectionDefaults(model);
 
     debugLog('[ModelDefaults] Applying defaults for model:', modelCode, defaults);
-
-    if (isRuntimeDebugEnabled()) {
-        console.group(`[Defaults] ${modelCode}`);
-        Object.keys(defaults).forEach((section) => {
-            const def = getDefaultVariantCode(defaults[section]);
-            const options = (sectionOptionsMap[section] || []).map((option) => option.variantCode);
-            console.log(`Section ${section}: default=${def}, options=`, options);
-        });
-        console.groupEnd();
-    }
-
-    const pinsVariant = getDefaultVariantCode(defaults.SHOCKMOUNT_PINS);
-    const pinsOptions = (sectionOptionsMap.shockmountPins || []).map((option) => option.variantCode);
-
-    debugLog('[ModelDefaults] Shockmount pins check:', {
-        requestedVariant: pinsVariant,
-        availableOptions: pinsOptions,
-        isAvailable: pinsOptions.includes(pinsVariant)
-    });
-
-    if (pinsVariant && !pinsOptions.includes(pinsVariant)) {
-        debugLog('[ModelDefaults] Shockmount pins variant not found:', pinsVariant, 'Available:', pinsOptions);
-        const fallbackVariant = pinsOptions.find((option) => option.includes('brass')) || pinsOptions[0] || '';
-        if (fallbackVariant) {
-            debugLog('[ModelDefaults] Using fallback pins variant:', fallbackVariant);
-            defaults.SHOCKMOUNT_PINS = fallbackVariant;
-            sectionDefaults.shockmountPins = fallbackVariant;
-        }
-    }
+    logSectionDefaults(modelCode, defaults, sectionOptionsMap);
+    normalizeShockmountPinsDefault(defaults, sectionDefaults, sectionOptionsMap);
 
     Object.entries(sectionDefaults).forEach(([sectionKey, defaultVariantCode]) => {
         const options = sectionOptionsMap[sectionKey] || [];
@@ -148,7 +185,7 @@ export function applyModelDefaults(modelCode) {
             console.warn(
                 `[ModelDefaults] Default option not found: ${sectionKey} -> ${resolvedVariantCode}`,
                 'Available options:',
-                options.map((option) => option.variantCode)
+                getAvailableVariantCodes(options)
             );
             return;
         }
@@ -157,30 +194,7 @@ export function applyModelDefaults(modelCode) {
 
         const currentState = stateManager.get()[sectionKey] || {};
         const optionPrice = getOptionPrice(sectionKey, defaultOption);
-        const nextState = {
-            ...currentState,
-            variantCode: defaultOption.variantCode,
-            variant: defaultOption.variantCode,
-            variantName: defaultOption.variantName,
-            isRal: defaultOption.isRal,
-            color: defaultOption.color,
-            colorValue: defaultOption.colorValue,
-            colorName: defaultOption.colorName,
-            modelId: defaultOption.modelId,
-            svgTargetMode: defaultOption.svgTargetMode,
-            svgLayerGroup: defaultOption.svgLayerGroup,
-            svgFilterId: defaultOption.svgFilterId,
-            svgSpecialKey: defaultOption.svgSpecialKey,
-            price: optionPrice
-        };
-
-        if (sectionKey === 'shockmount') {
-            nextState.price = optionPrice || 0;
-        }
-
-        if (sectionKey === 'shockmountOption') {
-            nextState.price = optionPrice;
-        }
+        const nextState = buildNextSectionState(currentState, defaultOption, optionPrice);
 
         stateManager.set(sectionKey, nextState);
 
