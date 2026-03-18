@@ -1,4 +1,5 @@
 import { stateManager } from '../core/state.js';
+import { buildShockmountState } from '../config/model-capabilities.js';
 import { updateSectionLayers } from './appearance-new.js';
 import { resolveConfiguredPrice } from './price-calculator.js';
 
@@ -34,6 +35,33 @@ function getOptionPrice(sectionKey, option = {}) {
     return option?.price || 0;
 }
 
+function getFallbackVariantCode(sectionKey, options = []) {
+    if (!options.length) {
+        return '';
+    }
+
+    if (sectionKey === 'shockmountPins') {
+        return options.find((option) => option.variantCode?.includes('brass'))?.variantCode || options[0].variantCode || '';
+    }
+
+    return options[0].variantCode || '';
+}
+
+function getSectionDefaults(model) {
+    const defaults = { ...(model.DEFAULTS || {}) };
+    const shockmountState = buildShockmountState(model);
+
+    return {
+        spheres: getDefaultVariantCode(defaults.SPHERES),
+        body: getDefaultVariantCode(defaults.BODY),
+        logo: getDefaultVariantCode(defaults.LOGO),
+        logobg: getDefaultVariantCode(defaults.LOGOBG),
+        shockmount: getDefaultVariantCode(defaults.SHOCKMOUNT),
+        shockmountPins: getDefaultVariantCode(defaults.SHOCKMOUNT_PINS),
+        shockmountOption: getDefaultVariantCode(shockmountState.defaultOption)
+    };
+}
+
 export function applyModelDefaults(modelCode) {
     if (!modelCode) {
         console.warn('[ModelDefaults] No modelCode provided');
@@ -50,6 +78,7 @@ export function applyModelDefaults(modelCode) {
 
     const defaults = { ...(model.DEFAULTS || {}) };
     const sectionOptionsMap = window.CUSTOMIZER_DATA.sectionOptions || window.CUSTOMIZER_DATA.optionsBySection || {};
+    const sectionDefaults = getSectionDefaults(model);
 
     console.log('[ModelDefaults] Applying defaults for model:', modelCode, defaults);
 
@@ -76,31 +105,24 @@ export function applyModelDefaults(modelCode) {
         if (fallbackVariant) {
             console.log('[ModelDefaults] Using fallback pins variant:', fallbackVariant);
             defaults.SHOCKMOUNT_PINS = fallbackVariant;
+            sectionDefaults.shockmountPins = fallbackVariant;
         }
     }
 
-    const sectionDefaults = {
-        spheres: getDefaultVariantCode(defaults.SPHERES),
-        body: getDefaultVariantCode(defaults.BODY),
-        logo: getDefaultVariantCode(defaults.LOGO),
-        logobg: getDefaultVariantCode(defaults.LOGOBG),
-        shockmount: getDefaultVariantCode(defaults.SHOCKMOUNT),
-        shockmountPins: getDefaultVariantCode(defaults.SHOCKMOUNT_PINS),
-        shockmountOption: getDefaultVariantCode(model.UF_DEFAULT_SHOCKMOUNT_OPTION)
-    };
-
     Object.entries(sectionDefaults).forEach(([sectionKey, defaultVariantCode]) => {
-        if (!defaultVariantCode) {
+        const options = sectionOptionsMap[sectionKey] || [];
+        const resolvedVariantCode = defaultVariantCode || getFallbackVariantCode(sectionKey, options);
+
+        if (!resolvedVariantCode) {
             console.log(`[ModelDefaults] No default variant for section: ${sectionKey}`);
             return;
         }
 
-        const options = sectionOptionsMap[sectionKey] || [];
-        const defaultOption = options.find((option) => option.variantCode === defaultVariantCode);
+        const defaultOption = options.find((option) => option.variantCode === resolvedVariantCode);
 
         if (!defaultOption) {
             console.warn(
-                `[ModelDefaults] Default option not found: ${sectionKey} -> ${defaultVariantCode}`,
+                `[ModelDefaults] Default option not found: ${sectionKey} -> ${resolvedVariantCode}`,
                 'Available options:',
                 options.map((option) => option.variantCode)
             );
