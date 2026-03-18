@@ -2,6 +2,7 @@ import { stateManager } from '../core/state.js';
 import { getDevice } from '../utils.js';
 import { CASE_IMAGES, CASE_GEOMETRY, getModelData } from '../config.js';
 import { formatPrice, getBreakdown } from './price-calculator.js';
+import { showNotification as showAppNotification } from '../utils/notifications.js';
 
 const WoodCase = {
     currentCase: '023-the-bomblet',
@@ -575,20 +576,7 @@ const WoodCase = {
     },
 
     showNotification(message, type = 'info') {
-        // Create notification element if it doesn't exist
-        let notification = document.querySelector('.notification');
-        if (!notification) {
-            notification = document.createElement('div');
-            notification.className = 'notification';
-            document.body.appendChild(notification);
-        }
-        
-        notification.textContent = message;
-        notification.className = `notification ${type} show`;
-        
-        setTimeout(() => {
-            notification.classList.remove('show');
-        }, 3000);
+        showAppNotification(message, type);
     },
 
     clearLogo() {

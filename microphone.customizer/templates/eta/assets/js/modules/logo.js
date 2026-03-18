@@ -3,6 +3,7 @@ import { stateManager } from '../core/state.js';
 import { CONFIG } from '../config.js';
 import { isMalfaModel } from '../config/model-capabilities.js';
 import { updateFilter } from './appearance-new.js';
+import { showNotification } from '../utils/notifications.js';
 
 // Utility functions for MALFA detection using Bitrix data
 export function isMalfaMic(state = null) {
@@ -170,25 +171,6 @@ function handleLogoFileUpload(file) {
     reader.readAsDataURL(file);
 }
 
-// Show notification helper
-function showNotification(message, type = 'info') {
-    // Create notification element if it doesn't exist
-    let notification = document.querySelector('.notification');
-    if (!notification) {
-        notification = document.createElement('div');
-        notification.className = 'notification';
-        document.body.appendChild(notification);
-    }
-    
-    notification.textContent = message;
-    notification.className = `notification ${type} show`;
-    
-    setTimeout(() => {
-        notification.classList.remove('show');
-    }, 3000);
-}
-
-//Управляет видимостью и стилями элементов эмблемы(логотипа микрофона)
 export function updateLogoSVG() {
     const svg = document
    .getElementById('microphone-svg-container')
