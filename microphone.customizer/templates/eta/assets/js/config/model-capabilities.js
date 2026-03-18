@@ -16,6 +16,20 @@ const CAMERA_MODEL_KEYS = Object.freeze({
     [MODEL_CODES.MALFA_023]: '023-MALFA'
 });
 
+const DEFAULT_CAMERA_MODEL_KEY = CAMERA_MODEL_KEYS[MODEL_CODES.TUBE_017];
+
+function getModelFieldValue(model = {}, primaryKey, fallbackKey, defaultValue = null) {
+    return model[primaryKey] ?? model[fallbackKey] ?? defaultValue;
+}
+
+function getNumericModelField(model, primaryKey, fallbackKey, defaultValue = 0) {
+    return Number(getModelFieldValue(model, primaryKey, fallbackKey, defaultValue)) || 0;
+}
+
+function getBooleanModelField(model, primaryKey, fallbackKey) {
+    return getNumericModelField(model, primaryKey, fallbackKey, 0) === 1;
+}
+
 function extractModelCode(modelLike) {
     if (!modelLike) {
         return null;
@@ -84,10 +98,10 @@ export function getShockmountOptionVariantCode(modelLike, enabled) {
 
 export function buildShockmountState(modelLike) {
     const model = getResolvedModel(modelLike) || modelLike || {};
-    const price = Number(model.shockmountPrice ?? model.SHOCKMOUNT_PRICE ?? 0) || 0;
-    const enabled = Number(model.shockmountEnabled ?? model.SHOCKMOUNT_ENABLED ?? 0) === 1;
-    const visible = Number(model.shockmountVisible ?? model.SHOCKMOUNT_VISIBLE ?? 0) === 1;
-    const canToggle = Number(model.shockmountToggle ?? model.SHOCKMOUNT_TOGGLE ?? 0) === 1;
+    const price = getNumericModelField(model, 'shockmountPrice', 'SHOCKMOUNT_PRICE');
+    const enabled = getBooleanModelField(model, 'shockmountEnabled', 'SHOCKMOUNT_ENABLED');
+    const visible = getBooleanModelField(model, 'shockmountVisible', 'SHOCKMOUNT_VISIBLE');
+    const canToggle = getBooleanModelField(model, 'shockmountToggle', 'SHOCKMOUNT_TOGGLE');
 
     return {
         canToggle,
@@ -96,14 +110,14 @@ export function buildShockmountState(modelLike) {
         available: visible || enabled,
         included: enabled && price === 0,
         price,
-        defaultOption: model.UF_DEFAULT_SHOCKMOUNT_OPTION || null
+        defaultOption: getModelFieldValue(model, 'UF_DEFAULT_SHOCKMOUNT_OPTION', 'defaultShockmountOption')
     };
 }
 
 export function getBaseAnimationModelKey(modelLike) {
     const modelCode = resolveModelCode(modelLike);
     if (!modelCode) {
-        return CAMERA_MODEL_KEYS[MODEL_CODES.TUBE_017];
+        return DEFAULT_CAMERA_MODEL_KEY;
     }
 
     return CAMERA_MODEL_KEYS[modelCode]
