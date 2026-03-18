@@ -8,7 +8,7 @@ import { updateShockmountLayers, updateShockmountVisibility, updateShockmountPre
 import { syncToggles, initToggles } from './modules/toggles.js';
 import { applyModelDefaults } from './modules/model-defaults.js';
 import { calculateTotal, getBreakdown, formatPrice, debugPrices } from './modules/price-calculator.js';
-import { initHLDataManager } from './modules/hl-data-manager.js';
+import { initHLDataManager, syncCurrentModelOptionData } from './modules/hl-data-manager.js';
 import { switchLayer, updateMicVariant } from './modules/camera-effect.js';
 import { sendOrder } from './services/report.js';
 import { validateForm } from './services/validation.js';
@@ -247,8 +247,7 @@ export function initEventListeners() {
             document.querySelectorAll('.variant-button').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
 
-            window.CUSTOMIZER_DATA.currentModelCode = modelCode;
-            window.CUSTOMIZER_DATA.currentModelOptions = window.CUSTOMIZER_DATA.modelsByCode[modelCode];
+            syncCurrentModelOptionData(modelCode);
 
             stateManager.set('currentModelCode', modelCode);
             stateManager.set('currentModelId', window.CUSTOMIZER_DATA.currentModelId);

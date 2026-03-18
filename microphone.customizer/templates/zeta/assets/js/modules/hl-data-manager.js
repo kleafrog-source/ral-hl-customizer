@@ -3,6 +3,8 @@
 import { stateManager } from '../core/state.js';
 import { loadCustomPrices } from './price-calculator.js';
 
+const MALFA_VARIANTS = new Set(['malfasilver', 'malfagold']);
+
 function mapOptionToState(option) {
     const isRal = option.UF_IS_RAL === 1 || option.UF_IS_RAL === true;
     const ralCode = option.RAL_DATA?.UF_CODE || null;
@@ -22,6 +24,106 @@ function mapOptionToState(option) {
         svgFilterId: option.UF_SVG_FILTER_ID || null,
         svgSpecialKey: option.UF_SVG_SPECIAL_KEY || null
     };
+}
+
+function mapOptionForSection(option) {
+    const isRal = option.UF_IS_RAL === 1 || option.UF_IS_RAL === true;
+    return {
+        variantCode: option.UF_VARIANT_CODE || '',
+        variantName: option.UF_VARIANT_NAME || '',
+        isRal,
+        isFree: option.UF_IS_FREE === 1 || option.UF_IS_FREE === true,
+        isRalPaid: option.IS_RAL_PAID === 1 || option.IS_RAL_PAID === true ? true : !(option.UF_IS_FREE === 1 || option.UF_IS_FREE === true),
+        price: parseInt(option.UF_PRICE || '0', 10) || 0,
+        color: option.UF_RAL_COLOR_CODE || '',
+        colorValue: option.RAL_DATA?.UF_HEX || '',
+        colorName: option.RAL_DATA?.UF_NAME || '',
+        modelId: parseInt(option.UF_MODEL_ID || '0', 10) || 0,
+        svgTargetMode: option.UF_SVG_TARGET_MODE || '',
+        svgLayerGroup: option.UF_SVG_LAYER_GROUP || '',
+        svgFilterId: option.UF_SVG_FILTER_ID || '',
+        svgSpecialKey: option.UF_SVG_SPECIAL_KEY || ''
+    };
+}
+
+export function buildCurrentModelOptions(modelCode) {
+    const data = window.CUSTOMIZER_DATA || {};
+    const model = data.modelsByCode?.[modelCode];
+    if (!model) {
+        return {};
+    }
+
+    const currentModelId = parseInt(model.ID || '0', 10) || 0;
+    const currentSeries = String(model.MODEL_SERIES || '');
+    const allOptions = data.options || {};
+    const merged = {};
+
+    const appendSectionOptions = (source) => {
+        Object.entries(source || {}).forEach(([sectionCode, sectionOptions]) => {
+            if (!Array.isArray(sectionOptions)) {
+                return;
+            }
+
+            if (!merged[sectionCode]) {
+                merged[sectionCode] = [];
+            }
+
+            merged[sectionCode].push(...sectionOptions);
+        });
+    };
+
+    appendSectionOptions(allOptions[0]);
+    appendSectionOptions(allOptions[currentModelId]);
+
+    Object.keys(merged).forEach((sectionCode) => {
+        merged[sectionCode] = merged[sectionCode].filter((option) => {
+            const optionModelId = parseInt(option.UF_MODEL_ID || '0', 10) || 0;
+            if (optionModelId > 0 && optionModelId !== currentModelId) {
+                return false;
+            }
+
+            const seriesVar = String(option.SERIES_VAR || option.UF_SERIESVAR || '');
+            if (seriesVar && seriesVar !== currentSeries) {
+                return false;
+            }
+
+            const variantCode = String(option.UF_VARIANT_CODE || '');
+            if (sectionCode === 'logo' && modelCode !== '023-malfa' && MALFA_VARIANTS.has(variantCode)) {
+                return false;
+            }
+
+            return true;
+        });
+    });
+
+    return merged;
+}
+
+export function syncCurrentModelOptionData(modelCode) {
+    const model = window.CUSTOMIZER_DATA?.modelsByCode?.[modelCode] || {};
+    const currentModelOptions = buildCurrentModelOptions(modelCode);
+    const sectionOptions = Object.fromEntries(
+        Object.entries(currentModelOptions).map(([sectionKey, options]) => [
+            sectionKey,
+            (options || []).map(mapOptionForSection)
+        ])
+    );
+
+    window.CUSTOMIZER_DATA.currentModelCode = modelCode;
+    window.CUSTOMIZER_DATA.currentModelId = parseInt(model.ID || '0', 10) || 0;
+    window.CUSTOMIZER_DATA.currentModelOptions = currentModelOptions;
+    window.CUSTOMIZER_DATA.sectionOptions = sectionOptions;
+    window.CUSTOMIZER_DATA.optionsBySection = sectionOptions;
+
+    const hlData = stateManager.get('hlData') || {};
+    stateManager.set('hlData', {
+        ...hlData,
+        currentModelCode: modelCode,
+        currentModelId: window.CUSTOMIZER_DATA.currentModelId,
+        currentModelOptions
+    });
+
+    return { currentModelOptions, sectionOptions };
 }
 
 export function initHLDataManager() {
@@ -57,8 +159,10 @@ export function initHLDataManager() {
     stateManager.set('basePrice', currentModel?.BASE_PRICE || 0);
     stateManager.set('defaultShockmountOption', currentModel?.UF_DEFAULT_SHOCKMOUNT_OPTION || null);
 
+    syncCurrentModelOptionData(data.currentModelCode || null);
+
     // Initialize options for each section based on current model options
-    const sectionOptions = data.currentModelOptions || {};
+    const sectionOptions = stateManager.get('hlData')?.currentModelOptions || {};
     Object.keys(sectionOptions).forEach(section => {
         const firstOption = sectionOptions[section]?.[0];
         if (!firstOption) return;

@@ -1,4 +1,5 @@
-  <? if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die(); 
+  <? if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
+  $startAssetsPath = ($templateFolder ?? '') . '/assets/image/custom/start';
   ?>
             <div class="start-screen-container">
     <!-- Hero Section -->
@@ -29,13 +30,13 @@
       </div>
       <div class="start-screen-hero-image">
         <img 
-          src="../image/custom/start/hero-mobile-360@1x.webp"
+          src="<?= htmlspecialchars($startAssetsPath) ?>/hero-mobile-360@1x.webp"
           srcset="
-            ../image/custom/start/hero-mobile-360@1x.webp 360w,
-            ../image/custom/start/hero-mobile-360@2x.webp 720w,
-            ../image/custom/start/hero-tablet-1024@1x.webp 1024w,
-            ../image/custom/start/hero-pc-1920@1x.webp 1920w,
-            ../image/custom/start/hero-pc-1920@2x.webp 3840w
+            <?= htmlspecialchars($startAssetsPath) ?>/hero-mobile-360@1x.webp 360w,
+            <?= htmlspecialchars($startAssetsPath) ?>/hero-mobile-360@2x.webp 720w,
+            <?= htmlspecialchars($startAssetsPath) ?>/hero-tablet-1024@1x.webp 1024w,
+            <?= htmlspecialchars($startAssetsPath) ?>/hero-pc-1920@1x.webp 1920w,
+            <?= htmlspecialchars($startAssetsPath) ?>/hero-pc-1920@2x.webp 3840w
           "
           sizes="(max-width: 360px) 360px, (max-width: 1024px) 1024px, 1920px"
           alt="Кастомный микрофон СОЮЗ"

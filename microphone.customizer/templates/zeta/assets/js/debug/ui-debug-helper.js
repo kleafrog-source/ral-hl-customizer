@@ -36,6 +36,25 @@ function readTransform(id) {
     return element ? (element.style.transform || getComputedStyle(element).transform || 'none') : 'missing';
 }
 
+function parseEditableTransform(transform) {
+    const source = transform && transform !== 'none' ? transform : 'translateX(0%) translateY(0%) scale(1)';
+    const readValue = (pattern, fallback) => {
+        const match = source.match(pattern);
+        return match ? parseFloat(match[1]) : fallback;
+    };
+
+    return {
+        x: readValue(/translateX\((-?\d+(?:\.\d+)?)%\)/, 0),
+        y: readValue(/translateY\((-?\d+(?:\.\d+)?)%\)/, 0),
+        scale: readValue(/scale\((-?\d+(?:\.\d+)?)\)/, 1)
+    };
+}
+
+function formatEditableTransform({ x, y, scale }) {
+    const safeScale = Math.max(0.05, scale);
+    return `translateX(${x.toFixed(2)}%) translateY(${y.toFixed(2)}%) scale(${safeScale.toFixed(2)})`;
+}
+
 function getVariantSummary(state) {
     return VARIANT_KEYS.reduce((acc, key) => {
         const sectionState = state?.[key];
@@ -126,19 +145,37 @@ export function initDebugHelper() {
 
             <div class="debug-section">
                 <h4>Live Transform Lab</h4>
-                <div class="debug-row">
+                <div class="debug-row debug-row-wrap">
                     <label for="debug-transform-input-microphone">Microphone</label>
                     <input type="text" id="debug-transform-input-microphone" class="debug-transform-input">
+                    <button data-transform-nudge="microphone-svg-container" data-axis="x" data-delta="-5">-X</button>
+                    <button data-transform-nudge="microphone-svg-container" data-axis="x" data-delta="5">+X</button>
+                    <button data-transform-nudge="microphone-svg-container" data-axis="y" data-delta="-5">-Y</button>
+                    <button data-transform-nudge="microphone-svg-container" data-axis="y" data-delta="5">+Y</button>
+                    <button data-transform-nudge="microphone-svg-container" data-axis="scale" data-delta="-0.05">-S</button>
+                    <button data-transform-nudge="microphone-svg-container" data-axis="scale" data-delta="0.05">+S</button>
                     <button data-apply-transform="microphone-svg-container">Apply</button>
                 </div>
-                <div class="debug-row">
+                <div class="debug-row debug-row-wrap">
                     <label for="debug-transform-input-shockmount">Shockmount</label>
                     <input type="text" id="debug-transform-input-shockmount" class="debug-transform-input">
+                    <button data-transform-nudge="shockmount-svg-container" data-axis="x" data-delta="-5">-X</button>
+                    <button data-transform-nudge="shockmount-svg-container" data-axis="x" data-delta="5">+X</button>
+                    <button data-transform-nudge="shockmount-svg-container" data-axis="y" data-delta="-5">-Y</button>
+                    <button data-transform-nudge="shockmount-svg-container" data-axis="y" data-delta="5">+Y</button>
+                    <button data-transform-nudge="shockmount-svg-container" data-axis="scale" data-delta="-0.05">-S</button>
+                    <button data-transform-nudge="shockmount-svg-container" data-axis="scale" data-delta="0.05">+S</button>
                     <button data-apply-transform="shockmount-svg-container">Apply</button>
                 </div>
-                <div class="debug-row">
+                <div class="debug-row debug-row-wrap">
                     <label for="debug-transform-input-case">Case</label>
                     <input type="text" id="debug-transform-input-case" class="debug-transform-input">
+                    <button data-transform-nudge="case-preview-container" data-axis="x" data-delta="-5">-X</button>
+                    <button data-transform-nudge="case-preview-container" data-axis="x" data-delta="5">+X</button>
+                    <button data-transform-nudge="case-preview-container" data-axis="y" data-delta="-5">-Y</button>
+                    <button data-transform-nudge="case-preview-container" data-axis="y" data-delta="5">+Y</button>
+                    <button data-transform-nudge="case-preview-container" data-axis="scale" data-delta="-0.05">-S</button>
+                    <button data-transform-nudge="case-preview-container" data-axis="scale" data-delta="0.05">+S</button>
                     <button data-apply-transform="case-preview-container">Apply</button>
                 </div>
             </div>
@@ -151,6 +188,10 @@ export function initDebugHelper() {
                 <div class="debug-row">
                     <label>Opacity</label>
                     <input type="range" id="debug-stencil-opacity" min="0" max="1" step="0.1" value="0.5">
+                </div>
+                <div class="debug-row">
+                    <label>Scale</label>
+                    <input type="range" id="debug-stencil-scale" min="0.2" max="2" step="0.05" value="1">
                 </div>
             </div>
 
@@ -183,6 +224,8 @@ export function initDebugHelper() {
         'shockmount-svg-container': document.getElementById('debug-transform-input-shockmount'),
         'case-preview-container': document.getElementById('debug-transform-input-case')
     };
+    const stencilOpacity = document.getElementById('debug-stencil-opacity');
+    const stencilScale = document.getElementById('debug-stencil-scale');
 
     persistToggle.checked = true;
 
@@ -232,6 +275,11 @@ export function initDebugHelper() {
     stencil.style.display = 'none';
     document.body.appendChild(stencil);
 
+    const applyStencilTransform = () => {
+        stencil.style.opacity = stencilOpacity.value;
+        stencil.style.transform = `translate(-50%, -50%) scale(${stencilScale.value})`;
+    };
+
     document.getElementById('debug-stencil-upload').addEventListener('change', (e) => {
         const file = e.target.files[0];
         if (!file) return;
@@ -240,13 +288,13 @@ export function initDebugHelper() {
         reader.onload = (event) => {
             stencil.src = event.target.result;
             stencil.style.display = 'block';
+            applyStencilTransform();
         };
         reader.readAsDataURL(file);
     });
 
-    document.getElementById('debug-stencil-opacity').addEventListener('input', (e) => {
-        stencil.style.opacity = e.target.value;
-    });
+    stencilOpacity.addEventListener('input', applyStencilTransform);
+    stencilScale.addEventListener('input', applyStencilTransform);
 
     document.getElementById('debug-collapse').addEventListener('click', () => {
         const content = document.getElementById('debug-content');
@@ -312,6 +360,34 @@ export function initDebugHelper() {
             }
 
             target.style.transform = input.value || 'none';
+            renderDebugState(stateManager.get());
+        });
+    });
+
+    panel.querySelectorAll('[data-transform-nudge]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            const targetId = btn.dataset.transformNudge;
+            const input = transformInputs[targetId];
+            const target = document.getElementById(targetId);
+
+            if (!input || !target) {
+                return;
+            }
+
+            const transform = parseEditableTransform(input.value || readTransform(targetId));
+            const axis = btn.dataset.axis;
+            const delta = parseFloat(btn.dataset.delta || '0');
+
+            if (axis === 'scale') {
+                transform.scale += delta;
+            } else if (axis === 'x') {
+                transform.x += delta;
+            } else if (axis === 'y') {
+                transform.y += delta;
+            }
+
+            input.value = formatEditableTransform(transform);
+            target.style.transform = input.value;
             renderDebugState(stateManager.get());
         });
     });

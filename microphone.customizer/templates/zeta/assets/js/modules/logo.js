@@ -392,6 +392,8 @@ export function clearCustomLogo() {
 
 // Управление видимостью MALFA вариантов логотипа
 export function updateMalfaLogoOptionsVisibility() {
-    // NOTE: MALFA variants are now handled via HL data filtering in result_modifier.php
-    // and dynamically rendered in the sidebar, so no manual group visibility is needed.
+    const isMalfa = isMalfaMic();
+    document.querySelectorAll('.malfa-logo-options').forEach((group) => {
+        group.style.display = isMalfa ? '' : 'none';
+    });
 }

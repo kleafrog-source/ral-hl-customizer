@@ -515,7 +515,8 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                                 <!-- MALFA logos section - динамически из HL данных -->
                                 <?php 
                                 // Фильтруем MALFA варианты из HL данных (теперь uf_model_id=0)
-                                $malfaOptions = array_filter($sectionOptions, function($opt) {
+                                $allLogoOptions = $arResult['OPTIONS'][0]['logo'] ?? [];
+                                $malfaOptions = array_filter($allLogoOptions, function($opt) {
                                     $variantCode = $opt['UF_VARIANT_CODE'] ?? '';
                                     $seriesVar = $opt['UF_SERIESVAR'] ?? '';
                                     
@@ -524,16 +525,15 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                                            $seriesVar === '023';
                                 });
                                 
-                                // Отображаем только для модели 023-malfa
-                                if (!empty($malfaOptions) && $currentModelCode === '023-malfa'): ?>
-                                    <div class="option-group">
+                                if (!empty($malfaOptions)): ?>
+                                    <div class="option-group malfa-logo-options" style="<?= $currentModelCode === '023-malfa' ? '' : 'display:none;' ?>">
                                         <h4>MALFA Эмблема</h4>
                                         <?php foreach ($malfaOptions as $option): ?>
                                             <?php
                                             $optionPrice = resolveOptionPrice(
                                                 $pricesData,
                                                 $sectionKey,
-                                                $currentModelCode,
+                                                '023-malfa',
                                                 $option['UF_VARIANT_CODE'] ?? '',
                                                 !empty($option['UF_IS_RAL']),
                                                 $option['UF_PRICE'] ?? 0
@@ -1470,4 +1470,3 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
         <!-- Additional hidden fields for customization data -->
         <input type="hidden" id="customizer-config-json" name="config_json" value="">
     </div>
-
