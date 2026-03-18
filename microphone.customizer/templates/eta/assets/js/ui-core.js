@@ -11,6 +11,7 @@ import { switchLayer, updateMicVariant } from './modules/camera-effect.js';
 import { sendOrder } from './services/report.js';
 import { validateForm } from './services/validation.js';
 import { prepareModelSelection } from './modules/model-selection.js';
+import { debugWarn } from './utils/debug.js';
 
 function syncShockmountVisibility(delay = false) {
     if (!delay) {
@@ -21,6 +22,28 @@ function syncShockmountVisibility(delay = false) {
     setTimeout(() => {
         updateShockmountVisibility();
     }, 50);
+}
+
+function syncSidebarResponsiveControls(sidebar = document.getElementById('customization-sidebar')) {
+    if (!sidebar) {
+        return;
+    }
+
+    const edgeControls = document.getElementById('sidebar-edge-controls');
+    const sidebarHeader = sidebar.querySelector('.sidebar-header');
+
+    if (!edgeControls || !sidebarHeader) {
+        return;
+    }
+
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    const targetParent = isMobile ? sidebarHeader : sidebar;
+
+    if (edgeControls.parentElement !== targetParent) {
+        targetParent.appendChild(edgeControls);
+    }
+
+    edgeControls.classList.toggle('is-inline', isMobile);
 }
 
 export function applyModelSelectionUI(modelCode, options = {}) {
@@ -479,10 +502,7 @@ function initSidebarControls() {
     const sidebar = document.getElementById('customization-sidebar');
     if (!sidebar) return;
 
-    const edgeControls = document.getElementById('sidebar-edge-controls');
-    if (edgeControls && !sidebar.contains(edgeControls)) {
-        sidebar.appendChild(edgeControls);
-    }
+    syncSidebarResponsiveControls(sidebar);
 
     const buttons = sidebar.querySelectorAll('[data-sidebar-state-btn]');
     if (!buttons.length) return;
@@ -500,6 +520,7 @@ function initSidebarControls() {
 
     const mediaQuery = window.matchMedia('(max-width: 768px)');
     mediaQuery.addEventListener('change', () => {
+        syncSidebarResponsiveControls(sidebar);
         applySidebarState(sidebar.dataset.sidebarState || 'normal', false);
     });
 }
@@ -512,6 +533,7 @@ function applySidebarState(state, animate = true) {
     const nextState = allowedStates.includes(state) ? state : 'normal';
     sidebar.dataset.sidebarState = nextState;
     localStorage.setItem('sidebarState', nextState);
+    syncSidebarResponsiveControls(sidebar);
 
     sidebar.querySelectorAll('[data-sidebar-state-btn]').forEach(btn => {
         btn.classList.toggle('is-active', btn.dataset.sidebarStateBtn === nextState);
@@ -536,6 +558,10 @@ function applySidebarState(state, animate = true) {
         normal: isMobile ? '16px' : '20px',
         expanded: isMobile ? '18px' : '24px'
     };
+    const shockmountMenuPrice = document.getElementById('shockmount-price');
+    if (shockmountMenuPrice) {
+        shockmountMenuPrice.style.display = nextState === 'compact' ? 'none' : '';
+    }
 
     if (window.anime && animate) {
         window.anime.remove(sidebar);
@@ -602,7 +628,7 @@ function initFullscreenControl() {
                 await document.exitFullscreen();
             }
         } catch (error) {
-            console.warn('Fullscreen toggle failed', error);
+            debugWarn('Fullscreen toggle failed', error);
         }
     });
 

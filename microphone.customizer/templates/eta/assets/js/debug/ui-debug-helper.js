@@ -2,6 +2,7 @@ import { stateManager } from '../core/state.js';
 import { switchLayer, getActiveLayer, getAnimationPreset, initCameraEffect } from '../modules/camera-effect.js';
 import { getBreakdown, calculateTotal } from '../modules/price-calculator.js';
 import { applyModelDefaults } from '../modules/model-defaults.js';
+import { debugWarn, isDebugUIEnabled } from '../utils/debug.js';
 
 const DEBUG_STORAGE_KEY = 'customizer-debug-enabled';
 const VARIANT_KEYS = ['spheres', 'body', 'logo', 'logobg', 'case', 'shockmount', 'shockmountPins', 'shockmountOption'];
@@ -29,23 +30,6 @@ const STENCIL_LIMITS = {
     scale: { min: 0.1, max: 3, step: 0.01 },
     opacity: { min: 0, max: 1, step: 0.01 }
 };
-
-function isDebugEnabled() {
-    const params = new URLSearchParams(window.location.search);
-    const queryFlag = params.get('debug');
-
-    if (queryFlag === '1') {
-        localStorage.setItem(DEBUG_STORAGE_KEY, '1');
-        return true;
-    }
-
-    if (queryFlag === '0') {
-        localStorage.removeItem(DEBUG_STORAGE_KEY);
-        return false;
-    }
-
-    return window.DEBUG_UI_HELPER || localStorage.getItem(DEBUG_STORAGE_KEY) === '1';
-}
 
 function escapeHtml(value) {
     return String(value ?? '')
@@ -232,7 +216,7 @@ function makePanelDraggable(panel, header) {
 }
 
 export function initDebugHelper() {
-    if (!isDebugEnabled()) return;
+    if (!isDebugUIEnabled()) return;
 
     const link = document.createElement('link');
     link.rel = 'stylesheet';
@@ -513,7 +497,7 @@ export function initDebugHelper() {
         try {
             await navigator.clipboard.writeText(JSON.stringify(stateManager.get(), null, 2));
         } catch (error) {
-            console.warn('Clipboard copy failed', error);
+            debugWarn('Clipboard copy failed', error);
         }
     });
 
@@ -522,7 +506,7 @@ export function initDebugHelper() {
             const currentState = stateManager.get();
             await navigator.clipboard.writeText(JSON.stringify(getAnimationPreset(currentState.currentModelCode, currentState), null, 2));
         } catch (error) {
-            console.warn('Clipboard copy failed', error);
+            debugWarn('Clipboard copy failed', error);
         }
     });
 
@@ -530,7 +514,7 @@ export function initDebugHelper() {
         try {
             await navigator.clipboard.writeText(exportArea.value || '');
         } catch (error) {
-            console.warn('Clipboard copy failed', error);
+            debugWarn('Clipboard copy failed', error);
         }
     });
 

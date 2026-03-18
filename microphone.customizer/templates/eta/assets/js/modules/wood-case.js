@@ -2,6 +2,7 @@ import { stateManager } from '../core/state.js';
 import { getDevice } from '../utils.js';
 import { CASE_IMAGES, CASE_GEOMETRY, getModelData } from '../config.js';
 import { showNotification as showAppNotification } from '../utils/notifications.js';
+import { debugWarn } from '../utils/debug.js';
 
 const WoodCase = {
     currentCase: '023-the-bomblet',
@@ -201,7 +202,7 @@ const WoodCase = {
         const caseId = modelData ? modelData.CODE : id;
 
         if (!caseId || !CASE_GEOMETRY.cases[caseId]) {
-            console.warn(`WoodCase.setCase: Invalid case ID "${caseId}"`);
+            debugWarn(`WoodCase.setCase: Invalid case ID "${caseId}"`);
             return;
         }
         

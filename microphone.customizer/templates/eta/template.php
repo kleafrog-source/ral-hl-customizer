@@ -372,10 +372,15 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                     $attrs[] = 'data-option-id="' . (int)($option['ID'] ?? 0) . '"';
 
                     if (!empty($option['UF_IS_RAL']) && !empty($option['RAL_DATA'])) {
+                        $ralName = htmlspecialchars($option['RAL_DATA']['UF_NAME'] ?? '');
                         $attrs[] = 'data-ral-id="' . htmlspecialchars($option['RAL_DATA']['ID'] ?? '') . '"';
                         $attrs[] = 'data-ral-rgb="' . htmlspecialchars($option['RAL_DATA']['UF_RGB_CODE'] ?? '') . '"';
                         $attrs[] = 'data-ral-hex="' . htmlspecialchars($option['RAL_DATA']['UF_HEX'] ?? '') . '"';
-                        $attrs[] = 'data-ral-name="' . htmlspecialchars($option['RAL_DATA']['UF_NAME'] ?? '') . '"';
+                        $attrs[] = 'data-ral-name="' . $ralName . '"';
+                        if ($ralName !== '') {
+                            $attrs[] = 'data-tooltip="' . $ralName . '"';
+                            $attrs[] = 'title="' . $ralName . '"';
+                        }
                     }
                     return implode(' ', $attrs);
                 }

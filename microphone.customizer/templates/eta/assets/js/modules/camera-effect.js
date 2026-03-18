@@ -1,6 +1,7 @@
 import { stateManager } from '../core/state.js';
 import { getAnimationModelKey, getBaseAnimationModelKey } from '../config/model-capabilities.js';
 import { CAMERA_PRESETS } from '../config/camera-presets.js';
+import { debugWarn } from '../utils/debug.js';
 
 const layers = {
     microphone: null,
@@ -57,7 +58,7 @@ function syncLayerElements() {
             return;
         }
 
-        console.warn(`Camera effect layer element with ID for '${id}' not found.`);
+        debugWarn(`Camera effect layer element with ID for '${id}' not found.`);
     });
 }
 
@@ -146,7 +147,7 @@ function applyStaticState(animationConfig, stateName) {
 function animateCameraState(modelCode, stateName, newActiveLayerId, state = stateManager.get()) {
     const { model: micModel, config: animationConfig } = getPresetState(modelCode, stateName, state);
     if (!animationConfig) {
-        console.warn(`Animation state '${stateName}' for model '${micModel}' not found.`);
+        debugWarn(`Animation state '${stateName}' for model '${micModel}' not found.`);
         return;
     }
 
@@ -198,7 +199,7 @@ export function switchLayer(newActiveLayerId) {
     }
 
     if (newActiveLayerId !== 'logo' && !layers[newActiveLayerId]) {
-        console.warn(`Cannot switch to layer '${newActiveLayerId}': element not found.`);
+        debugWarn(`Cannot switch to layer '${newActiveLayerId}': element not found.`);
         return;
     }
 

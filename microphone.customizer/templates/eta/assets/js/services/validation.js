@@ -1,3 +1,5 @@
+import { debugWarn } from '../utils/debug.js';
+
 const FIELD_VALIDATORS = {
     'input-lastname': (val) => val.length >= 2,
     'input-name': (val) => val.length >= 2,
@@ -22,7 +24,7 @@ export function initValidation() {
     Object.entries(FIELD_VALIDATORS).forEach(([id, validator]) => {
         const el = getValidationElement(id);
         if (!el) {
-            console.warn(`Element with id "${id}" not found for validation`);
+            debugWarn(`Element with id "${id}" not found for validation`);
             return;
         }
 

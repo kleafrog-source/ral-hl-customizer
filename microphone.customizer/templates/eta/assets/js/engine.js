@@ -4,7 +4,7 @@ import { updateSectionLayers } from './modules/appearance-new.js';
 import { updateLogoSVG } from './modules/logo.js';
 import { getAssetSuffix } from './utils.js';
 import { eventRegistry } from './core/events.js';
-import { debugLog } from './utils/debug.js';
+import { debugLog, debugWarn } from './utils/debug.js';
 
 function getMicrophoneContainer() {
     return document.getElementById('microphone-svg-container');
@@ -63,13 +63,13 @@ export function updateSVG() {
     try {
         const svg = getMicrophoneSvg();
         if (!svg) {
-            console.warn('[SVG] SVG element not found in #microphone-svg-container, skipping update');
+            debugWarn('[SVG] SVG element not found in #microphone-svg-container, skipping update');
             return;
         }
 
         const state = stateManager.get();
         if (!state) {
-            console.warn('[SVG] State manager not initialized, skipping update');
+            debugWarn('[SVG] State manager not initialized, skipping update');
             return;
         }
 

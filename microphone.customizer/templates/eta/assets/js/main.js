@@ -8,6 +8,7 @@ import { initCameraEffect } from './modules/camera-effect.js';
 import { stateManager } from './core/state.js';
 import { initDebugHelper } from './debug/ui-debug-helper.js';
 import { initValidation } from './services/validation.js';
+import { isDebugUIEnabled } from './utils/debug.js';
 
 function getAppRoot() {
     return document.getElementById('customizer-app-root');
@@ -68,7 +69,9 @@ function initCustomizerModules(currentModelCode) {
     initializeWoodCase();
     initShockmount();
     updateSVG();
-    initDebugHelper();
+    if (isDebugUIEnabled()) {
+        initDebugHelper();
+    }
     initValidation();
 }
 

@@ -1,5 +1,5 @@
 // core/state.js
-import { debugLog } from '../utils/debug.js';
+import { debugLog, debugWarn } from '../utils/debug.js';
 
 /**
  * @typedef {object} State
@@ -121,7 +121,7 @@ class StateManager {
      */
     batchSet(updates) {
         if (this.#isNotifying) {
-            console.warn('[StateManager] Cannot batch updates during notification cycle');
+            debugWarn('[StateManager] Cannot batch updates during notification cycle');
             return;
         }
 
@@ -179,7 +179,7 @@ class StateManager {
     set(path, value) {
         // Prevent recursive updates during notification
         if (this.#isNotifying) {
-            console.warn(`[StateManager] Recursive set detected during notification for path: ${path}. This may cause infinite loops.`);
+            debugWarn(`[StateManager] Recursive set detected during notification for path: ${path}. This may cause infinite loops.`);
             return;
         }
 

@@ -1,6 +1,12 @@
   <? if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
-  $startAssetsPath = ($templateFolder ?? '') . '/assets/image/custom/start';
+  $componentImagesBasePath = rtrim(($componentPath ?? '/local/components/custom/microphone.customizer'), '/') . '/images/custom/start';
+  $templateImagesBasePath = ($templateFolder ?? '') . '/assets/image/custom/start';
+  $componentImagesAbsolutePath = $_SERVER['DOCUMENT_ROOT'] . $componentImagesBasePath;
+  $startAssetsPath = is_dir($componentImagesAbsolutePath) ? $componentImagesBasePath : $templateImagesBasePath;
   ?>
+  <?php if (!is_dir($componentImagesAbsolutePath)): ?>
+  <!-- TODO: move hero images into microphone.customizer/images/custom/start and remove the template-level fallback below -->
+  <?php endif; ?>
             <div class="start-screen-container">
     <!-- Hero Section -->
     <div class="start-screen-hero">

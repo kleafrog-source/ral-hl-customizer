@@ -1,4 +1,4 @@
-import { debugLog } from './utils/debug.js';
+import { debugLog, debugWarn } from './utils/debug.js';
 
 export const CONFIG = {
     // Цены берутся из HL данных (CUSTOMIZER_DATA), здесь только безопасные дефолты
@@ -59,7 +59,7 @@ function getAssetsBasePath() {
     if (window.CUSTOMIZER_ASSETS_PATH) {
         return window.CUSTOMIZER_ASSETS_PATH + '/image/';
     }
-    console.warn('[CONFIG] CUSTOMIZER_ASSETS_PATH not available, using fallback');
+    debugWarn('[CONFIG] CUSTOMIZER_ASSETS_PATH not available, using fallback');
     return '/local/templates/microphone.customizer/assets/image/';
 }
 
@@ -67,7 +67,7 @@ function getAssetsBasePath() {
 export function getModelData(modelCode) {
     const data = getCustomizerData();
     if (!data?.modelsByCode) {
-        console.warn('CUSTOMIZER_DATA.modelsByCode not available');
+        debugWarn('CUSTOMIZER_DATA.modelsByCode not available');
         return null;
     }
     return data.modelsByCode[modelCode] || null;
@@ -76,7 +76,7 @@ export function getModelData(modelCode) {
 export function getAllModels() {
     const data = getCustomizerData();
     if (!data?.models) {
-        console.warn('CUSTOMIZER_DATA.models not available');
+        debugWarn('CUSTOMIZER_DATA.models not available');
         return {};
     }
     return data.models;
@@ -119,7 +119,7 @@ export function getCaseImages() {
         // Fallback на старый маппинг
         if (!imageBase) {
             imageBase = fallbackImageMap[code];
-            console.warn(`[CONFIG] Using fallback image mapping for model: ${code}`);
+            debugWarn(`[CONFIG] Using fallback image mapping for model: ${code}`);
         }
         
         if (imageBase) {
@@ -143,13 +143,13 @@ export function getCaseImages() {
 function getCaseImageFromHL(modelCode) {
     // Проверяем доступность CUSTOMIZER_DATA
     if (!window.CUSTOMIZER_DATA || !window.CUSTOMIZER_DATA.options) {
-        console.warn('[CONFIG] CUSTOMIZER_DATA not available for case image mapping');
+        debugWarn('[CONFIG] CUSTOMIZER_DATA not available for case image mapping');
         return null;
     }
     
     const modelData = getModelData(modelCode);
     if (!modelData) {
-        console.warn(`[CONFIG] Model data not found: ${modelCode}`);
+        debugWarn(`[CONFIG] Model data not found: ${modelCode}`);
         return null;
     }
     
@@ -192,7 +192,7 @@ function getCaseImageFromHL(modelCode) {
         }
     }
     
-    console.warn(`[CONFIG] No suitable case image found in HL data for: ${modelCode}`);
+    debugWarn(`[CONFIG] No suitable case image found in HL data for: ${modelCode}`);
     return null;
 }
 
@@ -205,7 +205,7 @@ function initializeCaseImages() {
         CASE_IMAGES = getCaseImages();
         debugLog('[CONFIG] CASE_IMAGES initialized:', CASE_IMAGES);
     } else {
-        console.warn('[CONFIG] CUSTOMIZER_DATA not available, CASE_IMAGES will be empty');
+        debugWarn('[CONFIG] CUSTOMIZER_DATA not available, CASE_IMAGES will be empty');
     }
 }
 

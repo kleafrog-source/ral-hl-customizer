@@ -2,7 +2,7 @@ import { stateManager } from '../core/state.js';
 import { buildShockmountState } from '../config/model-capabilities.js';
 import { updateSectionLayers } from './appearance-new.js';
 import { resolveConfiguredPrice } from './price-calculator.js';
-import { debugLog, isRuntimeDebugEnabled } from '../utils/debug.js';
+import { debugLog, debugWarn, isRuntimeDebugEnabled } from '../utils/debug.js';
 
 function getDefaultVariantCode(defaultValue) {
     if (!defaultValue) {
@@ -160,7 +160,7 @@ function getSectionDefaults(model) {
 
 export function applyModelDefaults(modelCode) {
     if (!modelCode) {
-        console.warn('[ModelDefaults] No modelCode provided');
+        debugWarn('[ModelDefaults] No modelCode provided');
         return;
     }
 
@@ -168,7 +168,7 @@ export function applyModelDefaults(modelCode) {
     const model = modelMap[modelCode];
 
     if (!model) {
-        console.warn('[ModelDefaults] Model not found:', modelCode, 'Available models:', Object.keys(modelMap));
+        debugWarn('[ModelDefaults] Model not found:', modelCode, 'Available models:', Object.keys(modelMap));
         return;
     }
 
@@ -192,7 +192,7 @@ export function applyModelDefaults(modelCode) {
         const defaultOption = resolveDefaultOption(sectionKey, resolvedVariantCode, options);
 
         if (!defaultOption) {
-            console.warn(
+            debugWarn(
                 `[ModelDefaults] Default option not found: ${sectionKey} -> ${resolvedVariantCode}`,
                 'Available options:',
                 getAvailableVariantCodes(options)

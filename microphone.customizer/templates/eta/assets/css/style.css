@@ -28,6 +28,7 @@
             --sidebar-width-normal: 420px;
             --sidebar-width-expanded: 480px;
             --sidebar-width-compact: 88px;
+}
 
 /* ============================================
            КНОПКА HELP
@@ -72,6 +73,7 @@
     stroke: white;
     transform: scale(1.1);
 }
+:root {
             --sidebar-height-normal: 50vh;
             --sidebar-height-expanded: 62vh;
             --sidebar-height-compact: 72px;
@@ -154,7 +156,6 @@ body {
            PREVIEW AREA
            ============================================ */
 .preview-area {
-.preview-area {
     flex: 1;
     /* display: flex; */
     /* flex-direction: column; */
@@ -166,7 +167,6 @@ body {
     /* height: calc(100vh - 40px); */
     overflow: hidden;
     height: calc(100vh - 1px);
-}
 }
 
 [data-theme="dark"] .preview-area {
@@ -2192,6 +2192,141 @@ body {
 .report-body {
  display: flex;
  gap: 30px;
+}
+
+/* eta polish overrides */
+.sidebar-help-btn,
+.sidebar-edge-controls .fullscreen-toggle,
+.sidebar-edge-controls .theme-toggle {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    background: var(--item-bg);
+    color: var(--text-secondary);
+    box-shadow: none;
+    padding: 0;
+}
+
+.sidebar-help-btn:hover,
+.sidebar-edge-controls .fullscreen-toggle:hover,
+.sidebar-edge-controls .theme-toggle:hover {
+    background: var(--item-hover);
+    color: var(--text-primary);
+    border-color: var(--accent);
+    transform: translateY(-1px);
+}
+
+.sidebar-help-btn:active,
+.sidebar-edge-controls .fullscreen-toggle:active,
+.sidebar-edge-controls .theme-toggle:active,
+.sidebar-edge-controls .fullscreen-toggle.is-active,
+.sidebar-edge-controls .theme-toggle.is-active {
+    background: var(--item-active);
+    color: var(--text-primary);
+    border-color: var(--accent);
+    transform: translateY(0);
+}
+
+.sidebar-help-btn svg,
+.sidebar-edge-controls .fullscreen-toggle svg,
+.sidebar-edge-controls .theme-toggle svg {
+    width: 16px;
+    height: 16px;
+}
+
+.sidebar-edge-controls {
+    gap: 8px;
+}
+
+#customization-sidebar[data-sidebar-state="compact"] #shockmount-price {
+    display: none !important;
+}
+
+.item-label,
+.item-subtitle {
+    line-height: 1.3;
+}
+
+.palette-group {
+    gap: 6px;
+}
+
+.swatch {
+    min-width: 32px;
+    min-height: 32px;
+}
+
+@media (max-width: 1024px) {
+    .menu-item,
+    .option-button,
+    .variant-button,
+    .palette-toggle-btn {
+        min-height: 44px;
+    }
+
+    .palette-group {
+        grid-template-columns: repeat(auto-fill, minmax(36px, 1fr));
+    }
+
+    .swatch {
+        min-width: 36px;
+        min-height: 36px;
+    }
+}
+
+@media (max-width: 768px) {
+    .sidebar-header {
+        align-items: flex-start;
+        flex-wrap: wrap;
+    }
+
+    .sidebar-state-controls {
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .sidebar-edge-controls.is-inline {
+        position: static;
+        top: auto;
+        left: auto;
+        right: auto;
+        width: auto;
+        margin-left: auto;
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .menu-item {
+        padding: 14px;
+        gap: 14px;
+    }
+
+    .item-label {
+        font-size: 13px;
+    }
+
+    .item-subtitle {
+        font-size: 11px;
+    }
+
+    .option-button,
+    .variant-button,
+    .palette-toggle-btn,
+    .switch-container {
+        min-height: 48px;
+    }
+
+    .palette-group {
+        grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+        gap: 8px;
+    }
+
+    .swatch {
+        min-width: 40px;
+        min-height: 40px;
+        border-radius: 8px;
+    }
 }
 
 .report-visual {
