@@ -42,7 +42,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         setTimeout(() => {
             const selectionData = prepareModelSelection(currentModelCode);
             const runtimeData = selectionData?.runtimeData;
-            console.log('[Main.js] Model runtime data:', runtimeData);
 
             if (!runtimeData) {
                 console.error('[Main.js] Model runtime data not found for code:', currentModelCode);

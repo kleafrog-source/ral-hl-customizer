@@ -248,14 +248,6 @@ export function initEventListeners() {
             const restored = !!selectionData?.restored;
             const runtimeData = selectionData?.runtimeData;
 
-            console.log('[UI-Core] Model switch to:', modelCode, {
-                restored,
-                modelId: runtimeData?.modelId,
-                modelSeries: runtimeData?.modelSeries,
-                basePrice: runtimeData?.basePrice,
-                shockmountState: runtimeData?.shockmountState
-            });
-
             syncToggles();
 
             // Сразу обновляем UI чтобы цены применились
