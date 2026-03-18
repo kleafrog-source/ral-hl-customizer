@@ -244,9 +244,7 @@ export function initEventListeners() {
             document.querySelectorAll('.variant-button').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
 
-            const selectionData = prepareModelSelection(modelCode, { restoreSavedState: true });
-            const restored = !!selectionData?.restored;
-            const runtimeData = selectionData?.runtimeData;
+            prepareModelSelection(modelCode, { restoreSavedState: true });
 
             syncToggles();
 
