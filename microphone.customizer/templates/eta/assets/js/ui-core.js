@@ -158,12 +158,12 @@ function applyOptionFromElement(element) {
     // Handle custom logo special case
     const isCustomLogo = element.dataset.isCustomLogo === '1';
     if (section === 'logo' && isCustomLogo) {
-        const batch = stateManager.startBatch();
-        batch('logo.useCustom', true);
-        batch('logo.variantCode', element.dataset.variantCode || '');
-        batch('logo.variantName', element.querySelector('.option-name')?.textContent?.trim() || '');
-        batch('logo.price', parseInt(element.dataset.price || '0', 10));
-        stateManager.endBatch();
+        stateManager.batch((batch) => {
+            batch('logo.useCustom', true);
+            batch('logo.variantCode', element.dataset.variantCode || '');
+            batch('logo.variantName', element.querySelector('.option-name')?.textContent?.trim() || '');
+            batch('logo.price', parseInt(element.dataset.price || '0', 10));
+        });
         
         updateSVG();
         updateLogoSVG();
@@ -175,7 +175,6 @@ function applyOptionFromElement(element) {
     const colorValue = element.dataset.ralRgb || null;
     const colorName = element.dataset.ralName || null;
 
-    const batch = stateManager.startBatch();
     const variantCode = element.dataset.variantCode || '';
     const variantName = element.dataset.variantName
         || element.dataset.ralName
@@ -184,20 +183,21 @@ function applyOptionFromElement(element) {
     const ralCode = element.dataset.ral || element.dataset.ralCode || (isRal ? variantCode : null);
     const price = parseInt(element.dataset.price || '0', 10);
 
-    batch(`${section}.variantCode`, variantCode);
-    batch(`${section}.variant`, variantCode);
-    batch(`${section}.variantName`, variantName);
-    batch(`${section}.isRal`, isRal);
-    batch(`${section}.color`, ralCode);
-    batch(`${section}.colorValue`, colorValue);
-    batch(`${section}.colorName`, colorName ? `RAL ${colorName}` : null);
-    batch(`${section}.modelId`, parseInt(element.dataset.modelId || '0', 10));
-    batch(`${section}.svgTargetMode`, element.dataset.svgTargetMode || null);
-    batch(`${section}.svgLayerGroup`, element.dataset.svgLayerGroup || null);
-    batch(`${section}.svgFilterId`, element.dataset.svgFilterId || null);
-    batch(`${section}.svgSpecialKey`, element.dataset.svgSpecialKey || null);
-    batch(`${section}.price`, price);
-    stateManager.endBatch();
+    stateManager.batch((batch) => {
+        batch(`${section}.variantCode`, variantCode);
+        batch(`${section}.variant`, variantCode);
+        batch(`${section}.variantName`, variantName);
+        batch(`${section}.isRal`, isRal);
+        batch(`${section}.color`, ralCode);
+        batch(`${section}.colorValue`, colorValue);
+        batch(`${section}.colorName`, colorName ? `RAL ${colorName}` : null);
+        batch(`${section}.modelId`, parseInt(element.dataset.modelId || '0', 10));
+        batch(`${section}.svgTargetMode`, element.dataset.svgTargetMode || null);
+        batch(`${section}.svgLayerGroup`, element.dataset.svgLayerGroup || null);
+        batch(`${section}.svgFilterId`, element.dataset.svgFilterId || null);
+        batch(`${section}.svgSpecialKey`, element.dataset.svgSpecialKey || null);
+        batch(`${section}.price`, price);
+    });
 
     if (section === 'logobg') {
         stateManager.set('logo.bgColor', ralCode || null);

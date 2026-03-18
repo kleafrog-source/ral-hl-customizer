@@ -12,6 +12,14 @@ const WoodCase = {
     currentMatrix: null,
     timer: null,
 
+    updateCaseState(updates) {
+        stateManager.batch((batch) => {
+            Object.entries(updates).forEach(([path, value]) => {
+                batch(`case.${path}`, value);
+            });
+        });
+    },
+
     init() {
         Object.keys(CASE_GEOMETRY.cases).forEach(k => { this.history[k] = { x: 0, y: 0, scale: 0.5 }; });
         this.setupNativeInteractions();
@@ -197,8 +205,10 @@ const WoodCase = {
             const loadHandler = () => {
                 this.applyStartConfig(this.currentCase);
                 this.render();
-                stateManager.set('case.variant', 'custom');
-                stateManager.set('case.customLogo', this.userImgSrc);
+                this.updateCaseState({
+                    variant: 'custom',
+                    customLogo: this.userImgSrc
+                });
                 
                 if (woodCaseLoader) woodCaseLoader.style.display = 'none';
                 showAppNotification('Изображение для футляра успешно загружено', 'success');
@@ -341,10 +351,12 @@ const WoodCase = {
             container.style.transform = `translate(${state.x}px, ${state.y}px) scale(${state.scale})`;
         }
 
-        stateManager.set('case.logoTransform', { x: state.x, y: state.y, scale: state.scale });
         const pxPerMM = this.getPixelsPerMM(this.currentCase);
         const width_mm = Math.round((bW * state.scale) / pxPerMM);
-        stateManager.set('case.logoWidthMM', width_mm);
+        this.updateCaseState({
+            logoTransform: { x: state.x, y: state.y, scale: state.scale },
+            logoWidthMM: width_mm
+        });
 
         this.drawRulers();
     },
@@ -526,7 +538,9 @@ const WoodCase = {
         if (leftInput && document.activeElement !== leftInput) leftInput.value = left_mm;
         if (widthInput && document.activeElement !== widthInput) widthInput.value = Math.round(cW / pxPerMM);
 
-        stateManager.set('case.logoOffsetMM', { top: top_mm, left: left_mm });
+        this.updateCaseState({
+            logoOffsetMM: { top: top_mm, left: left_mm }
+        });
 
         const sCorners = [{x:iTLx,y:iTLy},{x:iTLx+cW,y:iTLy},{x:iTLx+cW,y:iTLy+cH},{x:iTLx,y:iTLy+cH}].map(p => this.projectPoint(p.x, p.y, this.currentMatrix));
         const pTL = sCorners[0], pTR = sCorners[1], pBL = sCorners[3];
@@ -606,9 +620,11 @@ const WoodCase = {
             caseFileInput.value = '';
         }
 
-        stateManager.set('case.variant', 'standard');
-        stateManager.set('case.customLogo', null);
-        stateManager.set('case.logoWidthMM', 0);
+        this.updateCaseState({
+            variant: 'standard',
+            customLogo: null,
+            logoWidthMM: 0
+        });
     }
 };
 
