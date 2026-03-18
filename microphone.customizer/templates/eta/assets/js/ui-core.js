@@ -12,6 +12,17 @@ import { sendOrder } from './services/report.js';
 import { validateForm } from './services/validation.js';
 import { prepareModelSelection } from './modules/model-selection.js';
 
+function syncShockmountVisibility(delay = false) {
+    if (!delay) {
+        updateShockmountVisibility();
+        return;
+    }
+
+    setTimeout(() => {
+        updateShockmountVisibility();
+    }, 50);
+}
+
 export function applyModelSelectionUI(modelCode, options = {}) {
     const {
         syncWoodCase = false,
@@ -27,14 +38,7 @@ export function applyModelSelectionUI(modelCode, options = {}) {
     updateSVG();
     refreshShockmountUI(stateManager.get());
     updateMicVariant(modelCode);
-
-    if (delayShockmountVisibility) {
-        setTimeout(() => {
-            updateShockmountVisibility();
-        }, 50);
-    } else {
-        updateShockmountVisibility();
-    }
+    syncShockmountVisibility(delayShockmountVisibility);
 
     if (syncWoodCase && window.WoodCase) {
         window.WoodCase.setCase(modelCode);
