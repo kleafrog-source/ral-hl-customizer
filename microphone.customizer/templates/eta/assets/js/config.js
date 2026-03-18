@@ -46,6 +46,14 @@ export const variantNames = {
 };
 
 // Функция для получения базового пути к изображениям
+function getCustomizerData() {
+    return window.CUSTOMIZER_DATA || null;
+}
+
+function getCustomizerOptions() {
+    return getCustomizerData()?.options || null;
+}
+
 function getAssetsBasePath() {
     // Используем глобальную переменную из template.php
     if (window.CUSTOMIZER_ASSETS_PATH) {
@@ -57,19 +65,21 @@ function getAssetsBasePath() {
 
 // Утилиты для работы с данными из Bitrix HighLoad блоков
 export function getModelData(modelCode) {
-    if (!window.CUSTOMIZER_DATA?.modelsByCode) {
+    const data = getCustomizerData();
+    if (!data?.modelsByCode) {
         console.warn('CUSTOMIZER_DATA.modelsByCode not available');
         return null;
     }
-    return window.CUSTOMIZER_DATA.modelsByCode[modelCode] || null;
+    return data.modelsByCode[modelCode] || null;
 }
 
 export function getAllModels() {
-    if (!window.CUSTOMIZER_DATA?.models) {
+    const data = getCustomizerData();
+    if (!data?.models) {
         console.warn('CUSTOMIZER_DATA.models not available');
         return {};
     }
-    return window.CUSTOMIZER_DATA.models;
+    return data.models;
 }
 
 export function getModelCodes() {
