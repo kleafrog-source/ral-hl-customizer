@@ -1,4 +1,41 @@
-export const CAMERA_PRESETS = {
+import { CAMERA_CAPTURE_OVERRIDES } from './camera-capture-overrides.js';
+
+function mergeLayerState(baseLayer = {}, overrideLayer = {}) {
+    return {
+        ...baseLayer,
+        ...overrideLayer
+    };
+}
+
+function mergeViewState(baseView = {}, overrideView = {}) {
+    return {
+        microphone: mergeLayerState(baseView.microphone, overrideView.microphone),
+        shockmount: mergeLayerState(baseView.shockmount, overrideView.shockmount),
+        case: mergeLayerState(baseView.case, overrideView.case)
+    };
+}
+
+function mergePresetStates(basePreset = {}, overridePreset = {}) {
+    const merged = { ...basePreset };
+
+    Object.entries(overridePreset).forEach(([viewKey, overrideView]) => {
+        merged[viewKey] = mergeViewState(basePreset[viewKey], overrideView);
+    });
+
+    return merged;
+}
+
+function buildCameraPresets(basePresets, overridePresets) {
+    const mergedPresets = { ...basePresets };
+
+    Object.entries(overridePresets).forEach(([presetKey, overridePreset]) => {
+        mergedPresets[presetKey] = mergePresetStates(basePresets[presetKey], overridePreset);
+    });
+
+    return Object.freeze(mergedPresets);
+}
+
+export const BASE_CAMERA_PRESETS = {
     '017-TUBE': {
         'global-view': {
             microphone: { transform: 'translateX(78%) translateY(8%) scale(0.78)', opacity: 1, duration: 1000, easing: 'easeInOutQuad' },
@@ -162,3 +199,5 @@ export const CAMERA_PRESETS = {
         }
     }
 };
+
+export const CAMERA_PRESETS = buildCameraPresets(BASE_CAMERA_PRESETS, CAMERA_CAPTURE_OVERRIDES);
