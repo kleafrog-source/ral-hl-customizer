@@ -48,6 +48,46 @@ function mapOptionForSection(option) {
     };
 }
 
+function buildInitialHlData(data) {
+    return {
+        ralColors: data.ralColors || {},
+        models: data.models || {},
+        modelsByCode: data.modelsByCode || {},
+        options: data.options || {},
+        prices: data.prices || {},
+        viewTypeMap: data.viewTypeMap || {},
+        currentModelId: data.currentModelId,
+        currentModelCode: data.currentModelCode,
+        currentModelOptions: data.currentModelOptions || {},
+        liquidToggles: data.liquidToggles || {}
+    };
+}
+
+function initializeSectionStates(currentModelOptions) {
+    stateManager.batch((batch) => {
+        Object.keys(currentModelOptions || {}).forEach((section) => {
+            const firstOption = currentModelOptions[section]?.[0];
+            if (!firstOption) {
+                return;
+            }
+
+            batch(section, mapOptionToState(firstOption));
+        });
+    });
+}
+
+function syncInitialLogoBackgroundState() {
+    const logobgState = stateManager.get('logobg');
+    if (!logobgState) {
+        return;
+    }
+
+    stateManager.batch((batch) => {
+        batch('logo.bgColor', logobgState.color || null);
+        batch('logo.bgColorValue', logobgState.colorValue || null);
+    });
+}
+
 export function buildCurrentModelOptions(modelCode) {
     const data = window.CUSTOMIZER_DATA || {};
     const model = data.modelsByCode?.[modelCode];
@@ -139,18 +179,7 @@ export function initHLDataManager() {
     debugLog('[HL Data Manager] CUSTOMIZER_DATA:', data);
     debugLog('[HL Data Manager] modelsByCode:', data.modelsByCode);
 
-    stateManager.set('hlData', {
-        ralColors: data.ralColors || {},
-        models: data.models || {},
-        modelsByCode: data.modelsByCode || {},
-        options: data.options || {},
-        prices: data.prices || {},
-        viewTypeMap: data.viewTypeMap || {},
-        currentModelId: data.currentModelId,
-        currentModelCode: data.currentModelCode,
-        currentModelOptions: data.currentModelOptions || {},
-        liquidToggles: data.liquidToggles || {}
-    });
+    stateManager.set('hlData', buildInitialHlData(data));
 
     const currentModel = data.modelsByCode?.[data.currentModelCode] || null;
     debugLog('[HL Data Manager] Current model:', currentModel);
@@ -164,26 +193,13 @@ export function initHLDataManager() {
         batch('defaultShockmountOption', currentModel?.UF_DEFAULT_SHOCKMOUNT_OPTION || null);
     });
 
-    syncCurrentModelOptionData(data.currentModelCode || null);
+    const { currentModelOptions } = syncCurrentModelOptionData(data.currentModelCode || null);
 
-    // Initialize options for each section based on current model options
-    const sectionOptions = stateManager.get('hlData')?.currentModelOptions || {};
-    Object.keys(sectionOptions).forEach(section => {
-        const firstOption = sectionOptions[section]?.[0];
-        if (!firstOption) return;
-        stateManager.set(section, mapOptionToState(firstOption));
-    });
+    initializeSectionStates(currentModelOptions);
 
-    const logobgState = stateManager.get('logobg');
-    if (logobgState) {
-        stateManager.batch((batch) => {
-            batch('logo.bgColor', logobgState.color || null);
-            batch('logo.bgColorValue', logobgState.colorValue || null);
-        });
-    }
+    syncInitialLogoBackgroundState();
 
     // Initialize toggles - НЕ выполняем инициализацию shockmount здесь, так как она делается в main.js
-    const toggleData = data.liquidToggles || {};
     
     // НЕ переопределяем shockmount состояние - оно уже установлено в main.js
     // Это позволяет избежать конфликта инициализации
