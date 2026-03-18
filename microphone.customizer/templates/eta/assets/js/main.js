@@ -1,11 +1,10 @@
-import { initEventListeners, updateUI } from './ui-core.js';
+import { applyModelSelectionUI, initEventListeners, updateUI } from './ui-core.js';
 import { initHLDataManager } from './modules/hl-data-manager.js';
 import { initShockmount, refreshShockmountUI } from './modules/shockmount-new.js';
-import { syncToggles } from './modules/toggles.js';
 import { loadSVG, updateSVG } from './engine.js';
 import { initializeWoodCase } from './modules/wood-case.js';
 import { init as initLogo } from './modules/logo.js';
-import { initCameraEffect, updateMicVariant } from './modules/camera-effect.js';
+import { initCameraEffect } from './modules/camera-effect.js';
 import { stateManager } from './core/state.js';
 import { initDebugHelper } from './debug/ui-debug-helper.js';
 import { initValidation } from './services/validation.js';
@@ -48,9 +47,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 return;
             }
 
-            syncToggles();
-            updateMicVariant(currentModelCode);
-            updateUI();
+            applyModelSelectionUI(currentModelCode);
         }, 100);
     } else {
         updateUI();

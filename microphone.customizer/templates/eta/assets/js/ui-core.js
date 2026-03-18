@@ -12,6 +12,35 @@ import { sendOrder } from './services/report.js';
 import { validateForm } from './services/validation.js';
 import { prepareModelSelection } from './modules/model-selection.js';
 
+export function applyModelSelectionUI(modelCode, options = {}) {
+    const {
+        syncWoodCase = false,
+        delayShockmountVisibility = false
+    } = options;
+
+    if (!modelCode) {
+        return;
+    }
+
+    syncToggles();
+    updateUI();
+    updateSVG();
+    refreshShockmountUI(stateManager.get());
+    updateMicVariant(modelCode);
+
+    if (delayShockmountVisibility) {
+        setTimeout(() => {
+            updateShockmountVisibility();
+        }, 50);
+    } else {
+        updateShockmountVisibility();
+    }
+
+    if (syncWoodCase && window.WoodCase) {
+        window.WoodCase.setCase(modelCode);
+    }
+}
+
 export function updateUI() {
     // Update MALFA logo options visibility based on current model
     updateMalfaLogoOptionsVisibility();
@@ -246,24 +275,17 @@ export function initEventListeners() {
 
             prepareModelSelection(modelCode, { restoreSavedState: true });
 
-            syncToggles();
+            applyModelSelectionUI(modelCode, {
+                syncWoodCase: true,
+                delayShockmountVisibility: true
+            });
 
             // Сразу обновляем UI чтобы цены применились
-            updateUI();
 
             // Обновляем SVG превью
-            updateSVG();
-            refreshShockmountUI(stateManager.get());
             
             // Дополнительное обновление видимости меню после всех изменений
-            setTimeout(() => {
-                updateShockmountVisibility();
-            }, 50);
-            updateMicVariant(modelCode);
 
-            if (window.WoodCase) {
-                window.WoodCase.setCase(modelCode);
-            }
         });
     });
 }
