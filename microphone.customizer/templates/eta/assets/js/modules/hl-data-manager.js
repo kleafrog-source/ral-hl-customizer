@@ -156,11 +156,13 @@ export function initHLDataManager() {
     debugLog('[HL Data Manager] Current model:', currentModel);
     debugLog('[HL Data Manager] MODEL_SERIES:', currentModel?.MODEL_SERIES);
     debugLog('[HL Data Manager] DEFAULT_SHOCKMOUNT_OPTION:', currentModel?.UF_DEFAULT_SHOCKMOUNT_OPTION);
-    stateManager.set('currentModelCode', data.currentModelCode || null);
-    stateManager.set('currentModelId', data.currentModelId || null);
-    stateManager.set('modelSeries', currentModel?.MODEL_SERIES || null);
-    stateManager.set('basePrice', currentModel?.BASE_PRICE || 0);
-    stateManager.set('defaultShockmountOption', currentModel?.UF_DEFAULT_SHOCKMOUNT_OPTION || null);
+    stateManager.batch((batch) => {
+        batch('currentModelCode', data.currentModelCode || null);
+        batch('currentModelId', data.currentModelId || null);
+        batch('modelSeries', currentModel?.MODEL_SERIES || null);
+        batch('basePrice', currentModel?.BASE_PRICE || 0);
+        batch('defaultShockmountOption', currentModel?.UF_DEFAULT_SHOCKMOUNT_OPTION || null);
+    });
 
     syncCurrentModelOptionData(data.currentModelCode || null);
 
@@ -174,8 +176,10 @@ export function initHLDataManager() {
 
     const logobgState = stateManager.get('logobg');
     if (logobgState) {
-        stateManager.set('logo.bgColor', logobgState.color || null);
-        stateManager.set('logo.bgColorValue', logobgState.colorValue || null);
+        stateManager.batch((batch) => {
+            batch('logo.bgColor', logobgState.color || null);
+            batch('logo.bgColorValue', logobgState.colorValue || null);
+        });
     }
 
     // Initialize toggles - НЕ выполняем инициализацию shockmount здесь, так как она делается в main.js

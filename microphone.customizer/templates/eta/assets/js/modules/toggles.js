@@ -68,7 +68,9 @@ export function initToggles() {
     if (engravingToggle) {
         engravingToggle.addEventListener('change', () => {
             const enabled = engravingToggle.checked;
-            stateManager.set('case.laserEngravingEnabled', enabled);
+            stateManager.batch((batch) => {
+                batch('case.laserEngravingEnabled', enabled);
+            });
             const dataSection = document.getElementById('laser-engraving-data');
             if (dataSection) dataSection.style.display = enabled ? 'block' : 'none';
             updateUI();
@@ -79,7 +81,9 @@ export function initToggles() {
     if (shockmountToggle) {
         shockmountToggle.addEventListener('change', () => {
             const enabled = shockmountToggle.checked;
-            stateManager.set('shockmount.enabled', enabled);
+            stateManager.batch((batch) => {
+                batch('shockmount.enabled', enabled);
+            });
             syncShockmountOptionState(enabled);
             updateMicVariant(stateManager.get('currentModelCode'));
 
