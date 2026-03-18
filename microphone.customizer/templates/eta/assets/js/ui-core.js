@@ -6,13 +6,11 @@ import { updateSectionLayers } from './modules/appearance-new.js';
 import { updateLogoSVG, updateMalfaLogoOptionsVisibility } from './modules/logo.js';
 import { refreshShockmountUI, updateShockmountVisibility } from './modules/shockmount-new.js';
 import { syncToggles, initToggles } from './modules/toggles.js';
-import { applyModelDefaults } from './modules/model-defaults.js';
 import { calculateTotal, getBreakdown, formatPrice, debugPrices } from './modules/price-calculator.js';
-import { syncCurrentModelOptionData } from './modules/hl-data-manager.js';
 import { switchLayer, updateMicVariant } from './modules/camera-effect.js';
-import { applyModelRuntimeState } from './modules/model-runtime.js';
 import { sendOrder } from './services/report.js';
 import { validateForm } from './services/validation.js';
+import { prepareModelSelection } from './modules/model-selection.js';
 
 export function updateUI() {
     // Update MALFA logo options visibility based on current model
@@ -246,12 +244,9 @@ export function initEventListeners() {
             document.querySelectorAll('.variant-button').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
 
-            syncCurrentModelOptionData(modelCode);
-
-            // Restore any saved per-model customization before applying capabilities.
-            const restored = stateManager.restoreModelState(modelCode);
-            // Normalize model-specific runtime state in one place.
-            const runtimeData = applyModelRuntimeState(modelCode, { preserveShockmountSelection: restored });
+            const selectionData = prepareModelSelection(modelCode, { restoreSavedState: true });
+            const restored = !!selectionData?.restored;
+            const runtimeData = selectionData?.runtimeData;
 
             console.log('[UI-Core] Model switch to:', modelCode, {
                 restored,
@@ -260,10 +255,6 @@ export function initEventListeners() {
                 basePrice: runtimeData?.basePrice,
                 shockmountState: runtimeData?.shockmountState
             });
-
-            if (!restored) {
-                applyModelDefaults(modelCode);
-            }
 
             syncToggles();
 

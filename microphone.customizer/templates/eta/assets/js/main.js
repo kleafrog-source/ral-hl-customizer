@@ -6,11 +6,10 @@ import { loadSVG, updateSVG } from './engine.js';
 import { initializeWoodCase } from './modules/wood-case.js';
 import { init as initLogo } from './modules/logo.js';
 import { initCameraEffect, updateMicVariant } from './modules/camera-effect.js';
-import { applyModelDefaults } from './modules/model-defaults.js';
 import { stateManager } from './core/state.js';
-import { applyModelRuntimeState } from './modules/model-runtime.js';
 import { initDebugHelper } from './debug/ui-debug-helper.js';
 import { initValidation } from './services/validation.js';
+import { prepareModelSelection } from './modules/model-selection.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
     const appRoot = document.getElementById('customizer-app-root');
@@ -41,7 +40,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     const currentModelCode = stateManager.get('currentModelCode') || window.CUSTOMIZER_DATA?.currentModelCode;
     if (currentModelCode) {
         setTimeout(() => {
-            const runtimeData = applyModelRuntimeState(currentModelCode);
+            const selectionData = prepareModelSelection(currentModelCode);
+            const runtimeData = selectionData?.runtimeData;
             console.log('[Main.js] Model runtime data:', runtimeData);
 
             if (!runtimeData) {
@@ -50,7 +50,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
 
             syncToggles();
-            applyModelDefaults(currentModelCode);
             updateMicVariant(currentModelCode);
             updateUI();
         }, 100);
