@@ -28,19 +28,33 @@ function svgToBlob(svgString) {
     }
 }
 
-export async function sendOrder(clientData) {
-    const bitrixForm = document.querySelector('form[name="SIMPLE_FORM_1"]');
-    if (!bitrixForm) {
-        console.error('Bitrix form not found');
+function buildBlobFromData(rawData) {
+    if (typeof rawData !== 'string') {
+        return null;
+    }
+
+    if (rawData.includes(';base64,')) {
+        return base64ToBlob(rawData);
+    }
+
+    if (rawData.trim().startsWith('<svg')) {
+        return svgToBlob(rawData);
+    }
+
+    return null;
+}
+
+function appendFileField(formData, fieldName, blob, fileBaseName) {
+    if (!blob) {
         return;
     }
 
-    const formData = new FormData(bitrixForm);
-    const currentState = stateManager.get();
-    const caseState = currentState.case || {};
-    const caseOffset = caseState.logoOffsetMM || { top: 0, left: 0 };
-    const woodcaseDesk = `Ш:${caseState.logoWidthMM || 0}мм, Сверху:${caseOffset.top || 0}мм, Слева:${caseOffset.left || 0}мм`;
+    const extension = blob.type.includes('svg') ? '.svg' : '.png';
+    formData.delete(fieldName);
+    formData.append(fieldName, blob, `${fileBaseName}${extension}`);
+}
 
+function setClientFields(formData, clientData) {
     formData.set('form_text_24', clientData.name || '');
     formData.set('form_text_25', clientData.lastname || '');
     formData.set('form_text_26', clientData.city || '');
@@ -48,7 +62,9 @@ export async function sendOrder(clientData) {
     formData.set('form_text_28', clientData.email || '');
     formData.set('form_text_29', clientData.phone || '');
     formData.set('form_text_30', clientData.comment || '');
+}
 
+function setConfigurationFields(formData, currentState, woodcaseDesk) {
     formData.set('form_text_31', currentState.currentModelCode || '');
     formData.set('form_text_32', currentState.spheres?.variantName || currentState.spheres?.variant || '');
     formData.set('form_text_33', currentState.body?.variantName || currentState.body?.variant || '');
@@ -62,6 +78,23 @@ export async function sendOrder(clientData) {
             : 'Disabled'
     );
     formData.set('form_text_38', currentState.shockmountPins?.variantName || currentState.shockmountPins?.variant || '');
+}
+
+export async function sendOrder(clientData) {
+    const bitrixForm = document.querySelector('form[name="SIMPLE_FORM_1"]');
+    if (!bitrixForm) {
+        console.error('Bitrix form not found');
+        return;
+    }
+
+    const formData = new FormData(bitrixForm);
+    const currentState = stateManager.get();
+    const caseState = currentState.case || {};
+    const caseOffset = caseState.logoOffsetMM || { top: 0, left: 0 };
+    const woodcaseDesk = `Ш:${caseState.logoWidthMM || 0}мм, Сверху:${caseOffset.top || 0}мм, Слева:${caseOffset.left || 0}мм`;
+
+    setClientFields(formData, clientData);
+    setConfigurationFields(formData, currentState, woodcaseDesk);
 
     const totalEl = document.getElementById('total-price');
     const totalPriceText = totalEl ? totalEl.textContent : '0';
@@ -85,42 +118,17 @@ export async function sendOrder(clientData) {
     const svgElement = document.getElementById('microphone-svg-container')?.innerHTML;
     if (svgElement) {
         const previewBlob = svgToBlob(svgElement);
-        if (previewBlob) {
-            formData.delete('form_file_47');
-            formData.append('form_file_47', previewBlob, 'preview.svg');
-        }
+        appendFileField(formData, 'form_file_47', previewBlob, 'preview');
     }
 
     if (currentState.case?.customLogo) {
-        let caseBlob = null;
-        const caseData = currentState.case.customLogo;
-
-        if (typeof caseData === 'string' && caseData.includes(';base64,')) {
-            caseBlob = base64ToBlob(caseData);
-        } else if (typeof caseData === 'string' && caseData.trim().startsWith('<svg')) {
-            caseBlob = svgToBlob(caseData);
-        }
-
-        if (caseBlob) {
-            formData.delete('form_file_43');
-            formData.append('form_file_43', caseBlob, `case_logo${caseBlob.type.includes('svg') ? '.svg' : '.png'}`);
-        }
+        const caseBlob = buildBlobFromData(currentState.case.customLogo);
+        appendFileField(formData, 'form_file_43', caseBlob, 'case_logo');
     }
 
     if (currentState.logo?.customLogoData) {
-        let logoBlob = null;
-        const logoData = currentState.logo.customLogoData;
-
-        if (typeof logoData === 'string' && logoData.includes(';base64,')) {
-            logoBlob = base64ToBlob(logoData);
-        } else if (typeof logoData === 'string' && logoData.trim().startsWith('<svg')) {
-            logoBlob = svgToBlob(logoData);
-        }
-
-        if (logoBlob) {
-            formData.delete('form_file_44');
-            formData.append('form_file_44', logoBlob, `mic_logo${logoBlob.type.includes('svg') ? '.svg' : '.png'}`);
-        }
+        const logoBlob = buildBlobFromData(currentState.logo.customLogoData);
+        appendFileField(formData, 'form_file_44', logoBlob, 'mic_logo');
     }
 
     try {
