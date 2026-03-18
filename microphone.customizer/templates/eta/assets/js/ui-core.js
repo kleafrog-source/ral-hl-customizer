@@ -4,7 +4,7 @@ import { stateManager } from './core/state.js';
 import { updateSVG } from './engine.js';
 import { updateSectionLayers } from './modules/appearance-new.js';
 import { updateLogoSVG, updateMalfaLogoOptionsVisibility } from './modules/logo.js';
-import { updateShockmountLayers, updateShockmountVisibility, updateShockmountPreview, updateShockmountPinsPreview } from './modules/shockmount-new.js';
+import { refreshShockmountUI, updateShockmountVisibility } from './modules/shockmount-new.js';
 import { syncToggles, initToggles } from './modules/toggles.js';
 import { applyModelDefaults } from './modules/model-defaults.js';
 import { calculateTotal, getBreakdown, formatPrice, debugPrices } from './modules/price-calculator.js';
@@ -185,9 +185,7 @@ function applyOptionFromElement(element) {
         updateSectionLayers('logo', stateManager.get().logo);
     }
     
-    updateShockmountLayers(stateManager.get());
-    updateShockmountPreview();
-    updateShockmountPinsPreview();
+    refreshShockmountUI(stateManager.get());
     updateUI();
 }
 
@@ -322,10 +320,7 @@ export function initEventListeners() {
 
             // Обновляем SVG превью
             updateSVG();
-            updateShockmountVisibility();
-            updateShockmountLayers(stateManager.get());
-            updateShockmountPreview();
-            updateShockmountPinsPreview();
+            refreshShockmountUI(stateManager.get());
             
             // Дополнительное обновление видимости меню после всех изменений
             setTimeout(() => {

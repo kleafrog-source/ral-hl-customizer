@@ -3,7 +3,7 @@
 import { stateManager } from '../core/state.js';
 import { buildShockmountState, getShockmountOptionVariantCode } from '../config/model-capabilities.js';
 import { updateUI } from '../ui-core.js';
-import { updateShockmountVisibility, updateShockmountLayers, updateShockmountPreview, updateShockmountPinsPreview } from './shockmount-new.js';
+import { refreshShockmountUI, updateShockmountVisibility } from './shockmount-new.js';
 import { updateSVG } from '../engine.js';
 import { updateLogoSVG } from './logo.js';
 import { updateMicVariant } from './camera-effect.js';
@@ -85,10 +85,7 @@ export function initToggles() {
 
             // Give state a moment to settle before the UI refresh.
             setTimeout(() => {
-                updateShockmountVisibility();
-                updateShockmountLayers(stateManager.get());
-                updateShockmountPreview();
-                updateShockmountPinsPreview();
+                refreshShockmountUI(stateManager.get());
                 updateUI();
                 updateShockmountVisibility();
             }, 10);

@@ -53,15 +53,16 @@ export function initShockmount() {
     
     // Подписываемся на изменения shockmount state для обновления UI
     stateManager.subscribeSection('shockmount', () => {
-        updateShockmountVisibility();
-        updateShockmountLayers(stateManager.get());
-        updateShockmountPreview();
-        updateShockmountPinsPreview();
+        refreshShockmountUI();
     });
     
     // Первоначальное обновление
+    refreshShockmountUI();
+}
+
+export function refreshShockmountUI(currentState = null) {
     updateShockmountVisibility();
-    updateShockmountLayers(stateManager.get());
+    updateShockmountLayers(currentState || stateManager.get());
     updateShockmountPreview();
     updateShockmountPinsPreview();
 }
@@ -279,8 +280,5 @@ export function toggleShockmount() {
         batch('shockmount.enabled', nextEnabled);
     });
 
-    updateShockmountVisibility();
-    updateShockmountLayers(stateManager.get());
-    updateShockmountPreview();
-    updateShockmountPinsPreview();
+    refreshShockmountUI();
 }
