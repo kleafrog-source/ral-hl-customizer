@@ -4,6 +4,10 @@ import { debugLog } from '../utils/debug.js';
 class EventRegistry {
     #listeners = [];
 
+    #isValidEventTarget(element) {
+        return !!element && typeof element.addEventListener === 'function';
+    }
+
     /**
      * Adds an event listener to an element and registers it for cleanup.
      * @param {EventTarget} element - The DOM element.
@@ -12,6 +16,11 @@ class EventRegistry {
      * @param {object} [options] - Optional event listener options.
      */
     add(element, event, handler, options) {
+        if (!this.#isValidEventTarget(element)) {
+            debugLog(`[EventRegistry] Skipping listener for invalid target: ${event}`);
+            return;
+        }
+
         element.addEventListener(event, handler, options);
         this.#listeners.push({ element, event, handler, options });
     }
@@ -26,7 +35,9 @@ class EventRegistry {
         
         debugLog(`[EventRegistry] Cleaning up ${this.#listeners.length} event listeners.`);
         this.#listeners.forEach(({ element, event, handler, options }) => {
-            element.removeEventListener(event, handler, options);
+            if (this.#isValidEventTarget(element)) {
+                element.removeEventListener(event, handler, options);
+            }
         });
         
         // Clear the registry
