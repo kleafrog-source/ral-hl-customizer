@@ -16,6 +16,40 @@ export function isMalfaLogo(state = null) {
     return logoVariant === 'malfasilver' || logoVariant === 'malfagold';
 }
 
+function setDisplayForIds(svg, ids, display) {
+    ids.forEach((id) => {
+        const element = svg.querySelector(`#${id}`);
+        if (element) {
+            element.style.display = display;
+        }
+    });
+}
+
+function bindLogoUploadArea(uploadArea) {
+    if (!uploadArea) {
+        return;
+    }
+
+    uploadArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadArea.classList.add('drag-over');
+    });
+
+    uploadArea.addEventListener('dragleave', (e) => {
+        e.preventDefault();
+        uploadArea.classList.remove('drag-over');
+    });
+
+    uploadArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadArea.classList.remove('drag-over');
+        const file = e.dataTransfer.files?.[0];
+        if (file) {
+            handleLogoFileUpload(file);
+        }
+    });
+}
+
 export function init() {
     // Убираем обработчик клика на всю область, чтобы избежать множественных вызовов
     // Клик обрабатывается через inline onclick в HTML
@@ -30,27 +64,7 @@ export function init() {
     }
     
     // Добавляем drag&drop для логотипа
-    const uploadArea = document.querySelector('#custom-logo-upload .upload-area');
-    if (uploadArea) {
-        uploadArea.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            uploadArea.classList.add('drag-over');
-        });
-        
-        uploadArea.addEventListener('dragleave', (e) => {
-            e.preventDefault();
-            uploadArea.classList.remove('drag-over');
-        });
-        
-        uploadArea.addEventListener('drop', (e) => {
-            e.preventDefault();
-            uploadArea.classList.remove('drag-over');
-            const file = e.dataTransfer.files?.[0];
-            if (file) {
-                handleLogoFileUpload(file);
-            }
-        });
-    }
+    bindLogoUploadArea(document.querySelector('#custom-logo-upload .upload-area'));
     
     // Добавляем обработчик для кнопки удаления кастомного логотипа
     const removeButton = document.getElementById('custom-logo-remove');
@@ -120,10 +134,11 @@ export function updateLogoSVG() {
     // Handle custom logo (единый для всех вариантов)
     if (state.logo.useCustom && state.logo.customLogoData) {
         // Скрываем все стандартные логотипы
-        ['logotype-gold', 'logo-bg-black', 'logo-bg-colorized', 'logo-bg-monochrome', 'logo-letters-and-frame', 'malfa-logo'].forEach(id => {
-            const el = svg.querySelector(`#${id}`);
-            if (el) el.style.display = 'none';
-        });
+        setDisplayForIds(
+            svg,
+            ['logotype-gold', 'logo-bg-black', 'logo-bg-colorized', 'logo-bg-monochrome', 'logo-letters-and-frame', 'malfa-logo'],
+            'none'
+        );
 
         // Создаем слой для кастомного логотипа
         const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
@@ -163,10 +178,11 @@ export function updateLogoSVG() {
         
         // Show standard logos for non-MALFA mics OR non-MALFA logos
         if (!malfaMic || !malfaLogoSelected) {
-            ['logotype-gold', 'logo-bg-black', 'logo-bg-colorized', 'logo-bg-monochrome', 'logo-letters-and-frame'].forEach(id => {
-                const el = svg.querySelector(`#${id}`);
-                if (el) el.style.display = 'inline';
-            });
+            setDisplayForIds(
+                svg,
+                ['logotype-gold', 'logo-bg-black', 'logo-bg-colorized', 'logo-bg-monochrome', 'logo-letters-and-frame'],
+                'inline'
+            );
 
             const letters = svg.querySelector('#logo-letters-and-frame');
             if (letters) letters.style.filter = (state.logo.variant === 'standard-silver') ? 'grayscale(1) brightness(1.5)' : 'none';
@@ -204,10 +220,11 @@ export function updateLogoSVG() {
     // We're here only if: MALFA mic + MALFA logo selected
     
     // Hide all standard logo elements
-    ['logotype-gold', 'logo-bg-black', 'logo-bg-colorized', 'logo-bg-monochrome', 'logo-letters-and-frame'].forEach(id => {
-        const el = svg.querySelector(`#${id}`);
-        if (el) el.style.display = 'none';
-    });
+    setDisplayForIds(
+        svg,
+        ['logotype-gold', 'logo-bg-black', 'logo-bg-colorized', 'logo-bg-monochrome', 'logo-letters-and-frame'],
+        'none'
+    );
     
     // Show MALFA logo
     if (malfaLogo) {
