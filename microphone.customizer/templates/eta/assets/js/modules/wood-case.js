@@ -12,7 +12,12 @@ const WoodCase = {
     history: {},
     currentMatrix: null,
     timer: null,
-    caseImageTimer: null,
+    resizeTimer: null,
+    caseImageCache: new Map(),
+    caseRequestId: 0,
+    caseBackgroundNodes: new Map(),
+    casePoolDevice: null,
+    visibleCaseId: null,
 
     updateCaseState(updates) {
         stateManager.batch((batch) => {
@@ -64,40 +69,192 @@ const WoodCase = {
         }
     },
 
-    updateCaseBackgroundImage(bg, nextHref, caseData) {
-        if (!bg || !nextHref) {
+    getCaseImageHref(caseId = this.currentCase, device = this.getDevice()) {
+        return CASE_IMAGES[caseId]?.[device] || null;
+    },
+
+    getCaseBackgroundLayer() {
+        return document.getElementById('wood-case-bg-layer');
+    },
+
+    getCaseBackgroundNode(caseId) {
+        return this.caseBackgroundNodes.get(caseId) || null;
+    },
+
+    syncCaseBackgroundFrame(node, caseId, device = this.getDevice()) {
+        const caseData = CASE_GEOMETRY.cases[caseId]?.[device];
+        if (!node || !caseData) {
             return;
         }
 
-        bg.style.transition = 'opacity 180ms ease';
-        bg.setAttribute('x', caseData.x);
-        bg.setAttribute('y', caseData.y);
-        bg.setAttribute('width', caseData.w);
-        bg.setAttribute('height', caseData.h);
+        node.setAttribute('x', caseData.x);
+        node.setAttribute('y', caseData.y);
+        node.setAttribute('width', caseData.w);
+        node.setAttribute('height', caseData.h);
+    },
 
-        const currentHref = bg.getAttribute('href');
-        if (!currentHref || currentHref === nextHref) {
-            bg.setAttribute('href', nextHref);
-            bg.style.opacity = '1';
+    hideAllCaseBackgrounds() {
+        this.caseBackgroundNodes.forEach((node) => {
+            node.style.opacity = '0';
+            node.style.visibility = 'hidden';
+        });
+        this.visibleCaseId = null;
+    },
+
+    showCaseBackground(caseId, device = this.getDevice()) {
+        const node = this.getCaseBackgroundNode(caseId);
+        if (!node) {
             return;
         }
 
-        clearTimeout(this.caseImageTimer);
-        bg.style.opacity = '0';
-        this.caseImageTimer = setTimeout(() => {
-            bg.setAttribute('href', nextHref);
-            bg.style.opacity = '1';
-        }, 90);
+        this.syncCaseBackgroundFrame(node, caseId, device);
+        this.hideAllCaseBackgrounds();
+        node.style.opacity = '1';
+        node.style.visibility = 'visible';
+        this.visibleCaseId = caseId;
+    },
+
+    preloadCaseImage(href) {
+        if (!href) {
+            return Promise.reject(new Error('WoodCase.preloadCaseImage: empty href'));
+        }
+
+        const cached = this.caseImageCache.get(href);
+        if (cached) {
+            return cached.promise;
+        }
+
+        const img = new Image();
+        img.decoding = 'async';
+        const entry = {
+            img,
+            loaded: false,
+            promise: null
+        };
+
+        entry.promise = new Promise((resolve, reject) => {
+            let settled = false;
+
+            const resolveImage = () => {
+                if (settled) {
+                    return;
+                }
+
+                settled = true;
+                entry.loaded = true;
+
+                if (typeof img.decode === 'function') {
+                    img.decode().catch(() => null).finally(() => resolve(img));
+                    return;
+                }
+
+                resolve(img);
+            };
+
+            img.onload = resolveImage;
+            img.onerror = () => {
+                if (settled) {
+                    return;
+                }
+
+                settled = true;
+                this.caseImageCache.delete(href);
+                reject(new Error(`Failed to preload case image: ${href}`));
+            };
+
+            img.src = href;
+
+            if (img.complete && img.naturalWidth > 0) {
+                resolveImage();
+            }
+        });
+
+        this.caseImageCache.set(href, entry);
+        return entry.promise;
+    },
+
+    isCaseImageReady(href) {
+        return !!this.caseImageCache.get(href)?.loaded;
+    },
+
+    primeCaseImagesForDevice(device = this.getDevice()) {
+        Object.keys(CASE_GEOMETRY.cases).forEach((caseId) => {
+            const href = this.getCaseImageHref(caseId, device);
+            if (!href) {
+                return;
+            }
+
+            this.preloadCaseImage(href).catch(() => {
+                debugWarn(`WoodCase.primeCaseImagesForDevice: failed to preload "${href}"`);
+            });
+        });
+    },
+
+    ensureCaseBackgroundPool(device = this.getDevice()) {
+        const layer = this.getCaseBackgroundLayer();
+        if (!layer) {
+            return;
+        }
+
+        const caseIds = Object.keys(CASE_GEOMETRY.cases);
+        const needsRebuild = this.casePoolDevice !== device || this.caseBackgroundNodes.size !== caseIds.length;
+
+        if (needsRebuild) {
+            layer.innerHTML = '';
+            this.caseBackgroundNodes = new Map();
+            this.casePoolDevice = device;
+            this.visibleCaseId = null;
+
+            caseIds.forEach((caseId) => {
+                const node = document.createElementNS('http://www.w3.org/2000/svg', 'image');
+                const href = this.getCaseImageHref(caseId, device);
+
+                node.dataset.caseId = caseId;
+                node.classList.add('wood-case-bg-node');
+                node.style.opacity = '0';
+                node.style.visibility = 'hidden';
+
+                if (href) {
+                    node.setAttribute('href', href);
+                }
+
+                this.syncCaseBackgroundFrame(node, caseId, device);
+                layer.appendChild(node);
+                this.caseBackgroundNodes.set(caseId, node);
+            });
+
+            this.primeCaseImagesForDevice(device);
+            return;
+        }
+
+        this.caseBackgroundNodes.forEach((node, caseId) => {
+            const href = this.getCaseImageHref(caseId, device);
+            this.syncCaseBackgroundFrame(node, caseId, device);
+
+            if (!href) {
+                node.removeAttribute('href');
+                node.style.opacity = '0';
+                node.style.visibility = 'hidden';
+                return;
+            }
+
+            if (node.getAttribute('href') !== href) {
+                node.setAttribute('href', href);
+                this.preloadCaseImage(href).catch(() => {
+                    debugWarn(`WoodCase.ensureCaseBackgroundPool: failed to preload "${href}"`);
+                });
+            }
+        });
     },
 
     init() {
         Object.keys(CASE_GEOMETRY.cases).forEach(k => { this.history[k] = { x: 0, y: 0, scale: 0.5 }; });
         this.setupNativeInteractions();
         this.setupRulerEvents();
-        window.addEventListener('resize', () => this.render());
-
-        const woodCaseLoader = document.getElementById('wood-case-loader');
-        if (woodCaseLoader) woodCaseLoader.remove();
+        window.addEventListener('resize', () => {
+            clearTimeout(this.resizeTimer);
+            this.resizeTimer = window.setTimeout(() => this.setCase(this.currentCase), 80);
+        });
 
         // Add null checks for elements that might not exist
         const caseFileInput = document.getElementById('case-file-input');
@@ -143,7 +300,7 @@ const WoodCase = {
         }
 
         this.setupManualInputs();
-        this.render();
+        this.setCase(this.currentCase);
         this.syncEditingState();
     },
 
@@ -205,21 +362,52 @@ const WoodCase = {
             debugWarn(`WoodCase.setCase: Invalid case ID "${caseId}"`);
             return;
         }
-        
-        const woodCaseLoader = document.getElementById('wood-case-loader');
-        if (woodCaseLoader) woodCaseLoader.style.display = 'block';
-        
+
         this.currentCase = caseId;
 
         if (this.userImgSrc && this.history[caseId].scale === 0.5 && this.history[caseId].x === 0) {
             this.applyStartConfig(caseId);
         }
-        this.render();
+        const device = this.getDevice();
+        const nextHref = this.getCaseImageHref(caseId, device);
+        const requestId = ++this.caseRequestId;
+
+        this.ensureCaseBackgroundPool(device);
+
+        if (!nextHref) {
+            this.hideAllCaseBackgrounds();
+            this.render({ syncBackground: false });
+            debugWarn(`WoodCase.setCase: Missing case image for "${caseId}" on "${device}"`);
+            return;
+        }
+
+        if (this.isCaseImageReady(nextHref)) {
+            this.showCaseBackground(caseId, device);
+            this.render({ syncBackground: false });
+            return;
+        }
+
+        this.hideAllCaseBackgrounds();
+        this.render({ syncBackground: false });
+
+        this.preloadCaseImage(nextHref)
+            .then(() => {
+                if (requestId !== this.caseRequestId || this.currentCase !== caseId) {
+                    return;
+                }
+
+                const freshDevice = this.getDevice();
+                this.ensureCaseBackgroundPool(freshDevice);
+                this.showCaseBackground(this.currentCase, freshDevice);
+            })
+            .catch(() => {
+                if (requestId !== this.caseRequestId) {
+                    return;
+                }
+
+                debugWarn(`WoodCase.setCase: Failed to load case image "${nextHref}"`);
+            });
         
-        // Debug логирование после установки
-        setTimeout(() => {
-            if (woodCaseLoader) woodCaseLoader.style.display = 'none';
-        }, 300);
     },
 
     handleUpload(e) {
@@ -246,11 +434,9 @@ const WoodCase = {
             return;
         }
         
-        const woodCaseLoader = document.getElementById('wood-case-loader');
         const caseClearBtn = document.getElementById('case-clear-btn');
         const casePositioningControls = document.getElementById('case-positioning-controls');
-        
-        if (woodCaseLoader) woodCaseLoader.style.display = 'block';
+
         if (caseClearBtn) caseClearBtn.style.display = 'block';
         if (casePositioningControls) casePositioningControls.style.display = 'block';
 
@@ -287,7 +473,6 @@ const WoodCase = {
                     customLogo: this.userImgSrc
                 });
                 
-                if (woodCaseLoader) woodCaseLoader.style.display = 'none';
                 showAppNotification('Изображение для футляра успешно загружено', 'success');
             };
 
@@ -333,7 +518,8 @@ const WoodCase = {
         return (maxX - minX) / CASE_GEOMETRY.cases[caseId].mm;
     },
 
-    render() {
+    render(options = {}) {
+        const { syncBackground = true } = options;
         const dev = this.getDevice();
         const res = CASE_GEOMETRY.res[dev];
         const caseData = CASE_GEOMETRY.cases[this.currentCase][dev];
@@ -349,9 +535,14 @@ const WoodCase = {
             workspace.style.transformOrigin = 'center center';
         }
 
-        const bg = document.getElementById('wood-case-bg');
-        if (bg) {
-            this.updateCaseBackgroundImage(bg, CASE_IMAGES[this.currentCase][dev], caseData);
+        this.ensureCaseBackgroundPool(dev);
+        if (syncBackground) {
+            const href = this.getCaseImageHref(this.currentCase, dev);
+            if (href && this.isCaseImageReady(href)) {
+                this.showCaseBackground(this.currentCase, dev);
+            } else {
+                this.hideAllCaseBackgrounds();
+            }
         }
 
         const fo = document.getElementById('wood-case-perspective-fo');
@@ -722,10 +913,10 @@ const WoodCase = {
     },
 
     setupRulerEvents() {
-        [document.getElementById('wood-case-logo-wrapper'), document.getElementById('wood-case-bg')].forEach(el => {
+        [document.getElementById('wood-case-logo-wrapper'), this.getCaseBackgroundLayer()].forEach(el => {
             if(el) {
                 el.addEventListener('click', () => this.showRulers());
-                el.addEventListener('mouseenter', () => this.showRulers());
+                el.addEventListener('mouseover', () => this.showRulers());
             }
         });
     },

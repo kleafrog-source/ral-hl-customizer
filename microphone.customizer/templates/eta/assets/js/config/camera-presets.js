@@ -48,7 +48,7 @@ export const BASE_CAMERA_PRESETS = {
             case: { transform: 'translateX(-18%) translateY(-10%) scale(0.96)', opacity: 1, duration: 1200, easing: 'easeOutCubic' }
         },
         'shockmount-active': {
-            microphone: { transform: 'translateX(20%) translateY(-2%) scale(0.9)', opacity: 1, duration: 1200, easing: 'easeOutCubic' },
+            microphone: { transform: 'translateX(20.00%) translateY(-17.00%) scale(1.15)', opacity: 1, duration: 1200, easing: 'easeOutCubic' },
             shockmount: { transform: 'translateX(96%) translateY(25%) scale(1.28)', opacity: 1, duration: 1200, easing: 'easeOutCubic' },
             case: { transform: 'translateX(6%) translateY(-18%) scale(1.08)', opacity: 1, duration: 1200, easing: 'easeOutCubic' }
         },

@@ -1,8 +1,4 @@
 /* New Case Preview Styles */
-#wood-case-loader {
- display: none !important;
-}
-
 .workspace {
  flex: 1;
  position: relative;
@@ -167,21 +163,6 @@
  display: block;
 }
 
-#wood-case-loader {
- position: absolute;
- top: 50%;
- left: 50%;
- transform: translate(-50%, -50%);
- color: var(--accent, #fff);
- font-family: "Pragmatica", serif;
- font-size: 16px;
- background: rgba(0, 0, 0, 0.8);
- padding: 10px 20px;
- border-radius: 4px;
- display: none;
- z-index: 200;
- pointer-events: none;
-}
 .info .highlight {
  color: var(--accent);
  font-weight: bold;

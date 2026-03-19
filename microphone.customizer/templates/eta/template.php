@@ -227,9 +227,6 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                         <div class="case-preview-container" id="case-preview-container" style=" width:100%; height:100%;">
                      
                             <div id="wood-case-workspace">
-                            <div class="loader" id="wood-case-loader">
-                            Загрузка...  
-                            </div>
                         <svg id="wood-case-svg" preserveAspectRatio="xMidYMid meet">
                             <defs>
                                 <filter id="shadow"><feDropShadow dx="0" dy="1" stdDeviation="2" flood-color="black" /></filter>
@@ -254,7 +251,7 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                                     <feGaussianBlur stdDeviation="0.4" in="burned"/>
                                 </filter>
                             </defs>
-                            <image id="wood-case-bg" x="0" y="0" />
+                            <g id="wood-case-bg-layer"></g>
                             <foreignObject id="wood-case-perspective-fo" x="0" y="0" width="100%" height="100%">
                                 <div id="wood-case-perspective-plane" xmlns="http://www.w3.org/1999/xhtml">
                                     <div id="wood-case-logo-wrapper">

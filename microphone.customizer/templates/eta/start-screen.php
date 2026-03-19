@@ -1,12 +1,4 @@
-  <? if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
-  $componentImagesBasePath = rtrim(($componentPath ?? '/local/components/custom/microphone.customizer'), '/') . '/images/custom/start';
-  $templateImagesBasePath = ($templateFolder ?? '') . '/assets/image/custom/start';
-  $componentImagesAbsolutePath = $_SERVER['DOCUMENT_ROOT'] . $componentImagesBasePath;
-  $startAssetsPath = is_dir($componentImagesAbsolutePath) ? $componentImagesBasePath : $templateImagesBasePath;
-  ?>
-  <?php if (!is_dir($componentImagesAbsolutePath)): ?>
-  <!-- TODO: move hero images into microphone.customizer/images/custom/start and remove the template-level fallback below -->
-  <?php endif; ?>
+  <? if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();?>
             <div class="start-screen-container">
     <!-- Hero Section -->
     <div class="start-screen-hero">
@@ -35,14 +27,14 @@
         </div>
       </div>
       <div class="start-screen-hero-image">
-        <img 
-          src="<?= htmlspecialchars($startAssetsPath) ?>/hero-mobile-360@1x.webp"
+       <img 
+          src="https://soyuzmicrophones.ru/image/custom/start/hero-mobile-360@1x.webp" 
           srcset="
-            <?= htmlspecialchars($startAssetsPath) ?>/hero-mobile-360@1x.webp 360w,
-            <?= htmlspecialchars($startAssetsPath) ?>/hero-mobile-360@2x.webp 720w,
-            <?= htmlspecialchars($startAssetsPath) ?>/hero-tablet-1024@1x.webp 1024w,
-            <?= htmlspecialchars($startAssetsPath) ?>/hero-pc-1920@1x.webp 1920w,
-            <?= htmlspecialchars($startAssetsPath) ?>/hero-pc-1920@2x.webp 3840w
+            https://soyuzmicrophones.ru/image/custom/start/hero-mobile-360@1x.webp 360w,
+            https://soyuzmicrophones.ru/image/custom/start/hero-mobile-360@2x.webp 720w,
+            https://soyuzmicrophones.ru/image/custom/start/hero-tablet-1024@1x.webp 1024w,
+            https://soyuzmicrophones.ru/image/custom/start/hero-pc-1920@1x.webp 1920w,
+            https://soyuzmicrophones.ru/image/custom/start/hero-pc-1920@2x.webp 3840w
           "
           sizes="(max-width: 360px) 360px, (max-width: 1024px) 1024px, 1920px"
           alt="Кастомный микрофон СОЮЗ"

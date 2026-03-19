@@ -1,5 +1,5 @@
 export const DEBUG_STORAGE_KEY = 'customizer-debug-enabled';
-export const DEBUG_UI_HELPER = false;
+export const DEBUG_UI_HELPER = true;
 export const DEBUG_LOGS = false; // Enable only during development.
 
 function hasWindow() {
