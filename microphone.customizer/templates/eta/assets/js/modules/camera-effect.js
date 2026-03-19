@@ -1,6 +1,6 @@
 import { stateManager } from '../core/state.js';
 import { getAnimationModelKey, getBaseAnimationModelKey } from '../config/model-capabilities.js';
-import { CAMERA_PRESETS, MOBILE_CAMERA_PRESETS } from '../config/camera-presets.js';
+import { CAMERA_PRESETS, MOBILE_CAMERA_PRESETS, TABLET_CAMERA_PRESETS } from '../config/camera-presets.js';
 import { debugWarn } from '../utils/debug.js';
 
 const layers = {
@@ -25,8 +25,24 @@ const LAYER_STATE_MAP = {
 let activeLayerId = null;
 let currentTimeline = null;
 
+function getCameraPresetDevice() {
+    if (typeof window === 'undefined') {
+        return 'desktop';
+    }
+
+    if (window.innerWidth <= 767) {
+        return 'mobile';
+    }
+
+    if (window.innerWidth <= 1024) {
+        return 'tablet';
+    }
+
+    return 'desktop';
+}
+
 function isMobileCameraDevice() {
-    return typeof window !== 'undefined' && window.matchMedia('(max-width: 768px)').matches;
+    return getCameraPresetDevice() === 'mobile';
 }
 
 export function normalizeMicModel(modelCode) {
@@ -39,7 +55,12 @@ export function resolveAnimationModel(modelCode, state = stateManager.get()) {
 
 export function getAnimationPreset(modelCode, state = stateManager.get()) {
     const normalizedModel = resolveAnimationModel(modelCode, state);
-    const presetCollection = isMobileCameraDevice() ? MOBILE_CAMERA_PRESETS : CAMERA_PRESETS;
+    const presetDevice = getCameraPresetDevice();
+    const presetCollection = presetDevice === 'mobile'
+        ? MOBILE_CAMERA_PRESETS
+        : presetDevice === 'tablet'
+            ? TABLET_CAMERA_PRESETS
+            : CAMERA_PRESETS;
     return {
         model: normalizedModel,
         states: presetCollection[normalizedModel] || null
