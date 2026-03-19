@@ -16,8 +16,34 @@ const REQUIRED_FIELDS = new Set([
     'input-email',
 ]);
 
+const PRIVACY_CHECKBOX_ID = 'input-privacy-consent';
+
 function getValidationElement(id) {
     return document.getElementById(id);
+}
+
+function getPrivacyConsentCheckbox() {
+    return document.getElementById(PRIVACY_CHECKBOX_ID);
+}
+
+function getPrivacyConsentGroup() {
+    return document.getElementById('privacy-consent-group');
+}
+
+export function hasPrivacyConsent() {
+    return !!getPrivacyConsentCheckbox()?.checked;
+}
+
+export function validatePrivacyConsent() {
+    const checkbox = getPrivacyConsentCheckbox();
+    const group = getPrivacyConsentGroup();
+    const isValid = !!checkbox?.checked;
+
+    if (group) {
+        group.classList.toggle('error', !isValid);
+    }
+
+    return isValid;
 }
 
 export function initValidation() {
@@ -32,6 +58,11 @@ export function initValidation() {
         el.addEventListener('input', validate);
         el.addEventListener('blur', validate);
     });
+
+    const privacyCheckbox = getPrivacyConsentCheckbox();
+    if (privacyCheckbox) {
+        privacyCheckbox.addEventListener('change', validatePrivacyConsent);
+    }
 }
 
 export function validateField(el, validator) {
@@ -60,5 +91,10 @@ export function validateForm() {
             }
         }
     });
+
+    if (!validatePrivacyConsent()) {
+        isFormValid = false;
+    }
+
     return isFormValid;
 }

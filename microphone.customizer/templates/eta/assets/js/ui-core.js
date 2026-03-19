@@ -7,9 +7,9 @@ import { updateLogoSVG, updateMalfaLogoOptionsVisibility } from './modules/logo.
 import { refreshShockmountUI, updateShockmountVisibility } from './modules/shockmount-new.js';
 import { syncToggles, initToggles } from './modules/toggles.js';
 import { calculateTotal, getBreakdown, formatPrice, debugPrices } from './modules/price-calculator.js';
-import { switchLayer, updateMicVariant } from './modules/camera-effect.js';
+import { initCameraEffect, switchLayer } from './modules/camera-effect.js';
 import { sendOrder } from './services/report.js';
-import { validateForm } from './services/validation.js';
+import { hasPrivacyConsent, validateForm } from './services/validation.js';
 import { prepareModelSelection } from './modules/model-selection.js';
 import { debugWarn } from './utils/debug.js';
 
@@ -60,7 +60,7 @@ export function applyModelSelectionUI(modelCode, options = {}) {
     updateUI();
     updateSVG();
     refreshShockmountUI(stateManager.get());
-    updateMicVariant(modelCode);
+    initCameraEffect(modelCode, 'global-view');
     syncShockmountVisibility(delayShockmountVisibility);
 
     if (syncWoodCase && window.WoodCase) {
@@ -116,8 +116,12 @@ export function updateUI() {
     const shockmountMenuPrice = document.getElementById('shockmount-price');
     if (shockmountMenuPrice) shockmountMenuPrice.textContent = formatPrice(breakdown.shockmount);
 
+    const totalPriceText = `${total.toLocaleString('ru-RU')}₽`;
     const totalEl = document.getElementById('total-price');
-    if (totalEl) totalEl.textContent = `${total.toLocaleString('ru-RU')}₽`;
+    if (totalEl) totalEl.textContent = totalPriceText;
+
+    const totalDetailsEl = document.getElementById('total-price-details');
+    if (totalDetailsEl) totalDetailsEl.textContent = totalPriceText;
 
     // const shockmountRow = document.getElementById('shockmount-price-row-container');
     // if (shockmountRow) {
@@ -143,14 +147,13 @@ export function updateUI() {
     const shockMenu = document.getElementById('shockmount-section');
     if (shockMenu) {
         const s = state.shockmount || {};
-        shockMenu.style.display = s.visible ? '' : 'none';
+        shockMenu.style.display = s.visible && s.enabled ? '' : 'none';
     }
 
     const shockPinsMenu = document.getElementById('shockmountPins-section');
     if (shockPinsMenu) {
         const s = state.shockmount || {};
-        // Pins показываем только если подвес вообще доступен
-        shockPinsMenu.style.display = s.visible ? '' : 'none';
+        shockPinsMenu.style.display = s.visible && s.enabled ? '' : 'none';
     }
 
     const setColorDisplay = (id, color) => {
@@ -305,6 +308,7 @@ export function initEventListeners() {
             const modelCode = btn.dataset.variant;
             if (!modelCode || !window.CUSTOMIZER_DATA?.modelsByCode?.[modelCode]) return;
 
+            window.WoodCase?.commitPendingTransformState?.();
             // Save old state
             stateManager.saveCurrentModelState(oldModelCode);
 
@@ -348,16 +352,13 @@ function initPriceSectionToggle() {
     if (!section || !toggle || !body) return;
 
     const toggleText = toggle.querySelector('.price-section-toggle-text');
-    const saved = localStorage.getItem('priceSectionCollapsed') === '1';
 
     const applyState = (collapsed, animate = true) => {
         const startHeight = body.offsetHeight;
         section.classList.toggle('is-collapsed', collapsed);
         toggle.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
         if (toggleText) toggleText.textContent = collapsed ? 'Показать детали' : 'Скрыть детали';
-        localStorage.setItem('priceSectionCollapsed', collapsed ? '1' : '0');
-
-        const targetHeight = body.scrollHeight;
+        const targetHeight = collapsed ? 0 : body.scrollHeight;
         body.style.height = `${startHeight}px`;
         if (window.anime && animate) {
             window.anime.remove(body);
@@ -367,15 +368,15 @@ function initPriceSectionToggle() {
                 duration: 260,
                 easing: 'easeOutQuad',
                 complete: () => {
-                    body.style.height = 'auto';
+                    body.style.height = collapsed ? '0px' : 'auto';
                 }
             });
         } else {
-            body.style.height = 'auto';
+            body.style.height = collapsed ? '0px' : 'auto';
         }
     };
 
-    applyState(saved, false);
+    applyState(true, false);
 
     toggle.addEventListener('click', () => {
         const next = !section.classList.contains('is-collapsed');
@@ -384,6 +385,7 @@ function initPriceSectionToggle() {
 }
 
 function serializeConfig() {
+    window.WoodCase?.commitPendingTransformState?.();
     const state = stateManager.get();
     const breakdown = getBreakdown(state);
     const total = calculateTotal(state);
@@ -426,12 +428,29 @@ function serializeConfig() {
 
 function initOrderModal() {
     const modal = document.getElementById('order-modal');
-    const openBtn = document.querySelector('.price-section .order-button');
+    const openBtn = document.querySelector('.price-section .price-section-order-button');
     if (!modal || !openBtn) return;
+
+    const form = document.getElementById('order-form');
+    const submitBtn = form?.querySelector('button[type="submit"]');
+    const submitWrapper = submitBtn?.closest('.submit-button-wrapper');
+    const privacyCheckbox = document.getElementById('input-privacy-consent');
+
+    const syncSubmitState = (forceDisabled = false) => {
+        if (!submitBtn) {
+            return;
+        }
+
+        const shouldDisable = forceDisabled || !hasPrivacyConsent();
+        submitBtn.disabled = shouldDisable;
+        submitBtn.setAttribute('aria-disabled', shouldDisable ? 'true' : 'false');
+        submitWrapper?.classList.toggle('is-disabled', shouldDisable);
+    };
 
     const closeBtn = modal.querySelector('[data-modal-close]') || modal.querySelector('button');
     const open = () => {
         serializeConfig();
+        syncSubmitState();
         modal.style.display = 'flex';
         modal.setAttribute('aria-hidden', 'false');
     };
@@ -446,18 +465,21 @@ function initOrderModal() {
         if (e.target === modal) close();
     });
 
-    const form = document.getElementById('order-form');
+    if (privacyCheckbox) {
+        privacyCheckbox.addEventListener('change', () => syncSubmitState());
+    }
+
     if (form) {
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
 
             if (!validateForm()) {
+                syncSubmitState();
                 return;
             }
 
-            const submitBtn = form.querySelector('button[type="submit"]');
             const originalText = submitBtn.textContent;
-            submitBtn.disabled = true;
+            syncSubmitState(true);
             submitBtn.textContent = 'Отправка...';
 
             try {
@@ -471,11 +493,17 @@ function initOrderModal() {
             } catch (error) {
                 alert('Ошибка при отправке заказа: ' + error.message);
             } finally {
-                submitBtn.disabled = false;
                 submitBtn.textContent = originalText;
+                requestAnimationFrame(() => syncSubmitState());
             }
         });
+
+        form.addEventListener('reset', () => {
+            requestAnimationFrame(() => syncSubmitState());
+        });
     }
+
+    syncSubmitState();
 }
 
 export function toggleSubmenu(section, forceClose = false) {
@@ -483,6 +511,7 @@ export function toggleSubmenu(section, forceClose = false) {
     const menuItem = document.querySelector(`[data-section="${section}"]`);
     if (!submenu || !menuItem) return;
 
+    window.WoodCase?.commitPendingTransformState?.();
     const isOpen = submenu.classList.contains('active');
     document.querySelectorAll('.submenu').forEach(sm => {
         sm.classList.remove('active');

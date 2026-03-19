@@ -201,3 +201,57 @@ export const BASE_CAMERA_PRESETS = {
 };
 
 export const CAMERA_PRESETS = buildCameraPresets(BASE_CAMERA_PRESETS, CAMERA_CAPTURE_OVERRIDES);
+
+function buildMobileState(globalView, overrides = {}) {
+    return mergeViewState(globalView, overrides);
+}
+
+function buildStaticMobilePreset(globalView, overrides = {}) {
+    return {
+        'global-view': buildMobileState(globalView, overrides['global-view']),
+        'mic-active': buildMobileState(globalView, overrides['mic-active']),
+        'shockmount-active': buildMobileState(globalView, overrides['shockmount-active']),
+        'case-active': buildMobileState(globalView, overrides['case-active']),
+        'logo-view': buildMobileState(globalView, overrides['logo-view'])
+    };
+}
+
+const MOBILE_023_GLOBAL_VIEW = Object.freeze({
+    microphone: { transform: 'translateX(201.00%) translateY(-5.00%) scale(1.20)', opacity: 1 },
+    case: { transform: 'translateX(33.00%) translateY(59.00%) scale(1.29)', opacity: 1 },
+    shockmount: { transform: 'translateX(-26.00%) translateY(-9.00%) scale(0.39)' }
+});
+
+const MOBILE_017_GLOBAL_VIEW = Object.freeze({
+    microphone: { transform: 'translateX(241.00%) translateY(3.00%) scale(1.05)', opacity: 1 },
+    shockmount: { transform: 'translateX(-26.00%) translateY(1.00%) scale(0.39)', opacity: 1 },
+    case: { transform: 'translateX(3.00%) translateY(39.00%) scale(1.04)', opacity: 1 }
+});
+
+export const MOBILE_CAMERA_PRESET_OVERRIDES = Object.freeze({
+    '017-TUBE': buildStaticMobilePreset(MOBILE_017_GLOBAL_VIEW, {
+        'shockmount-active': {
+            microphone: { transform: 'translateX(468%) translateY(-15%) scale(1.3)', opacity: 0 },
+            shockmount: { transform: 'translateX(-9%) translateY(-15%) scale(0.75)', opacity: 1 },
+            case: { transform: 'translateX(-9%) translateY(-15%) scale(0.75)', opacity: 0 }
+        },
+        'case-active': {
+            microphone: { transform: 'translateX(468%) translateY(-15%) scale(1.3)', opacity: 0 },
+            shockmount: { transform: 'translateX(-91%) translateY(-15%) scale(0.75)', opacity: 0 },
+            case: { transform: 'translateX(4%) translateY(51%) scale(1)', opacity: 1 }
+        }
+    }),
+    '017-FET': buildStaticMobilePreset(MOBILE_017_GLOBAL_VIEW, {
+        'case-active': {
+            microphone: { transform: 'translateX(468%) translateY(-15%) scale(1.3)', opacity: 0 },
+            shockmount: { transform: 'translateX(-91%) translateY(-15%) scale(0.75)', opacity: 0 },
+            case: { transform: 'translateX(-1%) translateY(73%) scale(1.5)', opacity: 1 }
+        }
+    }),
+    '023-BOMBLET-NO-SHOCKMOUNT': buildStaticMobilePreset(MOBILE_023_GLOBAL_VIEW),
+    '023-BOMBLET-WITH-SHOCKMOUNT': buildStaticMobilePreset(MOBILE_023_GLOBAL_VIEW),
+    '023-MALFA': buildStaticMobilePreset(MOBILE_023_GLOBAL_VIEW),
+    '023-DELUXE': buildStaticMobilePreset(MOBILE_023_GLOBAL_VIEW)
+});
+
+export const MOBILE_CAMERA_PRESETS = buildCameraPresets(CAMERA_PRESETS, MOBILE_CAMERA_PRESET_OVERRIDES);

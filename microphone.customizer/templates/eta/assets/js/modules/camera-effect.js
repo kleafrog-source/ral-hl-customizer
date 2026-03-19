@@ -1,6 +1,6 @@
 import { stateManager } from '../core/state.js';
 import { getAnimationModelKey, getBaseAnimationModelKey } from '../config/model-capabilities.js';
-import { CAMERA_PRESETS } from '../config/camera-presets.js';
+import { CAMERA_PRESETS, MOBILE_CAMERA_PRESETS } from '../config/camera-presets.js';
 import { debugWarn } from '../utils/debug.js';
 
 const layers = {
@@ -25,6 +25,10 @@ const LAYER_STATE_MAP = {
 let activeLayerId = null;
 let currentTimeline = null;
 
+function isMobileCameraDevice() {
+    return typeof window !== 'undefined' && window.matchMedia('(max-width: 768px)').matches;
+}
+
 export function normalizeMicModel(modelCode) {
     return getBaseAnimationModelKey(modelCode);
 }
@@ -35,9 +39,10 @@ export function resolveAnimationModel(modelCode, state = stateManager.get()) {
 
 export function getAnimationPreset(modelCode, state = stateManager.get()) {
     const normalizedModel = resolveAnimationModel(modelCode, state);
+    const presetCollection = isMobileCameraDevice() ? MOBILE_CAMERA_PRESETS : CAMERA_PRESETS;
     return {
         model: normalizedModel,
-        states: CAMERA_PRESETS[normalizedModel] || null
+        states: presetCollection[normalizedModel] || null
     };
 }
 
@@ -216,9 +221,38 @@ export function switchLayer(newActiveLayerId) {
 
     if (newActiveLayerId === 'shockmount') {
         if (currentState.shockmount?.enabled === true && currentState.shockmount?.available) {
+            if (isMobileCameraDevice()) {
+                const { model: micModel, config: animationConfig } = getPresetState(currentState.currentModelCode, stateName, currentState);
+                if (!animationConfig) {
+                    debugWarn(`Animation state '${stateName}' for model '${micModel}' not found.`);
+                    return;
+                }
+                if (currentTimeline) {
+                    currentTimeline.pause();
+                    currentTimeline = null;
+                }
+                applyStaticState(animationConfig, stateName);
+                activeLayerId = newActiveLayerId;
+                return;
+            }
             animateCameraState(currentState.currentModelCode, stateName, newActiveLayerId, currentState);
             activeLayerId = newActiveLayerId;
         }
+        return;
+    }
+
+    if (isMobileCameraDevice()) {
+        const { model: micModel, config: animationConfig } = getPresetState(currentState.currentModelCode, stateName, currentState);
+        if (!animationConfig) {
+            debugWarn(`Animation state '${stateName}' for model '${micModel}' not found.`);
+            return;
+        }
+        if (currentTimeline) {
+            currentTimeline.pause();
+            currentTimeline = null;
+        }
+        applyStaticState(animationConfig, stateName);
+        activeLayerId = newActiveLayerId;
         return;
     }
 

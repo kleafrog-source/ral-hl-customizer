@@ -27,7 +27,7 @@ $APPLICATION->AddHeadString('
 <!-- NOTE: zoom disabled intentionally to keep SVG/layout stable on mobile -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <?
-// interact.js removed as per overhaul requirements
+Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/interactjs@1.10.19/dist/interact.min.js");
 Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js");
 ?>
 
@@ -1221,12 +1221,16 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                 <!-- Price Section -->
                 <div class="sidebar-section price-section" data-sidebar-fade data-sidebar-hide="compact">
                     <div class="price-section-header">
-                        <button class="price-section-toggle" id="price-section-toggle" type="button" aria-expanded="true">
-                            <span class="price-section-toggle-text">Скрыть детали</span>
+                        <button class="price-section-toggle" id="price-section-toggle" type="button" aria-expanded="false">
+                            <span class="price-section-toggle-text">Показать детали</span>
                             <svg class="chevron" width="12" height="8" viewBox="0 0 12 8" fill="none">
                                 <path d="M1 1L6 6L11 1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                             </svg>
                         </button>
+                        <div class="price-section-header-meta">
+                            <span class="price-section-header-total" id="total-price">159 990₽</span>
+                            <button class="order-button price-section-order-button" type="button">Отправить</button>
+                        </div>
                     </div>
                     <div class="price-section-body" id="price-section-body">
                         <div class="price-display">
@@ -1257,9 +1261,8 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                             </div>
                             <div class="price-row price-total">
                                 <span>Итого:</span>
-                                <span id="total-price">159 990₽</span>
+                                <span id="total-price-details">159 990₽</span>
                             </div>
-                            <button class="order-button">Отправить конфигурацию</button>
                         </div>
                     </div>
                 </div>
@@ -1307,7 +1310,19 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                     <label class="form-label">Комментарий</label>
                     <textarea class="form-textarea" name="comment" rows="3"></textarea>
                 </div>
-                <button type="submit" class="order-button">Отправить конфигурацию</button>
+                <div class="form-group form-group-consent" id="privacy-consent-group">
+                    <label class="privacy-consent-label" for="input-privacy-consent">
+                        <input type="checkbox" id="input-privacy-consent" name="privacyConsent" value="Y">
+                        <span>
+                            <a href="/privacy-policy/" class="privacy-link" title="Ознакомиться с целями и принципы политики конфиденциальности и сбора персональных данных" target="_blank" rel="noopener noreferrer">условия обработки персональных данных</a>
+                        </span>
+                    </label>
+                    <div class="error-message">Необходимо согласиться с условиями обработки персональных данных</div>
+                </div>
+                <div class="submit-button-wrapper is-disabled" data-disabled-tooltip="Необходимо согласиться с условиями обработки персональных данных">
+                    <button type="submit" class="order-button" disabled aria-disabled="true">Отправить конфигурацию</button>
+                    <div class="submit-button-tooltip">Необходимо согласиться с условиями обработки персональных данных</div>
+                </div>
             </form>
         </div>
                 <!-- HIDDEN STORAGE -->

@@ -18,6 +18,8 @@ const WoodCase = {
     caseBackgroundNodes: new Map(),
     casePoolDevice: null,
     visibleCaseId: null,
+    pendingTransformDirty: false,
+    transformCommitTimer: null,
 
     updateCaseState(updates) {
         stateManager.batch((batch) => {
@@ -65,8 +67,23 @@ const WoodCase = {
 
     syncEditingState() {
         if (!this.isCaseEditingActive()) {
+            this.commitPendingTransformState();
             this.hideRulers();
         }
+    },
+
+    clampScale(scale) {
+        return Math.max(0.01, Math.min(5, scale));
+    },
+
+    commitPendingTransformState() {
+        if (!this.userImgSrc || !this.pendingTransformDirty) {
+            return;
+        }
+
+        clearTimeout(this.transformCommitTimer);
+        this.transformCommitTimer = null;
+        this.updateTransform(false, true);
     },
 
     getCaseImageHref(caseId = this.currentCase, device = this.getDevice()) {
@@ -249,7 +266,7 @@ const WoodCase = {
 
     init() {
         Object.keys(CASE_GEOMETRY.cases).forEach(k => { this.history[k] = { x: 0, y: 0, scale: 0.5 }; });
-        this.setupNativeInteractions();
+        this.setupCaseInteractions();
         this.setupRulerEvents();
         window.addEventListener('resize', () => {
             clearTimeout(this.resizeTimer);
@@ -342,7 +359,8 @@ const WoodCase = {
             state.y = targetTopPx - pH/2 + cH/2;
             state.x = targetLeftPx - pW/2 + cW/2;
 
-            this.updateTransform();
+            this.updateTransform(false, false);
+            this.showRulers();
         };
 
         [topInput, leftInput, widthInput].forEach(input => {
@@ -591,7 +609,7 @@ const WoodCase = {
         this.syncEditingState();
     },
 
-    updateTransform(animate = false) {
+    updateTransform(animate = false, persistState = true) {
         if(!this.userImgSrc) return;
         const state = this.history[this.currentCase];
         const container = document.getElementById('user-logo-container');
@@ -622,12 +640,56 @@ const WoodCase = {
 
         const pxPerMM = this.getPixelsPerMM(this.currentCase);
         const width_mm = Math.round((bW * state.scale) / pxPerMM);
-        this.updateCaseState({
-            logoTransform: { x: state.x, y: state.y, scale: state.scale },
-            logoWidthMM: width_mm
-        });
+        if (persistState) {
+            this.updateCaseState({
+                logoTransform: { x: state.x, y: state.y, scale: state.scale },
+                logoWidthMM: width_mm
+            });
+            this.pendingTransformDirty = false;
+        } else {
+            this.pendingTransformDirty = true;
+        }
 
-        this.drawRulers();
+        this.drawRulers(persistState);
+    },
+
+    moveLogoBy(dx, dy) {
+        if (!this.isCaseEditingActive()) {
+            return;
+        }
+
+        const state = this.history[this.currentCase];
+        state.x += dx;
+        state.y += dy;
+        this.updateTransform(false, false);
+        this.showRulers();
+    },
+
+    scaleLogoBy(factor) {
+        if (!this.isCaseEditingActive()) {
+            return;
+        }
+
+        const state = this.history[this.currentCase];
+        state.scale = this.clampScale(state.scale * factor);
+        this.updateTransform(false, false);
+        this.showRulers();
+    },
+
+    scheduleTransformCommit(delay = 140) {
+        clearTimeout(this.transformCommitTimer);
+        this.transformCommitTimer = window.setTimeout(() => {
+            this.commitPendingTransformState();
+        }, delay);
+    },
+
+    setupCaseInteractions() {
+        if (typeof window !== 'undefined' && typeof window.interact === 'function') {
+            this.setupInteractInteractions();
+            return;
+        }
+
+        this.setupNativeInteractions();
     },
 
     getLocalPlanePoint(clientX, clientY) {
@@ -646,6 +708,44 @@ const WoodCase = {
         };
     },
 
+    setupInteractInteractions() {
+        const wrapper = document.getElementById('wood-case-logo-wrapper');
+        if (!wrapper || wrapper.dataset.interactReady === '1') {
+            return;
+        }
+
+        wrapper.dataset.interactReady = '1';
+
+        window.interact(wrapper)
+            .gesturable({
+                listeners: {
+                    move: (event) => {
+                        this.scaleLogoBy(1 + event.ds);
+                    },
+                    end: () => {
+                        this.commitPendingTransformState();
+                    }
+                }
+            })
+            .draggable({
+                listeners: {
+                    move: (event) => {
+                        this.moveLogoBy(event.dx, event.dy);
+                    },
+                    end: () => {
+                        this.commitPendingTransformState();
+                    }
+                }
+            });
+
+        wrapper.addEventListener('wheel', (event) => {
+            event.preventDefault();
+            const factor = event.deltaY > 0 ? 0.95 : 1.05;
+            this.scaleLogoBy(factor);
+            this.scheduleTransformCommit();
+        }, { passive: false });
+    },
+
     setupNativeInteractions() {
         const wrapper = document.getElementById('wood-case-logo-wrapper');
         if (!wrapper) return;
@@ -658,30 +758,6 @@ const WoodCase = {
 
         const getDistance = (touches) => {
             return Math.hypot(touches[0].pageX - touches[1].pageX, touches[0].pageY - touches[1].pageY);
-        };
-
-        const handleMove = (dx, dy) => {
-            if (!this.isCaseEditingActive()) {
-                return;
-            }
-
-            const state = this.history[this.currentCase];
-            state.x += dx;
-            state.y += dy;
-            this.updateTransform();
-            this.showRulers();
-        };
-
-        const handleScale = (ds) => {
-            if (!this.isCaseEditingActive()) {
-                return;
-            }
-
-            const state = this.history[this.currentCase];
-            state.scale *= ds;
-            state.scale = Math.max(0.01, Math.min(5, state.scale));
-            this.updateTransform();
-            this.showRulers();
         };
 
         const beginDrag = (clientX, clientY) => {
@@ -716,7 +792,7 @@ const WoodCase = {
             const state = this.history[this.currentCase];
             state.x = dragStartState.x + dx;
             state.y = dragStartState.y + dy;
-            this.updateTransform();
+            this.updateTransform(false, false);
             this.showRulers();
         };
 
@@ -724,6 +800,7 @@ const WoodCase = {
             isDragging = false;
             dragStartPoint = null;
             dragStartState = null;
+            this.commitPendingTransformState();
         };
 
         wrapper.addEventListener('pointerdown', (e) => {
@@ -758,8 +835,8 @@ const WoodCase = {
                 const currentDistance = getDistance(e.touches);
                 const ds = currentDistance / initialPinchDistance;
                 const state = this.history[this.currentCase];
-                state.scale = Math.max(0.01, Math.min(5, initialScale * ds));
-                this.updateTransform();
+                state.scale = this.clampScale(initialScale * ds);
+                this.updateTransform(false, false);
                 this.showRulers();
             }
         }, { passive: true });
@@ -777,7 +854,8 @@ const WoodCase = {
         wrapper.addEventListener('wheel', (e) => {
             e.preventDefault();
             const delta = e.deltaY > 0 ? 0.95 : 1.05;
-            handleScale(delta);
+            this.scaleLogoBy(delta);
+            this.scheduleTransformCommit();
         }, { passive: false });
     },
 
@@ -837,7 +915,7 @@ const WoodCase = {
         return { x: (h[0]*x + h[1]*y + h[2]) / w, y: (h[3]*x + h[4]*y + h[5]) / w };
     },
 
-    drawRulers() {
+    drawRulers(persistState = true) {
         if (!this.userImgSrc || !this.currentMatrix) return;
         const state = this.history[this.currentCase], container = document.getElementById('user-logo-container');
         if (!container) return;
@@ -867,9 +945,11 @@ const WoodCase = {
         if (leftInput && document.activeElement !== leftInput) leftInput.value = left_mm;
         if (widthInput && document.activeElement !== widthInput) widthInput.value = Math.round(cW / pxPerMM);
 
-        this.updateCaseState({
-            logoOffsetMM: { top: top_mm, left: left_mm }
-        });
+        if (persistState) {
+            this.updateCaseState({
+                logoOffsetMM: { top: top_mm, left: left_mm }
+            });
+        }
 
         const sCorners = [{x:iTLx,y:iTLy},{x:iTLx+cW,y:iTLy},{x:iTLx+cW,y:iTLy+cH},{x:iTLx,y:iTLy+cH}].map(p => this.projectPoint(p.x, p.y, this.currentMatrix));
         const pTL = sCorners[0], pTR = sCorners[1], pBL = sCorners[3];
@@ -922,6 +1002,9 @@ const WoodCase = {
     },
 
     clearLogo() {
+        clearTimeout(this.transformCommitTimer);
+        this.transformCommitTimer = null;
+        this.pendingTransformDirty = false;
         this.userImgSrc = null;
         const c = document.getElementById('user-logo-container');
         if (c) {
