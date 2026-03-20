@@ -1,0 +1,22 @@
+
+.case-preview-container{z-index:1}
+.shockmount-preview-container{
+  z-index:3;
+}
+.layer {
+  position:absolute;
+  transform-box: fill-box;
+  transform-origin: center center;
+  will-change: transform, opacity;
+  -webkit-backface-visibility: hidden;
+          backface-visibility: hidden;
+  pointer-events: none; /* All layers are non-interactive by default */
+}
+
+.layer.active {
+  pointer-events: auto; /* Only the active layer is interactive */
+}
+
+
+
+
