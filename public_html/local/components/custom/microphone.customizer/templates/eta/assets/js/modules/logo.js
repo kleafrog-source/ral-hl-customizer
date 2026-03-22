@@ -645,6 +645,11 @@ function updateCustomLogoRulers(transform, bounds, meta) {
         return;
     }
 
+    if (!isCustomLogoEditMode() || !isMicrophoneLayerActive()) {
+        hideCustomLogoRulers();
+        return;
+    }
+
     const metrics = buildLogoMetrics(transform, bounds, meta);
     const width = meta.width * transform.scale;
     const height = meta.height * transform.scale;
@@ -674,10 +679,6 @@ function updateCustomLogoRulers(transform, bounds, meta) {
         <line class="ruler-tick" x1="${right}" y1="${top}" x2="${topX}" y2="${top}" />
         <text class="r-text" x="${topX + 8}" y="${(bounds.y + top) / 2}" text-anchor="start" dominant-baseline="middle">${metrics.mm.top} mm</text>
     `;
-
-    if (!isCustomLogoEditMode() || !isMicrophoneLayerActive()) {
-        hideCustomLogoRulers();
-    }
 }
 
 function hideCustomLogoRulers() {
@@ -751,7 +752,13 @@ function applyActiveTransform() {
         outline.style.opacity = isCustomLogoEditMode() ? '1' : '0';
     }
 
-    updatePositioningUi(buildLogoMetrics(clamped, activeLogoBounds, activeLogoMeta));
+    if (!isCustomLogoEditMode() || !isMicrophoneLayerActive()) {
+        hideCustomLogoRulers();
+        return;
+    }
+
+    const metrics = buildLogoMetrics(clamped, activeLogoBounds, activeLogoMeta);
+    updatePositioningUi(metrics);
     updateCustomLogoRulers(clamped, activeLogoBounds, activeLogoMeta);
 }
 

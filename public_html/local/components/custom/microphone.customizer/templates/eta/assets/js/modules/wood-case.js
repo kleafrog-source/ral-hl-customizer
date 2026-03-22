@@ -20,6 +20,21 @@ const WoodCase = {
     visibleCaseId: null,
     pendingTransformDirty: false,
     transformCommitTimer: null,
+    canvasRenderScheduled: false,
+    canvasRenderRequestId: 0,
+    logoImageCacheKey: null,
+    logoImagePromise: null,
+    logoImageElement: null,
+    logoObjectUrl: null,
+    logoBaseWidth: 0,
+    logoBaseHeight: 0,
+    logoRenderCacheKey: null,
+
+    // Конфигурация цветовой трансформации для удаления белого фона
+    burnConfig: {
+        targetColor: { red: 72, green: 40, blue: 20 },  // #482814 - цвет древесины
+        whiteThreshold: 200                              // порог полной прозрачности (0-255)
+    },
 
     updateCaseState(updates) {
         stateManager.batch((batch) => {
@@ -29,21 +44,21 @@ const WoodCase = {
         });
     },
 
-    isVerticalBurnFilterCase() {
-        return this.currentCase === '023-the-bomblet' || this.currentCase === '023-malfa';
-    },
+    // isVerticalBurnFilterCase() {
+    //     return this.currentCase === '023-the-bomblet' || this.currentCase === '023-malfa';
+    // },
 
-    syncBurnFilterOrientation() {
-        const turbulence = document.getElementById('burnFilterSVGNoise');
-        if (!turbulence) {
-            return;
-        }
+    // syncBurnFilterOrientation() {
+    //     const turbulence = document.getElementById('burnFilterSVGNoise');
+    //     if (!turbulence) {
+    //         return;
+    //     }
 
-        turbulence.setAttribute(
-            'baseFrequency',
-            this.isVerticalBurnFilterCase() ? '0.7 0.011' : '0.011 0.7'
-        );
-    },
+    //     turbulence.setAttribute(
+    //         'baseFrequency',
+    //         this.isVerticalBurnFilterCase() ? '0.7 0.011' : '0.011 0.7'
+    //     );
+    // },
 
     isCaseEditingActive() {
         const caseSubmenu = document.getElementById('submenu-case');
@@ -86,6 +101,93 @@ const WoodCase = {
         this.updateTransform(false, true);
     },
 
+    resetLogoRenderAssets() {
+        this.logoImageCacheKey = null;
+        this.logoImagePromise = null;
+        this.logoImageElement = null;
+        this.logoBaseWidth = 0;
+        this.logoBaseHeight = 0;
+        this.logoRenderCacheKey = null;
+
+        if (this.logoObjectUrl) {
+            URL.revokeObjectURL(this.logoObjectUrl);
+            this.logoObjectUrl = null;
+        }
+    },
+
+    getLogoBaseDimensions() {
+        if (!this.userImgSrc) {
+            return { width: 0, height: 0 };
+        }
+
+        if (this.isSvg) {
+            return {
+                width: 550,
+                height: 550 / this.svgRatio
+            };
+        }
+
+        return {
+            width: this.logoBaseWidth || 100,
+            height: this.logoBaseHeight || 100
+        };
+    },
+
+    getCasePolyBounds(poly) {
+        let minX = Infinity;
+        let minY = Infinity;
+        let maxX = -Infinity;
+        let maxY = -Infinity;
+
+        for (let i = 0; i < poly.length; i += 2) {
+            minX = Math.min(minX, poly[i]);
+            maxX = Math.max(maxX, poly[i]);
+            minY = Math.min(minY, poly[i + 1]);
+            maxY = Math.max(maxY, poly[i + 1]);
+        }
+
+        return {
+            minX,
+            minY,
+            maxX,
+            maxY,
+            width: maxX - minX,
+            height: maxY - minY
+        };
+    },
+
+    // Метод для применения цветовой трансформации к изображению логотипа
+    applyColorTransform(imageData, config) {
+        const imageDataArray = imageData.data;
+        const targetRed = config.targetColor.red;
+        const targetGreen = config.targetColor.green;
+        const targetBlue = config.targetColor.blue;
+        const whiteThresholdValue = config.whiteThreshold;
+        
+        for (let pixelIndex = 0; pixelIndex < imageDataArray.length; pixelIndex += 4) {
+            // Пропускаем уже прозрачные пиксели
+            if (imageDataArray[pixelIndex + 3] === 0) continue;
+            
+            let pixelRed = imageDataArray[pixelIndex];
+            let pixelGreen = imageDataArray[pixelIndex + 1];
+            let pixelBlue = imageDataArray[pixelIndex + 2];
+            
+            // Вычисляем яркость пикселя (0-255)
+            let pixelBrightness = pixelRed * 0.299 + pixelGreen * 0.587 + pixelBlue * 0.114;
+            
+            if (pixelBrightness > whiteThresholdValue) {
+                imageDataArray[pixelIndex + 3] = 0;
+            } else {
+                imageDataArray[pixelIndex] = targetRed;
+                imageDataArray[pixelIndex + 1] = targetGreen;
+                imageDataArray[pixelIndex + 2] = targetBlue;
+                imageDataArray[pixelIndex + 3] = 255;
+            }
+        }
+        
+        return imageData;
+    },
+
     getCaseImageHref(caseId = this.currentCase, device = this.getDevice()) {
         return CASE_IMAGES[caseId]?.[device] || null;
     },
@@ -96,6 +198,219 @@ const WoodCase = {
 
     getCaseBackgroundNode(caseId) {
         return this.caseBackgroundNodes.get(caseId) || null;
+    },
+
+    async loadImageFromNode(node) {
+        const href = node?.getAttribute('href') || node?.getAttribute('xlink:href');
+        if (!href) {
+            return null;
+        }
+
+        try {
+            return await this.preloadCaseImage(href);
+        } catch (error) {
+            debugWarn(`WoodCase.loadImageFromNode: failed to load "${href}"`);
+            return null;
+        }
+    },
+
+    async getLogoAsImage() {
+        if (!this.userImgSrc) {
+            return null;
+        }
+
+        const cacheKey = `${this.isSvg ? 'svg' : 'img'}:${this.userImgSrc}`;
+        if (this.logoImageElement && this.logoImageCacheKey === cacheKey) {
+            return this.logoImageElement;
+        }
+
+        if (this.logoImagePromise && this.logoImageCacheKey === cacheKey) {
+            return this.logoImagePromise;
+        }
+
+        this.logoImageCacheKey = cacheKey;
+        this.logoImagePromise = new Promise((resolve, reject) => {
+            const img = new Image();
+            img.decoding = 'async';
+
+            img.onload = () => {
+                this.logoImageElement = img;
+                this.logoImagePromise = null;
+                resolve(img);
+            };
+
+            img.onerror = () => {
+                this.logoImagePromise = null;
+                reject(new Error('Failed to load woodcase logo image'));
+            };
+
+            if (this.isSvg) {
+                if (!this.logoObjectUrl) {
+                    this.logoObjectUrl = URL.createObjectURL(
+                        new Blob([this.userImgSrc], { type: 'image/svg+xml' })
+                    );
+                }
+                img.src = this.logoObjectUrl;
+            } else {
+                img.src = this.userImgSrc;
+            }
+
+            if (img.complete && img.naturalWidth > 0) {
+                img.onload();
+            }
+        });
+
+        return this.logoImagePromise;
+    },
+
+    ensureLogoCanvas(width, height) {
+        const container = document.getElementById('user-logo-container');
+        if (!container) {
+            return null;
+        }
+
+        let canvas = container.querySelector('canvas[data-wood-case-render="1"]');
+        if (!canvas) {
+            container.innerHTML = '';
+            canvas = document.createElement('canvas');
+            canvas.dataset.woodCaseRender = '1';
+            canvas.style.display = 'block';
+            canvas.style.width = '100%';
+            canvas.style.height = '100%';
+            container.appendChild(canvas);
+        }
+
+        const dpr = Math.max(1, window.devicePixelRatio || 1);
+        const cssWidth = Math.max(1, Math.round(width));
+        const cssHeight = Math.max(1, Math.round(height));
+        const pixelWidth = Math.max(1, Math.round(cssWidth * dpr));
+        const pixelHeight = Math.max(1, Math.round(cssHeight * dpr));
+
+        if (canvas.width !== pixelWidth) {
+            canvas.width = pixelWidth;
+        }
+
+        if (canvas.height !== pixelHeight) {
+            canvas.height = pixelHeight;
+        }
+
+        canvas.style.width = `${cssWidth}px`;
+        canvas.style.height = `${cssHeight}px`;
+
+        const ctx = canvas.getContext('2d', { alpha: true });
+        if (!ctx) {
+            return null;
+        }
+
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        return { canvas, ctx, width: cssWidth, height: cssHeight };
+    },
+
+    async renderLogoWithCanvas() {
+        const container = document.getElementById('user-logo-container');
+        if (!container || !this.userImgSrc) {
+            return;
+        }
+
+        const requestId = ++this.canvasRenderRequestId;
+
+        const baseSize = this.getLogoBaseDimensions();
+        if (!baseSize.width || !baseSize.height) {
+            return;
+        }
+
+        const renderCacheKey = `${this.isSvg ? 'svg' : 'img'}:${baseSize.width}x${baseSize.height}:${this.userImgSrc}`;
+
+        if (this.isSvg) {
+            if (
+                this.logoRenderCacheKey === renderCacheKey
+                && container.firstElementChild?.tagName?.toLowerCase() === 'svg'
+            ) {
+                container.style.display = 'block';
+                container.style.width = `${baseSize.width}px`;
+                container.style.height = `${baseSize.height}px`;
+                container.style.filter = 'none';
+                container.style.mixBlendMode = '';
+                container.style.opacity = '1';
+                return;
+            }
+
+            container.innerHTML = '';
+
+            const svgElement = document.createElement('div');
+            svgElement.innerHTML = this.userImgSrc;
+            const svgNode = svgElement.querySelector('svg');
+
+            if (!svgNode || requestId !== this.canvasRenderRequestId) {
+                return;
+            }
+
+            svgNode.style.display = 'block';
+            svgNode.style.width = '100%';
+            svgNode.style.height = '100%';
+
+            container.appendChild(svgNode);
+            container.style.display = 'block';
+            container.style.width = `${baseSize.width}px`;
+            container.style.height = `${baseSize.height}px`;
+            container.style.filter = 'none';
+            container.style.mixBlendMode = '';
+            container.style.opacity = '1';
+            this.logoRenderCacheKey = renderCacheKey;
+            return;
+        }
+
+        if (
+            this.logoRenderCacheKey === renderCacheKey
+            && container.querySelector('canvas[data-wood-case-render="1"]')
+        ) {
+            container.style.display = 'block';
+            container.style.width = `${baseSize.width}px`;
+            container.style.height = `${baseSize.height}px`;
+            container.style.filter = 'none';
+            container.style.mixBlendMode = '';
+            container.style.opacity = '1';
+            return;
+        }
+
+        const logoImage = await this.getLogoAsImage();
+        if (requestId !== this.canvasRenderRequestId || !logoImage || !this.userImgSrc) {
+            return;
+        }
+
+        const canvasState = this.ensureLogoCanvas(baseSize.width, baseSize.height);
+        if (!canvasState) {
+            return;
+        }
+
+        const { ctx, width, height } = canvasState;
+        ctx.clearRect(0, 0, width, height);
+        ctx.drawImage(logoImage, 0, 0, width, height);
+
+        const imageData = ctx.getImageData(0, 0, width, height);
+        ctx.putImageData(this.applyColorTransform(imageData, this.burnConfig), 0, 0);
+
+        container.style.display = 'block';
+        container.style.width = `${baseSize.width}px`;
+        container.style.height = `${baseSize.height}px`;
+        container.style.filter = 'none';
+        container.style.mixBlendMode = '';
+        container.style.opacity = '1';
+        this.logoRenderCacheKey = renderCacheKey;
+    },
+
+    scheduleCanvasRender() {
+        if (this.canvasRenderScheduled) {
+            return;
+        }
+
+        this.canvasRenderScheduled = true;
+        requestAnimationFrame(() => {
+            this.canvasRenderScheduled = false;
+            this.renderLogoWithCanvas().catch((error) => {
+                debugWarn(`WoodCase.renderLogoWithCanvas: ${error?.message || error}`);
+            });
+        });
     },
 
     syncCaseBackgroundFrame(node, caseId, device = this.getDevice()) {
@@ -379,15 +694,9 @@ const WoodCase = {
             const pH = parseFloat(plane.style.height) || 0;
             const pW = parseFloat(plane.style.width) || 0;
 
-            const container = document.getElementById('user-logo-container');
-            let bW, bH;
-            if (this.isSvg) {
-                bW = 550; bH = 550 / this.svgRatio;
-            } else {
-                const img = container.querySelector('img');
-                bW = img ? img.naturalWidth : 100;
-                bH = img ? img.naturalHeight : 100;
-            }
+            const baseSize = this.getLogoBaseDimensions();
+            const bW = baseSize.width;
+            const bH = baseSize.height;
 
             const targetWidthPx = parseFloat(widthInput.value) * pxPerMM;
             state.scale = targetWidthPx / bW;
@@ -502,26 +811,21 @@ const WoodCase = {
 
         const reader = new FileReader();
         reader.onload = (ev) => {
-            this.isSvg = file.type === 'image/svg+xml';
+            this.resetLogoRenderAssets();
+            this.isSvg = file.type === 'image/svg+xml' || fileName.endsWith('.svg');
+            const container = document.getElementById('user-logo-container');
+            if (container) {
+                container.innerHTML = '';
+            }
+
             if (this.isSvg) {
                 const text = ev.target.result;
                 this.svgRatio = this.parseSvgRatio(text);
                 this.userImgSrc = this.processSvgColors(text);
-                const container = document.getElementById('user-logo-container');
-                if (container) {
-                    container.innerHTML = this.userImgSrc;
-                    const svgEl = container.querySelector('svg');
-                    if(svgEl) {
-                        svgEl.setAttribute('preserveAspectRatio', 'xMidYMid meet');
-                        svgEl.style.width = '100%'; svgEl.style.height = '100%';
-                    }
-                }
+                this.logoBaseWidth = 550;
+                this.logoBaseHeight = 550 / this.svgRatio;
             } else {
                 this.userImgSrc = ev.target.result;
-                const container = document.getElementById('user-logo-container');
-                if (container) {
-                    container.innerHTML = `<img src="${this.userImgSrc}" style="display:block; width:100%; height:100%;" />`;
-                }
             }
 
             const loadHandler = () => {
@@ -539,10 +843,13 @@ const WoodCase = {
             if (this.isSvg) {
                 loadHandler();
             } else {
-                const img = document.querySelector('#user-logo-container img');
-                if (img) {
-                    img.onload = loadHandler;
-                }
+                const preloadImage = new Image();
+                preloadImage.onload = () => {
+                    this.logoBaseWidth = preloadImage.naturalWidth || 100;
+                    this.logoBaseHeight = preloadImage.naturalHeight || 100;
+                    loadHandler();
+                };
+                preloadImage.src = this.userImgSrc;
             }
         };
 
@@ -559,12 +866,9 @@ const WoodCase = {
         const pxPerMM = this.getPixelsPerMM(caseId);
         let newScale = 0.5;
 
-        if (this.isSvg) {
-            newScale = (config.wMM * pxPerMM) / 550;
-        } else {
-            const img = document.querySelector('#user-logo-container img');
-            const natW = img ? img.naturalWidth : 100;
-            if (natW > 0) newScale = (config.wMM * pxPerMM) / natW;
+        const baseSize = this.getLogoBaseDimensions();
+        if (baseSize.width > 0) {
+            newScale = (config.wMM * pxPerMM) / baseSize.width;
         }
 
         this.history[caseId] = { x: 0, y: config.yOffsetMM * pxPerMM, scale: newScale };
@@ -609,6 +913,7 @@ const WoodCase = {
         if (fo) {
             const vbParts = res.vb.split(' ');
             fo.setAttribute('width', vbParts[2]); fo.setAttribute('height', vbParts[3]);
+            fo.classList.toggle('wood-case-fo-blend', !!this.userImgSrc);
         }
 
         const infoResTag = document.getElementById('info-res-tag');
@@ -618,24 +923,11 @@ const WoodCase = {
 
         const container = document.getElementById('user-logo-container');
         if (this.userImgSrc && container) {
-            this.syncBurnFilterOrientation();
             container.style.display = 'block';
-            if (this.isSvg) {
-                container.style.filter = 'grayscale(1) brightness(0) url(#woodBurnFilter)';
-                container.style.mixBlendMode = 'multiply';
-                container.style.opacity = '0.9';
-            } else {
-                container.style.filter = 'url(#svg-burn-charcoal)';
-                container.style.mixBlendMode = 'multiply';
-                container.style.opacity = '1';
-            }
             const poly = caseData.poly;
-            let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
-            for(let i=0; i<poly.length; i+=2) {
-                minX = Math.min(minX, poly[i]); maxX = Math.max(maxX, poly[i]);
-                minY = Math.min(minY, poly[i+1]); maxY = Math.max(maxY, poly[i+1]);
-            }
-            const srcW = maxX - minX, srcH = maxY - minY;
+            const bounds = this.getCasePolyBounds(poly);
+            const srcW = bounds.width;
+            const srcH = bounds.height;
             const dstQuad = this.getSortedCorners(poly);
             const h = this.solveHomography([{x:0,y:0},{x:srcW,y:0},{x:srcW,y:srcH},{x:0,y:srcH}], dstQuad);
             this.currentMatrix = h;
@@ -645,6 +937,7 @@ const WoodCase = {
                 plane.style.width = srcW + 'px'; plane.style.height = srcH + 'px';
                 plane.style.transform = `matrix3d(${h[0]},${h[3]},0,${h[6]},${h[1]},${h[4]},0,${h[7]},0,0,1,0,${h[2]},${h[5]},0,1)`;
             }
+            this.scheduleCanvasRender();
             this.updateTransform();
         }
 
@@ -656,15 +949,14 @@ const WoodCase = {
         const state = this.history[this.currentCase];
         const container = document.getElementById('user-logo-container');
         if (!container) return;
-        
-        let bW, bH;
-        if (this.isSvg) {
-            bW = 550; bH = 550 / this.svgRatio;
-        } else {
-            const img = container.querySelector('img');
-            bW = img ? img.naturalWidth : 100; bH = img ? img.naturalHeight : 100;
-        }
-        container.style.width = bW + 'px'; container.style.height = bH + 'px';
+
+        const baseSize = this.getLogoBaseDimensions();
+        const bW = baseSize.width;
+        const bH = baseSize.height;
+        if (!bW || !bH) return;
+
+        container.style.width = `${bW}px`;
+        container.style.height = `${bH}px`;
 
         if (window.anime && animate) {
             window.anime.remove(container);
@@ -959,10 +1251,12 @@ const WoodCase = {
 
     drawRulers(persistState = true) {
         if (!this.userImgSrc || !this.currentMatrix) return;
-        const state = this.history[this.currentCase], container = document.getElementById('user-logo-container');
-        if (!container) return;
-        
-        const bW = parseFloat(container.style.width), bH = parseFloat(container.style.height);
+        const state = this.history[this.currentCase];
+        const baseSize = this.getLogoBaseDimensions();
+        const bW = baseSize.width;
+        const bH = baseSize.height;
+        if (!bW || !bH) return;
+
         const cW = bW * state.scale, cH = bH * state.scale;
         const plane = document.getElementById('wood-case-perspective-plane');
         if (!plane) return;
@@ -1047,11 +1341,22 @@ const WoodCase = {
         clearTimeout(this.transformCommitTimer);
         this.transformCommitTimer = null;
         this.pendingTransformDirty = false;
+        this.canvasRenderScheduled = false;
+        this.canvasRenderRequestId += 1;
         this.userImgSrc = null;
+        this.resetLogoRenderAssets();
         const c = document.getElementById('user-logo-container');
         if (c) {
             c.style.display = 'none';
+            c.style.filter = 'none';
+            c.style.mixBlendMode = '';
+            c.style.opacity = '1';
             c.innerHTML = '';
+        }
+
+        const fo = document.getElementById('wood-case-perspective-fo');
+        if (fo) {
+            fo.classList.remove('wood-case-fo-blend');
         }
         
         const rulersGroup = document.getElementById('wood-case-rulers-group');
@@ -1111,4 +1416,3 @@ export function initializeWoodCase() {
     // Make it globally accessible for now for easier integration
     window.WoodCase = WoodCase;
 }
-

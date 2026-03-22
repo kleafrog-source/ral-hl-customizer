@@ -124,6 +124,10 @@
  pointer-events: none;
  overflow: visible;
 }
+
+#wood-case-perspective-fo.wood-case-fo-blend {
+ mix-blend-mode: multiply;
+}
 #wood-case-perspective-plane {
  transform-origin: 0 0;
  position: absolute;
@@ -152,7 +156,6 @@
  display: block;
  position: absolute;
  transform-origin: center center;
- mix-blend-mode: multiply;
  will-change: transform;
 }
 
@@ -209,4 +212,13 @@
 .pos-input-group input:focus {
  border-color: var(--accent);
  outline: none;
+}
+.case-preview-container.layer #wood-case-logo-wrapper{
+    pointer-events: none;
+    cursor: auto!important;
+}
+
+.case-preview-container.layer.active #wood-case-logo-wrapper{
+    pointer-events: auto;
+    cursor: grab!important;
 }
