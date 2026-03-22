@@ -190,7 +190,7 @@ if ($cache->initCache($cacheTime, $cacheId, $cacheDir)) {
                 break;
             }
         }
-        // Fallback если модель по умолчанию не найдена
+        // Fallback, если модель по умолчанию не найдена
         if (!$currentModelCode) {
             $currentModelCode = '023-the-bomblet';
         }

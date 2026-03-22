@@ -45,9 +45,16 @@ class StateManager {
             currentModelId: null,
             modelSeries: null,
             basePrice: 0,
+            miclogoState: null,
             spheres: {},
             body: {},
-            logo: { useCustom: false, customLogoData: null },
+            logo: {
+                useCustom: false,
+                customLogoData: null,
+                customLogoMeta: null,
+                customLogoTransform: null,
+                customLogoMetrics: null
+            },
             logobg: {},
             case: { laserEngravingEnabled: false, logoTransform: { x: 0, y: 0, scale: 1 }, logoWidthMM: 0, logoOffsetMM: { top: 0, left: 0 } },
             shockmount: { enabled: false, included: false, available: false },

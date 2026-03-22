@@ -328,6 +328,48 @@ const WoodCase = {
 
         if (!topInput || !leftInput || !widthInput) return;
 
+        const enhanceWithSteppers = (input, labelText) => {
+            if (!input || input.dataset.stepperReady === '1') {
+                return;
+            }
+
+            const group = input.closest('.input-group');
+            const label = group?.querySelector('label');
+            if (!group || !label) {
+                return;
+            }
+
+            input.dataset.stepperReady = '1';
+            group.classList.add('positioning-input-group');
+            input.classList.add('positioning-number-input');
+
+            const controls = document.createElement('div');
+            controls.className = 'positioning-input-controls';
+
+            const createButton = (delta, text) => {
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.textContent = text;
+                button.className = 'positioning-stepper-btn';
+                button.setAttribute('aria-label', `${delta > 0 ? 'Увеличить' : 'Уменьшить'} ${labelText}`);
+                button.addEventListener('click', () => {
+                    const currentValue = Number.parseFloat(input.value || '0') || 0;
+                    input.value = String(Math.max(0, currentValue + delta));
+                    input.dispatchEvent(new Event('input', { bubbles: true }));
+                });
+                return button;
+            };
+
+            controls.appendChild(createButton(-1, '-'));
+            controls.appendChild(input);
+            controls.appendChild(createButton(1, '+'));
+            group.appendChild(controls);
+        };
+
+        enhanceWithSteppers(topInput, 'отступ сверху');
+        enhanceWithSteppers(leftInput, 'отступ слева');
+        enhanceWithSteppers(widthInput, 'ширину');
+
         const updateFromInputs = () => {
             if (!this.userImgSrc) return;
             const state = this.history[this.currentCase];
@@ -579,11 +621,11 @@ const WoodCase = {
             this.syncBurnFilterOrientation();
             container.style.display = 'block';
             if (this.isSvg) {
-                container.style.filter = 'grayscale(1) brightness(0) url(#woodBurnFilter';
+                container.style.filter = 'grayscale(1) brightness(0) url(#woodBurnFilter)';
                 container.style.mixBlendMode = 'multiply';
                 container.style.opacity = '0.9';
             } else {
-                container.style.filter = 'grayscale(1) contrast(1.2) brightness(0)  url(#burnFilterSVG) ';
+                container.style.filter = 'url(#svg-burn-charcoal)';
                 container.style.mixBlendMode = 'multiply';
                 container.style.opacity = '1';
             }
@@ -1069,3 +1111,4 @@ export function initializeWoodCase() {
     // Make it globally accessible for now for easier integration
     window.WoodCase = WoodCase;
 }
+

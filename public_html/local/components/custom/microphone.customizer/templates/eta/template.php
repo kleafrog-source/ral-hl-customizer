@@ -69,6 +69,7 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
         <div class="app-container">
              <div class="preview-area" id="preview-area">
             <div class="svg-container">
+                <div class="camera-scene" id="camera-scene">
                      <div class="svg-wrapper" id="microphone-svg-container">
                     <!-- SVG контент будет загружен через JavaScript -->
                      </div>
@@ -259,6 +260,14 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                                     <feComposite operator="in" in="distorted" in2="noise" result="burned"/>
                                     <feGaussianBlur stdDeviation="0.4" in="burned"/>
                                 </filter>
+                                <filter id="svg-burn-charcoal">
+                                    <feColorMatrix type="matrix" values="1 1 1 0 -1.6
+1 1 1 0 -1.6
+1 1 1 0 -1.6
+0 0 0 1 0" result="base"></feColorMatrix>
+                                    <feFlood flood-color="#120a07" result="color"></feFlood>
+                                    <feComposite in="color" in2="base" operator="in"></feComposite>
+                                </filter>
                             </defs>
                             <g id="wood-case-bg-layer"></g>
                             <foreignObject id="wood-case-perspective-fo" x="0" y="0" width="100%" height="100%">
@@ -272,6 +281,7 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                         </svg>
                         </div>
                         </div>
+                    </div>
                     </div>
                 </div>
         
@@ -677,20 +687,20 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                                         </div>
                                         
                                         <!-- Positioning controls -->
-                                        <div class="submenu-section" id="case-positioning-controls" style="display: none;">
+                                        <div class="submenu-section is-hidden" id="case-positioning-controls">
                                             <h4 class="section-title">Позиционирование</h4>
-                                            <div class="manual-inputs" style="display: flex; flex-direction: column; gap: 10px;">
-                                                <div class="input-group" style="display: flex; justify-content: space-between; align-items: center;">
+                                            <div class="manual-inputs">
+                                                <div class="input-group">
                                                     <label for="input-case-top">Отступ сверху (мм)</label>
-                                                    <input type="number" id="input-case-top" value="0" style="width: 60px;">
+                                                    <input type="number" id="input-case-top" value="0">
                                                 </div>
-                                                <div class="input-group" style="display: flex; justify-content: space-between; align-items: center;">
+                                                <div class="input-group">
                                                     <label for="input-case-left">Отступ слева (мм)</label>
-                                                    <input type="number" id="input-case-left" value="0" style="width: 60px;">
+                                                    <input type="number" id="input-case-left" value="0">
                                                 </div>
-                                                <div class="input-group" style="display: flex; justify-content: space-between; align-items: center;">
+                                                <div class="input-group">
                                                     <label for="input-case-width">Ширина (мм)</label>
-                                                    <input type="number" id="input-case-width" value="100" style="width: 60px;">
+                                                    <input type="number" id="input-case-width" value="100">
                                                 </div>
                                             </div>
                                         </div>
@@ -876,7 +886,8 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                                 </h4>
                                 <input type="checkbox" class="liquid-toggle" id="logo-mode-toggle">
                             </div>
-                            <p><?= htmlspecialchars($arResult['LIQUID_TOGGLES']['custom_logo']['description']) ?></p>
+                            <p id="custom-logo-description"><?= htmlspecialchars($arResult['LIQUID_TOGGLES']['custom_logo']['description']) ?></p>
+                            <button type="button" id="custom-logo-edit" class="custom-logo-edit-btn">Изменить</button>
                             <div id="custom-logo-upload-area" style="display: none;">
                                 <div class="option-group">
                                     <!-- <h4>Кастомная эмблема</h4> -->
@@ -922,7 +933,7 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                                     <!-- Custom logo microphone upload area -->
                                     <div class="custom-logo-upload" id="custom-logo-upload" style="display: block;">
                                         <div class="upload-area">
-                                            <input type="file" id="logo-file-input" accept="image/*" style="display: none;">
+                                            <input type="file" id="logo-file-input" accept=".png,.svg,.jpg,.jpeg,.bmp,.webp,.ico,image/png,image/svg+xml,image/jpeg,image/bmp,image/webp,image/x-icon" style="display: none;">
                                             <button class="upload-button" onclick="document.getElementById('logo-file-input').click()">
                                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                                                     <path d="M21 15V19C21 20.1 20.1 21 19 21H5C3.9 21 3 20.1 3 19V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -931,8 +942,48 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                                                 </svg>
                                                 <span>Загрузить логотип</span>
                                             </button>
-<p class="upload-hint">Допустимые форматы: PNG, SVG, JPG, BMP, WEBP, ICO, до 3 МБ</p>
-                                             <button id="custom-logo-remove" class="remove-custom-logo-btn" style="display:none; width:100%; margin-top:10px; padding:10px; border:1px solid #ef4444; color:#ef4444; background:none; border-radius:8px; cursor:pointer;">Удалить загруженный файл</button>
+                                            <p class="upload-hint">Допустимые форматы: PNG, SVG, JPG, BMP, WEBP, ICO, до 3 МБ</p>
+                                            <div id="custom-logo-positioning-controls" class="positioning-panel custom-logo-positioning-panel is-hidden">
+                                                <div class="positioning-title">Позиционирование</div>
+                                                <div
+                                                    id="custom-logo-positioning-hint"
+                                                    class="positioning-hint"
+                                                    data-active-text="Перетаскивайте логотип в превью. Колесо мыши или щипок меняют масштаб."
+                                                    data-idle-text="Загрузите файл, чтобы включить позиционирование в превью."
+                                                >
+                                                    Загрузите файл, чтобы включить позиционирование в превью.
+                                                </div>
+                                                <div id="custom-logo-manual-inputs" class="positioning-manual-inputs">
+                                                    <div class="positioning-input-group">
+                                                        <label for="custom-logo-input-top-mm">Отступ сверху (мм)</label>
+                                                        <div class="positioning-input-controls">
+                                                            <button type="button" class="positioning-stepper-btn" data-step-target="custom-logo-input-top-mm" data-step-delta="-1">-</button>
+                                                            <input type="number" class="positioning-number-input" id="custom-logo-input-top-mm" data-metric="top" value="0">
+                                                            <button type="button" class="positioning-stepper-btn" data-step-target="custom-logo-input-top-mm" data-step-delta="1">+</button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="positioning-input-group">
+                                                        <label for="custom-logo-input-width-mm">Ширина (мм)</label>
+                                                        <div class="positioning-input-controls">
+                                                            <button type="button" class="positioning-stepper-btn" data-step-target="custom-logo-input-width-mm" data-step-delta="-1">-</button>
+                                                            <input type="number" class="positioning-number-input" id="custom-logo-input-width-mm" data-metric="width" value="0">
+                                                            <button type="button" class="positioning-stepper-btn" data-step-target="custom-logo-input-width-mm" data-step-delta="1">+</button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="positioning-input-group">
+                                                        <label for="custom-logo-input-height-mm">Высота (мм)</label>
+                                                        <div class="positioning-input-controls">
+                                                            <button type="button" class="positioning-stepper-btn" data-step-target="custom-logo-input-height-mm" data-step-delta="-1">-</button>
+                                                            <input type="number" class="positioning-number-input" id="custom-logo-input-height-mm" data-metric="height" value="0">
+                                                            <button type="button" class="positioning-stepper-btn" data-step-target="custom-logo-input-height-mm" data-step-delta="1">+</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div id="custom-logo-actions" class="positioning-actions is-hidden">
+                                                    <button id="custom-logo-remove" class="remove-custom-logo-btn positioning-action-button positioning-action-button-danger" type="button">Удалить загруженный файл</button>
+                                                    <button id="custom-logo-done" class="positioning-action-button positioning-action-button-success" type="button">Готово</button>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -1359,6 +1410,29 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
         </div>
     </div>
 
+    <div class="modal-overlay" id="order-success-modal" aria-hidden="true">
+        <div class="modal-container order-success-modal">
+            <div class="order-success-modal__header">
+                <h3>Спасибо за вашу конфигурацию</h3>
+                <button type="button" class="order-success-modal__close" data-success-close aria-label="Закрыть">×</button>
+            </div>
+            <p class="order-success-modal__text">
+                Мы сохранили вашу конфигурацию и свяжемся с вами, чтобы обсудить детали для воплощения вашей конфигурации.
+            </p>
+            <p class="order-success-modal__question">
+                Вы хотите остаться на странице или исследовать сайт soyuzmicrophones.ru?
+            </p>
+            <div class="order-success-modal__actions">
+                <button type="button" class="leave-confirm-modal__cancel" data-success-close>
+                    Остаться в кастомайзере
+                </button>
+                <button type="button" class="order-button order-success-modal__confirm" data-success-explore>
+                    Перейти на сайт
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Report Modal -->
     <div class="modal-overlay" id="report-modal">
         <div class="modal-container report-container">
@@ -1516,3 +1590,4 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
         <!-- Additional hidden fields for customization data -->
         <input type="hidden" id="customizer-config-json" name="config_json" value="">
     </div>
+

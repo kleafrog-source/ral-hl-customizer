@@ -337,3 +337,25 @@ export const CASE_GEOMETRY = {
         }
     }
 };
+
+export const MIC_LOGO_GEOMETRY = {
+    '017': {
+        diameterMm: 55,
+        heightMm: 87.02
+    },
+    '023': {
+        diameterMm: 47,
+        heightMm: 74.373
+    }
+};
+
+export function getMicLogoGeometry(modelCode = '') {
+    const normalizedCode = String(modelCode || '').trim();
+    const seriesKey = normalizedCode.startsWith('023') ? '023' : '017';
+    const geometry = MIC_LOGO_GEOMETRY[seriesKey];
+
+    return {
+        ...geometry,
+        circumferenceMm: Number((Math.PI * geometry.diameterMm).toFixed(3))
+    };
+}

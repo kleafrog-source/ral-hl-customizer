@@ -28,7 +28,7 @@ function setLayerDisplay(layer, display, important = false) {
 }
 
 function updateGrillVisibility(svg, spheresState = {}) {
-    const showGrills = !!spheresState.isRal;
+    const showGrills = !!spheresState.isRal && spheresState.svgTargetMode !== 'original';
 
     for (let i = 1; i <= 3; i++) {
         setLayerDisplay(svg.querySelector(`#img-grill-mic${i}`), showGrills ? 'inline' : 'none');

@@ -126,7 +126,7 @@ export function getCaseImages() {
             caseImages[code] = {
                 mobile: assetsPath + imageBase + '_mobile.png',
                 tablet: assetsPath + imageBase + '_tablet.png', 
-                desktop: assetsPath + imageBase + '_desktop.png',
+                desktop: assetsPath + imageBase + '_4k.png',
                 _4k: assetsPath + imageBase + '_4k.png'
             };
         }

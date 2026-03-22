@@ -5,8 +5,8 @@ import { buildShockmountState, getShockmountOptionVariantCode } from '../config/
 import { updateUI } from '../ui-core.js';
 import { refreshShockmountUI, updateShockmountVisibility } from './shockmount-new.js';
 import { updateSVG } from '../engine.js';
-import { updateLogoSVG } from './logo.js';
-import { updateMicVariant } from './camera-effect.js';
+import { activateCustomLogoEditing, finishCustomLogoEditing, updateLogoSVG } from './logo.js';
+import { switchLayer, updateMicVariant } from './camera-effect.js';
 
 let listenersBound = false;
 
@@ -45,10 +45,17 @@ function syncLogoToggleState(enabled) {
     const logoSection = document.querySelector('[data-section="logo"]');
     const logobgSection = document.querySelector('[data-section="logobg"]');
     const customLogoUploadArea = document.getElementById('custom-logo-upload-area');
+    const customLogoDescription = document.getElementById('custom-logo-description');
+    const customLogoEditButton = document.getElementById('custom-logo-edit');
 
     if (logoSection) logoSection.classList.toggle('disabled', enabled);
     if (logobgSection) logobgSection.classList.toggle('disabled', enabled);
-    if (customLogoUploadArea) customLogoUploadArea.style.display = enabled ? 'block' : 'none';
+    if (customLogoUploadArea) {
+        const isCollapsed = customLogoUploadArea.dataset.collapsed === '1';
+        customLogoUploadArea.style.display = enabled && !isCollapsed ? 'block' : 'none';
+    }
+    if (!enabled && customLogoDescription) customLogoDescription.style.display = '';
+    if (!enabled && customLogoEditButton) customLogoEditButton.style.display = 'none';
 }
 
 function syncEngravingToggleState(enabled) {
@@ -85,8 +92,21 @@ export function initToggles() {
     if (logoToggle) {
         logoToggle.addEventListener('change', () => {
             const enabled = logoToggle.checked;
-            stateManager.set('logo.useCustom', enabled);
-            syncLogoToggleState(enabled);
+            if (enabled) {
+                stateManager.batch((batch) => {
+                    batch('logo.useCustom', true);
+                });
+                syncLogoToggleState(true);
+                switchLayer('logo');
+                activateCustomLogoEditing();
+            } else {
+                finishCustomLogoEditing();
+                stateManager.batch((batch) => {
+                    batch('logo.useCustom', false);
+                    batch('miclogoState', null);
+                });
+                syncLogoToggleState(false);
+            }
             updateSVG();
             updateLogoSVG();
             updateUI();

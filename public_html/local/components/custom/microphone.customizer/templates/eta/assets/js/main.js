@@ -54,12 +54,12 @@ function initializeCurrentModelSelection(currentModelCode) {
         return;
     }
 
-    setTimeout(() => {
+    requestAnimationFrame(() => {
         const selection = selectModelVariant(currentModelCode);
         if (!selection?.runtimeData) {
             console.error('[Main.js] Model runtime data not found for code:', currentModelCode);
         }
-    }, 100);
+    });
 }
 
 function initCustomizerModules(currentModelCode) {

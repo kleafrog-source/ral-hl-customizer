@@ -7,11 +7,31 @@ import { updateLogoSVG, updateMalfaLogoOptionsVisibility } from './modules/logo.
 import { refreshShockmountUI, updateShockmountVisibility } from './modules/shockmount-new.js';
 import { syncToggles, initToggles } from './modules/toggles.js';
 import { calculateTotal, getBreakdown, formatPrice, debugPrices } from './modules/price-calculator.js';
-import { initCameraEffect, switchLayer } from './modules/camera-effect.js';
+import { resetCameraToGlobalView, switchLayer, transitionToGlobalView } from './modules/camera-effect.js';
 import { sendOrder } from './services/report.js';
 import { hasPrivacyConsent, validateForm } from './services/validation.js';
 import { prepareModelSelection } from './modules/model-selection.js';
 import { debugWarn } from './utils/debug.js';
+
+const OPTION_SWATCH_PARTS = new Set([
+    'spheres',
+    'body',
+    'logo',
+    'logobg',
+    'shockmount',
+    'shockmountPins'
+]);
+
+const SPECIAL_OPTION_SWATCHES = {
+    'spheres-satinsteel': 'linear-gradient(135deg, #f4f4f1 0%, #bcbec2 45%, #7e8288 100%)',
+    'body-satinsteel': 'linear-gradient(135deg, #f4f4f1 0%, #bcbec2 45%, #7e8288 100%)',
+    'spheres-brass': 'linear-gradient(135deg, #f6e3a1 0%, #c99b2c 48%, #7f5c10 100%)',
+    'brass-logo': 'linear-gradient(135deg, #f6e3a1 0%, #c99b2c 48%, #7f5c10 100%)',
+    'pins-brass-023': 'linear-gradient(135deg, #f6e3a1 0%, #c99b2c 48%, #7f5c10 100%)',
+    coldchrome: 'linear-gradient(135deg, #f5f7fa 0%, #b9c2cb 45%, #727b87 100%)',
+    malfagold: 'linear-gradient(135deg, #f8e7aa 0%, #ddb64a 42%, #8e6516 100%)',
+    malfasilver: 'linear-gradient(135deg, #fbfcfd 0%, #cfd5dd 42%, #8e96a3 100%)'
+};
 
 function syncShockmountVisibility(delay = false) {
     if (!delay) {
@@ -46,6 +66,77 @@ function syncSidebarResponsiveControls(sidebar = document.getElementById('custom
     edgeControls.classList.toggle('is-inline', isMobile);
 }
 
+function getOptionSwatchFill(button) {
+    const variantCode = button.dataset.variantCode || button.dataset.variant || '';
+    const explicitSwatch = SPECIAL_OPTION_SWATCHES[variantCode];
+    if (explicitSwatch) {
+        return explicitSwatch;
+    }
+
+    const ralHex = button.dataset.ralHex;
+    if (ralHex) {
+        return ralHex;
+    }
+
+    return '';
+}
+
+function getStateSwatchFill(sectionState, fallbackColor = '') {
+    const variantCode = sectionState?.variantCode || sectionState?.variant || '';
+    const explicitSwatch = SPECIAL_OPTION_SWATCHES[variantCode];
+    if (explicitSwatch) {
+        return explicitSwatch;
+    }
+
+    return sectionState?.colorValue || fallbackColor || '';
+}
+
+function applyFillToElement(element, fill) {
+    if (!element) {
+        return;
+    }
+
+    element.style.backgroundColor = '';
+    element.style.backgroundImage = '';
+
+    if (!fill) {
+        return;
+    }
+
+    if (fill.startsWith('linear-gradient(')) {
+        element.style.backgroundImage = fill;
+        return;
+    }
+
+    element.style.backgroundColor = fill;
+}
+
+function initOptionColorSwatches() {
+    document.querySelectorAll('.option-button.variant-item[data-option-part]').forEach((button) => {
+        const optionPart = button.dataset.optionPart;
+        if (!OPTION_SWATCH_PARTS.has(optionPart)) {
+            return;
+        }
+
+        const optionName = button.querySelector('.option-name');
+        if (!optionName || optionName.querySelector('.option-color-swatch')) {
+            return;
+        }
+
+        const fill = getOptionSwatchFill(button);
+        if (!fill) {
+            return;
+        }
+
+        const swatch = document.createElement('span');
+        swatch.className = 'option-color-swatch';
+
+        applyFillToElement(swatch, fill);
+
+        optionName.prepend(swatch);
+    });
+}
+
 export function applyModelSelectionUI(modelCode, options = {}) {
     const {
         syncWoodCase = false,
@@ -60,7 +151,7 @@ export function applyModelSelectionUI(modelCode, options = {}) {
     updateUI();
     updateSVG();
     refreshShockmountUI(stateManager.get());
-    initCameraEffect(modelCode, 'global-view');
+    transitionToGlobalView(modelCode, stateManager.get());
     syncShockmountVisibility(delayShockmountVisibility);
 
     if (syncWoodCase && window.WoodCase) {
@@ -156,17 +247,20 @@ export function updateUI() {
         shockPinsMenu.style.display = s.visible && s.enabled ? '' : 'none';
     }
 
-    const setColorDisplay = (id, color) => {
+    const setColorDisplay = (id, fill) => {
         const el = document.getElementById(id);
-        if (el && color) el.style.backgroundColor = color;
+        applyFillToElement(el, fill);
     };
 
-    setColorDisplay('spheres-color-display', state.spheres?.colorValue);
-    setColorDisplay('body-color-display', state.body?.colorValue);
-    setColorDisplay('logo-color-display', state.logo?.useCustom ? '#000000' : state.logobg?.colorValue);
-    setColorDisplay('logobg-color-display', state.logobg?.colorValue);
-    setColorDisplay('shockmount-color-display', state.shockmount?.colorValue);
-    setColorDisplay('shockmountPins-color-display', state.shockmountPins?.colorValue);
+    setColorDisplay('spheres-color-display', getStateSwatchFill(state.spheres));
+    setColorDisplay('body-color-display', getStateSwatchFill(state.body));
+    setColorDisplay(
+        'logo-color-display',
+        state.logo?.useCustom ? '#000000' : getStateSwatchFill(state.logo, state.logobg?.colorValue)
+    );
+    setColorDisplay('logobg-color-display', getStateSwatchFill(state.logobg));
+    setColorDisplay('shockmount-color-display', getStateSwatchFill(state.shockmount));
+    setColorDisplay('shockmountPins-color-display', getStateSwatchFill(state.shockmountPins));
 
     const setSubtitle = (id, value) => {
         const el = document.getElementById(id);
@@ -272,7 +366,9 @@ export function initEventListeners() {
     initPriceSectionToggle();
     initToggles();
     initOrderModal();
+    initOrderSuccessModal();
     initLeaveHomeModal();
+    initOptionColorSwatches();
     initHelpButton();
 
     document.querySelectorAll('.menu-item[data-section]').forEach(item => {
@@ -335,6 +431,10 @@ export function initEventListeners() {
 
 function focusSection(section) {
     if (!section) return;
+    if (section === 'logo' || section === 'customlogo' || section === 'logobg') {
+        switchLayer('logo');
+        return;
+    }
     if (section === 'case') {
         switchLayer('case');
         return;
@@ -388,6 +488,7 @@ function initPriceSectionToggle() {
 function serializeConfig() {
     window.WoodCase?.commitPendingTransformState?.();
     const state = stateManager.get();
+    const useCustomMicLogo = !!state.logo?.useCustom;
     const breakdown = getBreakdown(state);
     const total = calculateTotal(state);
 
@@ -396,8 +497,8 @@ function serializeConfig() {
         options: {
             spheres: state.spheres?.variantCode,
             body: state.body?.variantCode,
-            logo: state.logo?.variantCode,
-            logobg: state.logobg?.variantCode,
+            logo: useCustomMicLogo ? null : state.logo?.variantCode,
+            logobg: useCustomMicLogo ? null : state.logobg?.variantCode,
             case: state.case?.variantCode,
             shockmount: state.shockmount?.variantCode,
             shockmountPins: state.shockmountPins?.variantCode
@@ -411,6 +512,12 @@ function serializeConfig() {
             case: breakdown.case,
             shockmount: breakdown.shockmount,
             total: total
+        },
+        micLogo: {
+            enabled: state.logo?.useCustom,
+            summary: state.miclogoState,
+            transform: state.logo?.customLogoTransform,
+            metrics: state.logo?.customLogoMetrics
         },
         woodCaseEngraving: {
             enabled: state.case?.laserEngravingEnabled,
@@ -436,6 +543,7 @@ function initOrderModal() {
     const submitBtn = form?.querySelector('button[type="submit"]');
     const submitWrapper = submitBtn?.closest('.submit-button-wrapper');
     const privacyCheckbox = document.getElementById('input-privacy-consent');
+    const successModal = document.getElementById('order-success-modal');
 
     const syncSubmitState = (forceDisabled = false) => {
         if (!submitBtn) {
@@ -480,6 +588,7 @@ function initOrderModal() {
             }
 
             const originalText = submitBtn.textContent;
+            const originalWindowAlert = window.alert;
             syncSubmitState(true);
             submitBtn.textContent = 'Отправка...';
 
@@ -488,12 +597,17 @@ function initOrderModal() {
                 const clientData = Object.fromEntries(formData.entries());
 
                 await sendOrder(clientData);
+                window.alert = () => {};
+                close();
+                form.reset();
+                openSuccessModal();
                 alert('Заказ успешно отправлен!');
                 close();
                 form.reset();
             } catch (error) {
                 alert('Ошибка при отправке заказа: ' + error.message);
             } finally {
+                window.alert = originalWindowAlert;
                 submitBtn.textContent = originalText;
                 requestAnimationFrame(() => syncSubmitState());
             }
@@ -528,6 +642,14 @@ function initLeaveHomeModal() {
         modal.style.display = 'none';
         modal.setAttribute('aria-hidden', 'true');
     };
+    const openSuccessModal = () => {
+        if (!successModal) {
+            return;
+        }
+
+        successModal.style.display = 'flex';
+        successModal.setAttribute('aria-hidden', 'false');
+    };
 
     trigger.addEventListener('click', open);
 
@@ -537,6 +659,42 @@ function initLeaveHomeModal() {
 
     confirmBtn?.addEventListener('click', () => {
         window.location.href = destinationUrl;
+    });
+
+    modal.addEventListener('click', (event) => {
+        if (event.target === modal) {
+            close();
+        }
+    });
+
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && modal.getAttribute('aria-hidden') === 'false') {
+            close();
+        }
+    });
+}
+
+function initOrderSuccessModal() {
+    const modal = document.getElementById('order-success-modal');
+
+    if (!modal) {
+        return;
+    }
+
+    const closeButtons = modal.querySelectorAll('[data-success-close]');
+    const exploreButton = modal.querySelector('[data-success-explore]');
+
+    const close = () => {
+        modal.style.display = 'none';
+        modal.setAttribute('aria-hidden', 'true');
+    };
+
+    closeButtons.forEach((button) => {
+        button.addEventListener('click', close);
+    });
+
+    exploreButton?.addEventListener('click', () => {
+        window.location.href = '/';
     });
 
     modal.addEventListener('click', (event) => {
@@ -566,6 +724,8 @@ export function toggleSubmenu(section, forceClose = false) {
     if (!forceClose && !isOpen) {
         submenu.style.display = 'block';
         requestAnimationFrame(() => submenu.classList.add('active'));
+    } else if (forceClose) {
+        resetCameraToGlobalView();
     }
 
     requestAnimationFrame(() => {

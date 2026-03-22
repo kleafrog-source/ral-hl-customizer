@@ -65,11 +65,12 @@ function setClientFields(formData, clientData) {
 }
 
 function setConfigurationFields(formData, currentState, woodcaseDesk) {
+    const useCustomMicLogo = !!currentState.logo?.useCustom;
     formData.set('form_text_31', currentState.currentModelCode || '');
     formData.set('form_text_32', currentState.spheres?.variantName || currentState.spheres?.variant || '');
     formData.set('form_text_33', currentState.body?.variantName || currentState.body?.variant || '');
-    formData.set('form_text_34', currentState.logo?.variantName || currentState.logo?.variant || '');
-    formData.set('form_text_35', currentState.logobg?.variantName || currentState.logobg?.variant || '');
+    formData.set('form_text_34', useCustomMicLogo ? (currentState.miclogoState || '') : (currentState.logo?.variantName || currentState.logo?.variant || ''));
+    formData.set('form_text_35', useCustomMicLogo ? '' : (currentState.logobg?.variantName || currentState.logobg?.variant || ''));
     formData.set('form_text_36', woodcaseDesk);
     formData.set(
         'form_text_37',
@@ -90,17 +91,25 @@ function getDisplayedTotalPrice() {
 }
 
 function buildConfigPayload(currentState) {
+    const useCustomMicLogo = !!currentState.logo?.useCustom;
     return {
         modelCode: currentState.currentModelCode,
         options: {
             spheres: currentState.spheres?.variant,
             body: currentState.body?.variant,
-            logo: currentState.logo?.variant,
-            logobg: currentState.logobg?.variant,
+            logo: useCustomMicLogo ? null : currentState.logo?.variant,
+            logobg: useCustomMicLogo ? null : currentState.logobg?.variant,
             case: currentState.case?.variant,
             shockmount: currentState.shockmount?.variant,
             shockmountPins: currentState.shockmountPins?.variant
         },
+        micLogo: currentState.logo?.useCustom
+            ? {
+                summary: currentState.miclogoState,
+                transform: currentState.logo?.customLogoTransform,
+                metrics: currentState.logo?.customLogoMetrics
+            }
+            : null,
         woodCase: currentState.case
     };
 }

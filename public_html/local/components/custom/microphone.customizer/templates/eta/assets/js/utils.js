@@ -20,7 +20,7 @@ export function getAssetSuffix() {
     const w = getViewportWidth();
     if (w > 1920) return '_4k';
     if (w >= 768 && w <= 1024) return '_tablet';
-    return '_hdmob';
+    return '_4k';
 }
 
 export function preloadImages(urls) {
