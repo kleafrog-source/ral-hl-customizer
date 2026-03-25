@@ -19,7 +19,7 @@ $arResult['VIEW_TYPE_MAP'] = $viewTypeMap;
 $arResult['VIEW_TYPE_TO_SECTION'] = $viewTypeMap;
 $arResult['SECTION_TO_VIEW_TYPE'] = array_flip($viewTypeMap);
 
-$cacheTime = 0;
+$cacheTime = 3600;
 $cacheId = 'customizer_hl_data_eta_' . ($arParams['MODEL_CODE'] ?? 'default');
 $cacheDir = '/customizer/hl_data';
 

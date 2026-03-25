@@ -82,6 +82,10 @@ function setConfigurationFields(formData, currentState, woodcaseDesk) {
 }
 
 function buildWoodcaseDesk(caseState = {}) {
+    if (!caseState.laserEngravingEnabled) {
+        return '';
+    }
+
     const caseOffset = caseState.logoOffsetMM || { top: 0, left: 0 };
     return `Ш:${caseState.logoWidthMM || 0}мм, Сверху:${caseOffset.top || 0}мм, Слева:${caseOffset.left || 0}мм`;
 }
@@ -92,6 +96,13 @@ function getDisplayedTotalPrice() {
 
 function buildConfigPayload(currentState) {
     const useCustomMicLogo = !!currentState.logo?.useCustom;
+    const woodCaseState = currentState.case?.laserEngravingEnabled
+        ? currentState.case
+        : {
+            ...(currentState.case || {}),
+            customLogo: null
+        };
+
     return {
         modelCode: currentState.currentModelCode,
         options: {
@@ -110,7 +121,7 @@ function buildConfigPayload(currentState) {
                 metrics: currentState.logo?.customLogoMetrics
             }
             : null,
-        woodCase: currentState.case
+        woodCase: woodCaseState
     };
 }
 
@@ -136,7 +147,7 @@ export async function sendOrder(clientData) {
         appendFileField(formData, 'form_file_47', previewBlob, 'preview');
     }
 
-    if (currentState.case?.customLogo) {
+    if (currentState.case?.laserEngravingEnabled && currentState.case?.customLogo) {
         const caseBlob = buildBlobFromData(currentState.case.customLogo);
         appendFileField(formData, 'form_file_43', caseBlob, 'case_logo');
     }

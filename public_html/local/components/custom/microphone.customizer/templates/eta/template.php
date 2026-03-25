@@ -37,15 +37,46 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
      data-ajax-path="<?= $componentPath ?>/ajax.php"
      data-sessid="<?= bitrix_sessid() ?>">
 
-    <button
-        type="button"
-        class="customizer-home-logo"
-        id="customizer-home-logo"
-        data-home-url="/"
-        aria-label="Перейти на главную страницу"
-        title="Перейти на главную страницу"
-    ></button>
 
+<button type="button" data-home-url="/" class="customizer-home-logo" id="customizer-home-logo" aria-label="Перейти на главную страницу">
+    <svg id="logotype-soyuz-ru" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 145.15 55">
+        <g id="colors-squares">
+            <rect id="square1" x="0.108" y="0.146" width="25.471" height="41.789" style="  stroke-miterlimit: 10; stroke-width: 0.4px;"/>
+            <rect id="square2" x="25.58" y="0.146" width="25.471" height="41.789" style=" stroke-miterlimit: 10; stroke-width: 0.4px;"/>
+            <rect id="square3" x="51.051" y="0.146" width="25.471" height="41.789" style="stroke-miterlimit: 10; stroke-width: 0.4px;"/>
+            <rect id="square4" x="76.522" y="0.146" width="25.472" height="41.789" style="stroke-miterlimit: 10; stroke-width: 0.4px;"/>
+            <rect id="square5" x="101.993" y="0.146" width="43.156" height="41.789" style="stroke-miterlimit: 10; stroke-width: 0.4px;"/>
+        </g>
+        <g id="logosoyuzpart">
+            <path class="logo-big-letter" d="M114.487,22.619a.2.2,0,0,0-.11-.116c-.048-.011-.114.054-.138.08a.567.567,0,0,1-.492.234c-.429,0-.7-.586-.7-2.162,0-1.2.251-1.679.615-1.679.274,0,.389.184.58.351a.352.352,0,0,0,.094.067.1.1,0,0,0,.116-.069l.265-.779a.167.167,0,0,0,.012-.076c0-.059-.03-.094-.077-.153a1.371,1.371,0,0,0-1.01-.509c-.969,0-1.568,1.112-1.568,2.988,0,1.977.54,3.123,1.6,3.123.369,0,1.063-.3,1.063-.6a.254.254,0,0,0-.018-.085Z"/>
+            <path class="logo-big-letter" d="M134.827,21.106a1.283,1.283,0,0,0-.441-.393,1.442,1.442,0,0,0,.6-1.316c0-.556-.173-1.59-1.294-1.59a1.4,1.4,0,0,0-1.144.581.3.3,0,0,0-.06.162.278.278,0,0,0,.012.069l.189.562a.142.142,0,0,0,.216.087l.073-.077a.754.754,0,0,1,.557-.286c.423,0,.5.421.5.64,0,.471-.176.707-.552.707h-.2c-.094,0-.118.059-.118.169v.724c0,.135.041.169.118.169h.223a.546.546,0,0,1,.476.193.871.871,0,0,1,.153.54c0,.48-.276.766-.594.766a.759.759,0,0,1-.623-.292l-.078-.052a.158.158,0,0,0-.225.059l-.178.613a.433.433,0,0,0-.012.076c0,.152.294.371.446.463a1.674,1.674,0,0,0,.847.211,1.175,1.175,0,0,0,1.039-.522,2.134,2.134,0,0,0,.317-1.23A1.8,1.8,0,0,0,134.827,21.106Z" />
+            <path class="logo-big-letter" d="M128.474,13.152c-1.488,0-2.713,3.1-2.861,7.067h-1.385V8.582a.961.961,0,0,0-.1-.4c-.076-.1-.381-.1-.381-.1h-.291c-.093.016-.314.012-.411.115s-.085.429-.085.429V33.515s0,.271.081.355a.529.529,0,0,0,.354.117h.408s.251-.006.344-.139a.645.645,0,0,0,.067-.376V21.86h1.365c.149,3.905,1.355,6.95,2.82,6.95,1.566,0,2.835-3.477,2.835-7.767S128.579,13.152,128.474,13.152Zm0,14.187c-.961,0-1.74-2.874-1.74-6.42s.779-6.419,1.74-6.419,1.74,2.874,1.74,6.419S127.974,27.463,127.013,27.463Z" />
+            <path class="logo-big-letter" d="M118.709,13.152c-1.589,0-2.878,3.529-2.878,7.881s1.289,7.881,2.878,7.881,2.878-3.528,2.878-7.881S120.3,13.152,118.709,13.152Zm0,14.4c-.975,0-1.766-2.916-1.766-6.514s.791-6.514,1.766-6.514,1.765,2.917,1.765,6.514S119.684,27.547,118.709,27.547Z" />
+        </g>
+        <g id="logoletters">
+            <path class="logo-big-letter" d="M38.315,7.289a3.609,3.609,0,0,1,3.605,3.605V31.188a3.6,3.6,0,0,1-7.209,0V10.894a3.609,3.609,0,0,1,3.6-3.605m0-1.592h0a5.2,5.2,0,0,0-5.2,5.2V31.188a5.2,5.2,0,0,0,5.2,5.2h0a5.2,5.2,0,0,0,5.2-5.2V10.894a5.2,5.2,0,0,0-5.2-5.2Z" />
+            <path class="logo-big-letter" d="M16.448,29.641v1.274a3.681,3.681,0,0,1-3.06,3.68A3.608,3.608,0,0,1,9.24,31.031V10.853A3.683,3.683,0,0,1,12.3,7.172a3.61,3.61,0,0,1,4.148,3.565v1.389a.8.8,0,0,0,.8.8h0a.8.8,0,0,0,.8-.8v-1.39a5.2,5.2,0,0,0-5.2-5.2h0a5.2,5.2,0,0,0-5.2,5.2V31.031a5.2,5.2,0,0,0,5.2,5.2h0a5.2,5.2,0,0,0,5.2-5.2v-1.39a.8.8,0,0,0-.8-.8h0A.8.8,0,0,0,16.448,29.641Z" />
+            <path class="logo-big-letter" d="M66.454,5.7a5.293,5.293,0,0,0-4.945,5.337v9.205H57.264V7.236a.8.8,0,0,0-.8-.8h0a.8.8,0,0,0-.8.8v27.61a.8.8,0,0,0,.8.8h0a.8.8,0,0,0,.8-.8V21.837h4.245v9.2a5.292,5.292,0,0,0,4.945,5.337,5.2,5.2,0,0,0,5.448-5.19V10.894A5.2,5.2,0,0,0,66.454,5.7ZM70.31,31.188a3.6,3.6,0,0,1-7.209,0V10.894a3.6,3.6,0,1,1,7.209,0Z" />
+            <path class="logo-big-letter" d="M94.455,15.844v-4.95a5.2,5.2,0,0,0-5.2-5.2h0a5.2,5.2,0,0,0-5.2,5.2v1.38a.8.8,0,0,0,.8.8h0a.8.8,0,0,0,.8-.8V11.021A3.691,3.691,0,0,1,89.011,7.3a3.609,3.609,0,0,1,3.852,3.6v4.95a3.609,3.609,0,0,1-3.605,3.605v1.593a3.609,3.609,0,0,1,3.605,3.6v6.414a3.689,3.689,0,0,1-3.358,3.723,3.608,3.608,0,0,1-3.851-3.6V29.8a.8.8,0,0,0-.8-.8h0a.8.8,0,0,0-.8.8v1.39a5.2,5.2,0,0,0,5.2,5.2h0a5.2,5.2,0,0,0,5.2-5.2V24.647a5.188,5.188,0,0,0-2.443-4.4A5.189,5.189,0,0,0,94.455,15.844Z" />
+        </g>
+        <g id="bottom-letters">
+            <path d="M4.317,54.761a1.983,1.983,0,0,1-1.956-2V48.1a1.983,1.983,0,0,1,1.956-2,1.982,1.982,0,0,1,1.956,2v.245H5.887V48.1a1.6,1.6,0,0,0-1.57-1.618A1.6,1.6,0,0,0,2.747,48.1v4.656a1.6,1.6,0,0,0,1.57,1.618,1.6,1.6,0,0,0,1.57-1.618v-.242h.386v.242A1.982,1.982,0,0,1,4.317,54.761Z" style="fill: #333"/>
+            <path d="M58.462,54.761a1.958,1.958,0,0,1-1.956-1.956V48.053a1.956,1.956,0,0,1,3.912,0v4.752A1.958,1.958,0,0,1,58.462,54.761Zm0-8.278a1.571,1.571,0,0,0-1.57,1.57v4.752a1.57,1.57,0,1,0,3.14,0V48.053A1.571,1.571,0,0,0,58.462,46.483Z" style="fill: #333"/>
+            <path d="M77.85,50.35a1.214,1.214,0,0,0,.471-.957V47.5A1.222,1.222,0,0,0,77.1,46.281H74.9v8.282h2.444A1.164,1.164,0,0,0,78.505,53.4V51.391A1.161,1.161,0,0,0,77.85,50.35Zm-2.566-3.684H77.1a.837.837,0,0,1,.836.836v1.891a.837.837,0,0,1-.836.836H75.284ZM78.12,53.4a.778.778,0,0,1-.777.777H75.284V50.614h2.059a.778.778,0,0,1,.777.777Z" style="fill: #333"/>
+            <polygon points="25.02 46.703 25.02 46.317 21.301 46.317 21.301 54.563 25.02 54.563 25.02 54.177 21.687 54.177 21.687 50.633 24.376 50.633 24.376 50.247 21.687 50.247 21.687 46.703 25.02 46.703" style="fill: #333"/>
+            <path d="M15.743,53.521v-7.2H13.409a.887.887,0,0,0-.9.787l-.658,6.417H11.2v1.047h.386v-.661h4.4v.661h.386V53.521Zm-3.506,0,.655-6.379a.5.5,0,0,1,.517-.439h1.948v6.818Z" style="fill: #333"/>
+            <path d="M30.327,54.854l-.381-.06,1.181-7.547a1.1,1.1,0,0,1,1.087-.93H33.9v8.251H33.51V46.7h-1.3a.711.711,0,0,0-.706.6Z" style="fill: #333"/>
+            <path d="M140.941,46.1a1.958,1.958,0,0,0-1.955,1.956v2.183h-1.229V46.29h-.385v8.278h.385V50.622h1.229v2.183a1.956,1.956,0,1,0,3.911,0V48.053A1.958,1.958,0,0,0,140.941,46.1Zm1.57,6.708a1.57,1.57,0,1,1-3.14,0V48.053a1.57,1.57,0,1,1,3.14,0Z" style="fill: #333"/>
+            <path d="M87.584,46.281h-2.2v8.287h.386V52.983h1.816a1.221,1.221,0,0,0,1.221-1.221V47.5A1.222,1.222,0,0,0,87.584,46.281Zm.836,5.481a.837.837,0,0,1-.836.836H85.768V46.666h1.816a.837.837,0,0,1,.836.836Z" style="fill: #333"/>
+            <path d="M109.02,46.29V52.6H107.2a.836.836,0,0,1-.835-.836V46.29h-.386v5.472a1.222,1.222,0,0,0,1.221,1.221h1.816v1.585h.386V46.29Z" style="fill: #333"/>
+            <polygon points="51.194 46.29 51.194 50.236 48.054 50.236 48.054 46.29 47.668 46.29 47.668 54.568 48.054 54.568 48.054 50.622 51.194 50.622 51.194 54.568 51.58 54.568 51.58 46.29 51.194 46.29" style="fill: #333"/>
+            <polygon points="119.809 46.29 119.809 50.236 116.669 50.236 116.669 46.29 116.283 46.29 116.283 54.568 116.669 54.568 116.669 50.622 119.809 50.622 119.809 54.568 120.195 54.568 120.195 46.29 119.809 46.29" style="fill: #333"/>
+            <path d="M42.347,54.568h.395L40.931,46.29h-.3l-1.811,8.278h.4l.347-1.585H42Zm-2.7-1.97,1.135-5.186L41.916,52.6Z" style="fill: #333"/>
+            <path d="M99.106,46.29H98.72V52.6H96.9a.837.837,0,0,1-.836-.836V46.29h-.385v5.472A1.221,1.221,0,0,0,96.9,52.983H98.72v.789a.4.4,0,0,1-.4.4c-.883,0-2.549.006-2.549.006v.386s1.666-.005,2.548-.006a.784.784,0,0,0,.781-.785v-.789h0Z" style="fill: #333"/>
+            <path d="M130.109,46.29V52.6h-1.816a.837.837,0,0,1-.836-.836V46.29h-.385v5.472a1.222,1.222,0,0,0,1.221,1.221h1.816v.789a.4.4,0,0,1-.4.4c-.883,0-2.549.006-2.549.006v.386s1.665-.005,2.549-.006a.785.785,0,0,0,.781-.785V46.29Z" style="fill: #333"/>
+        </g>
+    </svg>
+</button>
     <div id="start-screen" class="hidden">
         <!-- эта функция отвечает за стартовый экран. false в конце означает, что компонент не будет кэшироваться . Если поставить true то компонент будет кэшироваться -->
         <?$APPLICATION->IncludeComponent("bitrix:main.include", "", array("AREA_FILE_SHOW" => "file", "PATH" => $templateFolder."/start-screen.php"), false);?>
@@ -109,30 +140,30 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                           <use inkscape:label="shockmount-023-pins-monochrome-mask" xlink:href="#path29" id="path30" style="display:inline;fill:none"/>
                         </clipPath>
                         <filter inkscape:label="colorize-shockmount-body" id="filter7" width="1" height="1" x="0" y="0" style="color-interpolation-filters:sRGB">
-                          <feComposite id="feComposite6" flood-color="rgb(0,169,161)" in2="SourceGraphic" k1="1" k2="0.59999999999999998" operator="arithmetic" result="result1"/>
-                          <feFlood id="feFlood6" flood-color="rgb(110,110,110)" flood-opacity="1" result="result3"/>
+                          <feComposite id="feComposite6" in2="SourceGraphic" k1="1" k2="0.59999999999999998" operator="arithmetic" result="result1"/>
+                          <feFlood id="feFlood6" flood-color="rgb(210,197,195)" flood-opacity="1" result="result3"/>
                           <feBlend id="feBlend6" in="result3" in2="result1" mode="screen" result="result2"/>
                           <feBlend id="feBlend7" in2="result2" mode="multiply"/>
                           <feComposite id="feComposite7" in2="SourceGraphic" operator="in"/>
                         </filter>
+                  <filter inkscape:label="monochrome-shockmount-body" id="filter11" width="1" height="1" x="0" y="0" style="color-interpolation-filters:sRGB">
+                          <feColorMatrix id="feColorMatrix9" flood-color="rgb(8,8,8)" result="result1" type="luminanceToAlpha"/>
+                          <feFlood id="feFlood9" flood-color="rgb(0,0,0)"/>
+                          <feComposite id="feComposite10" in2="result1" operator="out"/>
+                          <feComposite id="feComposite11" in2="SourceGraphic" k1="-5" k2="6" k3="1" k4="-1.6" operator="arithmetic"/>
+                        </filter>
                         <filter inkscape:label="colorize-shockmount-pins" id="filter9" width="1" height="1" x="0" y="0" style="color-interpolation-filters:sRGB">
-                          <feComposite id="feComposite8" flood-color="rgb(210,197,195)" in2="SourceGraphic" k1="1" k2="0.59999999999999998" operator="arithmetic" result="result1"/>
-                          <feFlood id="feFlood8" flood-color="rgb(70,70,77)" flood-opacity="1" result="result3"/>
+                          <feComposite id="feComposite8" in2="SourceGraphic" k1="1" k2="0.59999999999999998" operator="arithmetic" result="result1"/>
+                          <feFlood id="feFlood8" flood-color="rgb(210,197,195)" flood-opacity="1" result="result3"/>
                           <feBlend id="feBlend8" in="result3" in2="result1" mode="screen" result="result2"/>
                           <feBlend id="feBlend9" in2="result2" mode="multiply"/>
                           <feComposite id="feComposite9" in2="SourceGraphic" operator="in"/>
-                        </filter>
-                        <filter inkscape:label="monochrome-shockmount-body" id="filter11" width="1" height="1" x="0" y="0" style="color-interpolation-filters:sRGB">
-                          <feColorMatrix id="feColorMatrix9" result="result1" type="luminanceToAlpha"/>
-                          <feFlood id="feFlood9"/>
-                          <feComposite id="feComposite10" in2="result1" operator="out"/>
-                          <feComposite id="feComposite11" in2="SourceGraphic" k1="-6" k2="8" k3="1" k4="-1.8" operator="arithmetic"/>
                         </filter>
                         <filter inkscape:label="monochrome-shockmount-pins" id="filter13" width="1" height="1" x="0" y="0" style="color-interpolation-filters:sRGB">
                           <feColorMatrix id="feColorMatrix12" flood-color="rgb(8,8,8)" result="result1" type="luminanceToAlpha"/>
                           <feFlood id="feFlood12" flood-color="rgb(0,0,0)"/>
                           <feComposite id="feComposite12" in2="result1" operator="out"/>
-                          <feComposite id="feComposite13" in2="SourceGraphic" k1="-6" k2="8" k3="1" k4="-1.8" operator="arithmetic"/>
+                          <feComposite id="feComposite13" in2="SourceGraphic" k1="-5" k2="6" k3="1" k4="-1.6" operator="arithmetic"/>
                         </filter>
                         <image xlink:href="https://soyuzmicrophones.ru/image/custom/shockmount_017_tube-017_fet.png" id="image" width="2731" height="2731"/>
                       </defs>

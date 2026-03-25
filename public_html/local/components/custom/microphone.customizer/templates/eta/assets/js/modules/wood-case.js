@@ -36,6 +36,10 @@ const WoodCase = {
         whiteThreshold: 200                              // порог полной прозрачности (0-255)
     },
 
+    isEngravingEnabled() {
+        return !!stateManager.get('case.laserEngravingEnabled');
+    },
+
     updateCaseState(updates) {
         stateManager.batch((batch) => {
             Object.entries(updates).forEach(([path, value]) => {
@@ -63,12 +67,11 @@ const WoodCase = {
     isCaseEditingActive() {
         const caseSubmenu = document.getElementById('submenu-case');
         const casePositioningControls = document.getElementById('case-positioning-controls');
-        const engravingToggle = document.getElementById('laser-engraving-toggle');
 
         return !!this.userImgSrc
+            && this.isEngravingEnabled()
             && !!caseSubmenu?.classList.contains('active')
-            && casePositioningControls?.style.display !== 'none'
-            && !!engravingToggle?.checked;
+            && casePositioningControls?.style.display !== 'none';
     },
 
     hideRulers() {
@@ -302,8 +305,15 @@ const WoodCase = {
             return null;
         }
 
-        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-        return { canvas, ctx, width: cssWidth, height: cssHeight };
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        return {
+            canvas,
+            ctx,
+            width: pixelWidth,
+            height: pixelHeight,
+            cssWidth,
+            cssHeight
+        };
     },
 
     async renderLogoWithCanvas() {
@@ -319,7 +329,7 @@ const WoodCase = {
             return;
         }
 
-        const renderCacheKey = `${this.isSvg ? 'svg' : 'img'}:${baseSize.width}x${baseSize.height}:${this.userImgSrc}`;
+        const renderCacheKey = `${this.isSvg ? 'svg' : 'img'}:${baseSize.width}x${baseSize.height}:${window.devicePixelRatio || 1}:${this.userImgSrc}`;
 
         if (this.isSvg) {
             if (
@@ -605,7 +615,10 @@ const WoodCase = {
         }
 
         if (engravingToggle) {
-            engravingToggle.addEventListener('change', () => this.syncEditingState());
+            engravingToggle.addEventListener('change', () => {
+                this.render({ syncBackground: false });
+                this.syncEditingState();
+            });
         }
 
         // Add drag&drop for case upload
@@ -876,10 +889,12 @@ const WoodCase = {
 
     getPixelsPerMM(caseId) {
         const dev = this.getDevice();
-        const poly = CASE_GEOMETRY.cases[caseId][dev].poly;
-        let minX = Infinity, maxX = -Infinity;
-        for(let i=0; i<poly.length; i+=2) { minX = Math.min(minX, poly[i]); maxX = Math.max(maxX, poly[i]); }
-        return (maxX - minX) / CASE_GEOMETRY.cases[caseId].mm;
+        const caseData = CASE_GEOMETRY.cases[caseId]?.[dev];
+        if (!caseData?.w) {
+            return 1;
+        }
+
+        return caseData.w / CASE_GEOMETRY.cases[caseId].mm;
     },
 
     render(options = {}) {
@@ -913,7 +928,6 @@ const WoodCase = {
         if (fo) {
             const vbParts = res.vb.split(' ');
             fo.setAttribute('width', vbParts[2]); fo.setAttribute('height', vbParts[3]);
-            fo.classList.toggle('wood-case-fo-blend', !!this.userImgSrc);
         }
 
         const infoResTag = document.getElementById('info-res-tag');
@@ -922,12 +936,16 @@ const WoodCase = {
         if (infoMmTag) infoMmTag.textContent = CASE_GEOMETRY.cases[this.currentCase].mm + ' мм';
 
         const container = document.getElementById('user-logo-container');
-        if (this.userImgSrc && container) {
-            container.style.display = 'block';
+        const shouldShowLogo = !!this.userImgSrc && this.isEngravingEnabled();
+
+        if (container) {
+            container.style.display = shouldShowLogo ? 'block' : 'none';
+        }
+
+        if (shouldShowLogo && container) {
             const poly = caseData.poly;
-            const bounds = this.getCasePolyBounds(poly);
-            const srcW = bounds.width;
-            const srcH = bounds.height;
+            const srcW = caseData.w;
+            const srcH = caseData.h;
             const dstQuad = this.getSortedCorners(poly);
             const h = this.solveHomography([{x:0,y:0},{x:srcW,y:0},{x:srcW,y:srcH},{x:0,y:srcH}], dstQuad);
             this.currentMatrix = h;
@@ -939,6 +957,13 @@ const WoodCase = {
             }
             this.scheduleCanvasRender();
             this.updateTransform();
+        } else {
+            this.currentMatrix = null;
+            this.hideRulers();
+        }
+
+        if (fo) {
+            fo.classList.toggle('wood-case-fo-blend', shouldShowLogo);
         }
 
         this.syncEditingState();

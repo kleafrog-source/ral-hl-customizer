@@ -169,23 +169,158 @@ body {
     height: calc(100vh - 1px);
 }
 
-.customizer-home-logo {
-    position: fixed;
-    top: 18px;
-    left: 18px;
-    z-index: 140;
-    display: block;
-    width: 152px;
-    aspect-ratio: 300 / 115;
-    min-height: 44px;
-    height: auto;
-    border: 0;
-    padding: 0;
-    background: url(/image/logo-mobile.svg) center center / contain no-repeat;
-    cursor: pointer;
-    opacity: 0.88;
-    transition: opacity 0.2s ease, transform 0.2s ease;
-}
+        .customizer-home-logo {
+            position: fixed;
+            top: 24px;
+            left: 24px;
+            z-index: 140;
+            display: block;
+            width: 160px;
+            aspect-ratio: 300 / 115;
+            min-height: 52px;
+            border: 0;
+            padding: 0;
+            background: linear-gradient(0deg, #ffffffe3, #ffffff);
+            border-radius: 2px;
+            cursor: pointer;
+            opacity: 0.95;
+            transition: opacity 0.2s ease, transform 0.2s ease, box-shadow 0.3s;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+            padding-bottom: 2px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+        }
+
+        .customizer-home-logo:hover {
+            opacity: 1;
+            transform: scale(1.01);
+            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
+        }
+
+        .customizer-home-logo:active {
+            transform: scale(0.99);
+        }
+
+        .customizer-home-logo svg {
+            display: block;
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+            pointer-events: none;
+        }
+
+        @media (max-width: 640px) {
+            .customizer-home-logo {
+                width: 130px;
+                top: 16px;
+                left: 16px;
+            }
+        }
+
+
+        #customizer-home-logo #square1,
+        #customizer-home-logo #square2,
+        #customizer-home-logo #square3,
+        #customizer-home-logo #square4,
+        #customizer-home-logo #square5,
+        #customizer-home-logo .logo-big-letter,
+        #customizer-home-logo #bottom-letters path,
+        #customizer-home-logo #bottom-letters polygon {
+            transition: fill 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
+                        stroke 0.3s ease-out;
+        }
+        
+        #customizer-home-logo:hover #square1 {
+            fill: #0a7588 !important;
+            transition-delay: 0.05s;
+        }
+        
+        #customizer-home-logo:hover #square2 {
+            fill: #e9d493 !important;
+            transition-delay: 0.15s;
+        }
+        
+        #customizer-home-logo:hover #square3 {
+            fill: #edc21b !important;
+            transition-delay: 0.25s;
+        }
+        
+        #customizer-home-logo:hover #square4 {
+            fill: #e21f26 !important;
+            transition-delay: 0.35s;
+        }
+        
+        #customizer-home-logo:hover #square5 {
+            fill: #0a7588 !important;
+            transition-delay: 0.45s;
+        }
+        
+
+        #customizer-home-logo .logo-big-letter {
+            fill: #333;
+            transition-delay: 0.55s;
+        }
+		
+
+        #customizer-home-logo:hover .logo-big-letter {
+            fill: #fff;
+            transition-delay: 0.55s;
+        }
+         #color-squares rect{
+		fill: transparent;
+		stroke: #333;
+		transition:all .4s linear;
+		}
+		
+        
+ 
+        #customizer-home-logo:hover #colors-squares rect {
+            stroke: transparent;
+            transition-delay: 0.3s;
+        }
+        
+
+        #customizer-home-logo #square1 {
+            transition-delay: 0.45s;
+        }
+        
+        #customizer-home-logo #square2 {
+            transition-delay: 0.35s;
+        }
+        
+        #customizer-home-logo #square3 {
+            transition-delay: 0.25s;
+        }
+        
+        #customizer-home-logo #square4 {
+            transition-delay: 0.15s;
+        }
+        
+        #customizer-home-logo #square5 {
+            transition-delay: 0.05s;
+        }
+        
+        #customizer-home-logo .logo-big-letter {
+            transition-delay: 0s;
+        }
+        
+        #customizer-home-logo #colors-squares rect {
+            stroke: #333;
+            transition: stroke 0.3s ease-out;
+            transition-delay: 0s;
+        }
+        
+        #customizer-home-logo #colors-squares rect {
+            stroke: #333;
+			fill:transparent;
+            transition: stroke 0.3s ease-out;
+        }
+                #customizer-home-logo:hover #colors-squares rect {
+            stroke: transparent;
+
+            transition: all 0.3s ease-in-out;
+        }
 
 .customizer-home-logo:hover {
     opacity: 1;
@@ -563,7 +698,7 @@ body {
     padding: 14px;
     border: 1px solid var(--border-color);
     border-radius: 14px;
-    background: linear-gradient(180deg, color-mix(in srgb, var(--surface-elev) 82%, transparent), color-mix(in srgb, var(--item-bg) 92%, transparent));
+    background: linear-gradient(180deg, color-mix(in srgb,  #ffffff38 82%, transparent), color-mix(in srgb, var(--item-bg) 92%, transparent));
     box-shadow: var(--shadow-soft);
 }
 
@@ -705,10 +840,10 @@ body {
     align-items: center;
     justify-content: center;
     padding: 0;
-    border: 1px solid var(--border-color);
     border-radius: 8px;
-    background: var(--surface-elev);
-    color: var(--text-primary);
+    background: transparent;
+        border: 1px solid var(--text-light);
+    color: var(--text-light);
     font-size: 16px;
     font-weight: 700;
     line-height: 1;
@@ -793,7 +928,7 @@ body {
     padding: 10px 14px;
     border: 1px solid var(--border-color);
     border-radius: 10px;
-    background: var(--surface-elev);
+    background: transparent;
     color: var(--text-primary);
     font-size: 13px;
     font-weight: 600;
@@ -1665,6 +1800,19 @@ transform: scale(1.15);
                 transform: translateY(120%); max-width: 100%;
             }
             .submenu.active { transform: translateY(0); }
+        
+        .submenu-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 3px;
+    padding-top: 3px;
+    border-bottom: 1px solid var(--border-color);
+    position: sticky;
+    top: -28px;
+    background: var(--cream-base);
+    z-index: 21;
+}
         }
 
 

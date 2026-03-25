@@ -422,6 +422,17 @@ function isCustomLogoEditMode() {
     return !!stateManager.get('logo.useCustom') && customLogoEditMode;
 }
 
+function syncCustomLogoOutlineVisibility() {
+    const outline = getMicrophoneSvg()?.querySelector(`#${CUSTOM_LOGO_OUTLINE_ID}`);
+    if (!outline) {
+        return;
+    }
+
+    const opacity = isCustomLogoEditMode() ? '1' : '0';
+    outline.setAttribute('opacity', opacity);
+    outline.style.opacity = opacity;
+}
+
 function ensureMicrophoneLayerObserver() {
     if (microphoneLayerObserver) {
         return;
@@ -1000,6 +1011,7 @@ function buildCustomLogoLayer(svg, imageSource, meta) {
 }
 
 function syncCustomLogoUi() {
+    syncCustomLogoOutlineVisibility();
     updatePositioningUi(stateManager.get('logo.customLogoMetrics'));
 }
 

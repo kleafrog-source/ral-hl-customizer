@@ -1,0 +1,1049 @@
+[
+  {
+    "viewport": "desktop",
+    "status": 200,
+    "state": "global-view",
+    "expectedActive": null,
+    "activeSelectors": [],
+    "expectedActivePass": true,
+    "expectedVisiblePass": true,
+    "sceneTransform": "matrix(1, 0, 0, 1, 0, 0)",
+    "layers": {
+      "#microphone-svg-container": {
+        "active": false,
+        "opacity": "1",
+        "rect": {
+          "x": 531.4678344726562,
+          "y": 82.739990234375,
+          "width": 191.6612548828125,
+          "height": 791.1199951171875
+        },
+        "intersects": true
+      },
+      "#shockmount-svg-container": {
+        "active": false,
+        "opacity": "0",
+        "rect": {
+          "x": -328.1400146484375,
+          "y": 305.4599609375,
+          "width": 467.2799987792969,
+          "height": 467.280029296875
+        },
+        "intersects": true
+      },
+      "#case-preview-container": {
+        "active": false,
+        "opacity": "1",
+        "rect": {
+          "x": 177.60003662109375,
+          "y": -54.67498779296875,
+          "width": 1238.39990234375,
+          "height": 870.75
+        },
+        "intersects": true
+      }
+    },
+    "consoleCount": 0,
+    "pageErrorCount": 0,
+    "consoleSample": [],
+    "pageErrorSample": [],
+    "screenshot": "camera-desktop-global-view.png"
+  },
+  {
+    "viewport": "desktop",
+    "status": 200,
+    "state": "mic-active",
+    "expectedActive": "#microphone-svg-container",
+    "activeSelectors": [
+      "#microphone-svg-container"
+    ],
+    "expectedActivePass": true,
+    "expectedVisiblePass": true,
+    "sceneTransform": "matrix(1.4, 0, 0, 1.4, 230.4, -43.2)",
+    "layers": {
+      "#microphone-svg-container": {
+        "active": true,
+        "opacity": "1",
+        "rect": {
+          "x": 782.4549560546875,
+          "y": -107.16401672363281,
+          "width": 268.3258056640625,
+          "height": 1107.5679931640625
+        },
+        "intersects": true
+      },
+      "#shockmount-svg-container": {
+        "active": false,
+        "opacity": "0",
+        "rect": {
+          "x": -420.9960021972656,
+          "y": 204.64395141601562,
+          "width": 654.1920166015625,
+          "height": 654.1920166015625
+        },
+        "intersects": true
+      },
+      "#case-preview-container": {
+        "active": false,
+        "opacity": "1",
+        "rect": {
+          "x": 287.0400695800781,
+          "y": -299.54498291015625,
+          "width": 1733.760009765625,
+          "height": 1219.050048828125
+        },
+        "intersects": true
+      }
+    },
+    "consoleCount": 0,
+    "pageErrorCount": 0,
+    "consoleSample": [],
+    "pageErrorSample": [],
+    "screenshot": "camera-desktop-mic-active.png"
+  },
+  {
+    "viewport": "desktop",
+    "status": 200,
+    "state": "logo-view",
+    "expectedActive": "#microphone-svg-container",
+    "activeSelectors": [
+      "#microphone-svg-container"
+    ],
+    "expectedActivePass": true,
+    "expectedVisiblePass": true,
+    "sceneTransform": "matrix(2, 0, 0, 2, 172.8, -129.6)",
+    "layers": {
+      "#microphone-svg-container": {
+        "active": true,
+        "opacity": "1",
+        "rect": {
+          "x": 755.7356567382812,
+          "y": -413.6199951171875,
+          "width": 383.32244873046875,
+          "height": 1582.239990234375
+        },
+        "intersects": true
+      },
+      "#shockmount-svg-container": {
+        "active": false,
+        "opacity": "0",
+        "rect": {
+          "x": -963.4800415039062,
+          "y": 31.8199462890625,
+          "width": 934.5599975585938,
+          "height": 934.56005859375
+        },
+        "intersects": false
+      },
+      "#case-preview-container": {
+        "active": false,
+        "opacity": "1",
+        "rect": {
+          "x": 48.00006103515625,
+          "y": -688.449951171875,
+          "width": 2476.800048828125,
+          "height": 1741.5
+        },
+        "intersects": true
+      }
+    },
+    "consoleCount": 0,
+    "pageErrorCount": 0,
+    "consoleSample": [],
+    "pageErrorSample": [],
+    "screenshot": "camera-desktop-logo-view.png"
+  },
+  {
+    "viewport": "desktop",
+    "status": 200,
+    "state": "shockmount-active",
+    "expectedActive": "#shockmount-svg-container",
+    "activeSelectors": [
+      "#microphone-svg-container"
+    ],
+    "expectedActivePass": false,
+    "expectedVisiblePass": false,
+    "sceneTransform": "matrix(2, 0, 0, 2, 172.8, -129.6)",
+    "layers": {
+      "#microphone-svg-container": {
+        "active": true,
+        "opacity": "1",
+        "rect": {
+          "x": 755.7356567382812,
+          "y": -413.6199951171875,
+          "width": 383.32244873046875,
+          "height": 1582.239990234375
+        },
+        "intersects": true
+      },
+      "#shockmount-svg-container": {
+        "active": false,
+        "opacity": "0",
+        "rect": {
+          "x": -963.4800415039062,
+          "y": 31.8199462890625,
+          "width": 934.5599975585938,
+          "height": 934.56005859375
+        },
+        "intersects": false
+      },
+      "#case-preview-container": {
+        "active": false,
+        "opacity": "1",
+        "rect": {
+          "x": 48.00006103515625,
+          "y": -688.449951171875,
+          "width": 2476.800048828125,
+          "height": 1741.5
+        },
+        "intersects": true
+      }
+    },
+    "consoleCount": 0,
+    "pageErrorCount": 0,
+    "consoleSample": [],
+    "pageErrorSample": [],
+    "screenshot": "camera-desktop-shockmount-active.png"
+  },
+  {
+    "viewport": "desktop",
+    "status": 200,
+    "state": "case-active",
+    "expectedActive": "#case-preview-container",
+    "activeSelectors": [
+      "#case-preview-container"
+    ],
+    "expectedActivePass": true,
+    "expectedVisiblePass": true,
+    "sceneTransform": "matrix(1.05, 0, 0, 1.05, -187.2, 0)",
+    "layers": {
+      "#microphone-svg-container": {
+        "active": false,
+        "opacity": "1",
+        "rect": {
+          "x": 268.954345703125,
+          "y": 70.0825424194336,
+          "width": 205.81802368164062,
+          "height": 849.554931640625
+        },
+        "intersects": true
+      },
+      "#shockmount-svg-container": {
+        "active": false,
+        "opacity": "0",
+        "rect": {
+          "x": -555.7469482421875,
+          "y": 298.2579650878906,
+          "width": 490.6439208984375,
+          "height": 490.6440124511719
+        },
+        "intersects": false
+      },
+      "#case-preview-container": {
+        "active": true,
+        "opacity": "1",
+        "rect": {
+          "x": -24.719955444335938,
+          "y": -79.88371276855469,
+          "width": 1300.3199462890625,
+          "height": 914.2874755859375
+        },
+        "intersects": true
+      }
+    },
+    "consoleCount": 0,
+    "pageErrorCount": 0,
+    "consoleSample": [],
+    "pageErrorSample": [],
+    "screenshot": "camera-desktop-case-active.png"
+  },
+  {
+    "viewport": "tablet",
+    "status": 200,
+    "state": "global-view",
+    "expectedActive": null,
+    "activeSelectors": [],
+    "expectedActivePass": true,
+    "expectedVisiblePass": true,
+    "sceneTransform": "matrix(1, 0, 0, 1, 0, 0)",
+    "layers": {
+      "#microphone-svg-container": {
+        "active": false,
+        "opacity": "1",
+        "rect": {
+          "x": 388.48126220703125,
+          "y": 102.3800048828125,
+          "width": 291.0050048828125,
+          "height": 1201.199951171875
+        },
+        "intersects": true
+      },
+      "#shockmount-svg-container": {
+        "active": false,
+        "opacity": "0",
+        "rect": {
+          "x": -207.64373779296875,
+          "y": 242.916259765625,
+          "width": 709.2249755859375,
+          "height": 709.2249755859375
+        },
+        "intersects": true
+      },
+      "#case-preview-container": {
+        "active": false,
+        "opacity": "1",
+        "rect": {
+          "x": 133.64004516601562,
+          "y": -117.83251953125,
+          "width": 815.280029296875,
+          "height": 1321.60498046875
+        },
+        "intersects": true
+      }
+    },
+    "consoleCount": 2,
+    "pageErrorCount": 0,
+    "consoleSample": [
+      "[error] Failed to load resource: the server responded with a status of 404 ()",
+      "[error] Failed to load resource: the server responded with a status of 404 ()"
+    ],
+    "pageErrorSample": [],
+    "screenshot": "camera-tablet-global-view.png"
+  },
+  {
+    "viewport": "tablet",
+    "status": 200,
+    "state": "mic-active",
+    "expectedActive": "#microphone-svg-container",
+    "activeSelectors": [
+      "#microphone-svg-container"
+    ],
+    "expectedActivePass": true,
+    "expectedVisiblePass": true,
+    "sceneTransform": "matrix(1.4, 0, 0, 1.4, 163.84, -30.72)",
+    "layers": {
+      "#microphone-svg-container": {
+        "active": true,
+        "opacity": "1",
+        "rect": {
+          "x": 581.3137817382812,
+          "y": -160.38796997070312,
+          "width": 407.406982421875,
+          "height": 1681.679931640625
+        },
+        "intersects": true
+      },
+      "#shockmount-svg-container": {
+        "active": false,
+        "opacity": "0",
+        "rect": {
+          "x": -253.26123046875,
+          "y": 36.36279296875,
+          "width": 992.9149780273438,
+          "height": 992.9149169921875
+        },
+        "intersects": true
+      },
+      "#case-preview-container": {
+        "active": false,
+        "opacity": "1",
+        "rect": {
+          "x": 224.5360565185547,
+          "y": -468.68548583984375,
+          "width": 1141.3919677734375,
+          "height": 1850.246826171875
+        },
+        "intersects": true
+      }
+    },
+    "consoleCount": 2,
+    "pageErrorCount": 0,
+    "consoleSample": [
+      "[error] Failed to load resource: the server responded with a status of 404 ()",
+      "[error] Failed to load resource: the server responded with a status of 404 ()"
+    ],
+    "pageErrorSample": [],
+    "screenshot": "camera-tablet-mic-active.png"
+  },
+  {
+    "viewport": "tablet",
+    "status": 200,
+    "state": "logo-view",
+    "expectedActive": "#microphone-svg-container",
+    "activeSelectors": [
+      "#microphone-svg-container"
+    ],
+    "expectedActivePass": true,
+    "expectedVisiblePass": true,
+    "sceneTransform": "matrix(2, 0, 0, 2, 122.88, -92.16)",
+    "layers": {
+      "#microphone-svg-container": {
+        "active": true,
+        "opacity": "1",
+        "rect": {
+          "x": 583.842529296875,
+          "y": -569.9000244140625,
+          "width": 582.010009765625,
+          "height": 2402.39990234375
+        },
+        "intersects": true
+      },
+      "#shockmount-svg-container": {
+        "active": false,
+        "opacity": "0",
+        "rect": {
+          "x": -608.407470703125,
+          "y": -288.8275146484375,
+          "width": 1418.449951171875,
+          "height": 1418.449951171875
+        },
+        "intersects": true
+      },
+      "#case-preview-container": {
+        "active": false,
+        "opacity": "1",
+        "rect": {
+          "x": 74.16009521484375,
+          "y": -1010.3250732421875,
+          "width": 1630.56005859375,
+          "height": 2643.2099609375
+        },
+        "intersects": true
+      }
+    },
+    "consoleCount": 2,
+    "pageErrorCount": 0,
+    "consoleSample": [
+      "[error] Failed to load resource: the server responded with a status of 404 ()",
+      "[error] Failed to load resource: the server responded with a status of 404 ()"
+    ],
+    "pageErrorSample": [],
+    "screenshot": "camera-tablet-logo-view.png"
+  },
+  {
+    "viewport": "tablet",
+    "status": 200,
+    "state": "shockmount-active",
+    "expectedActive": "#shockmount-svg-container",
+    "activeSelectors": [
+      "#microphone-svg-container"
+    ],
+    "expectedActivePass": false,
+    "expectedVisiblePass": true,
+    "sceneTransform": "matrix(2, 0, 0, 2, 122.88, -92.16)",
+    "layers": {
+      "#microphone-svg-container": {
+        "active": true,
+        "opacity": "1",
+        "rect": {
+          "x": 583.842529296875,
+          "y": -569.9000244140625,
+          "width": 582.010009765625,
+          "height": 2402.39990234375
+        },
+        "intersects": true
+      },
+      "#shockmount-svg-container": {
+        "active": false,
+        "opacity": "0",
+        "rect": {
+          "x": -608.407470703125,
+          "y": -288.8275146484375,
+          "width": 1418.449951171875,
+          "height": 1418.449951171875
+        },
+        "intersects": true
+      },
+      "#case-preview-container": {
+        "active": false,
+        "opacity": "1",
+        "rect": {
+          "x": 74.16009521484375,
+          "y": -1010.3250732421875,
+          "width": 1630.56005859375,
+          "height": 2643.2099609375
+        },
+        "intersects": true
+      }
+    },
+    "consoleCount": 2,
+    "pageErrorCount": 0,
+    "consoleSample": [
+      "[error] Failed to load resource: the server responded with a status of 404 ()",
+      "[error] Failed to load resource: the server responded with a status of 404 ()"
+    ],
+    "pageErrorSample": [],
+    "screenshot": "camera-tablet-shockmount-active.png"
+  },
+  {
+    "viewport": "tablet",
+    "status": 200,
+    "state": "case-active",
+    "expectedActive": "#case-preview-container",
+    "activeSelectors": [
+      "#case-preview-container"
+    ],
+    "expectedActivePass": true,
+    "expectedVisiblePass": true,
+    "sceneTransform": "matrix(1.05, 0, 0, 1.05, -133.12, 0)",
+    "layers": {
+      "#microphone-svg-container": {
+        "active": false,
+        "opacity": "1",
+        "rect": {
+          "x": 201.75308227539062,
+          "y": 69.79352569580078,
+          "width": 312.4997253417969,
+          "height": 1289.9249267578125
+        },
+        "intersects": true
+      },
+      "#shockmount-svg-container": {
+        "active": false,
+        "opacity": "0",
+        "rect": {
+          "x": -366.9458923339844,
+          "y": 220.93711853027344,
+          "width": 744.6861572265625,
+          "height": 744.6861572265625
+        },
+        "intersects": true
+      },
+      "#case-preview-container": {
+        "active": true,
+        "opacity": "1",
+        "rect": {
+          "x": -8.597946166992188,
+          "y": -157.8490753173828,
+          "width": 856.0440063476562,
+          "height": 1387.685302734375
+        },
+        "intersects": true
+      }
+    },
+    "consoleCount": 2,
+    "pageErrorCount": 0,
+    "consoleSample": [
+      "[error] Failed to load resource: the server responded with a status of 404 ()",
+      "[error] Failed to load resource: the server responded with a status of 404 ()"
+    ],
+    "pageErrorSample": [],
+    "screenshot": "camera-tablet-case-active.png"
+  },
+  {
+    "viewport": "mobile",
+    "status": 200,
+    "state": "global-view",
+    "expectedActive": null,
+    "activeSelectors": [],
+    "expectedActivePass": true,
+    "expectedVisiblePass": true,
+    "sceneTransform": "matrix(1, 0, 0, 1, 0, 0)",
+    "layers": {
+      "#microphone-svg-container": {
+        "active": false,
+        "opacity": "1",
+        "rect": {
+          "x": 45.134063720703125,
+          "y": 52.62001037597656,
+          "width": 89.96624755859375,
+          "height": 371.3599853515625
+        },
+        "intersects": true
+      },
+      "#shockmount-svg-container": {
+        "active": false,
+        "opacity": "0",
+        "rect": {
+          "x": -0.18195343017578125,
+          "y": 206.51803588867188,
+          "width": 186.43576049804688,
+          "height": 186.43576049804688
+        },
+        "intersects": true
+      },
+      "#case-preview-container": {
+        "active": false,
+        "opacity": "1",
+        "rect": {
+          "x": 9.75,
+          "y": 239.1099853515625,
+          "width": 503.0999755859375,
+          "height": 544.3800048828125
+        },
+        "intersects": true
+      }
+    },
+    "consoleCount": 0,
+    "pageErrorCount": 0,
+    "consoleSample": [],
+    "pageErrorSample": [],
+    "screenshot": "camera-mobile-global-view.png"
+  },
+  {
+    "viewport": "mobile",
+    "status": 200,
+    "state": "mic-active",
+    "expectedActive": "#microphone-svg-container",
+    "activeSelectors": [
+      "#microphone-svg-container"
+    ],
+    "expectedActivePass": true,
+    "expectedVisiblePass": true,
+    "sceneTransform": "matrix(1, 0, 0, 1, 0, 0)",
+    "layers": {
+      "#microphone-svg-container": {
+        "active": true,
+        "opacity": "1",
+        "rect": {
+          "x": 127.22343444824219,
+          "y": 42.19999694824219,
+          "width": 81.78749084472656,
+          "height": 337.5999755859375
+        },
+        "intersects": true
+      },
+      "#shockmount-svg-container": {
+        "active": false,
+        "opacity": "0",
+        "rect": {
+          "x": -41.031883239746094,
+          "y": 192.96810913085938,
+          "width": 174.53564453125,
+          "height": 174.53561401367188
+        },
+        "intersects": true
+      },
+      "#case-preview-container": {
+        "active": false,
+        "opacity": "1",
+        "rect": {
+          "x": 13.6500244140625,
+          "y": 172.80999755859375,
+          "width": 503.0999755859375,
+          "height": 544.3800048828125
+        },
+        "intersects": true
+      }
+    },
+    "consoleCount": 0,
+    "pageErrorCount": 0,
+    "consoleSample": [],
+    "pageErrorSample": [],
+    "screenshot": "camera-mobile-mic-active.png"
+  },
+  {
+    "viewport": "mobile",
+    "status": 200,
+    "state": "logo-view",
+    "expectedActive": "#microphone-svg-container",
+    "activeSelectors": [
+      "#microphone-svg-container"
+    ],
+    "expectedActivePass": true,
+    "expectedVisiblePass": true,
+    "sceneTransform": "matrix(1, 0, 0, 1, 0, 0)",
+    "layers": {
+      "#microphone-svg-container": {
+        "active": true,
+        "opacity": "1",
+        "rect": {
+          "x": 107.60952758789062,
+          "y": -74.3599853515625,
+          "width": 128.8153076171875,
+          "height": 531.719970703125
+        },
+        "intersects": true
+      },
+      "#shockmount-svg-container": {
+        "active": false,
+        "opacity": "0",
+        "rect": {
+          "x": -40.89842987060547,
+          "y": 204.80154418945312,
+          "width": 158.6687469482422,
+          "height": 158.66873168945312
+        },
+        "intersects": true
+      },
+      "#case-preview-container": {
+        "active": false,
+        "opacity": "1",
+        "rect": {
+          "x": 83.85000610351562,
+          "y": 184.510009765625,
+          "width": 503.0999450683594,
+          "height": 544.3800048828125
+        },
+        "intersects": true
+      }
+    },
+    "consoleCount": 0,
+    "pageErrorCount": 0,
+    "consoleSample": [],
+    "pageErrorSample": [],
+    "screenshot": "camera-mobile-logo-view.png"
+  },
+  {
+    "viewport": "mobile",
+    "status": 200,
+    "state": "shockmount-active",
+    "expectedActive": "#shockmount-svg-container",
+    "activeSelectors": [
+      "#microphone-svg-container"
+    ],
+    "expectedActivePass": false,
+    "expectedVisiblePass": true,
+    "sceneTransform": "matrix(1, 0, 0, 1, 0, 0)",
+    "layers": {
+      "#microphone-svg-container": {
+        "active": true,
+        "opacity": "1",
+        "rect": {
+          "x": 107.60952758789062,
+          "y": -74.3599853515625,
+          "width": 128.8153076171875,
+          "height": 531.719970703125
+        },
+        "intersects": true
+      },
+      "#shockmount-svg-container": {
+        "active": false,
+        "opacity": "0",
+        "rect": {
+          "x": -40.89842987060547,
+          "y": 204.80154418945312,
+          "width": 158.6687469482422,
+          "height": 158.66873168945312
+        },
+        "intersects": true
+      },
+      "#case-preview-container": {
+        "active": false,
+        "opacity": "1",
+        "rect": {
+          "x": 83.85000610351562,
+          "y": 184.510009765625,
+          "width": 503.0999450683594,
+          "height": 544.3800048828125
+        },
+        "intersects": true
+      }
+    },
+    "consoleCount": 0,
+    "pageErrorCount": 0,
+    "consoleSample": [],
+    "pageErrorSample": [],
+    "screenshot": "camera-mobile-shockmount-active.png"
+  },
+  {
+    "viewport": "mobile",
+    "status": 200,
+    "state": "case-active",
+    "expectedActive": "#case-preview-container",
+    "activeSelectors": [
+      "#case-preview-container"
+    ],
+    "expectedActivePass": true,
+    "expectedVisiblePass": true,
+    "sceneTransform": "matrix(1, 0, 0, 1, 0, 0)",
+    "layers": {
+      "#microphone-svg-container": {
+        "active": false,
+        "opacity": "1",
+        "rect": {
+          "x": 75.31172180175781,
+          "y": 52.30000305175781,
+          "width": 92.01094055175781,
+          "height": 379.79998779296875
+        },
+        "intersects": true
+      },
+      "#shockmount-svg-container": {
+        "active": false,
+        "opacity": "0",
+        "rect": {
+          "x": -0.18195343017578125,
+          "y": 206.51803588867188,
+          "width": 186.43576049804688,
+          "height": 186.43576049804688
+        },
+        "intersects": true
+      },
+      "#case-preview-container": {
+        "active": true,
+        "opacity": "1",
+        "rect": {
+          "x": 23.399993896484375,
+          "y": 226,
+          "width": 585,
+          "height": 633
+        },
+        "intersects": true
+      }
+    },
+    "consoleCount": 0,
+    "pageErrorCount": 0,
+    "consoleSample": [],
+    "pageErrorSample": [],
+    "screenshot": "camera-mobile-case-active.png"
+  },
+  {
+    "viewport": "4k",
+    "status": 200,
+    "state": "global-view",
+    "expectedActive": null,
+    "activeSelectors": [],
+    "expectedActivePass": true,
+    "expectedVisiblePass": true,
+    "sceneTransform": "matrix(1, 0, 0, 1, 0, 0)",
+    "layers": {
+      "#microphone-svg-container": {
+        "active": false,
+        "opacity": "1",
+        "rect": {
+          "x": 1413.7828369140625,
+          "y": 206.34002685546875,
+          "width": 460.28125,
+          "height": 1899.919921875
+        },
+        "intersects": true
+      },
+      "#shockmount-svg-container": {
+        "active": false,
+        "opacity": "0",
+        "rect": {
+          "x": -883.5365600585938,
+          "y": 806.0634155273438,
+          "width": 1121.4637451171875,
+          "height": 1121.463623046875
+        },
+        "intersects": true
+      },
+      "#case-preview-container": {
+        "active": false,
+        "opacity": "1",
+        "rect": {
+          "x": 357.60009765625,
+          "y": -119.70001220703125,
+          "width": 4334.39990234375,
+          "height": 2089.800048828125
+        },
+        "intersects": true
+      }
+    },
+    "consoleCount": 0,
+    "pageErrorCount": 0,
+    "consoleSample": [],
+    "pageErrorSample": [],
+    "screenshot": "camera-4k-global-view.png"
+  },
+  {
+    "viewport": "4k",
+    "status": 200,
+    "state": "mic-active",
+    "expectedActive": "#microphone-svg-container",
+    "activeSelectors": [
+      "#microphone-svg-container"
+    ],
+    "expectedActivePass": true,
+    "expectedVisiblePass": true,
+    "sceneTransform": "matrix(1.4, 0, 0, 1.4, 614.4, -115.2)",
+    "layers": {
+      "#microphone-svg-container": {
+        "active": true,
+        "opacity": "1",
+        "rect": {
+          "x": 1921.69580078125,
+          "y": -258.1239013671875,
+          "width": 644.393798828125,
+          "height": 2659.8876953125
+        },
+        "intersects": true
+      },
+      "#shockmount-svg-container": {
+        "active": false,
+        "opacity": "0",
+        "rect": {
+          "x": -1294.55126953125,
+          "y": 581.4888305664062,
+          "width": 1570.0491943359375,
+          "height": 1570.049072265625
+        },
+        "intersects": true
+      },
+      "#case-preview-container": {
+        "active": false,
+        "opacity": "1",
+        "rect": {
+          "x": 443.0400390625,
+          "y": -714.5799560546875,
+          "width": 6068.15966796875,
+          "height": 2925.72021484375
+        },
+        "intersects": true
+      }
+    },
+    "consoleCount": 0,
+    "pageErrorCount": 0,
+    "consoleSample": [],
+    "pageErrorSample": [],
+    "screenshot": "camera-4k-mic-active.png"
+  },
+  {
+    "viewport": "4k",
+    "status": 200,
+    "state": "logo-view",
+    "expectedActive": "#microphone-svg-container",
+    "activeSelectors": [
+      "#microphone-svg-container"
+    ],
+    "expectedActivePass": true,
+    "expectedVisiblePass": true,
+    "sceneTransform": "matrix(2, 0, 0, 2, 460.8, -345.6)",
+    "layers": {
+      "#microphone-svg-container": {
+        "active": true,
+        "opacity": "1",
+        "rect": {
+          "x": 1608.36572265625,
+          "y": -1012.419921875,
+          "width": 920.5625,
+          "height": 3799.83984375
+        },
+        "intersects": true
+      },
+      "#shockmount-svg-container": {
+        "active": false,
+        "opacity": "0",
+        "rect": {
+          "x": -2986.27294921875,
+          "y": 187.02685546875,
+          "width": 2242.92724609375,
+          "height": 2242.92724609375
+        },
+        "intersects": false
+      },
+      "#case-preview-container": {
+        "active": false,
+        "opacity": "1",
+        "rect": {
+          "x": -503.999755859375,
+          "y": -1664.5,
+          "width": 8668.7998046875,
+          "height": 4179.60009765625
+        },
+        "intersects": true
+      }
+    },
+    "consoleCount": 0,
+    "pageErrorCount": 0,
+    "consoleSample": [],
+    "pageErrorSample": [],
+    "screenshot": "camera-4k-logo-view.png"
+  },
+  {
+    "viewport": "4k",
+    "status": 200,
+    "state": "shockmount-active",
+    "expectedActive": "#shockmount-svg-container",
+    "activeSelectors": [
+      "#microphone-svg-container"
+    ],
+    "expectedActivePass": false,
+    "expectedVisiblePass": false,
+    "sceneTransform": "matrix(2, 0, 0, 2, 460.8, -345.6)",
+    "layers": {
+      "#microphone-svg-container": {
+        "active": true,
+        "opacity": "1",
+        "rect": {
+          "x": 1608.36572265625,
+          "y": -1012.419921875,
+          "width": 920.5625,
+          "height": 3799.83984375
+        },
+        "intersects": true
+      },
+      "#shockmount-svg-container": {
+        "active": false,
+        "opacity": "0",
+        "rect": {
+          "x": -2986.27294921875,
+          "y": 187.02685546875,
+          "width": 2242.92724609375,
+          "height": 2242.92724609375
+        },
+        "intersects": false
+      },
+      "#case-preview-container": {
+        "active": false,
+        "opacity": "1",
+        "rect": {
+          "x": -503.999755859375,
+          "y": -1664.5,
+          "width": 8668.7998046875,
+          "height": 4179.60009765625
+        },
+        "intersects": true
+      }
+    },
+    "consoleCount": 0,
+    "pageErrorCount": 0,
+    "consoleSample": [],
+    "pageErrorSample": [],
+    "screenshot": "camera-4k-shockmount-active.png"
+  },
+  {
+    "viewport": "4k",
+    "status": 200,
+    "state": "case-active",
+    "expectedActive": "#case-preview-container",
+    "activeSelectors": [
+      "#case-preview-container"
+    ],
+    "expectedActivePass": true,
+    "expectedVisiblePass": true,
+    "sceneTransform": "matrix(1.05, 0, 0, 1.05, -499.2, 0)",
+    "layers": {
+      "#microphone-svg-container": {
+        "active": false,
+        "opacity": "1",
+        "rect": {
+          "x": 694.1800537109375,
+          "y": 180.3324737548828,
+          "width": 494.279296875,
+          "height": 2040.2548828125
+        },
+        "intersects": true
+      },
+      "#shockmount-svg-container": {
+        "active": false,
+        "opacity": "0",
+        "rect": {
+          "x": -1510.9130859375,
+          "y": 792.3916015625,
+          "width": 1177.536865234375,
+          "height": 1177.5367431640625
+        },
+        "intersects": false
+      },
+      "#case-preview-container": {
+        "active": true,
+        "opacity": "1",
+        "rect": {
+          "x": -207.71975708007812,
+          "y": -179.65997314453125,
+          "width": 4551.11962890625,
+          "height": 2194.2900390625
+        },
+        "intersects": true
+      }
+    },
+    "consoleCount": 0,
+    "pageErrorCount": 0,
+    "consoleSample": [],
+    "pageErrorSample": [],
+    "screenshot": "camera-4k-case-active.png"
+  }
+]

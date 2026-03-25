@@ -34,6 +34,10 @@ export function prepareModelSelection(modelCode, options = {}) {
     syncModelSelectionData(modelCode);
     const restored = restoreSavedModelSelection(modelCode, restoreSavedState);
 
+    if (!restored) {
+        stateManager.set('case.laserEngravingEnabled', false);
+    }
+
     const runtimeData = applyModelRuntimeState(modelCode, {
         preserveShockmountSelection: restored
     });

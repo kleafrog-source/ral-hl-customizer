@@ -121,6 +121,8 @@ export function initToggles() {
                 batch('case.laserEngravingEnabled', enabled);
             });
             syncEngravingToggleState(enabled);
+            window.WoodCase?.render?.({ syncBackground: false });
+            window.WoodCase?.syncEditingState?.();
             updateUI();
         });
     }
@@ -146,6 +148,8 @@ export function syncToggles() {
         const enabled = !!stateManager.get('case.laserEngravingEnabled');
         engravingToggle.checked = enabled;
         syncEngravingToggleState(enabled);
+        window.WoodCase?.render?.({ syncBackground: false });
+        window.WoodCase?.syncEditingState?.();
     }
 
     const shockmountToggle = document.getElementById('shockmount-switch');

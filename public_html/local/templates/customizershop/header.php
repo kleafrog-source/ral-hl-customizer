@@ -7,13 +7,8 @@
     <?$APPLICATION->ShowPanel();?>
     <?include_once($_SERVER["DOCUMENT_ROOT"]."/local/templates/.default/include/header_customizer.php");?>
 
-<?php
-global $USER;
-if (!$USER->IsAdmin()) {
-    LocalRedirect("/");
-}
-
-$APPLICATION->IncludeComponent(
+<?php
+$APPLICATION->IncludeComponent(
 	"custom:microphone.customizer", 
 	"eta", 
 	array(
@@ -21,8 +16,8 @@ $APPLICATION->IncludeComponent(
 		"ELEMENT_ID" => "0",
 		"PROPERTY_CODE" => "CUSTOM_CONFIG",
 		"COMPONENT_TEMPLATE" => "eta",
-		"CACHE_TYPE" => "N",
-		"CACHE_TIME" => "0",
+		"CACHE_TYPE" => "A",
+		"CACHE_TIME" => "3600",
 		"MODEL_CODE" => "023-the-bomblet",
 		"CACHE_NOTES" => ""
 	),

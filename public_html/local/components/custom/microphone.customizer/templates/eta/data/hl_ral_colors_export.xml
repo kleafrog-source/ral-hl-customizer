@@ -1,6 +1,6 @@
 
-<!-- Справочник RAL (код, hex, rgb) -->
-<!-- Highload-block: RAL colors dictionary (code, name, HEX, RGB, flood_opacity). Linked from free variants via UF_RAL_COLOR_ID and used for SVG feFlood filter changing color and feFlood opacity / UI swatches. -->
+													
+																																																					 
 <?xml version="1.0" encoding="UTF-8"?>
 <hiblock>
 	<items>
@@ -142,7 +142,7 @@
 			<uf_sort>14</uf_sort>
 			<uf_hex>#E8E253</uf_hex>
 			<uf_flood_opacity>1</uf_flood_opacity>
-			<uf_rgb_code>rgb(232,226,83)</uf_rgb_code>
+			<uf_rgb_code>rgb(190,170,70)</uf_rgb_code>
 		</item>
 		<item>
 			<id>20</id>
@@ -192,7 +192,7 @@
 			<uf_sort>19</uf_sort>
 			<uf_hex>#E5C000</uf_hex>
 			<uf_flood_opacity>1</uf_flood_opacity>
-			<uf_rgb_code>rgb(229,192,0)</uf_rgb_code>
+			<uf_rgb_code>rgb(190,160,40)</uf_rgb_code>
 		</item>
 		<item>
 			<id>25</id>
@@ -221,8 +221,8 @@
 			<uf_active>1</uf_active>
 			<uf_sort>22</uf_sort>
 			<uf_hex>#FFFF00</uf_hex>
-			<uf_flood_opacity>0.8</uf_flood_opacity>
-			<uf_rgb_code>rgb(255,255,0)</uf_rgb_code>
+			<uf_flood_opacity>1</uf_flood_opacity>
+			<uf_rgb_code>rgb(210,190,80)</uf_rgb_code>
 		</item>
 		<item>
 			<id>28</id>
@@ -352,7 +352,7 @@
 			<uf_sort>35</uf_sort>
 			<uf_hex>#CC5608</uf_hex>
 			<uf_flood_opacity>1</uf_flood_opacity>
-			<uf_rgb_code>rgb(204,86,8)</uf_rgb_code>
+			<uf_rgb_code>rgb(160,80,35)</uf_rgb_code>
 		</item>
 		<item>
 			<id>41</id>
@@ -362,7 +362,7 @@
 			<uf_sort>36</uf_sort>
 			<uf_hex>#FF4612</uf_hex>
 			<uf_flood_opacity>1</uf_flood_opacity>
-			<uf_rgb_code>rgb(255,70,18)</uf_rgb_code>
+			<uf_rgb_code>rgb(200,75,45)</uf_rgb_code>
 		</item>
 		<item>
 			<id>42</id>
@@ -372,7 +372,7 @@
 			<uf_sort>37</uf_sort>
 			<uf_hex>#FFAD19</uf_hex>
 			<uf_flood_opacity>1</uf_flood_opacity>
-			<uf_rgb_code>rgb(255,173,25)</uf_rgb_code>
+			<uf_rgb_code>rgb(205,135,45)</uf_rgb_code>
 		</item>
 		<item>
 			<id>43</id>
@@ -382,7 +382,7 @@
 			<uf_sort>38</uf_sort>
 			<uf_hex>#D66C21</uf_hex>
 			<uf_flood_opacity>1</uf_flood_opacity>
-			<uf_rgb_code>rgb(214,108,33)</uf_rgb_code>
+			<uf_rgb_code>rgb(180,55,65)</uf_rgb_code>
 		</item>
 		<item>
 			<id>44</id>
@@ -442,7 +442,7 @@
 			<uf_sort>44</uf_sort>
 			<uf_hex>#FA4402</uf_hex>
 			<uf_flood_opacity>1</uf_flood_opacity>
-			<uf_rgb_code>rgb(250,68,2)</uf_rgb_code>
+			<uf_rgb_code>rgb(195,75,40)</uf_rgb_code>
 		</item>
 		<item>
 			<id>50</id>
@@ -612,7 +612,7 @@
 			<uf_sort>61</uf_sort>
 			<uf_hex>#AB1519</uf_hex>
 			<uf_flood_opacity>1</uf_flood_opacity>
-			<uf_rgb_code>rgb(171,21,25)</uf_rgb_code>
+			<uf_rgb_code>rgb(140,45,50)</uf_rgb_code>
 		</item>
 		<item>
 			<id>67</id>
@@ -642,7 +642,7 @@
 			<uf_sort>64</uf_sort>
 			<uf_hex>#F71027</uf_hex>
 			<uf_flood_opacity>1</uf_flood_opacity>
-			<uf_rgb_code>rgb(247,16,39)</uf_rgb_code>
+			<uf_rgb_code>rgb(185,50,65)</uf_rgb_code>
 		</item>
 		<item>
 			<id>70</id>
@@ -932,7 +932,7 @@
 			<uf_sort>93</uf_sort>
 			<uf_hex>#457FB3</uf_hex>
 			<uf_flood_opacity>1</uf_flood_opacity>
-			<uf_rgb_code>rgb(69,127,179)</uf_rgb_code>
+			<uf_rgb_code>rgb(80,110,145)</uf_rgb_code>
 		</item>
 		<item>
 			<id>99</id>
@@ -1252,7 +1252,7 @@
 			<uf_sort>125</uf_sort>
 			<uf_hex>#689A45</uf_hex>
 			<uf_flood_opacity>1</uf_flood_opacity>
-			<uf_rgb_code>rgb(104,154,69)</uf_rgb_code>
+			<uf_rgb_code>rgb(55,125,70)</uf_rgb_code>
 		</item>
 		<item>
 			<id>131</id>
@@ -1412,7 +1412,7 @@
 			<uf_sort>141</uf_sort>
 			<uf_hex>#3F8C3D</uf_hex>
 			<uf_flood_opacity>1</uf_flood_opacity>
-			<uf_rgb_code>rgb(63,140,61)</uf_rgb_code>
+			<uf_rgb_code>rgb(70,100,140)</uf_rgb_code>
 		</item>
 		<item>
 			<id>147</id>
@@ -2091,8 +2091,8 @@
 			<uf_active>1</uf_active>
 			<uf_sort>209</uf_sort>
 			<uf_hex>#EFEEE5</uf_hex>
-			<uf_flood_opacity>1</uf_flood_opacity>
-			<uf_rgb_code>rgb(239,238,229)</uf_rgb_code>
+			<uf_flood_opacity>0.9</uf_flood_opacity>
+			<uf_rgb_code>rgb(199,199,199)</uf_rgb_code>
 		</item>
 		<item>
 			<id>215</id>
