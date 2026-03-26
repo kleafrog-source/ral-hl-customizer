@@ -1,6 +1,7 @@
 import { stateManager } from '../core/state.js';
 import { getAnimationModelKey, getBaseAnimationModelKey } from '../config/model-capabilities.js';
 import { DIRECT_CAMERA_VIEW_OVERRIDES, SCENE_CAMERA_PRESETS } from '../config/camera-presets.js';
+import { getLayoutTransforms } from './layout-engine.js';
 import { debugWarn } from '../utils/debug.js';
 
 const layers = {
@@ -25,6 +26,7 @@ const LAYER_STATE_MAP = {
 };
 
 const ENABLE_CAMERA_FOCUS_STATES = false;
+const CAMERA_LAYER_IDS = Object.freeze(['microphone', 'shockmount', 'case']);
 
 let activeLayerId = null;
 let currentTimeline = null;
@@ -111,27 +113,41 @@ function getActiveLayerFromState(stateName) {
     return Object.keys(LAYER_STATE_MAP).find((layerId) => LAYER_STATE_MAP[layerId] === stateName) || 'case';
 }
 
+function getSceneViewportSize() {
+    const sceneRect = sceneElement?.getBoundingClientRect?.();
+    const width = sceneRect?.width || sceneElement?.clientWidth || window.innerWidth || 1;
+    const height = sceneRect?.height || sceneElement?.clientHeight || window.innerHeight || 1;
+
+    return {
+        width,
+        height
+    };
+}
+
 function getPresetState(modelCode, stateName, state = stateManager.get()) {
     const preset = getAnimationPreset(modelCode, state);
+    const legacyConfig = preset.states?.states?.[stateName]
+        ? {
+            baseLayers: preset.states.baseLayers,
+            state: preset.states.states[stateName]
+        }
+        : null;
+    const layoutTransforms = getLayoutTransforms({
+        deviceKey: preset.device,
+        modelKey: preset.model,
+        stateName,
+        viewportSize: getSceneViewportSize()
+    });
     const directConfig = DIRECT_CAMERA_VIEW_OVERRIDES[preset.device]?.[preset.model]?.[stateName] || null;
-
-    if (directConfig) {
-        return {
-            model: preset.model,
-            device: preset.device,
-            config: directConfig
-        };
-    }
+    const resolvedBaseConfig = layoutTransforms
+        ? buildLayoutRenderedConfig(layoutTransforms, legacyConfig, stateName)
+        : legacyConfig;
+    const mergedConfig = mergeRenderedConfigs(resolvedBaseConfig, directConfig, stateName);
 
     return {
         model: preset.model,
         device: preset.device,
-        config: preset.states?.states?.[stateName]
-            ? {
-                baseLayers: preset.states.baseLayers,
-                state: preset.states.states[stateName]
-            }
-            : null
+        config: mergedConfig
     };
 }
 
@@ -162,8 +178,116 @@ function buildTransformString({ x = 0, y = 0, scale = 1 } = {}) {
     return `translateX(${formatPercentValue(x)}) translateY(${formatPercentValue(y)}) scale(${Number((Number(scale) || 1).toFixed(2))})`;
 }
 
+function buildRenderedConfig(renderedLayers = {}, sceneTransform = 'translateX(0vw) translateY(0vw) scale(1)', sceneMeta = {}) {
+    return {
+        sceneTransform,
+        sceneMeta: {
+            duration: sceneMeta.duration ?? 1000,
+            easing: sceneMeta.easing ?? 'easeInOutQuad'
+        },
+        renderedLayers
+    };
+}
+
 function isDirectRenderedConfig(config) {
     return Boolean(config?.renderedLayers);
+}
+
+function normalizeToRenderedConfig(config, stateName) {
+    if (!config) {
+        return null;
+    }
+
+    if (isDirectRenderedConfig(config)) {
+        return buildRenderedConfig(
+            { ...config.renderedLayers },
+            config.sceneTransform,
+            config.sceneMeta
+        );
+    }
+
+    const renderedLayers = {};
+
+    CAMERA_LAYER_IDS.forEach((layerId) => {
+        const layerState = getRenderedLayerState(config, layerId);
+        if (layerState) {
+            renderedLayers[layerId] = layerState;
+        }
+    });
+
+    return buildRenderedConfig(
+        renderedLayers,
+        getSceneTransformString(config),
+        getSceneAnimationMeta(config, stateName)
+    );
+}
+
+function mergeLayerStates(baseLayer = {}, overrideLayer = {}) {
+    return {
+        ...baseLayer,
+        ...overrideLayer
+    };
+}
+
+function mergeRenderedConfigs(baseConfig, overrideConfig, stateName) {
+    const normalizedBase = normalizeToRenderedConfig(baseConfig, stateName);
+    const normalizedOverride = normalizeToRenderedConfig(overrideConfig, stateName);
+
+    if (!normalizedBase && !normalizedOverride) {
+        return null;
+    }
+
+    if (!normalizedBase) {
+        return normalizedOverride;
+    }
+
+    if (!normalizedOverride) {
+        return normalizedBase;
+    }
+
+    const renderedLayers = {};
+
+    CAMERA_LAYER_IDS.forEach((layerId) => {
+        const mergedLayer = mergeLayerStates(
+            normalizedBase.renderedLayers[layerId],
+            normalizedOverride.renderedLayers[layerId]
+        );
+
+        if (Object.keys(mergedLayer).length) {
+            renderedLayers[layerId] = mergedLayer;
+        }
+    });
+
+    return buildRenderedConfig(
+        renderedLayers,
+        normalizedOverride.sceneTransform ?? normalizedBase.sceneTransform,
+        {
+            ...normalizedBase.sceneMeta,
+            ...normalizedOverride.sceneMeta
+        }
+    );
+}
+
+function buildLayoutRenderedConfig(layoutTransforms, fallbackConfig, stateName) {
+    const fallbackRenderedConfig = normalizeToRenderedConfig(fallbackConfig, stateName)
+        || buildRenderedConfig({});
+    const renderedLayers = {
+        ...fallbackRenderedConfig.renderedLayers
+    };
+
+    Object.entries(layoutTransforms).forEach(([layerId, layoutState]) => {
+        renderedLayers[layerId] = {
+            ...(fallbackRenderedConfig.renderedLayers[layerId] || {}),
+            transform: layoutState.transform,
+            opacity: layoutState.opacity
+        };
+    });
+
+    return buildRenderedConfig(
+        renderedLayers,
+        'translateX(0px) translateY(0px) scale(1)',
+        fallbackRenderedConfig.sceneMeta
+    );
 }
 
 function getRenderedLayerState(config, layerId) {

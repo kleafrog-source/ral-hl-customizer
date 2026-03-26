@@ -33,6 +33,24 @@ function buildCameraPresets(basePresets, overridePresets) {
     return Object.freeze(mergedPresets);
 }
 
+/*
+ * Camera preset inventory (eta)
+ * Models: 017-TUBE, 017-FET, 023-BOMBLET-NO-SHOCKMOUNT,
+ * 023-BOMBLET-WITH-SHOCKMOUNT, 023-MALFA, 023-DELUXE.
+ * Shared camera states: global-view, mic-active, shockmount-active,
+ * case-active, logo-view.
+ * Declarative layout migration status: all user-facing model/state/device
+ * combinations now resolve through layout-presets.js first.
+ *
+ * Legacy notes:
+ * layout-presets.js is calibrated from the archived vw-based direct-view
+ * overrides that matched production positioning. The percent-based transforms
+ * below are retained only as semantic fallback metadata for durations/easing
+ * and rollback safety; they are not the source of truth for layout geometry.
+ * Device-specific override collections below are intentionally minimal and are
+ * candidates for full removal once the layout engine no longer needs any
+ * legacy fallback metadata.
+ */
 export const BASE_CAMERA_PRESETS = {
     '017-TUBE': {
         'global-view': {
@@ -198,108 +216,9 @@ export const BASE_CAMERA_PRESETS = {
     }
 };
 
-export const DESKTOP_CAMERA_PRESET_OVERRIDES = Object.freeze({
-    '017-TUBE': {
-        'global-view': {
-            microphone: { transform: 'translateX(79%) translateY(14%) scale(0.66)', opacity: 1 },
-            shockmount: { transform: 'translateX(63%) translateY(82%) scale(0.62)', opacity: 1 },
-            case: { transform: 'translateX(7%) translateY(7%) scale(1.21)', opacity: 1 }
-        },
-        'mic-active': {
-            microphone: { transform: 'translateX(14%) translateY(-15%) scale(1.22)', opacity: 1 },
-            shockmount: { transform: 'translateX(99%) translateY(48%) scale(1.26)', opacity: 1 },
-            case: { transform: 'translateX(2%) translateY(-2%) scale(1.17)', opacity: 1 }
-        },
-        'case-active': {
-            microphone: { transform: 'translateX(70%) translateY(18%) scale(0.6)', opacity: 0 },
-            shockmount: { transform: 'translateX(120%) translateY(44%) scale(0.7)', opacity: 0 },
-            case: { transform: 'translateX(2%) translateY(11%) scale(1.12)', opacity: 1 }
-        },
-        'logo-view': {
-            microphone: { transform: 'translateX(399%) translateY(-15%) scale(1.43)', opacity: 1 },
-            shockmount: { transform: 'translateX(221%) translateY(45%) scale(1.05)', opacity: 0.61 },
-            case: { transform: 'translateX(4%) translateY(-2%) scale(1.39)', opacity: 0.17 }
-        }
-    },
-    '017-FET': {
-        'mic-active': {
-            microphone: { transform: 'translateX(400%) translateY(1%) scale(1)', opacity: 1 },
-            shockmount: { transform: 'translateX(-1%) translateY(74%) scale(1.07)', opacity: 1 },
-            case: { transform: 'translateX(-28%) translateY(-19%) scale(1.92)', opacity: 1 }
-        },
-        'shockmount-active': {
-            microphone: { transform: 'translateX(10%) translateY(-11%) scale(1.2)', opacity: 1 },
-            shockmount: { transform: 'translateX(104%) translateY(45%) scale(1.22)', opacity: 1 },
-            case: { transform: 'translateX(-29%) translateY(-58%) scale(1.76)', opacity: 0.62 }
-        },
-        'case-active': {
-            microphone: { transform: 'translateX(66%) translateY(11%) scale(0.7)', opacity: 0 },
-            shockmount: { transform: 'translateX(142%) translateY(42%) scale(0.8)', opacity: 0 },
-            case: { transform: 'translateX(-2%) translateY(12%) scale(1.22)', opacity: 1 }
-        },
-        'logo-view': {
-            microphone: { transform: 'translateX(400%) translateY(-15%) scale(1.57)', opacity: 1 },
-            shockmount: { transform: 'translateX(-179%) translateY(42%) scale(0.82)', opacity: 0 },
-            case: { transform: 'translateX(18%) translateY(-8%) scale(1.72)', opacity: 0 }
-        }
-    },
-    '023-BOMBLET-NO-SHOCKMOUNT': {
-        'global-view': {
-            microphone: { transform: 'translateX(286%) translateY(4%) scale(0.88)', opacity: 1 },
-            shockmount: { transform: 'translateX(4%) translateY(54%) scale(0.72)', opacity: 0 },
-            case: { transform: 'translateX(8%) translateY(9%) scale(1.29)', opacity: 1 }
-        },
-        'mic-active': {
-            microphone: { transform: 'translateX(400%) translateY(-7%) scale(1.12)', opacity: 1 },
-            shockmount: { transform: 'translateX(0%) translateY(52%) scale(0.72)', opacity: 0 },
-            case: { transform: 'translateX(-13%) translateY(-1%) scale(1.39)', opacity: 1 }
-        }
-    },
-    '023-BOMBLET-WITH-SHOCKMOUNT': {
-        'mic-active': {
-            microphone: { transform: 'translateX(200%) translateY(-19%) scale(1.11)', opacity: 1 },
-            shockmount: { transform: 'translateX(139%) translateY(31%) scale(1.21)', opacity: 1 },
-            case: { transform: 'translateX(48%) translateY(-23%) scale(1.57)', opacity: 0.78 }
-        },
-        'case-active': {
-            microphone: { transform: 'translateX(278%) translateY(12%) scale(0.7)', opacity: 0 },
-            shockmount: { transform: 'translateX(24%) translateY(41%) scale(0.76)', opacity: 0 },
-            case: { transform: 'translateX(14%) translateY(12%) scale(1.32)', opacity: 1 }
-        },
-        'logo-view': {
-            microphone: { transform: 'translateX(400%) translateY(-35%) scale(1.7)', opacity: 1 },
-            shockmount: { transform: 'translateX(24%) translateY(41%) scale(0.88)', opacity: 0 },
-            case: { transform: 'translateX(30%) translateY(-8%) scale(1.04)', opacity: 0 }
-        }
-    },
-    '023-MALFA': {
-        'global-view': {
-            microphone: { transform: 'translateX(214%) translateY(4%) scale(0.84)', opacity: 1 },
-            shockmount: { transform: 'translateX(6%) translateY(40%) scale(0.92)', opacity: 1 },
-            case: { transform: 'translateX(36%) translateY(-8%) scale(1.05)', opacity: 1 }
-        },
-        'mic-active': {
-            microphone: { transform: 'translateX(254%) translateY(-8%) scale(1.12)', opacity: 1 },
-            shockmount: { transform: 'translateX(0%) translateY(44%) scale(0.84)', opacity: 1 },
-            case: { transform: 'translateX(24%) translateY(-14%) scale(0.98)', opacity: 1 }
-        },
-        'shockmount-active': {
-            microphone: { transform: 'translateX(134%) translateY(-1%) scale(0.96)', opacity: 1 },
-            shockmount: { transform: 'translateX(86%) translateY(22%) scale(1.34)', opacity: 1 },
-            case: { transform: 'translateX(28%) translateY(-18%) scale(1.1)', opacity: 1 }
-        },
-        'case-active': {
-            microphone: { transform: 'translateX(214%) translateY(12%) scale(0.72)', opacity: 0 },
-            shockmount: { transform: 'translateX(6%) translateY(40%) scale(0.82)', opacity: 0 },
-            case: { transform: 'translateX(30%) translateY(-4%) scale(1.18)', opacity: 1 }
-        },
-        'logo-view': {
-            microphone: { transform: 'translateX(288%) translateY(-34%) scale(1.84)', opacity: 1 },
-            shockmount: { transform: 'translateX(6%) translateY(40%) scale(0.92)', opacity: 0 },
-            case: { transform: 'translateX(36%) translateY(-8%) scale(1.05)', opacity: 0 }
-        }
-    }
-});
+// Legacy positional desktop deltas have been migrated into layout-presets.js.
+// This collection now stays empty and acts only as a rollback seam.
+export const DESKTOP_CAMERA_PRESET_OVERRIDES = Object.freeze({});
 
 export const DEBUG_CAMERA_CAPTURE_EXPERIMENTS = Object.freeze({
     enabled: false,
@@ -339,465 +258,71 @@ export const CAMERA_PRESETS = buildCameraPresets(BASE_CAMERA_PRESETS, DESKTOP_CA
 export const TABLET_CAMERA_PRESET_OVERRIDES = Object.freeze({});
 export const TABLET_CAMERA_PRESETS = buildCameraPresets(CAMERA_PRESETS, TABLET_CAMERA_PRESET_OVERRIDES);
 
-function buildMobileState(globalView, overrides = {}) {
-    return mergeViewState(globalView, overrides);
-}
-
-function buildStaticMobilePreset(globalView, overrides = {}) {
-    return {
-        'global-view': buildMobileState(globalView, overrides['global-view']),
-        'mic-active': buildMobileState(globalView, overrides['mic-active']),
-        'shockmount-active': buildMobileState(globalView, overrides['shockmount-active']),
-        'case-active': buildMobileState(globalView, overrides['case-active']),
-        'logo-view': buildMobileState(globalView, overrides['logo-view'])
-    };
-}
-
-const MOBILE_023_GLOBAL_VIEW = Object.freeze({
-    microphone: { transform: 'translateX(201.00%) translateY(-5.00%) scale(1.20)', opacity: 1 },
-    case: { transform: 'translateX(33.00%) translateY(59.00%) scale(1.29)', opacity: 1 },
-    shockmount: { transform: 'translateX(-26.00%) translateY(-9.00%) scale(0.39)' }
-});
-
-const MOBILE_017_GLOBAL_VIEW = Object.freeze({
-    microphone: { transform: 'translateX(241.00%) translateY(3.00%) scale(1.05)', opacity: 1 },
-    shockmount: { transform: 'translateX(-26.00%) translateY(1.00%) scale(0.39)', opacity: 1 },
-    case: { transform: 'translateX(3.00%) translateY(39.00%) scale(1.04)', opacity: 1 }
-});
-
-export const MOBILE_CAMERA_PRESET_OVERRIDES = Object.freeze({
-    '017-TUBE': buildStaticMobilePreset(MOBILE_017_GLOBAL_VIEW, {
-        'shockmount-active': {
-            microphone: { transform: 'translateX(468%) translateY(-15%) scale(1.3)', opacity: 0 },
-            shockmount: { transform: 'translateX(-9%) translateY(-15%) scale(0.75)', opacity: 1 },
-            case: { transform: 'translateX(-9%) translateY(-15%) scale(0.75)', opacity: 0 }
-        },
-        'case-active': {
-            microphone: { transform: 'translateX(468%) translateY(-15%) scale(1.3)', opacity: 0 },
-            shockmount: { transform: 'translateX(-91%) translateY(-15%) scale(0.75)', opacity: 0 },
-            case: { transform: 'translateX(4%) translateY(51%) scale(1)', opacity: 1 }
-        }
-    }),
-    '017-FET': buildStaticMobilePreset(MOBILE_017_GLOBAL_VIEW, {
-        'case-active': {
-            microphone: { transform: 'translateX(468%) translateY(-15%) scale(1.3)', opacity: 0 },
-            shockmount: { transform: 'translateX(-91%) translateY(-15%) scale(0.75)', opacity: 0 },
-            case: { transform: 'translateX(-1%) translateY(73%) scale(1.5)', opacity: 1 }
-        }
-    }),
-    '023-BOMBLET-NO-SHOCKMOUNT': buildStaticMobilePreset(MOBILE_023_GLOBAL_VIEW),
-    '023-BOMBLET-WITH-SHOCKMOUNT': buildStaticMobilePreset(MOBILE_023_GLOBAL_VIEW),
-    '023-MALFA': buildStaticMobilePreset(MOBILE_023_GLOBAL_VIEW),
-    '023-DELUXE': buildStaticMobilePreset(MOBILE_023_GLOBAL_VIEW)
-});
+// Mobile positional deltas are also declarative now; keep this empty unless a
+// layout state is intentionally rolled back to the legacy preset system.
+export const MOBILE_CAMERA_PRESET_OVERRIDES = Object.freeze({});
 
 export const MOBILE_CAMERA_PRESETS = buildCameraPresets(CAMERA_PRESETS, MOBILE_CAMERA_PRESET_OVERRIDES);
 
-function buildDirectLayerState(transform, opacity = 1, duration = 1000, easing = 'easeInOutQuad') {
+function buildDirectLayerMetaState(duration = 1000, easing = 'easeInOutQuad') {
     return Object.freeze({
-        transform,
-        opacity,
         duration,
         easing
     });
 }
 
-function buildDirectViewState(layers) {
+function buildDirectMetaViewState(duration = 1000, easing = 'easeInOutQuad') {
+    const sharedLayerMeta = buildDirectLayerMetaState(duration, easing);
+
     return Object.freeze({
         sceneTransform: 'translateX(0vw) translateY(0vw) scale(1)',
-        sceneMeta: Object.freeze({
-            duration: 1000,
-            easing: 'easeInOutQuad'
-        }),
-        renderedLayers: Object.freeze(layers)
+        sceneMeta: Object.freeze({ duration, easing }),
+        renderedLayers: Object.freeze({
+            microphone: sharedLayerMeta,
+            shockmount: sharedLayerMeta,
+            case: sharedLayerMeta
+        })
     });
 }
 
-function buildDirectSceneViewState(globalView, stateConfig, duration = 1000, easing = 'easeInOutQuad') {
-    const normalizedState = typeof stateConfig === 'string'
-        ? { sceneTransform: stateConfig }
-        : (stateConfig || {});
-    const layerOverrides = normalizedState.layers || {};
-    const renderedLayers = Object.freeze({
-        ...globalView.renderedLayers,
-        ...Object.fromEntries(
-            Object.entries(layerOverrides).map(([layerId, layerConfig]) => [
-                layerId,
-                Object.freeze({
-                    ...(globalView.renderedLayers[layerId] || {}),
-                    ...layerConfig
-                })
-            ])
-        )
-    });
+const CAMERA_MODEL_KEYS = Object.freeze([
+    '017-TUBE',
+    '017-FET',
+    '023-BOMBLET-NO-SHOCKMOUNT',
+    '023-BOMBLET-WITH-SHOCKMOUNT',
+    '023-MALFA',
+    '023-DELUXE'
+]);
 
-    return Object.freeze({
-        sceneTransform: normalizedState.sceneTransform || globalView.sceneTransform || 'translateX(0vw) translateY(0vw) scale(1)',
-        sceneMeta: Object.freeze({
-            duration: normalizedState.duration ?? duration,
-            easing: normalizedState.easing ?? easing
-        }),
-        renderedLayers
-    });
+const CAMERA_STATE_KEYS = Object.freeze([
+    'global-view',
+    'mic-active',
+    'shockmount-active',
+    'case-active',
+    'logo-view'
+]);
+
+function buildSharedDirectMetaStateMap(duration = 1000, easing = 'easeInOutQuad') {
+    const sharedViewState = buildDirectMetaViewState(duration, easing);
+    const modelStateMap = Object.freeze(
+        Object.fromEntries(CAMERA_STATE_KEYS.map((stateKey) => [stateKey, sharedViewState]))
+    );
+
+    return Object.freeze(
+        Object.fromEntries(CAMERA_MODEL_KEYS.map((modelKey) => [modelKey, modelStateMap]))
+    );
 }
 
-function buildDirectStateMap(globalView, sceneTransforms = {}) {
-    return Object.freeze({
-        'global-view': globalView,
-        ...Object.fromEntries(
-            Object.entries(sceneTransforms).map(([stateName, stateConfig]) => [
-                stateName,
-                buildDirectSceneViewState(globalView, stateConfig)
-            ])
-        )
-    });
-}
+const SHARED_DIRECT_CAMERA_META_OVERRIDES = buildSharedDirectMetaStateMap();
 
-const SHARED_GLOBAL_VIEW_LAYER_OVERRIDES = Object.freeze({
-    '023-BOMBLET-NO-SHOCKMOUNT': buildDirectStateMap(
-        buildDirectViewState({
-            microphone: buildDirectLayerState('translateX(36vw) translateY(2vw) scale(0.88)', 1),
-            shockmount: buildDirectLayerState('translateX(-25vw) translateY(19vw) scale(0.88)', 0),
-            case: buildDirectLayerState('translateX(22vw) translateY(3vw) scale(1.29)', 1)
-        }),
-        {
-            'mic-active': 'translateX(16vw) translateY(-3vw) scale(1.4)',
-            'logo-view': 'translateX(12vw) translateY(-9vw) scale(2)',
-            'case-active': {
-                sceneTransform: 'translateX(-13vw) translateY(0vw) scale(1.05)',
-                layers: {
-                    microphone: buildDirectLayerState('translateX(31vw) translateY(3vw) scale(0.9)', 1)
-                }
-            }
-        }
-    ),
-    '023-BOMBLET-WITH-SHOCKMOUNT': buildDirectStateMap(
-        buildDirectViewState({
-            microphone: buildDirectLayerState('translateX(36vw) translateY(2vw) scale(0.88)', 1),
-            shockmount: buildDirectLayerState('translateX(11vw) translateY(19vw) scale(0.88)', 1),
-            case: buildDirectLayerState('translateX(22vw) translateY(3vw) scale(1.29)', 1)
-        }),
-        {
-            'mic-active': 'translateX(16vw) translateY(-3vw) scale(1.4)',
-            'logo-view': 'translateX(12vw) translateY(-9vw) scale(2)',
-            'case-active': {
-                sceneTransform: 'translateX(-13vw) translateY(0vw) scale(1.05)',
-                layers: {
-                    microphone: buildDirectLayerState('translateX(71vw) translateY(3vw) scale(1)', 1),
-                    shockmount: buildDirectLayerState('translateX(12vw) translateY(25vw) scale(0.96)', 1)
-                }
-            },
-            'shockmount-active': 'translateX(37vw) translateY(-11vw) scale(1.8)'
-        }
-    ),
-    '023-MALFA': buildDirectStateMap(
-        buildDirectViewState({
-            microphone: buildDirectLayerState('translateX(38vw) translateY(-1vw) scale(1)', 1),
-            shockmount: buildDirectLayerState('translateX(7vw) translateY(16vw) scale(0.92)', 1),
-            case: buildDirectLayerState('translateX(21vw) translateY(1vw) scale(1.2)', 1)
-        }),
-        {
-            'mic-active': 'translateX(17vw) translateY(-0.5vw) scale(1.24)',
-            'logo-view': 'translateX(4vw) translateY(-9vw) scale(2.1)',
-            'case-active': {
-                sceneTransform: 'translateX(-10vw) translateY(0vw) scale(1)',
-                layers: {
-                    microphone: buildDirectLayerState('translateX(70vw) translateY(1vw) scale(1.1)', 1),
-                    shockmount: buildDirectLayerState('translateX(12vw) translateY(22vw) scale(1)', 1)
-                }
-            },
-            'shockmount-active': 'translateX(41vw) translateY(-10vw) scale(1.6)'
-        }
-    ),
-    '023-DELUXE': buildDirectStateMap(
-        buildDirectViewState({
-            microphone: buildDirectLayerState('translateX(50vw) translateY(1vw) scale(0.88)', 1),
-            shockmount: buildDirectLayerState('translateX(5vw) translateY(17vw) scale(0.8)', 1),
-            case: buildDirectLayerState('translateX(2vw) translateY(0vw) scale(0.96)', 1)
-        }),
-        {
-            'mic-active': 'translateX(1vw) translateY(-3vw) scale(1.4)',
-            'logo-view': 'translateX(-17vw) translateY(-10vw) scale(2.2)',
-            'case-active': {
-                sceneTransform: 'translateX(10vw) translateY(7vw) scale(1.3)',
-                layers: {
-                    microphone: buildDirectLayerState('translateX(51.2vw) translateY(-2vw) scale(0.58)', 1),
-                    shockmount: buildDirectLayerState('translateX(-3vw) translateY(24vw) scale(0.9)', 1)
-                }
-            },
-            'shockmount-active': 'translateX(45vw) translateY(-14vw) scale(1.8)'
-        }
-    ),
-    '017-FET': buildDirectStateMap(
-        buildDirectViewState({
-            microphone: buildDirectLayerState('translateX(33vw) translateY(6vw) scale(0.82)', 1),
-            shockmount: buildDirectLayerState('translateX(43vw) translateY(20vw) scale(0.88)', 1),
-            case: buildDirectLayerState('translateX(-9vw) translateY(2vw) scale(1.22)', 1)
-        }),
-        {
-            'mic-active': 'translateX(18vw) translateY(-5vw) scale(1.2)',
-            'logo-view': 'translateX(20vw) translateY(-12vw) scale(1.9)',
-            'case-active': {
-                sceneTransform: 'translateX(17vw) translateY(3vw) scale(1.1)',
-                layers: {
-                    microphone: buildDirectLayerState('translateX(-6vw) translateY(3vw) scale(0.72)', 1),
-                    shockmount: buildDirectLayerState('translateX(47vw) translateY(22vw) scale(0.88)', 1)
-                }
-            },
-            'shockmount-active': 'translateX(20vw) translateY(-12vw) scale(1.9)'
-        }
-    ),
-    '017-TUBE': buildDirectStateMap(
-        buildDirectViewState({
-            microphone: buildDirectLayerState('translateX(7vw) translateY(8vw) scale(0.66)', 1),
-            shockmount: buildDirectLayerState('translateX(18vw) translateY(23vw) scale(0.62)', 1),
-            case: buildDirectLayerState('translateX(7vw) translateY(4vw) scale(1.21)', 1)
-        }),
-        {
-            'mic-active': 'translateX(65vw) translateY(-11vw) scale(1.55)',
-            'logo-view': 'translateX(79vw) translateY(-20vw) scale(2.3)',
-            'case-active': {
-                sceneTransform: 'translateX(1vw) translateY(-2vw) scale(1.1)',
-                layers: {
-                    microphone: buildDirectLayerState('translateX(-3vw) translateY(8vw) scale(0.66)', 1),
-                    shockmount: buildDirectLayerState('translateX(57vw) translateY(36vw) scale(0.92)', 1)
-                }
-            },
-            'shockmount-active': 'translateX(23vw) translateY(-29vw) scale(2.3)'
-        }
-    )
-});
-
-const MOBILE_PORTRAIT_LAYER_OVERRIDES = Object.freeze({
-    '023-BOMBLET-NO-SHOCKMOUNT': buildDirectStateMap(
-        buildDirectViewState({
-            microphone: buildDirectLayerState('translateX(22vw) translateY(11vw) scale(0.88)', 1),
-            shockmount: buildDirectLayerState('translateX(-27vw) translateY(26vw) scale(0.47)', 0),
-            case: buildDirectLayerState('translateX(17vw) translateY(77vw) scale(1.29)', 1)
-        }),
-        {
-            'mic-active': {
-                layers: {
-                    microphone: buildDirectLayerState('translateX(30vw) translateY(0vw) scale(0.8)', 1),
-                    shockmount: buildDirectLayerState('translateX(-39vw) translateY(21vw) scale(0.44)', 0),
-                    case: buildDirectLayerState('translateX(18vw) translateY(60vw) scale(1.29)', 1)
-                }
-            },
-            'logo-view': {
-                layers: {
-                    microphone: buildDirectLayerState('translateX(31vw) translateY(-5vw) scale(1.26)', 1),
-                    shockmount: buildDirectLayerState('translateX(-41vw) translateY(22vw) scale(0.4)', 0),
-                    case: buildDirectLayerState('translateX(36vw) translateY(63vw) scale(1.29)', 1)
-                }
-            },
-            'shockmount-active': {
-                layers: {
-                    microphone: buildDirectLayerState('translateX(59vw) translateY(0vw) scale(0.88)', 1),
-                    shockmount: buildDirectLayerState('translateX(-20vw) translateY(14vw) scale(0.5)', 0),
-                    case: buildDirectLayerState('translateX(22vw) translateY(3vw) scale(1.29)', 1)
-                }
-            },
-            'case-active': {
-                layers: {
-                    microphone: buildDirectLayerState('translateX(18vw) translateY(8vw) scale(0.9)', 1),
-                    shockmount: buildDirectLayerState('translateX(-27vw) translateY(26vw) scale(0.47)', 0),
-                    case: buildDirectLayerState('translateX(12vw) translateY(80vw) scale(1.44)', 1)
-                }
-            }
-        }
-    ),
-    '023-BOMBLET-WITH-SHOCKMOUNT': buildDirectStateMap(
-        buildDirectViewState({
-            microphone: buildDirectLayerState('translateX(34vw) translateY(11vw) scale(0.88)', 1),
-            shockmount: buildDirectLayerState('translateX(-27vw) translateY(28vw) scale(0.47)', 1),
-            case: buildDirectLayerState('translateX(22vw) translateY(73vw) scale(1.33)', 1)
-        }),
-        {
-            'mic-active': {
-                layers: {
-                    microphone: buildDirectLayerState('translateX(37vw) translateY(0vw) scale(1.1)', 1),
-                    shockmount: buildDirectLayerState('translateX(-28vw) translateY(23vw) scale(0.44)', 1),
-                    case: buildDirectLayerState('translateX(35vw) translateY(66vw) scale(1.33)', 1)
-                }
-            },
-            'logo-view': {
-                layers: {
-                    microphone: buildDirectLayerState('translateX(31vw) translateY(-5vw) scale(1.26)', 1),
-                    shockmount: buildDirectLayerState('translateX(-41vw) translateY(22vw) scale(0.4)', 1),
-                    case: buildDirectLayerState('translateX(36vw) translateY(63vw) scale(1.33)', 1)
-                }
-            },
-            'shockmount-active': {
-                layers: {
-                    microphone: buildDirectLayerState('translateX(59vw) translateY(0vw) scale(0.88)', 1),
-                    shockmount: buildDirectLayerState('translateX(-20vw) translateY(14vw) scale(0.5)', 1),
-                    case: buildDirectLayerState('translateX(22vw) translateY(3vw) scale(1.33)', 1)
-                }
-            },
-            'case-active': {
-                layers: {
-                    microphone: buildDirectLayerState('translateX(84vw) translateY(16vw) scale(1)', 1),
-                    shockmount: buildDirectLayerState('translateX(-40vw) translateY(44vw) scale(0.44)', 1),
-                    case: buildDirectLayerState('translateX(12vw) translateY(80vw) scale(1.44)', 1)
-                }
-            }
-        }
-    ),
-    '023-MALFA': buildDirectStateMap(
-        buildDirectViewState({
-            microphone: buildDirectLayerState('translateX(9vw) translateY(5vw) scale(1)', 1),
-            shockmount: buildDirectLayerState('translateX(6vw) translateY(35vw) scale(0.48)', 1),
-            case: buildDirectLayerState('translateX(31vw) translateY(80vw) scale(1.5)', 1)
-        }),
-        {
-            'mic-active': {
-                layers: {
-                    microphone: buildDirectLayerState('translateX(22vw) translateY(-2vw) scale(1)', 1),
-                    shockmount: buildDirectLayerState('translateX(-47vw) translateY(24vw) scale(0.44)', 1),
-                    case: buildDirectLayerState('translateX(34vw) translateY(80vw) scale(1.8)', 1)
-                }
-            },
-            'logo-view': {
-                layers: {
-                    microphone: buildDirectLayerState('translateX(33vw) translateY(2vw) scale(1)', 1),
-                    shockmount: buildDirectLayerState('translateX(-38vw) translateY(31vw) scale(0.5)', 1),
-                    case: buildDirectLayerState('translateX(37vw) translateY(75vw) scale(1.2)', 1)
-                }
-            },
-            'shockmount-active': {
-                layers: {
-                    microphone: buildDirectLayerState('translateX(-16vw) translateY(-23vw) scale(1.5)', 1),
-                    shockmount: buildDirectLayerState('translateX(5vw) translateY(10vw) scale(0.92)', 1),
-                    case: buildDirectLayerState('translateX(52vw) translateY(58vw) scale(1.7)', 1)
-                }
-            },
-            'case-active': {
-                layers: {
-                    microphone: buildDirectLayerState('translateX(17vw) translateY(18vw) scale(1)', 1),
-                    shockmount: buildDirectLayerState('translateX(-46vw) translateY(38vw) scale(0.5)', 1),
-                    case: buildDirectLayerState('translateX(20vw) translateY(80vw) scale(1.44)', 1)
-                }
-            }
-        }
-    ),
-    '023-DELUXE': buildDirectStateMap(
-        buildDirectViewState({
-            microphone: buildDirectLayerState('translateX(16vw) translateY(13vw) scale(0.8)', 1),
-            shockmount: buildDirectLayerState('translateX(11vw) translateY(32vw) scale(0.4)', 1),
-            case: buildDirectLayerState('translateX(-9vw) translateY(61vw) scale(1.3)', 1)
-        }),
-        {
-            'mic-active': {
-                layers: {
-                    microphone: buildDirectLayerState('translateX(39vw) translateY(0vw) scale(0.9)', 1),
-                    shockmount: buildDirectLayerState('translateX(42vw) translateY(20vw) scale(0.55)', 1),
-                    case: buildDirectLayerState('translateX(-5vw) translateY(52vw) scale(1.3)', 1)
-                }
-            },
-            'logo-view': {
-                layers: {
-                    microphone: buildDirectLayerState('translateX(47vw) translateY(0vw) scale(0.9)', 1),
-                    shockmount: buildDirectLayerState('translateX(58vw) translateY(15vw) scale(0.6)', 1),
-                    case: buildDirectLayerState('translateX(5vw) translateY(22vw) scale(0.96)', 1)
-                }
-            },
-            'shockmount-active': {
-                layers: {
-                    microphone: buildDirectLayerState('translateX(100vw) translateY(-1vw) scale(0.88)', 1),
-                    shockmount: buildDirectLayerState('translateX(1vw) translateY(6vw) scale(1)', 1),
-                    case: buildDirectLayerState('translateX(-29vw) translateY(33vw) scale(1.2)', 1)
-                }
-            },
-            'case-active': {
-                layers: {
-                    microphone: buildDirectLayerState('translateX(-11.8vw) translateY(18vw) scale(0.7)', 1),
-                    shockmount: buildDirectLayerState('translateX(72vw) translateY(24vw) scale(0.9)', 1),
-                    case: buildDirectLayerState('translateX(14vw) translateY(78vw) scale(1.5)', 1)
-                }
-            }
-        }
-    ),
-    '017-FET': buildDirectStateMap(
-        buildDirectViewState({
-            microphone: buildDirectLayerState('translateX(20vw) translateY(18vw) scale(0.7)', 1),
-            shockmount: buildDirectLayerState('translateX(16vw) translateY(33vw) scale(0.4)', 1),
-            case: buildDirectLayerState('translateX(0vw) translateY(65vw) scale(1.4)', 1)
-        }),
-        {
-            'mic-active': {
-                layers: {
-                    microphone: buildDirectLayerState('translateX(17vw) translateY(21vw) scale(0.65)', 1),
-                    shockmount: buildDirectLayerState('translateX(9vw) translateY(36vw) scale(0.37)', 1),
-                    case: buildDirectLayerState('translateX(-4vw) translateY(71vw) scale(1.45)', 1)
-                }
-            },
-            'logo-view': {
-                layers: {
-                    microphone: buildDirectLayerState('translateX(26vw) translateY(6vw) scale(0.82)', 1),
-                    shockmount: buildDirectLayerState('translateX(34vw) translateY(21vw) scale(0.5)', 1),
-                    case: buildDirectLayerState('translateX(-13vw) translateY(46vw) scale(1)', 1)
-                }
-            },
-            'shockmount-active': {
-                layers: {
-                    microphone: buildDirectLayerState('translateX(-11vw) translateY(2vw) scale(0.82)', 1),
-                    shockmount: buildDirectLayerState('translateX(-11vw) translateY(12vw) scale(0.5)', 1),
-                    case: buildDirectLayerState('translateX(-18vw) translateY(13vw) scale(1)', 1)
-                }
-            },
-            'case-active': {
-                layers: {
-                    microphone: buildDirectLayerState('translateX(-24vw) translateY(27vw) scale(0.62)', 1),
-                    shockmount: buildDirectLayerState('translateX(48vw) translateY(34vw) scale(0.48)', 1),
-                    case: buildDirectLayerState('translateX(11vw) translateY(72vw) scale(1.4)', 1)
-                }
-            }
-        }
-    ),
-    '017-TUBE': buildDirectStateMap(
-        buildDirectViewState({
-            microphone: buildDirectLayerState('translateX(6vw) translateY(21vw) scale(0.6)', 1),
-            shockmount: buildDirectLayerState('translateX(-2vw) translateY(32vw) scale(0.33)', 1),
-            case: buildDirectLayerState('translateX(-2vw) translateY(49vw) scale(1)', 1)
-        }),
-        {
-            'mic-active': {
-                layers: {
-                    microphone: buildDirectLayerState('translateX(38vw) translateY(4vw) scale(1.05)', 1),
-                    shockmount: buildDirectLayerState('translateX(56vw) translateY(24vw) scale(0.62)', 1),
-                    case: buildDirectLayerState('translateX(23vw) translateY(49vw) scale(1.41)', 1)
-                }
-            },
-            'logo-view': {
-                layers: {
-                    microphone: buildDirectLayerState('translateX(2vw) translateY(8vw) scale(0.7)', 1),
-                    shockmount: buildDirectLayerState('translateX(-56vw) translateY(16vw) scale(0.4)', 1),
-                    case: buildDirectLayerState('translateX(76vw) translateY(60vw) scale(1.21)', 1)
-                }
-            },
-            'shockmount-active': {
-                layers: {
-                    microphone: buildDirectLayerState('translateX(-1vw) translateY(10vw) scale(0.46)', 1),
-                    shockmount: buildDirectLayerState('translateX(-11vw) translateY(18vw) scale(0.4)', 1),
-                    case: buildDirectLayerState('translateX(31vw) translateY(30vw) scale(0.6)', 1)
-                }
-            },
-            'case-active': {
-                layers: {
-                    microphone: buildDirectLayerState('translateX(-23vw) translateY(2vw) scale(0.66)', 1),
-                    shockmount: buildDirectLayerState('translateX(73vw) translateY(47vw) scale(0.47)', 1),
-                    case: buildDirectLayerState('translateX(-1vw) translateY(51vw) scale(1)', 1)
-                }
-            }
-        }
-    )
-});
-
+// Final direct overrides are metadata-only now. Layout presets own runtime
+// positioning; this map only preserves the legacy anime timing contract and
+// remains the final escape hatch if a migrated state needs a non-layout tweak.
 export const DIRECT_CAMERA_VIEW_OVERRIDES = Object.freeze({
-    desktop: SHARED_GLOBAL_VIEW_LAYER_OVERRIDES,
-    tablet: SHARED_GLOBAL_VIEW_LAYER_OVERRIDES,
-    'mobile-landscape': SHARED_GLOBAL_VIEW_LAYER_OVERRIDES,
-    'mobile-portrait': MOBILE_PORTRAIT_LAYER_OVERRIDES
+    desktop: SHARED_DIRECT_CAMERA_META_OVERRIDES,
+    tablet: SHARED_DIRECT_CAMERA_META_OVERRIDES,
+    'mobile-landscape': SHARED_DIRECT_CAMERA_META_OVERRIDES,
+    'mobile-portrait': SHARED_DIRECT_CAMERA_META_OVERRIDES
 });
 
 const CAMERA_LAYERS = ['microphone', 'shockmount', 'case'];
@@ -998,3 +523,5 @@ export const RUNTIME_CAMERA_PRESETS = Object.freeze({
 export function resolveRuntimeCameraPreset(deviceMode, modelKey, stateName) {
     return RUNTIME_CAMERA_PRESETS[deviceMode]?.[modelKey]?.[stateName] || null;
 }
+
+
