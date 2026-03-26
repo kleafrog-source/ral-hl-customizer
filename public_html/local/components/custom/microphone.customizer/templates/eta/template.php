@@ -39,7 +39,7 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
 
 
 <button type="button" data-home-url="/" class="customizer-home-logo" id="customizer-home-logo" aria-label="Перейти на главную страницу">
-    <svg id="logotype-soyuz-ru" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 145.15 55">
+    <svg id="logotype-soyuz-ru" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 145.15 41.995">
         <g id="colors-squares">
             <rect id="square1" x="0.108" y="0.146" width="25.471" height="41.789" style="  stroke-miterlimit: 10; stroke-width: 0.4px;"/>
             <rect id="square2" x="25.58" y="0.146" width="25.471" height="41.789" style=" stroke-miterlimit: 10; stroke-width: 0.4px;"/>
@@ -59,22 +59,7 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
             <path class="logo-big-letter" d="M66.454,5.7a5.293,5.293,0,0,0-4.945,5.337v9.205H57.264V7.236a.8.8,0,0,0-.8-.8h0a.8.8,0,0,0-.8.8v27.61a.8.8,0,0,0,.8.8h0a.8.8,0,0,0,.8-.8V21.837h4.245v9.2a5.292,5.292,0,0,0,4.945,5.337,5.2,5.2,0,0,0,5.448-5.19V10.894A5.2,5.2,0,0,0,66.454,5.7ZM70.31,31.188a3.6,3.6,0,0,1-7.209,0V10.894a3.6,3.6,0,1,1,7.209,0Z" />
             <path class="logo-big-letter" d="M94.455,15.844v-4.95a5.2,5.2,0,0,0-5.2-5.2h0a5.2,5.2,0,0,0-5.2,5.2v1.38a.8.8,0,0,0,.8.8h0a.8.8,0,0,0,.8-.8V11.021A3.691,3.691,0,0,1,89.011,7.3a3.609,3.609,0,0,1,3.852,3.6v4.95a3.609,3.609,0,0,1-3.605,3.605v1.593a3.609,3.609,0,0,1,3.605,3.6v6.414a3.689,3.689,0,0,1-3.358,3.723,3.608,3.608,0,0,1-3.851-3.6V29.8a.8.8,0,0,0-.8-.8h0a.8.8,0,0,0-.8.8v1.39a5.2,5.2,0,0,0,5.2,5.2h0a5.2,5.2,0,0,0,5.2-5.2V24.647a5.188,5.188,0,0,0-2.443-4.4A5.189,5.189,0,0,0,94.455,15.844Z" />
         </g>
-        <g id="bottom-letters">
-            <path d="M4.317,54.761a1.983,1.983,0,0,1-1.956-2V48.1a1.983,1.983,0,0,1,1.956-2,1.982,1.982,0,0,1,1.956,2v.245H5.887V48.1a1.6,1.6,0,0,0-1.57-1.618A1.6,1.6,0,0,0,2.747,48.1v4.656a1.6,1.6,0,0,0,1.57,1.618,1.6,1.6,0,0,0,1.57-1.618v-.242h.386v.242A1.982,1.982,0,0,1,4.317,54.761Z" style="fill: #333"/>
-            <path d="M58.462,54.761a1.958,1.958,0,0,1-1.956-1.956V48.053a1.956,1.956,0,0,1,3.912,0v4.752A1.958,1.958,0,0,1,58.462,54.761Zm0-8.278a1.571,1.571,0,0,0-1.57,1.57v4.752a1.57,1.57,0,1,0,3.14,0V48.053A1.571,1.571,0,0,0,58.462,46.483Z" style="fill: #333"/>
-            <path d="M77.85,50.35a1.214,1.214,0,0,0,.471-.957V47.5A1.222,1.222,0,0,0,77.1,46.281H74.9v8.282h2.444A1.164,1.164,0,0,0,78.505,53.4V51.391A1.161,1.161,0,0,0,77.85,50.35Zm-2.566-3.684H77.1a.837.837,0,0,1,.836.836v1.891a.837.837,0,0,1-.836.836H75.284ZM78.12,53.4a.778.778,0,0,1-.777.777H75.284V50.614h2.059a.778.778,0,0,1,.777.777Z" style="fill: #333"/>
-            <polygon points="25.02 46.703 25.02 46.317 21.301 46.317 21.301 54.563 25.02 54.563 25.02 54.177 21.687 54.177 21.687 50.633 24.376 50.633 24.376 50.247 21.687 50.247 21.687 46.703 25.02 46.703" style="fill: #333"/>
-            <path d="M15.743,53.521v-7.2H13.409a.887.887,0,0,0-.9.787l-.658,6.417H11.2v1.047h.386v-.661h4.4v.661h.386V53.521Zm-3.506,0,.655-6.379a.5.5,0,0,1,.517-.439h1.948v6.818Z" style="fill: #333"/>
-            <path d="M30.327,54.854l-.381-.06,1.181-7.547a1.1,1.1,0,0,1,1.087-.93H33.9v8.251H33.51V46.7h-1.3a.711.711,0,0,0-.706.6Z" style="fill: #333"/>
-            <path d="M140.941,46.1a1.958,1.958,0,0,0-1.955,1.956v2.183h-1.229V46.29h-.385v8.278h.385V50.622h1.229v2.183a1.956,1.956,0,1,0,3.911,0V48.053A1.958,1.958,0,0,0,140.941,46.1Zm1.57,6.708a1.57,1.57,0,1,1-3.14,0V48.053a1.57,1.57,0,1,1,3.14,0Z" style="fill: #333"/>
-            <path d="M87.584,46.281h-2.2v8.287h.386V52.983h1.816a1.221,1.221,0,0,0,1.221-1.221V47.5A1.222,1.222,0,0,0,87.584,46.281Zm.836,5.481a.837.837,0,0,1-.836.836H85.768V46.666h1.816a.837.837,0,0,1,.836.836Z" style="fill: #333"/>
-            <path d="M109.02,46.29V52.6H107.2a.836.836,0,0,1-.835-.836V46.29h-.386v5.472a1.222,1.222,0,0,0,1.221,1.221h1.816v1.585h.386V46.29Z" style="fill: #333"/>
-            <polygon points="51.194 46.29 51.194 50.236 48.054 50.236 48.054 46.29 47.668 46.29 47.668 54.568 48.054 54.568 48.054 50.622 51.194 50.622 51.194 54.568 51.58 54.568 51.58 46.29 51.194 46.29" style="fill: #333"/>
-            <polygon points="119.809 46.29 119.809 50.236 116.669 50.236 116.669 46.29 116.283 46.29 116.283 54.568 116.669 54.568 116.669 50.622 119.809 50.622 119.809 54.568 120.195 54.568 120.195 46.29 119.809 46.29" style="fill: #333"/>
-            <path d="M42.347,54.568h.395L40.931,46.29h-.3l-1.811,8.278h.4l.347-1.585H42Zm-2.7-1.97,1.135-5.186L41.916,52.6Z" style="fill: #333"/>
-            <path d="M99.106,46.29H98.72V52.6H96.9a.837.837,0,0,1-.836-.836V46.29h-.385v5.472A1.221,1.221,0,0,0,96.9,52.983H98.72v.789a.4.4,0,0,1-.4.4c-.883,0-2.549.006-2.549.006v.386s1.666-.005,2.548-.006a.784.784,0,0,0,.781-.785v-.789h0Z" style="fill: #333"/>
-            <path d="M130.109,46.29V52.6h-1.816a.837.837,0,0,1-.836-.836V46.29h-.385v5.472a1.222,1.222,0,0,0,1.221,1.221h1.816v.789a.4.4,0,0,1-.4.4c-.883,0-2.549.006-2.549.006v.386s1.665-.005,2.549-.006a.785.785,0,0,0,.781-.785V46.29Z" style="fill: #333"/>
-        </g>
+       
     </svg>
 </button>
     <div id="start-screen" class="hidden">
@@ -94,6 +79,13 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
             </svg>
+            </button>
+            <button class="sidebar-help-btn" type="button" id="sidebar-help-btn" aria-label="Help" title="Help" data-tooltip="Help">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                </svg>
             </button>
         </div>
 
@@ -318,35 +310,9 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
         
         <!-- Sidebar сгенерированный из HL данных -->
         <div class="sidebar" id="customization-sidebar" data-sidebar-state="normal">
-            <div class="sidebar-header">
-                <!-- <div class="sidebar-title-block" data-sidebar-fade data-sidebar-hide="compact">
-                    <div class="sidebar-title">Customizer</div>
-                    <div class="sidebar-subtitle">Microphone</div>
-                </div> -->
-                <div class="sidebar-state-controls" role="group" aria-label="Sidebar size">
-                    <button class="sidebar-help-btn" type="button" id="sidebar-help-btn" aria-label="Help" title="Help" data-tooltip="Help">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
-                            <line x1="12" y1="17" x2="12.01" y2="17"></line>
-                        </svg>
-                    </button>
-                    <button class="sidebar-state-btn" type="button" data-sidebar-state-btn="compact" aria-label="Compact sidebar" title="Compact" data-tooltip="Compact">
-                        <svg viewBox="0 0 24 24" aria-hidden="true">
-                            <rect x="4" y="5" width="6" height="14" rx="1"></rect>
-                            <rect x="14" y="5" width="6" height="14" rx="1" opacity="0.4"></rect>
-                        </svg>
-                    </button>
-                    <button class="sidebar-state-btn" type="button" data-sidebar-state-btn="normal" aria-label="Normal sidebar" title="Normal" data-tooltip="Normal">
-                        <svg viewBox="0 0 24 24" aria-hidden="true">
-                            <rect x="4" y="5" width="16" height="14" rx="1"></rect>
-                        </svg>
-                    </button>
-                </div>
-            </div>
             <div class="sidebar-content">
                 <!-- VARIANT SWITCH -->
-                <div class="variant-switch" id="variant-switch" data-sidebar-fade data-sidebar-hide="compact">
+                <div class="variant-switch" id="variant-switch">
                     <?php foreach ($arResult['MODELS'] as $model): ?>
                         <?php 
                         $series = substr($model['CODE'], 0, 3);
@@ -910,7 +876,7 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                     </div>
 
                     <?php if ($sectionKey === 'logo' && !empty($arResult['LIQUID_TOGGLES']['custom_logo']['enabled'])): ?>
-                        <div class="menu-item toggle-logo-section" data-sidebar-fade data-sidebar-hide="compact">
+                        <div class="menu-item toggle-logo-section">
                             <div class="toggle-flexbox-option-text">
                                 <h4 class="section-title" style="margin:0;">
                                     <?= htmlspecialchars($arResult['LIQUID_TOGGLES']['custom_logo']['title']) ?>
@@ -1026,7 +992,7 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                 <?php endforeach; ?>
 
                 <!-- SHOCKMOUNT TOGGLE -->
-                <div class="menu-item" id="shockmount-toggle" data-sidebar-fade data-sidebar-hide="compact">
+                <div class="menu-item" id="shockmount-toggle">
                     <div class="toggle-flexbox-option-text" style="width: 100%;">
                         <h4 class="section-title" style="margin:0;"><?= htmlspecialchars($arResult['LIQUID_TOGGLES']['shockmount']['title'] ?? 'Добавить подвес') ?></h4>
                         <div class="switch-container" id="shockmount-switch-container" style="width: auto;">
@@ -1310,7 +1276,7 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
             </div>
 
                 <!-- Price Section -->
-                <div class="sidebar-section price-section" data-sidebar-fade data-sidebar-hide="compact">
+                <div class="sidebar-section price-section">
                     <div class="price-section-header">
                         <button class="price-section-toggle" id="price-section-toggle" type="button" aria-expanded="false">
                             <span class="price-section-toggle-text">Показать детали</span>

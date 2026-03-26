@@ -27,6 +27,7 @@ const SPECIAL_OPTION_SWATCHES = {
     'body-satinsteel': 'linear-gradient(135deg, #f4f4f1 0%, #bcbec2 45%, #7e8288 100%)',
     'spheres-brass': 'linear-gradient(135deg, #f6e3a1 0%, #c99b2c 48%, #7f5c10 100%)',
     'brass-logo': 'linear-gradient(135deg, #f6e3a1 0%, #c99b2c 48%, #7f5c10 100%)',
+    'pins-brass': 'linear-gradient(135deg, #f6e3a1 0%, #c99b2c 48%, #7f5c10 100%)',
     'pins-brass-023': 'linear-gradient(135deg, #f6e3a1 0%, #c99b2c 48%, #7f5c10 100%)',
     coldchrome: 'linear-gradient(135deg, #f5f7fa 0%, #b9c2cb 45%, #727b87 100%)',
     malfagold: 'linear-gradient(135deg, #f8e7aa 0%, #ddb64a 42%, #8e6516 100%)',
@@ -42,28 +43,6 @@ function syncShockmountVisibility(delay = false) {
     setTimeout(() => {
         updateShockmountVisibility();
     }, 50);
-}
-
-function syncSidebarResponsiveControls(sidebar = document.getElementById('customization-sidebar')) {
-    if (!sidebar) {
-        return;
-    }
-
-    const edgeControls = document.getElementById('sidebar-edge-controls');
-    const sidebarHeader = sidebar.querySelector('.sidebar-header');
-
-    if (!edgeControls || !sidebarHeader) {
-        return;
-    }
-
-    const isMobile = window.matchMedia('(max-width: 768px)').matches;
-    const targetParent = isMobile ? sidebarHeader : sidebar;
-
-    if (edgeControls.parentElement !== targetParent) {
-        targetParent.appendChild(edgeControls);
-    }
-
-    edgeControls.classList.toggle('is-inline', isMobile);
 }
 
 function getOptionSwatchFill(button) {
@@ -203,6 +182,17 @@ export function updateUI() {
     setPrice('logo-price-row', breakdown.logo + breakdown.logobg);
     setPrice('case-price-row', breakdown.case);
     setPrice('shockmount-price-row', breakdown.shockmount);
+
+    const casePriceValue = breakdown.case || 0;
+    const caseRow =
+        document.getElementById('case-price-row-container')
+        || document.getElementById('case-price-row')?.closest('.price-row');
+    if (caseRow) {
+        if (!caseRow.id) {
+            caseRow.id = 'case-price-row-container';
+        }
+        caseRow.style.display = casePriceValue > 0 ? 'flex' : 'none';
+    }
 
     const shockmountMenuPrice = document.getElementById('shockmount-price');
     if (shockmountMenuPrice) shockmountMenuPrice.textContent = formatPrice(breakdown.shockmount);
@@ -736,99 +726,11 @@ export function toggleSubmenu(section, forceClose = false) {
 function initSidebarControls() {
     const sidebar = document.getElementById('customization-sidebar');
     if (!sidebar) return;
-
-    syncSidebarResponsiveControls(sidebar);
-
-    const buttons = sidebar.querySelectorAll('[data-sidebar-state-btn]');
-    if (!buttons.length) return;
-
-    const savedState = localStorage.getItem('sidebarState');
-    const initialState = savedState || sidebar.dataset.sidebarState || 'normal';
-    applySidebarState(initialState, false);
-
-    buttons.forEach(btn => {
-        btn.addEventListener('click', () => {
-            const targetState = btn.dataset.sidebarStateBtn;
-            applySidebarState(targetState, true);
-        });
-    });
-
-    const mediaQuery = window.matchMedia('(max-width: 768px)');
-    mediaQuery.addEventListener('change', () => {
-        syncSidebarResponsiveControls(sidebar);
-        applySidebarState(sidebar.dataset.sidebarState || 'normal', false);
-    });
-}
-
-function applySidebarState(state, animate = true) {
-    const sidebar = document.getElementById('customization-sidebar');
-    if (!sidebar) return;
-
-    const allowedStates = ['compact', 'normal'];
-    const nextState = allowedStates.includes(state) ? state : 'normal';
-    sidebar.dataset.sidebarState = nextState;
-    localStorage.setItem('sidebarState', nextState);
-    syncSidebarResponsiveControls(sidebar);
-
-    sidebar.querySelectorAll('[data-sidebar-state-btn]').forEach(btn => {
-        btn.classList.toggle('is-active', btn.dataset.sidebarStateBtn === nextState);
-    });
-
-    const isMobile = window.matchMedia('(max-width: 768px)').matches;
-    const styles = getComputedStyle(sidebar);
-    const widthMap = {
-        compact: styles.getPropertyValue('--sidebar-width-compact').trim() || '88px',
-        normal: styles.getPropertyValue('--sidebar-width-normal').trim() || '420px',
-        expanded: styles.getPropertyValue('--sidebar-width-expanded').trim() || '480px'
-    };
-    const heightMap = {
-        compact: styles.getPropertyValue('--sidebar-height-compact').trim() || '72px',
-        normal: styles.getPropertyValue('--sidebar-height-normal').trim() || '50vh',
-        expanded: styles.getPropertyValue('--sidebar-height-expanded').trim() || '62vh'
-    };
-
-    const targetSize = isMobile ? heightMap[nextState] : widthMap[nextState];
-    const paddingMap = {
-        compact: isMobile ? '10px 12px' : '12px',
-        normal: isMobile ? '16px' : '20px',
-        expanded: isMobile ? '18px' : '24px'
-    };
-    const shockmountMenuPrice = document.getElementById('shockmount-price');
-    if (shockmountMenuPrice) {
-        shockmountMenuPrice.style.display = nextState === 'compact' ? 'none' : '';
-    }
-
-    if (window.anime && animate) {
-        window.anime.remove(sidebar);
-        window.anime({
-            targets: sidebar,
-            width: isMobile ? undefined : targetSize,
-            height: isMobile ? targetSize : undefined,
-            padding: paddingMap[nextState],
-            duration: 360,
-            easing: 'easeOutQuad'
-        });
-
-        const fadeTargets = sidebar.querySelectorAll('[data-sidebar-fade]');
-        window.anime.remove(fadeTargets);
-        window.anime({
-            targets: fadeTargets,
-            opacity: nextState === 'compact' ? 0 : 1,
-            duration: 220,
-            easing: 'linear'
-        });
-    } else {
-        const fadeTargets = sidebar.querySelectorAll('[data-sidebar-fade]');
-        fadeTargets.forEach(el => {
-            el.style.opacity = nextState === 'compact' ? '0' : '1';
-        });
-        if (isMobile) {
-            sidebar.style.height = targetSize;
-        } else {
-            sidebar.style.width = targetSize;
-        }
-        sidebar.style.padding = paddingMap[nextState];
-    }
+    sidebar.dataset.sidebarState = 'normal';
+    sidebar.style.width = '';
+    sidebar.style.height = '';
+    sidebar.style.padding = '';
+    localStorage.removeItem('sidebarState');
 }
 
 function initThemeControl() {

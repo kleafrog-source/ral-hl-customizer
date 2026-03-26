@@ -270,7 +270,7 @@ export function getCaseGeometry() {
     // Коэффициенты масштабирования по умолчанию
     const defaultRescale = {
         mobile: 1.7,
-        tablet: 1.7, 
+        tablet: 1.1, 
         desktop: 1.1,
         _4k: 1.0
     };
@@ -306,33 +306,33 @@ export const CASE_GEOMETRY = {
         // Коэффициенты масштабирования для ручной корректировки CASE_GEOMETRY
         // Позволяют точно настроить размеры для каждого типа футляра и устройства
         '017-tube': {
-            mobile: 1.0,      // Базовый масштаб для mobile
-            tablet: 1.0,       // Базовый масштаб для tablet  
-            desktop: 1.0,      // Базовый масштаб для desktop
+            mobile: 1.7,      // Базовый масштаб для mobile
+            tablet: 1.1,       // Базовый масштаб для tablet  
+            desktop: 1.1,      // Базовый масштаб для desktop
             _4k: 1.0          // Базовый масштаб для 4K
         },
         '017-fet': {
-            mobile: 1.0,
-            tablet: 1.0,
-            desktop: 1.0,
+            mobile: 1.7,
+            tablet: 1.1,
+            desktop: 1.1,
             _4k: 1.0
         },
         '023-deluxe': {
-            mobile: 1.0,
-            tablet: 1.0,
-            desktop: 1.0,
+            mobile: 1.7,
+            tablet: 1.1,
+            desktop: 1.1,
             _4k: 1.0
         },
         '023-the-bomblet': {
-            mobile: 1.0,
-            tablet: 1.0,
-            desktop: 1.0,
+            mobile: 1.7,
+            tablet: 1.1,
+            desktop: 1.1,
             _4k: 1.0
         },
         '023-malfa': {
-            mobile: 1.0,
-            tablet: 1.0,
-            desktop: 1.0,
+            mobile: 1.7,
+            tablet: 1.1,
+            desktop: 1.1,
             _4k: 1.0
         }
     }

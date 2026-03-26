@@ -571,7 +571,7 @@ const SHARED_GLOBAL_VIEW_LAYER_OVERRIDES = Object.freeze({
 const MOBILE_PORTRAIT_LAYER_OVERRIDES = Object.freeze({
     '023-BOMBLET-NO-SHOCKMOUNT': buildDirectStateMap(
         buildDirectViewState({
-            microphone: buildDirectLayerState('translateX(10vw) translateY(7vw) scale(0.88)', 1),
+            microphone: buildDirectLayerState('translateX(22vw) translateY(11vw) scale(0.88)', 1),
             shockmount: buildDirectLayerState('translateX(-27vw) translateY(26vw) scale(0.47)', 0),
             case: buildDirectLayerState('translateX(17vw) translateY(77vw) scale(1.29)', 1)
         }),
@@ -601,44 +601,44 @@ const MOBILE_PORTRAIT_LAYER_OVERRIDES = Object.freeze({
                 layers: {
                     microphone: buildDirectLayerState('translateX(18vw) translateY(8vw) scale(0.9)', 1),
                     shockmount: buildDirectLayerState('translateX(-27vw) translateY(26vw) scale(0.47)', 0),
-                    case: buildDirectLayerState('translateX(31vw) translateY(85vw) scale(1.5)', 1)
+                    case: buildDirectLayerState('translateX(12vw) translateY(80vw) scale(1.44)', 1)
                 }
             }
         }
     ),
     '023-BOMBLET-WITH-SHOCKMOUNT': buildDirectStateMap(
         buildDirectViewState({
-            microphone: buildDirectLayerState('translateX(39vw) translateY(6vw) scale(0.88)', 1),
-            shockmount: buildDirectLayerState('translateX(-27vw) translateY(26vw) scale(0.47)', 1),
-            case: buildDirectLayerState('translateX(22vw) translateY(73vw) scale(1.29)', 1)
+            microphone: buildDirectLayerState('translateX(34vw) translateY(11vw) scale(0.88)', 1),
+            shockmount: buildDirectLayerState('translateX(-27vw) translateY(28vw) scale(0.47)', 1),
+            case: buildDirectLayerState('translateX(22vw) translateY(73vw) scale(1.33)', 1)
         }),
         {
             'mic-active': {
                 layers: {
-                    microphone: buildDirectLayerState('translateX(30vw) translateY(0vw) scale(0.8)', 1),
-                    shockmount: buildDirectLayerState('translateX(-39vw) translateY(21vw) scale(0.44)', 1),
-                    case: buildDirectLayerState('translateX(18vw) translateY(60vw) scale(1.29)', 1)
+                    microphone: buildDirectLayerState('translateX(37vw) translateY(0vw) scale(1.1)', 1),
+                    shockmount: buildDirectLayerState('translateX(-28vw) translateY(23vw) scale(0.44)', 1),
+                    case: buildDirectLayerState('translateX(35vw) translateY(66vw) scale(1.33)', 1)
                 }
             },
             'logo-view': {
                 layers: {
                     microphone: buildDirectLayerState('translateX(31vw) translateY(-5vw) scale(1.26)', 1),
                     shockmount: buildDirectLayerState('translateX(-41vw) translateY(22vw) scale(0.4)', 1),
-                    case: buildDirectLayerState('translateX(36vw) translateY(63vw) scale(1.29)', 1)
+                    case: buildDirectLayerState('translateX(36vw) translateY(63vw) scale(1.33)', 1)
                 }
             },
             'shockmount-active': {
                 layers: {
                     microphone: buildDirectLayerState('translateX(59vw) translateY(0vw) scale(0.88)', 1),
                     shockmount: buildDirectLayerState('translateX(-20vw) translateY(14vw) scale(0.5)', 1),
-                    case: buildDirectLayerState('translateX(22vw) translateY(3vw) scale(1.29)', 1)
+                    case: buildDirectLayerState('translateX(22vw) translateY(3vw) scale(1.33)', 1)
                 }
             },
             'case-active': {
                 layers: {
                     microphone: buildDirectLayerState('translateX(84vw) translateY(16vw) scale(1)', 1),
                     shockmount: buildDirectLayerState('translateX(-40vw) translateY(44vw) scale(0.44)', 1),
-                    case: buildDirectLayerState('translateX(16vw) translateY(91vw) scale(1.5)', 1)
+                    case: buildDirectLayerState('translateX(12vw) translateY(80vw) scale(1.44)', 1)
                 }
             }
         }
@@ -675,7 +675,7 @@ const MOBILE_PORTRAIT_LAYER_OVERRIDES = Object.freeze({
                 layers: {
                     microphone: buildDirectLayerState('translateX(17vw) translateY(18vw) scale(1)', 1),
                     shockmount: buildDirectLayerState('translateX(-46vw) translateY(38vw) scale(0.5)', 1),
-                    case: buildDirectLayerState('translateX(32vw) translateY(93vw) scale(1.6)', 1)
+                    case: buildDirectLayerState('translateX(20vw) translateY(80vw) scale(1.44)', 1)
                 }
             }
         }
@@ -719,9 +719,9 @@ const MOBILE_PORTRAIT_LAYER_OVERRIDES = Object.freeze({
     ),
     '017-FET': buildDirectStateMap(
         buildDirectViewState({
-            microphone: buildDirectLayerState('translateX(22vw) translateY(10vw) scale(0.82)', 1),
-            shockmount: buildDirectLayerState('translateX(23vw) translateY(31vw) scale(0.44)', 1),
-            case: buildDirectLayerState('translateX(-6vw) translateY(68vw) scale(1.4)', 1)
+            microphone: buildDirectLayerState('translateX(20vw) translateY(18vw) scale(0.7)', 1),
+            shockmount: buildDirectLayerState('translateX(16vw) translateY(33vw) scale(0.4)', 1),
+            case: buildDirectLayerState('translateX(0vw) translateY(65vw) scale(1.4)', 1)
         }),
         {
             'mic-active': {
@@ -756,9 +756,9 @@ const MOBILE_PORTRAIT_LAYER_OVERRIDES = Object.freeze({
     ),
     '017-TUBE': buildDirectStateMap(
         buildDirectViewState({
-            microphone: buildDirectLayerState('translateX(6vw) translateY(5vw) scale(0.5)', 1),
-            shockmount: buildDirectLayerState('translateX(-2vw) translateY(16vw) scale(0.3)', 1),
-            case: buildDirectLayerState('translateX(-2vw) translateY(32vw) scale(0.9)', 1)
+            microphone: buildDirectLayerState('translateX(6vw) translateY(21vw) scale(0.6)', 1),
+            shockmount: buildDirectLayerState('translateX(-2vw) translateY(32vw) scale(0.33)', 1),
+            case: buildDirectLayerState('translateX(-2vw) translateY(49vw) scale(1)', 1)
         }),
         {
             'mic-active': {
@@ -786,7 +786,7 @@ const MOBILE_PORTRAIT_LAYER_OVERRIDES = Object.freeze({
                 layers: {
                     microphone: buildDirectLayerState('translateX(-23vw) translateY(2vw) scale(0.66)', 1),
                     shockmount: buildDirectLayerState('translateX(73vw) translateY(47vw) scale(0.47)', 1),
-                    case: buildDirectLayerState('translateX(-1vw) translateY(51vw) scale(0.95)', 1)
+                    case: buildDirectLayerState('translateX(-1vw) translateY(51vw) scale(1)', 1)
                 }
             }
         }
