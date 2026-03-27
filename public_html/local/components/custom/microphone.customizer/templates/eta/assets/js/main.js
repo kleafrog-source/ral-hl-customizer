@@ -6,6 +6,9 @@ import { initializeWoodCase } from './modules/wood-case.js';
 import { init as initLogo } from './modules/logo.js';
 import { initCameraEffect } from './modules/camera-effect.js';
 import { initAdminBackgroundHelper } from './modules/admin-background-helper.js';
+import SceneController from './modules/scene-controller.js';
+import visualModules from './modules/visual-modules.js';
+import { initModulesPanel } from './modules/modules-panel.js';
 import { stateManager } from './core/state.js';
 import { initDebugHelper } from './debug/ui-debug-helper.js';
 import { initValidation } from './services/validation.js';
@@ -63,8 +66,20 @@ function initializeCurrentModelSelection(currentModelCode) {
     });
 }
 
+function initSceneKinematics() {
+    if (window.sceneController instanceof SceneController) {
+        return window.sceneController;
+    }
+
+    const sceneController = new SceneController();
+    window.sceneController = sceneController;
+    return sceneController;
+}
+
 function initCustomizerModules(currentModelCode) {
     initCameraEffect(currentModelCode);
+    initSceneKinematics();
+    visualModules.applyToDOM();
     initEventListeners();
     initLogo();
     initializeWoodCase();
@@ -74,7 +89,9 @@ function initCustomizerModules(currentModelCode) {
         initDebugHelper();
     }
     initValidation();
+    initModulesPanel();
     initAdminBackgroundHelper();
+    window.visualModules = visualModules;
 }
 
 document.addEventListener('DOMContentLoaded', async () => {

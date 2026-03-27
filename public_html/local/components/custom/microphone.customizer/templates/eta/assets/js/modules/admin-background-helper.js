@@ -1,4 +1,5 @@
 import { ADMIN_BACKGROUND_FILTERS, ADMIN_BACKGROUND_PRESETS } from '../config/background-presets.js';
+import SceneController, { DEFAULT_SCENE_STATE, SCENE_PRESETS } from './scene-controller.js';
 
 const PANEL_ID = 'admin-bg-helper';
 const PREVIEW_ID = 'preview-area';
@@ -8,6 +9,23 @@ const PRESET_CLASS_PREFIX = 'admin-bg-filter-';
 const HELPER_ACTIVE_CLASS = 'admin-bg-helper-active';
 const FLOOR_CLASS = 'admin-bg-has-floor';
 const COLLAPSED_CLASS = 'is-collapsed';
+const CUSTOM_SCENE_PRESET_ID = 'custom';
+
+let sceneController = null;
+let currentScenePresetId = 'neutral';
+
+function resolveSceneController(preview, scene) {
+    if (window.sceneController instanceof SceneController) {
+        return window.sceneController;
+    }
+
+    const controller = new SceneController({
+        preview,
+        scene
+    });
+    window.sceneController = controller;
+    return controller;
+}
 
 function isAdminUser() {
     return Boolean(window.BX_USER_DATA?.IS_ADMIN);
@@ -53,6 +71,52 @@ function sanitizeAssetPath(path) {
     const assetBase = String(window.CUSTOMIZER_ASSETS_PATH || '').replace(/\/$/, '');
     const relativePath = String(path).replace(/^\//, '');
     return assetBase ? `${assetBase}/${relativePath}` : relativePath;
+}
+
+function parseHexColor(color) {
+    const normalized = String(color || '').trim();
+    const hex = normalized.startsWith('#') ? normalized.slice(1) : normalized;
+
+    if (hex.length === 3) {
+        const [r, g, b] = hex.split('');
+        return [
+            Number.parseInt(`${r}${r}`, 16),
+            Number.parseInt(`${g}${g}`, 16),
+            Number.parseInt(`${b}${b}`, 16)
+        ];
+    }
+
+    if (hex.length === 6) {
+        return [
+            Number.parseInt(hex.slice(0, 2), 16),
+            Number.parseInt(hex.slice(2, 4), 16),
+            Number.parseInt(hex.slice(4, 6), 16)
+        ];
+    }
+
+    return null;
+}
+
+function toHexColor(rgb) {
+    return `#${rgb
+        .map((channel) => Math.max(0, Math.min(255, Math.round(channel))).toString(16).padStart(2, '0'))
+        .join('')}`;
+}
+
+function mixHexColors(baseColor, mixColor, ratio = 0.5) {
+    const source = parseHexColor(baseColor);
+    const target = parseHexColor(mixColor);
+
+    if (!source || !target) {
+        return baseColor || mixColor || '#000000';
+    }
+
+    const mixRatio = Math.max(0, Math.min(1, Number(ratio) || 0));
+    const mixed = source.map((channel, index) =>
+        channel + (target[index] - channel) * mixRatio
+    );
+
+    return toHexColor(mixed);
 }
 
 function ensureFilterDefs() {
@@ -124,7 +188,9 @@ function resetPreviewStyles(preview) {
         '--admin-bg-overlay',
         '--admin-bg-floor-height',
         '--admin-bg-floor-transform',
-        '--admin-bg-floor-gradient'
+        '--admin-bg-floor-gradient',
+        '--admin-scene-wall-color',
+        '--admin-scene-floor-color'
     ].forEach((propertyName) => preview.style.removeProperty(propertyName));
 }
 
@@ -172,6 +238,8 @@ function applyPreset(preview, presetId, imageOverridePath = '') {
     preview.style.setProperty('--admin-bg-floor-height', preset.floorHeight || '34%');
     preview.style.setProperty('--admin-bg-floor-transform', preset.floorTransform || 'perspective(900px) rotateX(74deg) translateY(36%)');
     preview.style.setProperty('--admin-bg-floor-gradient', preset.floorGradient || 'radial-gradient(circle at 50% 25%, rgba(255,255,255,0.28) 0%, rgba(255,255,255,0.06) 18%, rgba(255,255,255,0) 40%), linear-gradient(180deg, rgba(53, 38, 27, 0.04) 0%, rgba(53, 38, 27, 0.44) 100%)');
+    preview.style.setProperty('--admin-scene-wall-color', preset.sceneWallColor || mixHexColors(preset.backgroundColor || '#e9e1d6', '#ffffff', 0.22));
+    preview.style.setProperty('--admin-scene-floor-color', preset.sceneFloorColor || mixHexColors(preset.backgroundColor || '#cdbda8', '#6f5c4b', 0.22));
 
     return preset;
 }
@@ -206,7 +274,8 @@ function updateButtonState(panel, state) {
         const imageLabel = state.imagePath === '__none__'
             ? 'No image'
             : (state.imagePath || preset.imagePath || 'Preset image');
-        status.textContent = `Preset: ${preset.label} | Filter: ${filter.label} | Image: ${imageLabel}`;
+        const sceneState = sceneController?.getState?.() || DEFAULT_SCENE_STATE;
+        status.textContent = `Preset: ${preset.label} | Filter: ${filter.label} | Image: ${imageLabel} | Camera: ${sceneState.cameraPitch}deg / ${sceneState.lightAngle}deg`;
     }
 
     const imageSelect = panel.querySelector('[data-bg-image-select]');
@@ -215,7 +284,24 @@ function updateButtonState(panel, state) {
     }
 }
 
-function renderPanel(panel, state) {
+function formatSceneValue(sceneState, valueKey) {
+    switch (valueKey) {
+        case 'cameraPitch':
+            return `${sceneState.cameraPitch}deg`;
+        case 'lightAngle':
+            return `${sceneState.lightAngle}deg`;
+        case 'horizonY':
+            return `${sceneState.horizonY}%`;
+        case 'shadowIntensity':
+            return Number(sceneState.shadowIntensity).toFixed(2);
+        case 'shadowColor':
+            return sceneState.shadowColor;
+        default:
+            return '';
+    }
+}
+
+function renderPanel(panel, state, sceneState = DEFAULT_SCENE_STATE) {
     const testImages = getAvailableBackgroundImages();
     panel.innerHTML = `
         <div class="admin-bg-helper__header">
@@ -264,6 +350,58 @@ function renderPanel(panel, state) {
                     `).join('')}
                 </div>
             </div>
+            <div class="admin-bg-helper__section">
+                <span class="admin-bg-helper__section-title">Camera & Light</span>
+                <div class="admin-bg-helper__slider-group">
+                    <label for="admin-bg-camera-pitch">
+                        <span>Camera Pitch</span>
+                        <span data-bg-scene-value="cameraPitch">${formatSceneValue(sceneState, 'cameraPitch')}</span>
+                    </label>
+                    <input class="admin-bg-helper__range" type="range" id="admin-bg-camera-pitch" min="0" max="45" step="1" value="${sceneState.cameraPitch}" data-bg-scene-range="cameraPitch">
+                </div>
+                <div class="admin-bg-helper__slider-group">
+                    <label for="admin-bg-light-angle">
+                        <span>Light Angle</span>
+                        <span data-bg-scene-value="lightAngle">${formatSceneValue(sceneState, 'lightAngle')}</span>
+                    </label>
+                    <input class="admin-bg-helper__range" type="range" id="admin-bg-light-angle" min="0" max="360" step="5" value="${sceneState.lightAngle}" data-bg-scene-range="lightAngle">
+                </div>
+                <div class="admin-bg-helper__slider-group">
+                    <label for="admin-bg-horizon">
+                        <span>Horizon</span>
+                        <span data-bg-scene-value="horizonY">${formatSceneValue(sceneState, 'horizonY')}</span>
+                    </label>
+                    <input class="admin-bg-helper__range" type="range" id="admin-bg-horizon" min="30" max="70" step="1" value="${sceneState.horizonY}" data-bg-scene-range="horizonY">
+                </div>
+                <div class="admin-bg-helper__button-grid admin-bg-helper__button-grid--quad">
+                    <button type="button" class="admin-bg-helper__button" data-bg-scene-preset="neutral">Neutral</button>
+                    <button type="button" class="admin-bg-helper__button" data-bg-scene-preset="studio">Studio</button>
+                    <button type="button" class="admin-bg-helper__button" data-bg-scene-preset="low-angle">Low Angle</button>
+                    <button type="button" class="admin-bg-helper__button" data-bg-scene-preset="overhead">Overhead</button>
+                </div>
+            </div>
+            <div class="admin-bg-helper__section">
+                <span class="admin-bg-helper__section-title">Shadow</span>
+                <div class="admin-bg-helper__slider-group">
+                    <label for="admin-bg-shadow-intensity">
+                        <span>Intensity</span>
+                        <span data-bg-scene-value="shadowIntensity">${formatSceneValue(sceneState, 'shadowIntensity')}</span>
+                    </label>
+                    <input class="admin-bg-helper__range" type="range" id="admin-bg-shadow-intensity" min="0.08" max="0.8" step="0.01" value="${sceneState.shadowIntensity}" data-bg-scene-range="shadowIntensity">
+                </div>
+                <label class="admin-bg-helper__color-field" for="admin-bg-shadow-color">
+                    <span class="admin-bg-helper__field-label">
+                        <span>Shadow Color</span>
+                        <span data-bg-scene-value="shadowColor">${formatSceneValue(sceneState, 'shadowColor')}</span>
+                    </span>
+                    <input class="admin-bg-helper__color" type="color" id="admin-bg-shadow-color" value="${sceneState.shadowColor}" data-bg-scene-color="shadowColor">
+                </label>
+                <div class="admin-bg-helper__button-grid admin-bg-helper__button-grid--filters">
+                    <button type="button" class="admin-bg-helper__button" data-bg-shadow-elevation="low">Low</button>
+                    <button type="button" class="admin-bg-helper__button" data-bg-shadow-elevation="medium">Medium</button>
+                    <button type="button" class="admin-bg-helper__button" data-bg-shadow-elevation="high">High</button>
+                </div>
+            </div>
             <div class="admin-bg-helper__section admin-bg-helper__section--actions">
                 <button type="button" class="admin-bg-helper__action" data-bg-reset>Reset</button>
                 <button type="button" class="admin-bg-helper__action" data-bg-log>Log Config</button>
@@ -273,6 +411,41 @@ function renderPanel(panel, state) {
     `;
 
     updateButtonState(panel, state);
+}
+
+function updateSceneControlState(panel) {
+    if (!panel || !sceneController) {
+        return;
+    }
+
+    const sceneState = sceneController.getState();
+
+    panel.querySelectorAll('[data-bg-scene-range]').forEach((input) => {
+        const key = input.dataset.bgSceneRange;
+        if (Object.prototype.hasOwnProperty.call(sceneState, key)) {
+            input.value = sceneState[key];
+        }
+    });
+
+    panel.querySelectorAll('[data-bg-scene-color]').forEach((input) => {
+        const key = input.dataset.bgSceneColor;
+        if (Object.prototype.hasOwnProperty.call(sceneState, key)) {
+            input.value = sceneState[key];
+        }
+    });
+
+    panel.querySelectorAll('[data-bg-scene-value]').forEach((element) => {
+        const key = element.dataset.bgSceneValue;
+        element.textContent = formatSceneValue(sceneState, key);
+    });
+
+    panel.querySelectorAll('[data-bg-scene-preset]').forEach((button) => {
+        button.classList.toggle('is-active', button.dataset.bgScenePreset === currentScenePresetId);
+    });
+
+    panel.querySelectorAll('[data-bg-shadow-elevation]').forEach((button) => {
+        button.classList.toggle('is-active', button.dataset.bgShadowElevation === sceneState.shadowElevation);
+    });
 }
 
 function applyState(panel, preview, state, overrides = {}) {
@@ -299,6 +472,10 @@ function applyState(panel, preview, state, overrides = {}) {
 
 function logCurrentConfig(state) {
     const payload = collectEffectiveConfig(state);
+    payload.scene = {
+        presetId: currentScenePresetId,
+        ...sceneController?.getState?.()
+    };
     console.log('[AdminBackgroundHelper] Current config:', payload);
     return payload;
 }
@@ -324,6 +501,8 @@ export function initAdminBackgroundHelper() {
     panel.hidden = false;
     panel.setAttribute('data-admin-ready', '1');
     ensureFilterDefs();
+    sceneController = resolveSceneController(preview, scene);
+    currentScenePresetId = 'neutral';
 
     let currentState = {
         presetId: 'default',
@@ -331,8 +510,9 @@ export function initAdminBackgroundHelper() {
         imagePath: ''
     };
 
-    renderPanel(panel, currentState);
+    renderPanel(panel, currentState, sceneController.getState());
     currentState = applyState(panel, preview, currentState);
+    updateSceneControlState(panel);
 
     panel.addEventListener('click', (event) => {
         const presetButton = event.target.closest('[data-bg-preset]');
@@ -352,11 +532,36 @@ export function initAdminBackgroundHelper() {
             return;
         }
 
+        const scenePresetButton = event.target.closest('[data-bg-scene-preset]');
+        if (scenePresetButton && sceneController) {
+            currentScenePresetId = scenePresetButton.dataset.bgScenePreset || CUSTOM_SCENE_PRESET_ID;
+            sceneController.setPreset(currentScenePresetId);
+            updateSceneControlState(panel);
+            updateButtonState(panel, currentState);
+            return;
+        }
+
+        const shadowElevationButton = event.target.closest('[data-bg-shadow-elevation]');
+        if (shadowElevationButton && sceneController) {
+            sceneController.setShadowElevation(shadowElevationButton.dataset.bgShadowElevation);
+            currentScenePresetId = CUSTOM_SCENE_PRESET_ID;
+            updateSceneControlState(panel);
+            updateButtonState(panel, currentState);
+            return;
+        }
+
         if (event.target.closest('[data-bg-reset]')) {
             currentState = applyState(panel, preview, currentState, {
                 presetId: 'default',
-                filterId: 'none'
+                filterId: 'none',
+                imagePath: ''
             });
+            if (sceneController) {
+                sceneController.applySceneState(DEFAULT_SCENE_STATE, { preserveManualHorizon: true });
+                currentScenePresetId = 'neutral';
+                updateSceneControlState(panel);
+            }
+            updateButtonState(panel, currentState);
             return;
         }
 
@@ -371,6 +576,38 @@ export function initAdminBackgroundHelper() {
             if (collapseButton) {
                 collapseButton.textContent = panel.classList.contains(COLLAPSED_CLASS) ? '+' : '-';
             }
+        }
+    });
+
+    panel.addEventListener('input', (event) => {
+        if (!sceneController) {
+            return;
+        }
+
+        const rangeInput = event.target.closest('[data-bg-scene-range]');
+        if (rangeInput) {
+            const key = rangeInput.dataset.bgSceneRange;
+            const value = Number(rangeInput.value);
+
+            if (key === 'horizonY') {
+                sceneController.applySceneState({ horizonY: value }, { preserveManualHorizon: true });
+            } else {
+                sceneController.applySceneState({ [key]: value });
+            }
+
+            currentScenePresetId = CUSTOM_SCENE_PRESET_ID;
+            updateSceneControlState(panel);
+            updateButtonState(panel, currentState);
+            return;
+        }
+
+        const colorInput = event.target.closest('[data-bg-scene-color]');
+        if (colorInput) {
+            const key = colorInput.dataset.bgSceneColor;
+            sceneController.applySceneState({ [key]: colorInput.value }, { preserveManualHorizon: true });
+            currentScenePresetId = CUSTOM_SCENE_PRESET_ID;
+            updateSceneControlState(panel);
+            updateButtonState(panel, currentState);
         }
     });
 
@@ -397,6 +634,18 @@ export function initAdminBackgroundHelper() {
 
     window.applyBackgroundImage = (imagePath = '') => {
         currentState = applyState(panel, preview, currentState, { imagePath });
+        return logCurrentConfig(currentState);
+    };
+
+    window.applyBackgroundScenePreset = (presetId = 'neutral') => {
+        if (!sceneController || !SCENE_PRESETS[presetId]) {
+            return logCurrentConfig(currentState);
+        }
+
+        currentScenePresetId = presetId;
+        sceneController.setPreset(presetId);
+        updateSceneControlState(panel);
+        updateButtonState(panel, currentState);
         return logCurrentConfig(currentState);
     };
 

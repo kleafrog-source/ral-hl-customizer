@@ -39,6 +39,8 @@ $APPLICATION->SetAdditionalCSS($templateFolder . "/assets/css/woodcase.css");
 $APPLICATION->SetAdditionalCSS($templateFolder . "/assets/css/forms.css");
 $APPLICATION->SetAdditionalCSS($templateFolder . "/assets/css/camera-effect.css");
 $APPLICATION->SetAdditionalCSS($templateFolder . "/assets/css/start-screen.css");
+$APPLICATION->SetAdditionalCSS($templateFolder . "/assets/css/visual-modules.css");
+$APPLICATION->SetAdditionalCSS($templateFolder . "/assets/css/visual-modules-panel.css");
 if ($isAdmin) {
     $APPLICATION->SetAdditionalCSS($templateFolder . "/assets/css/admin-background-helper.css");
 }
