@@ -5,6 +5,7 @@ import { loadSVG, updateSVG } from './engine.js';
 import { initializeWoodCase } from './modules/wood-case.js';
 import { init as initLogo } from './modules/logo.js';
 import { initCameraEffect } from './modules/camera-effect.js';
+import { initAdminBackgroundHelper } from './modules/admin-background-helper.js';
 import { stateManager } from './core/state.js';
 import { initDebugHelper } from './debug/ui-debug-helper.js';
 import { initValidation } from './services/validation.js';
@@ -73,6 +74,7 @@ function initCustomizerModules(currentModelCode) {
         initDebugHelper();
     }
     initValidation();
+    initAdminBackgroundHelper();
 }
 
 document.addEventListener('DOMContentLoaded', async () => {

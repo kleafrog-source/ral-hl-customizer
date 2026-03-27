@@ -7,11 +7,41 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
 
 use Bitrix\Main\Page\Asset;
 
+$isAdmin = !empty($arResult["USER_DATA"]["IS_ADMIN"]);
+$adminBackgroundTestImages = [];
+
+if ($isAdmin) {
+    $testImagesDir = __DIR__ . '/assets/image/test';
+    if (is_dir($testImagesDir)) {
+        $allowedExtensions = ['png', 'jpg', 'jpeg', 'webp', 'svg'];
+        foreach (glob($testImagesDir . '/*') ?: [] as $imageFilePath) {
+            if (!is_file($imageFilePath)) {
+                continue;
+            }
+
+            $extension = strtolower(pathinfo($imageFilePath, PATHINFO_EXTENSION));
+            if (!in_array($extension, $allowedExtensions, true)) {
+                continue;
+            }
+
+            $fileName = basename($imageFilePath);
+            $adminBackgroundTestImages[] = [
+                'name' => $fileName,
+                'label' => pathinfo($fileName, PATHINFO_FILENAME),
+                'path' => 'image/test/' . $fileName
+            ];
+        }
+    }
+}
+
 $APPLICATION->SetAdditionalCSS($templateFolder . "/assets/css/style.css");
 $APPLICATION->SetAdditionalCSS($templateFolder . "/assets/css/woodcase.css");
 $APPLICATION->SetAdditionalCSS($templateFolder . "/assets/css/forms.css");
 $APPLICATION->SetAdditionalCSS($templateFolder . "/assets/css/camera-effect.css");
 $APPLICATION->SetAdditionalCSS($templateFolder . "/assets/css/start-screen.css");
+if ($isAdmin) {
+    $APPLICATION->SetAdditionalCSS($templateFolder . "/assets/css/admin-background-helper.css");
+}
 ?>
 
 <?php
@@ -35,6 +65,7 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
      data-element-id="<?= isset($arResult["ELEMENT"]["ID"]) ? $arResult["ELEMENT"]["ID"] : 0 ?>"
      data-iblock-id="<?= isset($arResult["ELEMENT"]["IBLOCK_ID"]) ? $arResult["ELEMENT"]["IBLOCK_ID"] : 0 ?>"
      data-ajax-path="<?= $componentPath ?>/ajax.php"
+     data-is-admin="<?= $isAdmin ? '1' : '0' ?>"
      data-sessid="<?= bitrix_sessid() ?>">
 
 
@@ -302,9 +333,12 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                             </foreignObject>
                             <g id="wood-case-rulers-group"></g>
                         </svg>
-                        </div>
+                     </div>
                         </div>
                     </div>
+                    <?php if ($isAdmin): ?>
+                        <div class="admin-bg-helper" id="admin-bg-helper" aria-label="Background presets helper" hidden></div>
+                    <?php endif; ?>
                     </div>
                 </div>
         
@@ -1572,6 +1606,9 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
     window.CUSTOMIZER_SVG_PATH = '<?= $templateFolder ?>/assets/mic-017.svg';
     window.CUSTOMIZER_ASSETS_PATH = '<?= $templateFolder ?>/assets';
     window.BX_USER_DATA = <?= json_encode($arResult["USER_DATA"] ?? ["AUTHORIZED" => false]) ?>;
+    window.CUSTOMIZER_ADMIN_DATA = <?= CUtil::PhpToJSObject([
+        'backgroundTestImages' => $isAdmin ? $adminBackgroundTestImages : [],
+    ]) ?>;
     
     window.CUSTOMIZER_DATA = <?= CUtil::PhpToJSObject([
         'ralColors' => $arResult['RAL_COLORS'] ?? [],

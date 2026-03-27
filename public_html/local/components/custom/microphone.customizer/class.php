@@ -24,12 +24,13 @@ class MicrophoneCustomizerComponent extends CBitrixComponent
             }
 
             // РџРѕР»СѓС‡Р°РµРј РґР°РЅРЅС‹Рµ С‚РµРєСѓС‰РµРіРѕ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ
-            global $USER;
-            $this->arResult["USER_DATA"] = [
-                "AUTHORIZED" => $USER->IsAuthorized(),
-                "ID" => $USER->GetID(),
-                "NAME" => $USER->GetFirstName(),
-                "LAST_NAME" => $USER->GetLastName(),
+            global $USER;
+            $this->arResult["USER_DATA"] = [
+                "AUTHORIZED" => $USER->IsAuthorized(),
+                "IS_ADMIN" => method_exists($USER, 'IsAdmin') ? $USER->IsAdmin() : false,
+                "ID" => $USER->GetID(),
+                "NAME" => $USER->GetFirstName(),
+                "LAST_NAME" => $USER->GetLastName(),
                 "EMAIL" => $USER->GetEmail(),
                 "LOGIN" => $USER->GetLogin()
             ];
