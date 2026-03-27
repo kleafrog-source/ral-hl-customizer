@@ -333,10 +333,10 @@ const DESKTOP_LAYOUT_PRESETS = Object.freeze({
                 "opacity": 1
             },
             "shockmount": {
-                "x": 0.22,
-                "y": 0.03,
-                "width": 0.903,
-                "height": 0.6966,
+                "x": 0.0779,
+                "y": 0.2445,
+                "width": 0.272,
+                "height": 0.408,
                 "anchor": "top-center",
                 "visible": false,
                 "opacity": 0
@@ -480,10 +480,10 @@ const DESKTOP_LAYOUT_PRESETS = Object.freeze({
                 "opacity": 1
             },
             "shockmount": {
-                "x": 0.22,
-                "y": 0.03,
-                "width": 0.903,
-                "height": 0.6966,
+                 "x": 0.0779,
+                 "y": 0.2445,
+                "width": 0.272,
+                "height": 0.408,
                 "anchor": "top-center",
                 "visible": true,
                 "opacity": 1

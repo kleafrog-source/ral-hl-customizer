@@ -660,7 +660,7 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                                     <?php endforeach; ?>
                                     
                                     <div class="submenu-section">
-                                        <h4 class="section-title"><?= htmlspecialchars($arResult['LIQUID_TOGGLES']['laser_engraving']['title'] ?? 'Добавить персональную лазерную гравировку') ?></h4>
+                                        <h4 class="section-title"><?= htmlspecialchars($arResult['LIQUID_TOGGLES']['laser_engraving']['title'] ?? 'Добавить бесплатную персональную лазерную гравировку') ?></h4>
                                         <div style="display:flex; align-items: center; justify-content: space-between;">
                                             <h4 class="section-title" style="margin:0;">Собственная гравировка</h4>
                                             <input type="checkbox" class="liquid-toggle" id="laser-engraving-toggle">
@@ -792,7 +792,7 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                                     <div class="option-group">
                                         <h4>Премиум цвета</h4>
                                         <div class="palette-toggle-btn" data-section="<?= htmlspecialchars($sectionKey) ?>">
-                                            <span>Палитра RAL K7</span>
+                                            <span>Палитра RAL K7 Классик</span>
                                             <svg class="chevron" width="12" height="8" viewBox="0 0 12 8" fill="none">
                                                 <path d="M1 1L6 6L11 1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                             </svg>
@@ -941,7 +941,7 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                                             </button>
                                             <p class="upload-hint">Допустимые форматы: PNG, SVG, JPG, BMP, WEBP, ICO, до 3 МБ</p>
                                             <div id="custom-logo-positioning-controls" class="positioning-panel custom-logo-positioning-panel is-hidden">
-                                                <div class="positioning-title">Позиционирование</div>
+                                                <div class="positioning-title">Позиционирование и масштаб</div>
                                                 <div
                                                     id="custom-logo-positioning-hint"
                                                     class="positioning-hint"
@@ -994,7 +994,7 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                 <!-- SHOCKMOUNT TOGGLE -->
                 <div class="menu-item" id="shockmount-toggle">
                     <div class="toggle-flexbox-option-text" style="width: 100%;">
-                        <h4 class="section-title" style="margin:0;"><?= htmlspecialchars($arResult['LIQUID_TOGGLES']['shockmount']['title'] ?? 'Добавить подвес') ?></h4>
+                        <h4 class="section-title" style="margin:0;"><?= htmlspecialchars($arResult['LIQUID_TOGGLES']['shockmount']['title'] ?? 'Добавить антивибрационный подвес в комплект') ?></h4>
                         <div class="switch-container" id="shockmount-switch-container" style="width: auto;">
                             <?php if (empty($arResult['LIQUID_TOGGLES']['shockmount']['included'])): ?>
                                 <span class="toggle-price-hint" id="shockmount-toggle-price">
@@ -1013,24 +1013,30 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                 <div class="menu-item" data-section="shockmount" tabindex="0" id="shockmount-section" style="display: none;" data-tooltip="Shockmount">
                     <div class="item-icon"><div class="color-circle" id="shockmount-color-display" style="background-color: #f5f5f5;"></div></div>
                     <div class="item-content" data-sidebar-fade>
-                        <p class="item-label">Антивибрационный подвес</p>
-                        <p class="item-subtitle" id="shockmount-subtitle">RAL 9010 Чистый белый</p>
+                        <p class="item-label">Каркас антивибрационного подвеса</p>
+                        <p class="item-subtitle" id="shockmount-subtitle">RAL 9005 Матовый черный</p>
                     </div>
-                    <svg class="chevron-icon" data-sidebar-fade viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                    <!-- <svg class="chevron-icon" data-sidebar-fade viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg> -->
                     <div class="option-price" id="shockmount-price">+0 ₽</div>
+                    <div class="item-arrow" data-sidebar-fade="">
+                        <svg width="8" height="12" viewBox="0 0 8 12" fill="none">
+                            <path d="M2 2L6 6L2 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                        </svg>
+                    </div>
                 </div>
                 <div class="submenu" id="submenu-shockmount">
                     <div class="submenu-header">
-                        <h3 class="submenu-title">Антивибрационный подвес (каркас)</h3>
                         <button class="submenu-back"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg><span>Назад</span></button>
+                    
                     </div>
                     <div class="submenu-content">
                         <div class="section-description">
+                            <h3 class="submenu-title">Антивибрационный подвес - цвет каркаса</h3>
                             <p>Выберите цвет для антивибрационного подвеса</p>
                         </div>
                         
                         <div class="option-group">
-                            <h4>Бесплатные варианты</h4>
+                            <h4>Бесплатная палитра</h4>
                             <?php 
                             if (isset($currentOptions['shockmount'])):
                                 $freeShockmountOptions = array_filter($currentOptions['shockmount'], function($opt) {
@@ -1090,7 +1096,7 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                         <div class="option-group">
                             <h4>Премиум цвета</h4>
                             <div class="palette-toggle-btn" data-section="shockmount">
-                                <span>Палитра RAL K7</span>
+                                <span>Палитра RAL K7 Классик</span>
                                 <svg class="chevron" width="12" height="8" viewBox="0 0 12 8" fill="none">
                                     <path d="M1 1L6 6L11 1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                 </svg>
@@ -1142,8 +1148,8 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                         <div class="color-circle" id="shockmountPins-color-display" style="background-color: #A1A1A0;"></div>
                     </div>
                     <div class="item-content" data-sidebar-fade>
-                        <p class="item-label">Подвес (пины)</p>
-                        <p class="item-subtitle" id="shockmountPins-subtitle">Выберите вариант</p>
+                        <p class="item-label">Антивибрационный подвес - оформление пинов</p>
+                        <p class="item-subtitle" id="shockmountPins-subtitle">Выберите вариацию</p>
                     </div>
                     <div class="item-arrow" data-sidebar-fade>
                         <svg width="8" height="12" viewBox="0 0 8 12" fill="none">
@@ -1163,11 +1169,11 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                     
                     <div class="submenu-content">
                         <div class="section-description">
-                            <p>Выберите опцию для Подвес (пины)</p>
+                            <p>Выберите опцию оформления пинов антивибрационного подвеса</p>
                         </div>
 
                         <div class="option-group">
-                            <h4>Бесплатные варианты</h4>
+                            <h4>Бесплатные вариации</h4>
                             <?php 
                             if (isset($currentOptions['shockmountPins'])):
                                 $freePinsOptions = array_filter($currentOptions['shockmountPins'], function($opt) {
@@ -1227,7 +1233,7 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                         <div class="option-group">
                             <h4>Премиум цвета</h4>
                             <div class="palette-toggle-btn" data-section="shockmountPins">
-                                <span>Палитра RAL K7</span>
+                                <span>Палитра RAL K7 Классик</span>
                                 <svg class="chevron" width="12" height="8" viewBox="0 0 12 8" fill="none">
                                     <path d="M1 1L6 6L11 1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                 </svg>
