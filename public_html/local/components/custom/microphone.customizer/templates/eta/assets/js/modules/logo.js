@@ -1182,14 +1182,30 @@ export function updateLogoSVG() {
     const malfaLogoTextPath = svg.querySelector('#malfa-logo-text-path');
     const clipLogoBgMalfa = svg.querySelector('#clip-logobg-malfa');
 
-    if (state.logo.useCustom && state.logo.customLogoData) {
-        const imageSource = activeLogoRenderUrl || updateActiveLogoRenderUrl(state.logo.customLogoData);
-
+    if (state.logo.useCustom) {
         setDisplayForIds(
             svg,
             ['logotype-gold', 'logobg-black', 'logobg-colorized', 'logobg-monochrome', 'logo-letters-and-frame', 'malfa-logo'],
             'none'
         );
+
+        if (!state.logo.customLogoData) {
+            activeLogoMeta = null;
+            activeLogoBounds = null;
+            activeLogoTransform = null;
+            clearInteractionState();
+            syncCustomLogoUi();
+
+            const overlay = document.getElementById('logo-overlay');
+            if (overlay) {
+                overlay.innerHTML = '<div class="logo-overlay-text">Р—Р°РіСЂСѓР·РёС‚Рµ РёР·РѕР±СЂР°Р¶РµРЅРёРµ РґР»СЏ Р»РѕРіРѕС‚РёРїР°</div>';
+                overlay.style.display = 'block';
+            }
+
+            return;
+        }
+
+        const imageSource = activeLogoRenderUrl || updateActiveLogoRenderUrl(state.logo.customLogoData);
 
         activeLogoMeta = normalizeLogoMeta(state.logo.customLogoMeta);
         activeLogoBounds = getCustomLogoBounds(svg);

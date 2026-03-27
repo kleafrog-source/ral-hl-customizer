@@ -1996,6 +1996,32 @@ transform: scale(1.15);
     border: 1px solid rgba(184, 115, 51, 0.25);
 }
 
+.menu-option-price {
+    margin-left: auto;
+    flex-shrink: 0;
+}
+
+#logo-toggle-price {
+    margin-left: auto;
+    flex-shrink: 0;
+}
+
+.palette-price-hint {
+    flex-shrink: 0;
+}
+
+.option-group-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.option-group-header h4 {
+    margin: 0;
+}
+
 /* пример в HTML:
    <div class="switch-container">
      <span class="switch-label">Собственная эмблема</span>
@@ -3401,6 +3427,19 @@ body {
 .sidebar-edge-controls button[aria-label]::after {
     left: auto;
     right: calc(100% + 10px);
+}
+
+@media (min-width: 1181px) {
+    .sidebar-edge-controls {
+        position: fixed;
+        top: 28px;
+        right: calc(var(--sidebar-width-normal) - -17px);
+        left: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        z-index: 140;
+    }
 }
 
 @media (max-width: 1024px) {

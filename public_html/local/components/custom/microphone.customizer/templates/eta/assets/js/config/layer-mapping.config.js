@@ -26,7 +26,7 @@ export const SECTION_LAYER_MAP = {
     'standard': {
       originals: ['logotype-gold'],
       standardGroup: 'logo-letters-and-frame',
-      malfaGroup: 'malfa-logo-text-path',
+      malfaGroup: 'malfa-logo',
       customGroup: 'custom-logo-layer'
     }
   },

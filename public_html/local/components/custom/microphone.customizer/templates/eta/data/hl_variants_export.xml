@@ -47,7 +47,7 @@
 			<uf_view_type>2</uf_view_type>
 			<uf_ral_color_id />
 			<uf_variant_code>body-satinsteel</uf_variant_code>
-			<uf_variant_name>Сатинированная сталь</uf_variant_name>
+			<uf_variant_name>Классический алюминий</uf_variant_name>
 			<uf_is_free>1</uf_is_free>
 			<uf_price>0</uf_price>
 			<uf_sort>30</uf_sort>
@@ -192,7 +192,7 @@
 			<uf_ral_color_id>214</uf_ral_color_id>
 			<uf_variant_code>pins-9010</uf_variant_code>
 			<uf_variant_name>RAL 9010 Чистый белый</uf_variant_name>
-			<uf_is_free>1</uf_is_free>
+			<uf_is_free>0</uf_is_free>
 			<uf_price>0</uf_price>
 			<uf_sort>75</uf_sort>
 			<uf_additional_image>0</uf_additional_image>
@@ -263,7 +263,7 @@
 			<uf_view_type>1</uf_view_type>
 			<uf_ral_color_id />
 			<uf_variant_code>spheres-satinsteel</uf_variant_code>
-			<uf_variant_name>Сатинированная сталь</uf_variant_name>
+			<uf_variant_name>Полированный алюминий</uf_variant_name>
 			<uf_is_free>1</uf_is_free>
 			<uf_price>0</uf_price>
 			<uf_sort>20</uf_sort>
@@ -535,7 +535,7 @@
 			<uf_variant_code>spherespaidral</uf_variant_code>
 			<uf_variant_name>Премиум цвет силуэта</uf_variant_name>
 			<uf_is_free>0</uf_is_free>
-			<uf_price>0</uf_price>
+			<uf_price>20000</uf_price>
 			<uf_sort>150</uf_sort>
 			<uf_additional_image>0</uf_additional_image>
 			<uf_svg_layer_group />
@@ -553,7 +553,7 @@
 			<uf_variant_code>bodypaidral</uf_variant_code>
 			<uf_variant_name>Премиум цвет корпуса</uf_variant_name>
 			<uf_is_free>0</uf_is_free>
-			<uf_price>0</uf_price>
+			<uf_price>5000</uf_price>
 			<uf_sort>199</uf_sort>
 			<uf_additional_image>0</uf_additional_image>
 			<uf_svg_layer_group />
@@ -607,7 +607,7 @@
 			<uf_variant_code>shockmount-017-paidral</uf_variant_code>
 			<uf_variant_name>Премиум цвет каркаса подвеса</uf_variant_name>
 			<uf_is_free>0</uf_is_free>
-			<uf_price>3000</uf_price>
+			<uf_price>5000</uf_price>
 			<uf_sort>201</uf_sort>
 			<uf_additional_image>0</uf_additional_image>
 			<uf_svg_layer_group />
@@ -625,7 +625,7 @@
 			<uf_variant_code>shockmount-option-included_023-the-bomblet</uf_variant_code>
 			<uf_variant_name>Добавить антивибрационный подвес в комплект</uf_variant_name>
 			<uf_is_free>0</uf_is_free>
-			<uf_price>0</uf_price>
+			<uf_price>10000</uf_price>
 			<uf_sort>250</uf_sort>
 			<uf_additional_image>0</uf_additional_image>
 			<uf_svg_layer_group>layer9</uf_svg_layer_group>
@@ -738,7 +738,7 @@
 			<uf_additional_image>0</uf_additional_image>
 			<uf_svg_layer_group>malfa-logo-text-path</uf_svg_layer_group>
 			<uf_svg_special_key>malfa_silver</uf_svg_special_key>
-			<uf_model_id>0</uf_model_id>
+			<uf_model_id />
 			<uf_svg_target_mode>gradient</uf_svg_target_mode>
 			<uf_seriesvar>023</uf_seriesvar>
 			<uf_svg_filter_id />
@@ -756,7 +756,7 @@
 			<uf_additional_image>0</uf_additional_image>
 			<uf_svg_layer_group>malfa-logo-text-path</uf_svg_layer_group>
 			<uf_svg_special_key>malfa_gold</uf_svg_special_key>
-			<uf_model_id>0</uf_model_id>
+			<uf_model_id />
 			<uf_svg_target_mode>gradient</uf_svg_target_mode>
 			<uf_seriesvar>023</uf_seriesvar>
 			<uf_svg_filter_id />
@@ -787,7 +787,7 @@
 			<uf_variant_code>shockmount-023-paidral</uf_variant_code>
 			<uf_variant_name>Премиум цвет каркаса подвеса 023</uf_variant_name>
 			<uf_is_free>0</uf_is_free>
-			<uf_price>3000</uf_price>
+			<uf_price>5000</uf_price>
 			<uf_sort>207</uf_sort>
 			<uf_additional_image>0</uf_additional_image>
 			<uf_svg_layer_group />

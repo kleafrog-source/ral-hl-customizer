@@ -163,7 +163,7 @@ function updateLogoLayers(svg, state) {
         const allLayers = [
             config.originals[0], // logotype-gold
             config.standardGroup, // logo-letters-and-frame
-            config.malfaGroup // malfa-logo-text-path
+            config.malfaGroup // malfa-logo
         ];
         allLayers.forEach(layerId => {
             setLayerDisplay(svg, layerId, 'none');

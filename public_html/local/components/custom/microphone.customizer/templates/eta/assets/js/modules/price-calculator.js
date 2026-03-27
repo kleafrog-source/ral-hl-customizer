@@ -79,6 +79,7 @@ export function getBreakdown(state) {
     const modelCode = state.currentModelCode || '';
     const hlData = state.hlData || {};
     const model = hlData.modelsByCode?.[modelCode] || {};
+    const useCustomLogo = !!state.logo?.useCustom;
     
     // Базовая цена из HL данных модели
     const basePrice = safeNumber(model.BASE_PRICE || state.basePrice);
@@ -91,10 +92,10 @@ export function getBreakdown(state) {
 
     const spheresPrice = safeNumber(state.spheres?.price);
     const bodyPrice = safeNumber(state.body?.price);
-    const logoPrice = state.logo?.useCustom
+    const logoPrice = useCustomLogo
         ? getSurcharge('logo', 'custom-microphone-logo', modelCode, false)
         : safeNumber(state.logo?.price);
-    const logobgPrice = safeNumber(state.logobg?.price);
+    const logobgPrice = useCustomLogo ? 0 : safeNumber(state.logobg?.price);
     const caseBasePrice = safeNumber(state.case?.price);
     const engravingPrice = state.case?.laserEngravingEnabled
         ? getSurcharge('case', 'custom-woodcase-image', modelCode, false)

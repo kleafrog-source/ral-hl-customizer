@@ -1,4 +1,5 @@
 import { stateManager } from '../core/state.js';
+import { calculateTotal, getBreakdown } from '../modules/price-calculator.js';
 
 function base64ToBlob(base64String) {
     try {
@@ -90,8 +91,26 @@ function buildWoodcaseDesk(caseState = {}) {
     return `Ш:${caseState.logoWidthMM || 0}мм, Сверху:${caseOffset.top || 0}мм, Слева:${caseOffset.left || 0}мм`;
 }
 
-function getDisplayedTotalPrice() {
-    return document.getElementById('total-price')?.textContent || '0';
+function formatRubles(value) {
+    return `${(Number(value) || 0).toLocaleString('ru-RU')} ₽`;
+}
+
+function buildDetailedPriceString(currentState) {
+    const breakdown = getBreakdown(currentState);
+    const total = calculateTotal(currentState);
+    const parts = [
+        ['база', breakdown.base],
+        ['силуэт', breakdown.spheres],
+        ['корпус', breakdown.body],
+        ['логотип', breakdown.logo],
+        ['фон логотипа', breakdown.logobg],
+        ['футляр', breakdown.case],
+        ['подвес', breakdown.shockmountBase],
+        ['цвет каркаса', breakdown.shockmountFrame],
+        ['цвет пинов', breakdown.shockmountPins]
+    ].filter(([, value], index) => index === 0 || (Number(value) || 0) > 0);
+
+    return `Итог: ${formatRubles(total)} (${parts.map(([label, value]) => `${label}: ${formatRubles(value)}`).join(' + ')})`;
 }
 
 function buildConfigPayload(currentState) {
@@ -138,7 +157,7 @@ export async function sendOrder(clientData) {
 
     setClientFields(formData, clientData);
     setConfigurationFields(formData, currentState, woodcaseDesk);
-    formData.set('form_text_39', getDisplayedTotalPrice());
+    formData.set('form_text_39', buildDetailedPriceString(currentState));
     formData.set('form_textarea_48', JSON.stringify(buildConfigPayload(currentState)));
 
     const svgElement = document.getElementById('microphone-svg-container')?.innerHTML;

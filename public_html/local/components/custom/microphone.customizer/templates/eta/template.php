@@ -369,6 +369,28 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                     return (int)$fallback;
                 }
 
+                function formatRalDisplayName($ralName = '', $ralCode = '') {
+                    $rawName = trim((string)$ralName);
+                    $normalizedCode = preg_replace('/^RAL\s*/i', '', trim((string)$ralCode));
+
+                    if ($rawName === '') {
+                        return $normalizedCode !== '' ? 'RAL' . $normalizedCode : '';
+                    }
+
+                    $compactName = preg_replace('/\s+/u', ' ', $rawName);
+                    if (preg_match('/^RAL\s*\d+/i', $compactName)) {
+                        return preg_replace('/^RAL\s*/i', 'RAL', $compactName);
+                    }
+
+                    if ($normalizedCode !== '' && preg_match('/^' . preg_quote($normalizedCode, '/') . '(\b|\s|$)/u', $compactName)) {
+                        return 'RAL' . $compactName;
+                    }
+
+                    return $normalizedCode !== ''
+                        ? 'RAL' . $normalizedCode . ($compactName !== '' ? ' ' . $compactName : '')
+                        : $compactName;
+                }
+
                 function buildOptionDataAttrs($sectionKey, $option, $priceValue, $isRalPaid = false) {
                     $attrs = [];
                     $attrs[] = 'data-option-part="' . htmlspecialchars($sectionKey) . '"';
@@ -385,7 +407,10 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                     $attrs[] = 'data-option-id="' . (int)($option['ID'] ?? 0) . '"';
 
                     if (!empty($option['UF_IS_RAL']) && !empty($option['RAL_DATA'])) {
-                        $ralName = htmlspecialchars($option['RAL_DATA']['UF_NAME'] ?? '');
+                        $ralName = htmlspecialchars(formatRalDisplayName(
+                            $option['RAL_DATA']['UF_NAME'] ?? '',
+                            $option['RAL_DATA']['UF_CODE'] ?? ''
+                        ));
                         $attrs[] = 'data-ral-id="' . htmlspecialchars($option['RAL_DATA']['ID'] ?? '') . '"';
                         $attrs[] = 'data-ral-rgb="' . htmlspecialchars($option['RAL_DATA']['UF_RGB_CODE'] ?? '') . '"';
                         $attrs[] = 'data-ral-hex="' . htmlspecialchars($option['RAL_DATA']['UF_HEX'] ?? '') . '"';
@@ -460,11 +485,19 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                         <div class="item-icon">
                             <div class="color-circle" id="<?= htmlspecialchars($sectionKey) ?>-color-display" style="background-color: #A1A1A0;"></div>
                         </div>
-                        <div class="item-content" data-sidebar-fade>
-                            <p class="item-label"><?= htmlspecialchars($sectionTitle) ?></p>
-                            <p class="item-subtitle" id="<?= htmlspecialchars($sectionKey) ?>-subtitle">Выберите вариант</p>
-                        </div>
-                        <div class="item-arrow" data-sidebar-fade>
+                    <div class="item-content" data-sidebar-fade>
+                        <p class="item-label"><?= htmlspecialchars($sectionTitle) ?></p>
+                        <p class="item-subtitle" id="<?= htmlspecialchars($sectionKey) ?>-subtitle">Выберите вариант</p>
+                    </div>
+                    <?php if (in_array($sectionKey, ['spheres', 'body', 'logobg'], true)): ?>
+                        <div
+                            class="option-price toggle-price-hint menu-option-price"
+                            id="<?= htmlspecialchars($sectionKey) ?>-menu-price"
+                            data-menu-price-for="<?= htmlspecialchars($sectionKey) ?>"
+                            hidden
+                        ></div>
+                    <?php endif; ?>
+                    <div class="item-arrow" data-sidebar-fade>
                             <svg width="8" height="12" viewBox="0 0 8 12" fill="none">
                                 <path d="M2 2L6 6L2 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                             </svg>
@@ -774,7 +807,7 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                                             $ralCode = $option['RAL_DATA']['UF_CODE'] ?? '';
                                             $ralName = $option['RAL_DATA']['UF_NAME'] ?? '';
                                             // Формируем читаемый label из HL
-                                            $label = trim(($ralName ? $ralName : 'RAL ' . $ralCode));
+                                            $label = formatRalDisplayName($ralName, $ralCode);
                                             ?>
                                             <button
                                                 class="option-button variant-item"
@@ -790,7 +823,10 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                                 <!-- 3. RAL цвета (палитра) -->
                                 <?php if (!empty($freeRalOptions) || !empty($paidRalOptions)): ?>
                                     <div class="option-group">
-                                        <h4>Премиум цвета</h4>
+                                        <div class="option-group-header">
+                                            <h4>Премиум цвета</h4>
+                                            <span class="toggle-price-hint palette-price-hint" data-palette-price-for="<?= htmlspecialchars($sectionKey) ?>" hidden></span>
+                                        </div>
                                         <div class="palette-toggle-btn" data-section="<?= htmlspecialchars($sectionKey) ?>">
                                             <span>Палитра RAL K7 Классик</span>
                                             <svg class="chevron" width="12" height="8" viewBox="0 0 12 8" fill="none">
@@ -881,6 +917,7 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                                 <h4 class="section-title" style="margin:0;">
                                     <?= htmlspecialchars($arResult['LIQUID_TOGGLES']['custom_logo']['title']) ?>
                                 </h4>
+                                <div class="toggle-price-hint" id="logo-toggle-price" hidden></div>
                                 <input type="checkbox" class="liquid-toggle" id="logo-mode-toggle">
                             </div>
                             <p id="custom-logo-description"><?= htmlspecialchars($arResult['LIQUID_TOGGLES']['custom_logo']['description']) ?></p>
@@ -1017,7 +1054,7 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                         <p class="item-subtitle" id="shockmount-subtitle">RAL 9005 Матовый черный</p>
                     </div>
                     <!-- <svg class="chevron-icon" data-sidebar-fade viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg> -->
-                    <div class="option-price" id="shockmount-price">+0 ₽</div>
+                    <div class="option-price toggle-price-hint menu-option-price" id="shockmount-price" data-menu-price-for="shockmount" hidden>+0 ₽</div>
                     <div class="item-arrow" data-sidebar-fade="">
                         <svg width="8" height="12" viewBox="0 0 8 12" fill="none">
                             <path d="M2 2L6 6L2 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -1080,7 +1117,10 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                                     $hex = $option['RAL_DATA']['UF_HEX'] ?? '';
                                     $rgb = $option['RAL_DATA']['UF_RGB_CODE'] ?? '';
                                     $ralCode = $option['RAL_DATA']['UF_CODE'] ?? '';
-                                    $ralName = $option['RAL_DATA']['UF_NAME'] ?? 'RAL ' . $ralCode;
+                                    $ralName = formatRalDisplayName(
+                                        $option['RAL_DATA']['UF_NAME'] ?? '',
+                                        $ralCode
+                                    );
                                     ?>
                                     <button
                                         class="option-button variant-item"
@@ -1094,7 +1134,10 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                         </div>
                         
                         <div class="option-group">
-                            <h4>Премиум цвета</h4>
+                            <div class="option-group-header">
+                                <h4>Премиум цвета</h4>
+                                <span class="toggle-price-hint palette-price-hint" data-palette-price-for="shockmount" hidden></span>
+                            </div>
                             <div class="palette-toggle-btn" data-section="shockmount">
                                 <span>Палитра RAL K7 Классик</span>
                                 <svg class="chevron" width="12" height="8" viewBox="0 0 12 8" fill="none">
@@ -1151,6 +1194,7 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                         <p class="item-label">Антивибрационный подвес - оформление пинов</p>
                         <p class="item-subtitle" id="shockmountPins-subtitle">Выберите вариацию</p>
                     </div>
+                    <div class="option-price toggle-price-hint menu-option-price" id="shockmountPins-price" data-menu-price-for="shockmountPins" hidden></div>
                     <div class="item-arrow" data-sidebar-fade>
                         <svg width="8" height="12" viewBox="0 0 8 12" fill="none">
                             <path d="M2 2L6 6L2 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -1231,7 +1275,10 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                         </div>
 
                         <div class="option-group">
-                            <h4>Премиум цвета</h4>
+                            <div class="option-group-header">
+                                <h4>Премиум цвета</h4>
+                                <span class="toggle-price-hint palette-price-hint" data-palette-price-for="shockmountPins" hidden></span>
+                            </div>
                             <div class="palette-toggle-btn" data-section="shockmountPins">
                                 <span>Палитра RAL K7 Классик</span>
                                 <svg class="chevron" width="12" height="8" viewBox="0 0 12 8" fill="none">

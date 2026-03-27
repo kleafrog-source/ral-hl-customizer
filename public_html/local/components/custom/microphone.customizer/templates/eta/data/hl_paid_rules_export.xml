@@ -8,7 +8,7 @@
 			<uf_section_code>spheres</uf_section_code>
 			<uf_model_code />
 			<uf_variant_code>ral-spheres-premium</uf_variant_code>
-			<uf_price>3000</uf_price>
+			<uf_price>20000</uf_price>
 			<uf_is_ral_surcharge>1</uf_is_ral_surcharge>
 			<uf_sort>10</uf_sort>
 			<uf_description>Наценка за платные RAL цвета силуэта</uf_description>
@@ -18,7 +18,7 @@
 			<uf_section_code>body</uf_section_code>
 			<uf_model_code />
 			<uf_variant_code>ral-body-premium</uf_variant_code>
-			<uf_price>3000</uf_price>
+			<uf_price>5000</uf_price>
 			<uf_is_ral_surcharge>1</uf_is_ral_surcharge>
 			<uf_sort>20</uf_sort>
 			<uf_description>Наценка за платные RAL цвета корпуса</uf_description>
@@ -28,7 +28,7 @@
 			<uf_section_code>case</uf_section_code>
 			<uf_model_code />
 			<uf_variant_code>custom-woodcase-image</uf_variant_code>
-			<uf_price>5000</uf_price>
+			<uf_price>0</uf_price>
 			<uf_is_ral_surcharge>0</uf_is_ral_surcharge>
 			<uf_sort>40</uf_sort>
 			<uf_description>Кастомная гравировка на футляре</uf_description>
@@ -38,7 +38,7 @@
 			<uf_section_code>logo</uf_section_code>
 			<uf_model_code />
 			<uf_variant_code>custom-microphone-logo</uf_variant_code>
-			<uf_price>3000</uf_price>
+			<uf_price>5000</uf_price>
 			<uf_is_ral_surcharge>0</uf_is_ral_surcharge>
 			<uf_sort>30</uf_sort>
 			<uf_description>Собственная эмблема</uf_description>
@@ -48,7 +48,7 @@
 			<uf_section_code>shockmount</uf_section_code>
 			<uf_model_code />
 			<uf_variant_code>ral-shockmount-premium</uf_variant_code>
-			<uf_price>3000</uf_price>
+			<uf_price>5000</uf_price>
 			<uf_is_ral_surcharge>1</uf_is_ral_surcharge>
 			<uf_sort>50</uf_sort>
 			<uf_description>Наценка за цвет каркаса подвеса</uf_description>
@@ -58,7 +58,7 @@
 			<uf_section_code>shockmountPins</uf_section_code>
 			<uf_model_code />
 			<uf_variant_code>ral-shockmountpins-premium</uf_variant_code>
-			<uf_price>2500</uf_price>
+			<uf_price>3000</uf_price>
 			<uf_is_ral_surcharge>1</uf_is_ral_surcharge>
 			<uf_sort>60</uf_sort>
 			<uf_description>Наценка за цвет пинов подвеса</uf_description>
@@ -68,7 +68,7 @@
 			<uf_section_code>logobg</uf_section_code>
 			<uf_model_code />
 			<uf_variant_code>ral-logobg-premium</uf_variant_code>
-			<uf_price>2500</uf_price>
+			<uf_price>1000</uf_price>
 			<uf_is_ral_surcharge>1</uf_is_ral_surcharge>
 			<uf_sort>35</uf_sort>
 			<uf_description>Наценка за платные RAL цвета фона эмблемы</uf_description>

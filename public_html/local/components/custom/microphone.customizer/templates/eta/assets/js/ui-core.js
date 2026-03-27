@@ -90,6 +90,47 @@ function applyFillToElement(element, fill) {
     element.style.backgroundColor = fill;
 }
 
+function normalizeRalDisplayName(name, ralCode = '') {
+    const rawName = String(name || '').trim();
+    const normalizedCode = String(ralCode || '').trim().replace(/^RAL\s*/i, '');
+
+    if (!rawName) {
+        return normalizedCode ? `RAL${normalizedCode}` : '';
+    }
+
+    const compactName = rawName.replace(/\s+/g, ' ').trim();
+    if (/^RAL\s*\d+/i.test(compactName)) {
+        return compactName.replace(/^RAL\s*/i, 'RAL');
+    }
+
+    if (normalizedCode && new RegExp(`^${normalizedCode}(\\b|\\s|$)`, 'i').test(compactName)) {
+        return `RAL${compactName}`;
+    }
+
+    return normalizedCode
+        ? `RAL${normalizedCode}${compactName ? ` ${compactName}` : ''}`
+        : compactName;
+}
+
+function syncPriceBadgeElement(element, price, visible = price > 0) {
+    if (!element) {
+        return;
+    }
+
+    element.hidden = !visible;
+    element.textContent = visible ? formatPrice(price) : '';
+}
+
+function syncPriceBadgeGroup(selector, price, visible = price > 0) {
+    document.querySelectorAll(selector).forEach((element) => {
+        syncPriceBadgeElement(element, price, visible);
+    });
+}
+
+function getSectionPrice(sectionState) {
+    return Number(sectionState?.price) || 0;
+}
+
 function initOptionColorSwatches() {
     document.querySelectorAll('.option-button.variant-item[data-option-part]').forEach((button) => {
         const optionPart = button.dataset.optionPart;
@@ -194,8 +235,31 @@ export function updateUI() {
         caseRow.style.display = casePriceValue > 0 ? 'flex' : 'none';
     }
 
-    const shockmountMenuPrice = document.getElementById('shockmount-price');
-    if (shockmountMenuPrice) shockmountMenuPrice.textContent = formatPrice(breakdown.shockmount);
+    syncPriceBadgeGroup('[data-menu-price-for="spheres"]', getSectionPrice(state.spheres), getSectionPrice(state.spheres) > 0);
+    syncPriceBadgeGroup('[data-menu-price-for="body"]', getSectionPrice(state.body), getSectionPrice(state.body) > 0);
+    syncPriceBadgeGroup(
+        '[data-menu-price-for="logobg"]',
+        getSectionPrice(state.logobg),
+        !state.logo?.useCustom && getSectionPrice(state.logobg) > 0
+    );
+    syncPriceBadgeGroup('[data-menu-price-for="shockmount"]', getSectionPrice(state.shockmount), getSectionPrice(state.shockmount) > 0);
+    syncPriceBadgeGroup('[data-menu-price-for="shockmountPins"]', getSectionPrice(state.shockmountPins), getSectionPrice(state.shockmountPins) > 0);
+
+    ['spheres', 'body', 'logobg', 'shockmount', 'shockmountPins'].forEach((sectionKey) => {
+        const sectionState = state[sectionKey];
+        const price = getSectionPrice(sectionState);
+        const shouldShowPalettePrice = !!sectionState?.isRal
+            && price > 0
+            && !(sectionKey === 'logobg' && state.logo?.useCustom);
+
+        syncPriceBadgeGroup(
+            `[data-palette-price-for="${sectionKey}"]`,
+            price,
+            shouldShowPalettePrice
+        );
+    });
+
+    syncPriceBadgeGroup('#logo-toggle-price', breakdown.logo, !!state.logo?.useCustom && breakdown.logo > 0);
 
     const totalPriceText = `${total.toLocaleString('ru-RU')}₽`;
     const totalEl = document.getElementById('total-price');
@@ -259,7 +323,12 @@ export function updateUI() {
 
     const getLabel = (sectionState) => {
         if (!sectionState) return 'Выберите вариант';
-        if (sectionState.isRal && sectionState.colorName) return sectionState.colorName;
+        if (sectionState.isRal) {
+            const normalizedRalLabel = normalizeRalDisplayName(sectionState.colorName, sectionState.color);
+            if (normalizedRalLabel) {
+                return normalizedRalLabel;
+            }
+        }
         if (sectionState.variantName) return sectionState.variantName;
         return 'Выберите вариант';
     };
@@ -313,7 +382,7 @@ function applyOptionFromElement(element) {
         batch(`${section}.isRal`, isRal);
         batch(`${section}.color`, ralCode);
         batch(`${section}.colorValue`, colorValue);
-        batch(`${section}.colorName`, colorName ? `RAL ${colorName}` : null);
+        batch(`${section}.colorName`, isRal ? normalizeRalDisplayName(colorName, ralCode) : (colorName || null));
         batch(`${section}.modelId`, parseInt(element.dataset.modelId || '0', 10));
         batch(`${section}.svgTargetMode`, element.dataset.svgTargetMode || null);
         batch(`${section}.svgLayerGroup`, element.dataset.svgLayerGroup || null);

@@ -131,6 +131,11 @@ export function initSVGVisibility(svg, initialState) {
             setLayerDisplay(logotypeGold, 'none', true);
             debugLog('[SVG] Hide logotype-gold for custom logo');
         }
+        const malfaLogo = svg.querySelector('#malfa-logo');
+        if (malfaLogo) {
+            setLayerDisplay(malfaLogo, 'none', true);
+            debugLog('[SVG] Hide malfa-logo for custom logo');
+        }
     } else if (!logoVariant || logoVariant === 'brass-logo') {
         const logotypeGold = svg.querySelector('#logotype-gold');
         if (logotypeGold) {

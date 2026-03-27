@@ -1,6 +1,3 @@
-
-													
-																																																					 
 <?xml version="1.0" encoding="UTF-8"?>
 <hiblock>
 	<items>
@@ -352,7 +349,7 @@
 			<uf_sort>35</uf_sort>
 			<uf_hex>#CC5608</uf_hex>
 			<uf_flood_opacity>1</uf_flood_opacity>
-			<uf_rgb_code>rgb(160,80,35)</uf_rgb_code>
+			<uf_rgb_code>rgb(204,86,8)</uf_rgb_code>
 		</item>
 		<item>
 			<id>41</id>
@@ -362,7 +359,7 @@
 			<uf_sort>36</uf_sort>
 			<uf_hex>#FF4612</uf_hex>
 			<uf_flood_opacity>1</uf_flood_opacity>
-			<uf_rgb_code>rgb(200,75,45)</uf_rgb_code>
+			<uf_rgb_code>rgb(255,70,18)</uf_rgb_code>
 		</item>
 		<item>
 			<id>42</id>
@@ -382,7 +379,7 @@
 			<uf_sort>38</uf_sort>
 			<uf_hex>#D66C21</uf_hex>
 			<uf_flood_opacity>1</uf_flood_opacity>
-			<uf_rgb_code>rgb(180,55,65)</uf_rgb_code>
+			<uf_rgb_code>rgb(214,108,33)</uf_rgb_code>
 		</item>
 		<item>
 			<id>44</id>
@@ -442,7 +439,7 @@
 			<uf_sort>44</uf_sort>
 			<uf_hex>#FA4402</uf_hex>
 			<uf_flood_opacity>1</uf_flood_opacity>
-			<uf_rgb_code>rgb(195,75,40)</uf_rgb_code>
+			<uf_rgb_code>rgb(250,68,2)</uf_rgb_code>
 		</item>
 		<item>
 			<id>50</id>
@@ -612,7 +609,7 @@
 			<uf_sort>61</uf_sort>
 			<uf_hex>#AB1519</uf_hex>
 			<uf_flood_opacity>1</uf_flood_opacity>
-			<uf_rgb_code>rgb(140,45,50)</uf_rgb_code>
+			<uf_rgb_code>rgb(171,21,25)</uf_rgb_code>
 		</item>
 		<item>
 			<id>67</id>
@@ -932,7 +929,7 @@
 			<uf_sort>93</uf_sort>
 			<uf_hex>#457FB3</uf_hex>
 			<uf_flood_opacity>1</uf_flood_opacity>
-			<uf_rgb_code>rgb(80,110,145)</uf_rgb_code>
+			<uf_rgb_code>rgb(69,127,179)</uf_rgb_code>
 		</item>
 		<item>
 			<id>99</id>
@@ -1252,7 +1249,7 @@
 			<uf_sort>125</uf_sort>
 			<uf_hex>#689A45</uf_hex>
 			<uf_flood_opacity>1</uf_flood_opacity>
-			<uf_rgb_code>rgb(55,125,70)</uf_rgb_code>
+			<uf_rgb_code>rgb(104,154,69)</uf_rgb_code>
 		</item>
 		<item>
 			<id>131</id>
@@ -1412,7 +1409,7 @@
 			<uf_sort>141</uf_sort>
 			<uf_hex>#3F8C3D</uf_hex>
 			<uf_flood_opacity>1</uf_flood_opacity>
-			<uf_rgb_code>rgb(70,100,140)</uf_rgb_code>
+			<uf_rgb_code>rgb(63,140,61)</uf_rgb_code>
 		</item>
 		<item>
 			<id>147</id>
@@ -2091,8 +2088,8 @@
 			<uf_active>1</uf_active>
 			<uf_sort>209</uf_sort>
 			<uf_hex>#EFEEE5</uf_hex>
-			<uf_flood_opacity>0.9</uf_flood_opacity>
-			<uf_rgb_code>rgb(199,199,199)</uf_rgb_code>
+			<uf_flood_opacity>1</uf_flood_opacity>
+			<uf_rgb_code>rgb(239,238,229)</uf_rgb_code>
 		</item>
 		<item>
 			<id>215</id>
