@@ -262,8 +262,8 @@ body {
 		
 
         #customizer-home-logo:hover .logo-big-letter {
-            fill: #fff;
-            transition-delay: 0.55s;
+            fill: #fff!important;
+            transition-delay: 0.25s;
         }
          #color-squares rect{
 		fill: transparent;
@@ -1753,8 +1753,8 @@ transform: scale(1.15);
            RESPONSIVE
            ============================================ */
         @media (max-width: 1200px) {
-            .sidebar { left: 16px; right: auto; width: 340px; }
-            .submenu { left: 16px; right: auto; transform: translateX(-120%); }
+            .sidebar { right: 16px; left: auto; width: 340px; }
+            .submenu { right: 16px; left: auto; transform: translateX(120%); }
             .sidebar-edge-controls { left: auto; right: -58px; }
         }
 
@@ -2376,19 +2376,19 @@ body {
 
 @media (max-width: 1200px) {
     .sidebar {
-        right: auto;
-        left: 16px;
+        right: 16px;
+        left: auto;
         width: 340px;
     }
 
     .submenu {
-        right: auto;
-        left: 16px;
+        right: 16px;
+        left: auto;
     }
 
     .sidebar [data-tooltip]::after {
-        right: auto;
-        left: calc(100% + 8px);
+        right: calc(100% + 8px);
+        left: auto;
     }
 
     .sidebar-edge-controls {

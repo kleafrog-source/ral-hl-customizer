@@ -80,7 +80,7 @@ Asset::getInstance()->addJs("https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anim
                 <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
             </svg>
             </button>
-            <button class="sidebar-help-btn" type="button" id="sidebar-help-btn" aria-label="Help" title="Help" data-tooltip="Help">
+            <button class="sidebar-help-btn" type="button" id="sidebar-help-btn" aria-label="Информация" title="Информация" data-tooltip="Help">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="12" cy="12" r="10"></circle>
                     <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
